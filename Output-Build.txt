@@ -1,0 +1,23 @@
+------ Build started: Project: gen_fixer, Configuration: Release Win32 ------
+
+Compiling...
+Main.cpp
+mod_unicode_m3u8.cpp
+mod_skininstall.cpp
+mod_skin_delete.cpp
+mod_plist_buttons.cpp
+mod_menu_restart.cpp
+Generating Code...
+Compiling resources...
+.\Resources\Main.rc(96) : error RC2116 : expecting number for ID
+.\Resources\Main.rc(96) : error RC2108 : expected numerical dialog constant
+
+Build log was saved at "file://y:\!! winamp dev\C++\gen_fixer\Release\BuildLog.htm"
+gen_fixer - 2 error(s), 0 warning(s)
+
+
+---------------------- Done ----------------------
+
+    Build: 0 succeeded, 1 failed, 0 skipped
+
+

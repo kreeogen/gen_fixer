@@ -1,0 +1,28 @@
+# Скомпилированные бинарники
+*.dll
+*.exe
+*.lib
+*.obj
+*.pdb
+*.exp
+
+# Временные папки сборки
+Debug/
+Release/
+ipch/
+.vs/
+
+# Файлы Visual Studio (пользовательские настройки и кэши)
+*.ncb
+*.opt
+*.plg
+*.aps
+*.suo
+*.user
+*.idb
+*.ilk
+*.pch
+
+# Если есть бэкапы кода
+*.bak
+*.old
