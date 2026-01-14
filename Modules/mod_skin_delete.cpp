@@ -2,20 +2,20 @@
  * mod_skin_delete.cpp
  * 
  * WINAMP SKIN DELETE/RENAME MODULE
- * Модуль удаления и переименования скинов Winamp
+ * РњРѕРґСѓР»СЊ СѓРґР°Р»РµРЅРёСЏ Рё РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅРѕРІ Winamp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module extends the Winamp skin selection dialog with additional
  * functionality for managing skins: deleting skins (with Recycle Bin support)
  * and renaming skins. It subclasses the skin list control and adds keyboard
  * shortcuts (Delete key, F2 key) and context menu operations.
  * 
- * Этот модуль расширяет диалог выбора скинов Winamp дополнительной
- * функциональностью для управления скинами: удаление скинов (с поддержкой
- * корзины) и переименование скинов. Он подменяет элемент управления списком
- * скинов и добавляет горячие клавиши (Delete, F2) и операции контекстного меню.
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ СЂР°СЃС€РёСЂСЏРµС‚ РґРёР°Р»РѕРі РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ Winamp РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№
+ * С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ СЃРєРёРЅР°РјРё: СѓРґР°Р»РµРЅРёРµ СЃРєРёРЅРѕРІ (СЃ РїРѕРґРґРµСЂР¶РєРѕР№
+ * РєРѕСЂР·РёРЅС‹) Рё РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃРєРёРЅРѕРІ. РћРЅ РїРѕРґРјРµРЅСЏРµС‚ СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
+ * СЃРєРёРЅРѕРІ Рё РґРѕР±Р°РІР»СЏРµС‚ РіРѕСЂСЏС‡РёРµ РєР»Р°РІРёС€Рё (Delete, F2) Рё РѕРїРµСЂР°С†РёРё РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ.
  * 
- * FEATURES / ВОЗМОЖНОСТИ:
+ * FEATURES / Р’РћР—РњРћР–РќРћРЎРўР:
  * - Delete skins using Delete key or context menu (moved to Recycle Bin)
  * - Rename skins using F2 key or context menu
  * - Automatic skin reapplication after rename if it was active
@@ -24,15 +24,15 @@
  * - Auto-selection of active skin when dialog opens
  * - Delayed skin application to avoid conflicts
  * 
- * - Удаление скинов клавишей Delete или через контекстное меню (перемещение в корзину)
- * - Переименование скинов клавишей F2 или через контекстное меню
- * - Автоматическое повторное применение скина после переименования, если он был активным
- * - Поддержка как ListBox (классический), так и ListView (современный) списков скинов
- * - Обработка файлов .wsz, .zip и каталогов скинов
- * - Автоматический выбор активного скина при открытии диалога
- * - Отложенное применение скина для избежания конфликтов
+ * - РЈРґР°Р»РµРЅРёРµ СЃРєРёРЅРѕРІ РєР»Р°РІРёС€РµР№ Delete РёР»Рё С‡РµСЂРµР· РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ (РїРµСЂРµРјРµС‰РµРЅРёРµ РІ РєРѕСЂР·РёРЅСѓ)
+ * - РџРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃРєРёРЅРѕРІ РєР»Р°РІРёС€РµР№ F2 РёР»Рё С‡РµСЂРµР· РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ
+ * - РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РїРѕРІС‚РѕСЂРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ СЃРєРёРЅР° РїРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ, РµСЃР»Рё РѕРЅ Р±С‹Р» Р°РєС‚РёРІРЅС‹Рј
+ * - РџРѕРґРґРµСЂР¶РєР° РєР°Рє ListBox (РєР»Р°СЃСЃРёС‡РµСЃРєРёР№), С‚Р°Рє Рё ListView (СЃРѕРІСЂРµРјРµРЅРЅС‹Р№) СЃРїРёСЃРєРѕРІ СЃРєРёРЅРѕРІ
+ * - РћР±СЂР°Р±РѕС‚РєР° С„Р°Р№Р»РѕРІ .wsz, .zip Рё РєР°С‚Р°Р»РѕРіРѕРІ СЃРєРёРЅРѕРІ
+ * - РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ РІС‹Р±РѕСЂ Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё РґРёР°Р»РѕРіР°
+ * - РћС‚Р»РѕР¶РµРЅРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ СЃРєРёРЅР° РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РєРѕРЅС„Р»РёРєС‚РѕРІ
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 1. Monitors for skin selection dialog appearance using a timer
  * 2. When dialog is found, locates the skin list control (ID 1122)
  * 3. Subclasses the list control to intercept keyboard and mouse events
@@ -40,17 +40,17 @@
  * 5. Uses shell operations for safe file deletion (Recycle Bin)
  * 6. Manages skin paths in both Program Files and AppData locations
  * 
- * 1. Отслеживает появление диалога выбора скинов с помощью таймера
- * 2. Когда диалог найден, находит элемент управления списком скинов (ID 1122)
- * 3. Подменяет список для перехвата событий клавиатуры и мыши
- * 4. Предоставляет пользовательский диалог для операции переименования
- * 5. Использует операции оболочки для безопасного удаления файлов (корзина)
- * 6. Управляет путями к скинам как в Program Files, так и в AppData
+ * 1. РћС‚СЃР»РµР¶РёРІР°РµС‚ РїРѕСЏРІР»РµРЅРёРµ РґРёР°Р»РѕРіР° РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ СЃ РїРѕРјРѕС‰СЊСЋ С‚Р°Р№РјРµСЂР°
+ * 2. РљРѕРіРґР° РґРёР°Р»РѕРі РЅР°Р№РґРµРЅ, РЅР°С…РѕРґРёС‚ СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј СЃРєРёРЅРѕРІ (ID 1122)
+ * 3. РџРѕРґРјРµРЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»СЏ РїРµСЂРµС…РІР°С‚Р° СЃРѕР±С‹С‚РёР№ РєР»Р°РІРёР°С‚СѓСЂС‹ Рё РјС‹С€Рё
+ * 4. РџСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РґРёР°Р»РѕРі РґР»СЏ РѕРїРµСЂР°С†РёРё РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
+ * 5. РСЃРїРѕР»СЊР·СѓРµС‚ РѕРїРµСЂР°С†РёРё РѕР±РѕР»РѕС‡РєРё РґР»СЏ Р±РµР·РѕРїР°СЃРЅРѕРіРѕ СѓРґР°Р»РµРЅРёСЏ С„Р°Р№Р»РѕРІ (РєРѕСЂР·РёРЅР°)
+ * 6. РЈРїСЂР°РІР»СЏРµС‚ РїСѓС‚СЏРјРё Рє СЃРєРёРЅР°Рј РєР°Рє РІ Program Files, С‚Р°Рє Рё РІ AppData
  * 
- * KEYBOARD SHORTCUTS / ГОРЯЧИЕ КЛАВИШИ:
- * Delete - Delete selected skin / Удалить выбранный скин
- * F2     - Rename selected skin / Переименовать выбранный скин
- * F5     - Refresh skin list (triggered automatically) / Обновить список скинов
+ * KEYBOARD SHORTCUTS / Р“РћР РЇР§РР• РљР›РђР’РРЁР:
+ * Delete - Delete selected skin / РЈРґР°Р»РёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ
+ * F2     - Rename selected skin / РџРµСЂРµРёРјРµРЅРѕРІР°С‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ
+ * F5     - Refresh skin list (triggered automatically) / РћР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє СЃРєРёРЅРѕРІ
  * 
  ******************************************************************************/
 
@@ -66,7 +66,7 @@
 #pragma comment(lib, "shell32.lib")
 
 // Compatibility macros for older Windows SDK versions
-// Макросы совместимости для старых версий Windows SDK
+// РњР°РєСЂРѕСЃС‹ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё РґР»СЏ СЃС‚Р°СЂС‹С… РІРµСЂСЃРёР№ Windows SDK
 #ifndef GetWindowLongPtrA
 # define GetWindowLongPtrA GetWindowLongA
 # define SetWindowLongPtrA SetWindowLongA
@@ -75,104 +75,104 @@
 #endif
 
 /*******************************************************************************
- * CONSTANTS / КОНСТАНТЫ
+ * CONSTANTS / РљРћРќРЎРўРђРќРўР«
  ******************************************************************************/
 
 // Control ID of the skin list in Winamp's skin selection dialog
-// Идентификатор элемента управления списка скинов в диалоге выбора скинов Winamp
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєР° СЃРєРёРЅРѕРІ РІ РґРёР°Р»РѕРіРµ РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ Winamp
 #define SKIN_CTL_ID     1122
 
 // Dialog ID for skin selection dialog (used for identification)
-// Идентификатор диалога выбора скинов (используется для идентификации)
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РґРёР°Р»РѕРіР° РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РёРґРµРЅС‚РёС„РёРєР°С†РёРё)
 #define SKIN_DIALOG_ID  236   
 
 // Context menu command IDs
-// Идентификаторы команд контекстного меню
-#define IDM_CTX_DELETE  0x9F01  // Delete skin command / Команда удаления скина
-#define IDM_CTX_RENAME  0x9F02  // Rename skin command / Команда переименования скина
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РєРѕРјР°РЅРґ РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ
+#define IDM_CTX_DELETE  0x9F01  // Delete skin command / РљРѕРјР°РЅРґР° СѓРґР°Р»РµРЅРёСЏ СЃРєРёРЅР°
+#define IDM_CTX_RENAME  0x9F02  // Rename skin command / РљРѕРјР°РЅРґР° РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅР°
 
 // Timer IDs for various delayed operations
-// Идентификаторы таймеров для различных отложенных операций
-#define APPLY_TIMER_ID  0x55A1  // Timer for delayed skin application / Таймер для отложенного применения скина
-#define SELECT_TIMER_ID 0x55A2  // Timer for auto-selecting active skin / Таймер для автоматического выбора активного скина
-#define RETRY_TIMER_ID  0x66B2  // Timer for retrying skin application after rename / Таймер для повторной попытки применения скина после переименования
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ С‚Р°Р№РјРµСЂРѕРІ РґР»СЏ СЂР°Р·Р»РёС‡РЅС‹С… РѕС‚Р»РѕР¶РµРЅРЅС‹С… РѕРїРµСЂР°С†РёР№
+#define APPLY_TIMER_ID  0x55A1  // Timer for delayed skin application / РўР°Р№РјРµСЂ РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕРіРѕ РїСЂРёРјРµРЅРµРЅРёСЏ СЃРєРёРЅР°
+#define SELECT_TIMER_ID 0x55A2  // Timer for auto-selecting active skin / РўР°Р№РјРµСЂ РґР»СЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РІС‹Р±РѕСЂР° Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР°
+#define RETRY_TIMER_ID  0x66B2  // Timer for retrying skin application after rename / РўР°Р№РјРµСЂ РґР»СЏ РїРѕРІС‚РѕСЂРЅРѕР№ РїРѕРїС‹С‚РєРё РїСЂРёРјРµРЅРµРЅРёСЏ СЃРєРёРЅР° РїРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
 
 /*******************************************************************************
  * GLOBAL STATE VARIABLES
- * ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ СОСТОЯНИЯ
+ * Р“Р›РћР‘РђР›Р¬РќР«Р• РџР•Р Р•РњР•РќРќР«Р• РЎРћРЎРўРћРЇРќРРЇ
  ******************************************************************************/
 
 // Handle to the skin list control (ListBox or ListView)
-// Дескриптор элемента управления списком скинов (ListBox или ListView)
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј СЃРєРёРЅРѕРІ (ListBox РёР»Рё ListView)
 static HWND     g_hList = NULL;
 
 // Original window procedure before subclassing
-// Оригинальная оконная процедура до подмены
+// РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ РѕРєРѕРЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РґРѕ РїРѕРґРјРµРЅС‹
 static WNDPROC  g_oldProc = NULL;
 
 // Path to the Skins directory
-// Путь к каталогу Skins
+// РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ Skins
 static char     g_SkinsDir[MAX_PATH] = {0};
 
 // Global monitor timer handle (for detecting dialog appearance)
-// Глобальный дескриптор таймера мониторинга (для обнаружения появления диалога)
+// Р“Р»РѕР±Р°Р»СЊРЅС‹Р№ РґРµСЃРєСЂРёРїС‚РѕСЂ С‚Р°Р№РјРµСЂР° РјРѕРЅРёС‚РѕСЂРёРЅРіР° (РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РїРѕСЏРІР»РµРЅРёСЏ РґРёР°Р»РѕРіР°)
 static UINT_PTR g_hTimer = 0;
 
 // TRUE if list is a ListBox (classic UI), FALSE if ListView (modern UI)
-// TRUE если список - ListBox (классический интерфейс), FALSE если ListView (современный интерфейс)
+// TRUE РµСЃР»Рё СЃРїРёСЃРѕРє - ListBox (РєР»Р°СЃСЃРёС‡РµСЃРєРёР№ РёРЅС‚РµСЂС„РµР№СЃ), FALSE РµСЃР»Рё ListView (СЃРѕРІСЂРµРјРµРЅРЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ)
 static BOOL     g_isLB = FALSE;
 
 // Timer handle for delayed skin application
-// Дескриптор таймера для отложенного применения скина
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ С‚Р°Р№РјРµСЂР° РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕРіРѕ РїСЂРёРјРµРЅРµРЅРёСЏ СЃРєРёРЅР°
 static UINT_PTR g_tmApply = 0;
 
 // Timer handle for active skin selection
-// Дескриптор таймера для выбора активного скина
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ С‚Р°Р№РјРµСЂР° РґР»СЏ РІС‹Р±РѕСЂР° Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР°
 static UINT_PTR g_tmSel   = 0;
 
 // Flag to prevent auto-apply during initial selection
-// Флаг для предотвращения автоматического применения во время начального выбора
+// Р¤Р»Р°Рі РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РїСЂРёРјРµРЅРµРЅРёСЏ РІРѕ РІСЂРµРјСЏ РЅР°С‡Р°Р»СЊРЅРѕРіРѕ РІС‹Р±РѕСЂР°
 static BOOL     g_anchor  = FALSE;
 
 // Counter for selection retry attempts
-// Счётчик попыток повторного выбора
+// РЎС‡С‘С‚С‡РёРє РїРѕРїС‹С‚РѕРє РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІС‹Р±РѕСЂР°
 static int      g_selTries= 0;
 
 // Path to skin that needs to be reapplied after rename
-// Путь к скину, который нужно повторно применить после переименования
+// РџСѓС‚СЊ Рє СЃРєРёРЅСѓ, РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РЅРѕ РїРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅРёС‚СЊ РїРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
 static char     g_pendingSkinPath[MAX_PATH] = {0};
 
 /*******************************************************************************
  * UTILITY MACROS AND FUNCTIONS
- * УТИЛИТАРНЫЕ МАКРОСЫ И ФУНКЦИИ
+ * РЈРўРР›РРўРђР РќР«Р• РњРђРљР РћРЎР« Р Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 /*******************************************************************************
  * IsVis Macro
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if a window handle is valid, points to an existing window, and
  * the window is currently visible.
  * 
- * Проверяет, является ли дескриптор окна допустимым, указывает на существующее
- * окно, и окно в данный момент видимо.
+ * РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° РґРѕРїСѓСЃС‚РёРјС‹Рј, СѓРєР°Р·С‹РІР°РµС‚ РЅР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРµ
+ * РѕРєРЅРѕ, Рё РѕРєРЅРѕ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РІРёРґРёРјРѕ.
  ******************************************************************************/
 #define IsVis(h) ((h) && IsWindow(h) && IsWindowVisible(h))
 
 /*******************************************************************************
  * Exists
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if a file or directory exists at the specified path.
  * 
- * Проверяет, существует ли файл или каталог по указанному пути.
+ * РџСЂРѕРІРµСЂСЏРµС‚, СЃСѓС‰РµСЃС‚РІСѓРµС‚ Р»Рё С„Р°Р№Р» РёР»Рё РєР°С‚Р°Р»РѕРі РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РїСѓС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * p - Path to check / Путь для проверки
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * p - Path to check / РџСѓС‚СЊ РґР»СЏ РїСЂРѕРІРµСЂРєРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if path exists, FALSE otherwise
- *        TRUE если путь существует, FALSE иначе
+ *        TRUE РµСЃР»Рё РїСѓС‚СЊ СЃСѓС‰РµСЃС‚РІСѓРµС‚, FALSE РёРЅР°С‡Рµ
  ******************************************************************************/
 static BOOL Exists(const char* p) {
     DWORD a = GetFileAttributesA(p);
@@ -182,24 +182,24 @@ static BOOL Exists(const char* p) {
 /*******************************************************************************
  * JoinPath
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Joins a directory path and filename into a single path, adding a backslash
  * separator if needed.
  * 
- * Объединяет путь к каталогу и имя файла в единый путь, добавляя разделитель
- * обратной косой черты при необходимости.
+ * РћР±СЉРµРґРёРЅСЏРµС‚ РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ Рё РёРјСЏ С„Р°Р№Р»Р° РІ РµРґРёРЅС‹Р№ РїСѓС‚СЊ, РґРѕР±Р°РІР»СЏСЏ СЂР°Р·РґРµР»РёС‚РµР»СЊ
+ * РѕР±СЂР°С‚РЅРѕР№ РєРѕСЃРѕР№ С‡РµСЂС‚С‹ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * out  - Buffer to receive the combined path
- *        Буфер для получения объединённого пути
- * dir  - Directory path / Путь к каталогу
- * file - Filename to append / Имя файла для добавления
+ *        Р‘СѓС„РµСЂ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕР±СЉРµРґРёРЅС‘РЅРЅРѕРіРѕ РїСѓС‚Рё
+ * dir  - Directory path / РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ
+ * file - Filename to append / РРјСЏ С„Р°Р№Р»Р° РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ
  ******************************************************************************/
 static void JoinPath(char* out, const char* dir, const char* file) {
     lstrcpyA(out, dir);
     int len = lstrlenA(out);
     // Add backslash if directory path doesn't end with one
-    // Добавить обратную косую черту, если путь каталога не заканчивается ею
+    // Р”РѕР±Р°РІРёС‚СЊ РѕР±СЂР°С‚РЅСѓСЋ РєРѕСЃСѓСЋ С‡РµСЂС‚Сѓ, РµСЃР»Рё РїСѓС‚СЊ РєР°С‚Р°Р»РѕРіР° РЅРµ Р·Р°РєР°РЅС‡РёРІР°РµС‚СЃСЏ РµСЋ
     if (len && out[len-1]!='\\') lstrcatA(out, "\\");
     lstrcatA(out, file);
 }
@@ -207,29 +207,29 @@ static void JoinPath(char* out, const char* dir, const char* file) {
 /*******************************************************************************
  * GetBaseName
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Extracts the filename from a full path by finding the last path separator.
  * 
- * Извлекает имя файла из полного пути, находя последний разделитель пути.
+ * РР·РІР»РµРєР°РµС‚ РёРјСЏ С„Р°Р№Р»Р° РёР· РїРѕР»РЅРѕРіРѕ РїСѓС‚Рё, РЅР°С…РѕРґСЏ РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·РґРµР»РёС‚РµР»СЊ РїСѓС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * path - Full path string / Строка полного пути
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * path - Full path string / РЎС‚СЂРѕРєР° РїРѕР»РЅРѕРіРѕ РїСѓС‚Рё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * const char* - Pointer to the filename portion of the path
- *               Указатель на часть имени файла в пути
+ *               РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С‡Р°СЃС‚СЊ РёРјРµРЅРё С„Р°Р№Р»Р° РІ РїСѓС‚Рё
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Returns pointer to the character after the last '\' or '/', or to the
  * beginning of the string if no separator is found.
  * 
- * Возвращает указатель на символ после последнего '\' или '/', или на
- * начало строки, если разделитель не найден.
+ * Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРёРјРІРѕР» РїРѕСЃР»Рµ РїРѕСЃР»РµРґРЅРµРіРѕ '\' РёР»Рё '/', РёР»Рё РЅР°
+ * РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё, РµСЃР»Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ.
  ******************************************************************************/
 static const char* GetBaseName(const char* path) {
     const char* p = path;
     // Find last backslash or forward slash
-    // Найти последнюю обратную или прямую косую черту
+    // РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅСЋСЋ РѕР±СЂР°С‚РЅСѓСЋ РёР»Рё РїСЂСЏРјСѓСЋ РєРѕСЃСѓСЋ С‡РµСЂС‚Сѓ
     for (; *path; path++) if (*path == '\\' || *path == '/') p = path + 1;
     return p;
 }
@@ -237,50 +237,50 @@ static const char* GetBaseName(const char* path) {
 /*******************************************************************************
  * GetSkinsDir
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Determines the location of the Winamp Skins directory using multiple
  * fallback strategies.
  * 
- * Определяет расположение каталога скинов Winamp, используя несколько
- * резервных стратегий.
+ * РћРїСЂРµРґРµР»СЏРµС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ РєР°С‚Р°Р»РѕРіР° СЃРєРёРЅРѕРІ Winamp, РёСЃРїРѕР»СЊР·СѓСЏ РЅРµСЃРєРѕР»СЊРєРѕ
+ * СЂРµР·РµСЂРІРЅС‹С… СЃС‚СЂР°С‚РµРіРёР№.
  * 
- * STRATEGY / СТРАТЕГИЯ:
+ * STRATEGY / РЎРўР РђРўР•Р“РРЇ:
  * 1. If already determined, return immediately
  * 2. Try <Winamp Installation>\Skins
  * 3. Try %APPDATA%\Winamp\Skins (for portable/user installations)
  * 
- * 1. Если уже определён, вернуться немедленно
- * 2. Попытаться <Установка Winamp>\Skins
- * 3. Попытаться %APPDATA%\Winamp\Skins (для портативных/пользовательских установок)
+ * 1. Р•СЃР»Рё СѓР¶Рµ РѕРїСЂРµРґРµР»С‘РЅ, РІРµСЂРЅСѓС‚СЊСЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ
+ * 2. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ <РЈСЃС‚Р°РЅРѕРІРєР° Winamp>\Skins
+ * 3. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ %APPDATA%\Winamp\Skins (РґР»СЏ РїРѕСЂС‚Р°С‚РёРІРЅС‹С…/РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… СѓСЃС‚Р°РЅРѕРІРѕРє)
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Result is cached in global variable g_SkinsDir for subsequent calls.
  * Uses dynamic API loading for SHGetSpecialFolderPathA for Win9x compatibility.
  * 
- * Результат кэшируется в глобальной переменной g_SkinsDir для последующих вызовов.
- * Использует динамическую загрузку API для SHGetSpecialFolderPathA для совместимости с Win9x.
+ * Р РµР·СѓР»СЊС‚Р°С‚ РєСЌС€РёСЂСѓРµС‚СЃСЏ РІ РіР»РѕР±Р°Р»СЊРЅРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№ g_SkinsDir РґР»СЏ РїРѕСЃР»РµРґСѓСЋС‰РёС… РІС‹Р·РѕРІРѕРІ.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ РґРёРЅР°РјРёС‡РµСЃРєСѓСЋ Р·Р°РіСЂСѓР·РєСѓ API РґР»СЏ SHGetSpecialFolderPathA РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ Win9x.
  ******************************************************************************/
 static void GetSkinsDir() {
     // If already determined, return immediately
-    // Если уже определён, вернуться немедленно
+    // Р•СЃР»Рё СѓР¶Рµ РѕРїСЂРµРґРµР»С‘РЅ, РІРµСЂРЅСѓС‚СЊСЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ
     if (g_SkinsDir[0]) return;
     
     char buf[MAX_PATH];
     
     // Strategy 1: Try Winamp installation directory + Skins
-    // Стратегия 1: попытаться каталог установки Winamp + Skins
+    // РЎС‚СЂР°С‚РµРіРёСЏ 1: РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РєР°С‚Р°Р»РѕРі СѓСЃС‚Р°РЅРѕРІРєРё Winamp + Skins
     GetModuleFileNameA(NULL, buf, MAX_PATH);
     char* p = strrchr(buf, '\\'); 
-    if(p) *p = 0;  // Remove winamp.exe filename / Удалить имя файла winamp.exe
+    if(p) *p = 0;  // Remove winamp.exe filename / РЈРґР°Р»РёС‚СЊ РёРјСЏ С„Р°Р№Р»Р° winamp.exe
     JoinPath(g_SkinsDir, buf, "Skins");
-    if (Exists(g_SkinsDir)) return;  // Success! / Успех!
+    if (Exists(g_SkinsDir)) return;  // Success! / РЈСЃРїРµС…!
 
     // Strategy 2: Try AppData\Winamp\Skins
-    // Стратегия 2: попытаться AppData\Winamp\Skins
+    // РЎС‚СЂР°С‚РµРіРёСЏ 2: РїРѕРїС‹С‚Р°С‚СЊСЃСЏ AppData\Winamp\Skins
     HMODULE hShell = LoadLibraryA("shell32.dll");
     if (hShell) {
         // Dynamically load SHGetSpecialFolderPathA for compatibility
-        // Динамически загрузить SHGetSpecialFolderPathA для совместимости
+        // Р”РёРЅР°РјРёС‡РµСЃРєРё Р·Р°РіСЂСѓР·РёС‚СЊ SHGetSpecialFolderPathA РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё
         typedef BOOL (WINAPI *PFN)(HWND, LPSTR, int, BOOL);
         PFN pGet = (PFN)GetProcAddress(hShell, "SHGetSpecialFolderPathA");
         
@@ -288,52 +288,52 @@ static void GetSkinsDir() {
             JoinPath(g_SkinsDir, buf, "Winamp\\Skins");
             if (Exists(g_SkinsDir)) { 
                 FreeLibrary(hShell); 
-                return;  // Success! / Успех!
+                return;  // Success! / РЈСЃРїРµС…!
             }
         }
         FreeLibrary(hShell);
     }
     // If we get here, g_SkinsDir will contain the last attempted path
-    // Если мы здесь, g_SkinsDir будет содержать последний попытанный путь
+    // Р•СЃР»Рё РјС‹ Р·РґРµСЃСЊ, g_SkinsDir Р±СѓРґРµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ РїРѕСЃР»РµРґРЅРёР№ РїРѕРїС‹С‚Р°РЅРЅС‹Р№ РїСѓС‚СЊ
 }
 
 /*******************************************************************************
  * ResolveSkin
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Resolves a skin name to its full path, checking for directory, .wsz file,
  * and .zip file variants.
  * 
- * Преобразует имя скина в его полный путь, проверяя варианты каталога,
- * файла .wsz и файла .zip.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РёРјСЏ СЃРєРёРЅР° РІ РµРіРѕ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ, РїСЂРѕРІРµСЂСЏСЏ РІР°СЂРёР°РЅС‚С‹ РєР°С‚Р°Р»РѕРіР°,
+ * С„Р°Р№Р»Р° .wsz Рё С„Р°Р№Р»Р° .zip.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * name - Skin name (without path or extension)
- *        Имя скина (без пути или расширения)
+ *        РРјСЏ СЃРєРёРЅР° (Р±РµР· РїСѓС‚Рё РёР»Рё СЂР°СЃС€РёСЂРµРЅРёСЏ)
  * out  - Buffer to receive the full path
- *        Буфер для получения полного пути
+ *        Р‘СѓС„РµСЂ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РїРѕР»РЅРѕРіРѕ РїСѓС‚Рё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if skin was found, FALSE otherwise
- *        TRUE если скин найден, FALSE иначе
+ *        TRUE РµСЃР»Рё СЃРєРёРЅ РЅР°Р№РґРµРЅ, FALSE РёРЅР°С‡Рµ
  * 
- * SEARCH ORDER / ПОРЯДОК ПОИСКА:
+ * SEARCH ORDER / РџРћР РЇР”РћРљ РџРћРРЎРљРђ:
  * 1. Directory: <SkinsDir>\<name>
  * 2. WSZ file:  <SkinsDir>\<name>.wsz
  * 3. ZIP file:  <SkinsDir>\<name>.zip
  * 
- * 1. Каталог:   <SkinsDir>\<name>
- * 2. Файл WSZ:  <SkinsDir>\<name>.wsz
- * 3. Файл ZIP:  <SkinsDir>\<name>.zip
+ * 1. РљР°С‚Р°Р»РѕРі:   <SkinsDir>\<name>
+ * 2. Р¤Р°Р№Р» WSZ:  <SkinsDir>\<name>.wsz
+ * 3. Р¤Р°Р№Р» ZIP:  <SkinsDir>\<name>.zip
  ******************************************************************************/
 static BOOL ResolveSkin(const char* name, char* out) {
-    // Try as directory first / Сначала попытаться как каталог
+    // Try as directory first / РЎРЅР°С‡Р°Р»Р° РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РєР°Рє РєР°С‚Р°Р»РѕРі
     JoinPath(out, g_SkinsDir, name);
     if (Exists(out)) return TRUE;
     
     char tmp[MAX_PATH];
     
-    // Try with .wsz extension / Попытаться с расширением .wsz
+    // Try with .wsz extension / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј .wsz
     lstrcpyA(tmp, out); 
     lstrcatA(tmp, ".wsz");
     if (Exists(tmp)) { 
@@ -341,7 +341,7 @@ static BOOL ResolveSkin(const char* name, char* out) {
         return TRUE; 
     }
 
-    // Try with .zip extension / Попытаться с расширением .zip
+    // Try with .zip extension / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј .zip
     lstrcpyA(tmp, out); 
     lstrcatA(tmp, ".zip");
     if (Exists(tmp)) { 
@@ -349,34 +349,34 @@ static BOOL ResolveSkin(const char* name, char* out) {
         return TRUE; 
     }
     
-    return FALSE;  // Not found / Не найден
+    return FALSE;  // Not found / РќРµ РЅР°Р№РґРµРЅ
 }
 
 /*******************************************************************************
  * LIST ABSTRACTION FUNCTIONS
- * ФУНКЦИИ АБСТРАКЦИИ СПИСКА
+ * Р¤РЈРќРљР¦РР РђР‘РЎРўР РђРљР¦РР РЎРџРРЎРљРђ
  * 
  * These functions provide a unified interface for both ListBox and ListView
  * controls, abstracting the differences between the two control types.
  * 
- * Эти функции предоставляют единый интерфейс как для ListBox, так и для
- * ListView, абстрагируя различия между двумя типами элементов управления.
+ * Р­С‚Рё С„СѓРЅРєС†РёРё РїСЂРµРґРѕСЃС‚Р°РІР»СЏСЋС‚ РµРґРёРЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ РєР°Рє РґР»СЏ ListBox, С‚Р°Рє Рё РґР»СЏ
+ * ListView, Р°Р±СЃС‚СЂР°РіРёСЂСѓСЏ СЂР°Р·Р»РёС‡РёСЏ РјРµР¶РґСѓ РґРІСѓРјСЏ С‚РёРїР°РјРё СЌР»РµРјРµРЅС‚РѕРІ СѓРїСЂР°РІР»РµРЅРёСЏ.
  ******************************************************************************/
 
 /*******************************************************************************
  * List_GetSel
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Gets the index of the currently selected item in the list.
  * 
- * Получает индекс текущего выбранного элемента в списке.
+ * РџРѕР»СѓС‡Р°РµС‚ РёРЅРґРµРєСЃ С‚РµРєСѓС‰РµРіРѕ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РІ СЃРїРёСЃРєРµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * int - Index of selected item, or -1 if none selected
- *       Индекс выбранного элемента или -1, если ничего не выбрано
+ *       РРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РёР»Рё -1, РµСЃР»Рё РЅРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°РЅРѕ
  ******************************************************************************/
 static int List_GetSel(HWND h) {
     return g_isLB ? (int)SendMessage(h, LB_GETCURSEL, 0, 0) 
@@ -386,16 +386,16 @@ static int List_GetSel(HWND h) {
 /*******************************************************************************
  * List_GetCount
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Gets the total number of items in the list.
  * 
- * Получает общее количество элементов в списке.
+ * РџРѕР»СѓС‡Р°РµС‚ РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃРїРёСЃРєРµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * int - Number of items in the list / Количество элементов в списке
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * int - Number of items in the list / РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃРїРёСЃРєРµ
  ******************************************************************************/
 static int List_GetCount(HWND h) {
     return g_isLB ? (int)SendMessage(h, LB_GETCOUNT, 0, 0) 
@@ -405,30 +405,30 @@ static int List_GetCount(HWND h) {
 /*******************************************************************************
  * List_GetText
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Retrieves the text of an item at the specified index.
  * 
- * Получает текст элемента по указанному индексу.
+ * РџРѕР»СѓС‡Р°РµС‚ С‚РµРєСЃС‚ СЌР»РµРјРµРЅС‚Р° РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РёРЅРґРµРєСЃСѓ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h   - Handle to list control / Дескриптор элемента управления списком
- * i   - Item index / Индекс элемента
- * buf - Buffer to receive the text / Буфер для получения текста
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h   - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
+ * i   - Item index / РРЅРґРµРєСЃ СЌР»РµРјРµРЅС‚Р°
+ * buf - Buffer to receive the text / Р‘СѓС„РµСЂ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ С‚РµРєСЃС‚Р°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if text was retrieved, FALSE otherwise
- *        TRUE если текст получен, FALSE иначе
+ *        TRUE РµСЃР»Рё С‚РµРєСЃС‚ РїРѕР»СѓС‡РµРЅ, FALSE РёРЅР°С‡Рµ
  ******************************************************************************/
 static BOOL List_GetText(HWND h, int i, char* buf) {
-    buf[0]=0;  // Initialize buffer / Инициализировать буфер
+    buf[0]=0;  // Initialize buffer / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ Р±СѓС„РµСЂ
     
     if (g_isLB) {
         // ListBox: use LB_GETTEXT message
-        // ListBox: использовать сообщение LB_GETTEXT
+        // ListBox: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ LB_GETTEXT
         SendMessage(h, LB_GETTEXT, i, (LPARAM)buf);
     } else {
         // ListView: use LVITEM structure
-        // ListView: использовать структуру LVITEM
+        // ListView: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ LVITEM
         LVITEMA lv = {0}; 
         lv.iItem=i; 
         lv.mask=LVIF_TEXT; 
@@ -436,94 +436,94 @@ static BOOL List_GetText(HWND h, int i, char* buf) {
         lv.cchTextMax=MAX_PATH;
         SendMessage(h, LVM_GETITEMTEXT, i, (LPARAM)&lv);
     }
-    return buf[0] != 0;  // Return TRUE if text was retrieved / Вернуть TRUE, если текст получен
+    return buf[0] != 0;  // Return TRUE if text was retrieved / Р’РµСЂРЅСѓС‚СЊ TRUE, РµСЃР»Рё С‚РµРєСЃС‚ РїРѕР»СѓС‡РµРЅ
 }
 
 /*******************************************************************************
  * List_SetSel
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Selects an item at the specified index and ensures it is visible.
  * 
- * Выбирает элемент по указанному индексу и гарантирует, что он виден.
+ * Р’С‹Р±РёСЂР°РµС‚ СЌР»РµРјРµРЅС‚ РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РёРЅРґРµРєСЃСѓ Рё РіР°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ РѕРЅ РІРёРґРµРЅ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
- * i - Item index to select / Индекс элемента для выбора
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
+ * i - Item index to select / РРЅРґРµРєСЃ СЌР»РµРјРµРЅС‚Р° РґР»СЏ РІС‹Р±РѕСЂР°
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * For ListView, also clears any previous selection and sets focus.
- * Для ListView также очищает любое предыдущее выделение и устанавливает фокус.
+ * Р”Р»СЏ ListView С‚Р°РєР¶Рµ РѕС‡РёС‰Р°РµС‚ Р»СЋР±РѕРµ РїСЂРµРґС‹РґСѓС‰РµРµ РІС‹РґРµР»РµРЅРёРµ Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С„РѕРєСѓСЃ.
  ******************************************************************************/
 static void List_SetSel(HWND h, int i) {
-    if (i < 0) return;  // Invalid index / Недопустимый индекс
+    if (i < 0) return;  // Invalid index / РќРµРґРѕРїСѓСЃС‚РёРјС‹Р№ РёРЅРґРµРєСЃ
     
     if (g_isLB) {
-        // ListBox: simple selection / ListBox: простой выбор
+        // ListBox: simple selection / ListBox: РїСЂРѕСЃС‚РѕР№ РІС‹Р±РѕСЂ
         SendMessage(h, LB_SETCURSEL, i, 0);
     } else {
         // ListView: clear previous selection and set new one
-        // ListView: очистить предыдущее выделение и установить новое
+        // ListView: РѕС‡РёСЃС‚РёС‚СЊ РїСЂРµРґС‹РґСѓС‰РµРµ РІС‹РґРµР»РµРЅРёРµ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІРѕРµ
         LVITEMA lv = {0}; 
         lv.stateMask = LVIS_SELECTED|LVIS_FOCUSED;
         
-        // Clear all selections / Очистить все выделения
+        // Clear all selections / РћС‡РёСЃС‚РёС‚СЊ РІСЃРµ РІС‹РґРµР»РµРЅРёСЏ
         SendMessage(h, LVM_SETITEMSTATE, -1, (LPARAM)&lv);
         
-        // Set new selection and focus / Установить новое выделение и фокус
+        // Set new selection and focus / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІРѕРµ РІС‹РґРµР»РµРЅРёРµ Рё С„РѕРєСѓСЃ
         lv.state = LVIS_SELECTED|LVIS_FOCUSED;
         SendMessage(h, LVM_SETITEMSTATE, i, (LPARAM)&lv);
         
-        // Ensure item is visible / Гарантировать, что элемент виден
+        // Ensure item is visible / Р“Р°СЂР°РЅС‚РёСЂРѕРІР°С‚СЊ, С‡С‚Рѕ СЌР»РµРјРµРЅС‚ РІРёРґРµРЅ
         SendMessage(h, LVM_ENSUREVISIBLE, i, 0);
     }
 }
 
 /*******************************************************************************
  * SKIN MANAGEMENT FUNCTIONS
- * ФУНКЦИИ УПРАВЛЕНИЯ СКИНАМИ
+ * Р¤РЈРќРљР¦РР РЈРџР РђР’Р›Р•РќРРЇ РЎРљРРќРђРњР
  ******************************************************************************/
 
 /*******************************************************************************
  * IsActiveSkin
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if the specified skin path corresponds to the currently active skin.
  * 
- * Проверяет, соответствует ли указанный путь к скину текущему активному скину.
+ * РџСЂРѕРІРµСЂСЏРµС‚, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р»Рё СѓРєР°Р·Р°РЅРЅС‹Р№ РїСѓС‚СЊ Рє СЃРєРёРЅСѓ С‚РµРєСѓС‰РµРјСѓ Р°РєС‚РёРІРЅРѕРјСѓ СЃРєРёРЅСѓ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * path - Full path to skin to check / Полный путь к скину для проверки
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * path - Full path to skin to check / РџРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє СЃРєРёРЅСѓ РґР»СЏ РїСЂРѕРІРµСЂРєРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if this is the active skin, FALSE otherwise
- *        TRUE если это активный скин, FALSE иначе
+ *        TRUE РµСЃР»Рё СЌС‚Рѕ Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ, FALSE РёРЅР°С‡Рµ
  * 
- * IMPLEMENTATION / РЕАЛИЗАЦИЯ:
+ * IMPLEMENTATION / Р Р•РђР›РР—РђР¦РРЇ:
  * Compares base filenames (case-insensitive) of current skin and provided path.
- * Сравнивает базовые имена файлов (без учёта регистра) текущего скина и предоставленного пути.
+ * РЎСЂР°РІРЅРёРІР°РµС‚ Р±Р°Р·РѕРІС‹Рµ РёРјРµРЅР° С„Р°Р№Р»РѕРІ (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°) С‚РµРєСѓС‰РµРіРѕ СЃРєРёРЅР° Рё РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ РїСѓС‚Рё.
  ******************************************************************************/
 static BOOL IsActiveSkin(const char* path) {
-    // Get current skin path from Winamp / Получить путь текущего скина из Winamp
+    // Get current skin path from Winamp / РџРѕР»СѓС‡РёС‚СЊ РїСѓС‚СЊ С‚РµРєСѓС‰РµРіРѕ СЃРєРёРЅР° РёР· Winamp
     char* cur = (char*)SendMessage(FindWinamp(), WM_WA_IPC, 0, IPC_GETSKIN);
     if (!cur || !path) return FALSE;
     
     // Compare base filenames (case-insensitive)
-    // Сравнить базовые имена файлов (без учёта регистра)
+    // РЎСЂР°РІРЅРёС‚СЊ Р±Р°Р·РѕРІС‹Рµ РёРјРµРЅР° С„Р°Р№Р»РѕРІ (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°)
     return (lstrcmpiA(GetBaseName(cur), GetBaseName(path)) == 0);
 }
 
 /*******************************************************************************
  * ApplySkin
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Applies (loads) a skin by its full path using Winamp's IPC mechanism.
  * 
- * Применяет (загружает) скин по его полному пути, используя механизм IPC Winamp.
+ * РџСЂРёРјРµРЅСЏРµС‚ (Р·Р°РіСЂСѓР¶Р°РµС‚) СЃРєРёРЅ РїРѕ РµРіРѕ РїРѕР»РЅРѕРјСѓ РїСѓС‚Рё, РёСЃРїРѕР»СЊР·СѓСЏ РјРµС…Р°РЅРёР·Рј IPC Winamp.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * fullPath - Full path to the skin file or directory
- *            Полный путь к файлу скина или каталогу
+ *            РџРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ СЃРєРёРЅР° РёР»Рё РєР°С‚Р°Р»РѕРіСѓ
  ******************************************************************************/
 static void ApplySkin(const char* fullPath) {
     SendMessage(FindWinamp(), WM_WA_IPC, (WPARAM)fullPath, IPC_SETSKIN);
@@ -532,21 +532,21 @@ static void ApplySkin(const char* fullPath) {
 /*******************************************************************************
  * FindActiveIndex
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Finds the list index of the currently active skin by comparing with each
  * item in the list.
  * 
- * Находит индекс списка текущего активного скина путём сравнения с каждым
- * элементом в списке.
+ * РќР°С…РѕРґРёС‚ РёРЅРґРµРєСЃ СЃРїРёСЃРєР° С‚РµРєСѓС‰РµРіРѕ Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР° РїСѓС‚С‘Рј СЃСЂР°РІРЅРµРЅРёСЏ СЃ РєР°Р¶РґС‹Рј
+ * СЌР»РµРјРµРЅС‚РѕРј РІ СЃРїРёСЃРєРµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * int - Index of active skin in list, or -1 if not found
- *       Индекс активного скина в списке или -1, если не найден
+ *       РРЅРґРµРєСЃ Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР° РІ СЃРїРёСЃРєРµ РёР»Рё -1, РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get current skin path from Winamp
  * 2. Extract base filename from current skin path
  * 3. Iterate through all list items
@@ -554,15 +554,15 @@ static void ApplySkin(const char* fullPath) {
  * 5. If no match, resolve full path and compare base filenames
  * 6. Return index if match found
  * 
- * 1. Получить путь текущего скина из Winamp
- * 2. Извлечь базовое имя файла из пути текущего скина
- * 3. Перебрать все элементы списка
- * 4. Для каждого элемента сначала попытаться точное совпадение имени
- * 5. Если нет совпадения, преобразовать в полный путь и сравнить базовые имена файлов
- * 6. Вернуть индекс, если совпадение найдено
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РїСѓС‚СЊ С‚РµРєСѓС‰РµРіРѕ СЃРєРёРЅР° РёР· Winamp
+ * 2. РР·РІР»РµС‡СЊ Р±Р°Р·РѕРІРѕРµ РёРјСЏ С„Р°Р№Р»Р° РёР· РїСѓС‚Рё С‚РµРєСѓС‰РµРіРѕ СЃРєРёРЅР°
+ * 3. РџРµСЂРµР±СЂР°С‚СЊ РІСЃРµ СЌР»РµРјРµРЅС‚С‹ СЃРїРёСЃРєР°
+ * 4. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ СЌР»РµРјРµРЅС‚Р° СЃРЅР°С‡Р°Р»Р° РїРѕРїС‹С‚Р°С‚СЊСЃСЏ С‚РѕС‡РЅРѕРµ СЃРѕРІРїР°РґРµРЅРёРµ РёРјРµРЅРё
+ * 5. Р•СЃР»Рё РЅРµС‚ СЃРѕРІРїР°РґРµРЅРёСЏ, РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рё СЃСЂР°РІРЅРёС‚СЊ Р±Р°Р·РѕРІС‹Рµ РёРјРµРЅР° С„Р°Р№Р»РѕРІ
+ * 6. Р’РµСЂРЅСѓС‚СЊ РёРЅРґРµРєСЃ, РµСЃР»Рё СЃРѕРІРїР°РґРµРЅРёРµ РЅР°Р№РґРµРЅРѕ
  ******************************************************************************/
 static int FindActiveIndex(HWND h) {
-    // Get current skin path / Получить путь текущего скина
+    // Get current skin path / РџРѕР»СѓС‡РёС‚СЊ РїСѓС‚СЊ С‚РµРєСѓС‰РµРіРѕ СЃРєРёРЅР°
     char* cur = (char*)SendMessage(FindWinamp(), WM_WA_IPC, 0, IPC_GETSKIN);
     if (!cur) return -1;
     
@@ -571,33 +571,33 @@ static int FindActiveIndex(HWND h) {
     int cnt = List_GetCount(h);
     char buf[MAX_PATH], full[MAX_PATH];
     
-    // Search through all list items / Поиск по всем элементам списка
+    // Search through all list items / РџРѕРёСЃРє РїРѕ РІСЃРµРј СЌР»РµРјРµРЅС‚Р°Рј СЃРїРёСЃРєР°
     for (int i=0; i<cnt; i++) {
         if (List_GetText(h, i, buf)) {
-            // Try exact name match first / Сначала попытаться точное совпадение имени
+            // Try exact name match first / РЎРЅР°С‡Р°Р»Р° РїРѕРїС‹С‚Р°С‚СЊСЃСЏ С‚РѕС‡РЅРѕРµ СЃРѕРІРїР°РґРµРЅРёРµ РёРјРµРЅРё
             if (lstrcmpiA(buf, base) == 0) return i;
             
-            // Try resolving to full path and comparing / Попытаться преобразовать в полный путь и сравнить
+            // Try resolving to full path and comparing / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рё СЃСЂР°РІРЅРёС‚СЊ
             if (ResolveSkin(buf, full) && lstrcmpiA(GetBaseName(full), base) == 0) return i;
         }
     }
-    return -1;  // Not found / Не найден
+    return -1;  // Not found / РќРµ РЅР°Р№РґРµРЅ
 }
 
 /*******************************************************************************
  * RENAME DIALOG FUNCTIONS
- * ФУНКЦИИ ДИАЛОГА ПЕРЕИМЕНОВАНИЯ
+ * Р¤РЈРќРљР¦РР Р”РРђР›РћР“Рђ РџР•Р Р•РРњР•РќРћР’РђРќРРЇ
  ******************************************************************************/
 
 /*******************************************************************************
  * Dialog Template Structures
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Packed structures for creating a dialog template in memory. This allows
  * creating a custom dialog without a resource file.
  * 
- * Упакованные структуры для создания шаблона диалога в памяти. Это позволяет
- * создавать пользовательский диалог без файла ресурсов.
+ * РЈРїР°РєРѕРІР°РЅРЅС‹Рµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ С€Р°Р±Р»РѕРЅР° РґРёР°Р»РѕРіР° РІ РїР°РјСЏС‚Рё. Р­С‚Рѕ РїРѕР·РІРѕР»СЏРµС‚
+ * СЃРѕР·РґР°РІР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РґРёР°Р»РѕРі Р±РµР· С„Р°Р№Р»Р° СЂРµСЃСѓСЂСЃРѕРІ.
  ******************************************************************************/
 #pragma pack(push, 1)
 struct DLG_TEMPLATE {
@@ -613,67 +613,67 @@ struct DLG_ITEM {
 /*******************************************************************************
  * RenameDlgProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Dialog procedure for the rename dialog. Handles initialization and
  * user input for renaming a skin.
  * 
- * Процедура диалога для диалога переименования. Обрабатывает инициализацию
- * и пользовательский ввод для переименования скина.
+ * РџСЂРѕС†РµРґСѓСЂР° РґРёР°Р»РѕРіР° РґР»СЏ РґРёР°Р»РѕРіР° РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ
+ * Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РІРІРѕРґ РґР»СЏ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to dialog window / Дескриптор окна диалога
- * m - Message identifier / Идентификатор сообщения
- * w - First message parameter / Первый параметр сообщения
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to dialog window / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° РґРёР°Р»РѕРіР°
+ * m - Message identifier / РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕРѕР±С‰РµРЅРёСЏ
+ * w - First message parameter / РџРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ
  * l - Second message parameter (pointer to buffer on WM_INITDIALOG)
- *     Второй параметр сообщения (указатель на буфер при WM_INITDIALOG)
+ *     Р’С‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ (СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ РїСЂРё WM_INITDIALOG)
  * 
- * DIALOG CONTROLS / ЭЛЕМЕНТЫ УПРАВЛЕНИЯ ДИАЛОГА:
+ * DIALOG CONTROLS / Р­Р›Р•РњР•РќРўР« РЈРџР РђР’Р›Р•РќРРЇ Р”РРђР›РћР“Рђ:
  * Control ID 100: Static text label (prompt)
  * Control ID 101: Edit box for entering new name
  * IDOK:           OK button
  * IDCANCEL:       Cancel button
  * 
- * Элемент управления ID 100: статический текстовый ярлык (подсказка)
- * Элемент управления ID 101: поле редактирования для ввода нового имени
- * IDOK:                      кнопка OK
- * IDCANCEL:                  кнопка Отмена
+ * Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ ID 100: СЃС‚Р°С‚РёС‡РµСЃРєРёР№ С‚РµРєСЃС‚РѕРІС‹Р№ СЏСЂР»С‹Рє (РїРѕРґСЃРєР°Р·РєР°)
+ * Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ ID 101: РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ РІРІРѕРґР° РЅРѕРІРѕРіРѕ РёРјРµРЅРё
+ * IDOK:                      РєРЅРѕРїРєР° OK
+ * IDCANCEL:                  РєРЅРѕРїРєР° РћС‚РјРµРЅР°
  ******************************************************************************/
 static INT_PTR CALLBACK RenameDlgProc(HWND h, UINT m, WPARAM w, LPARAM l) {
     // Static pointer to output buffer (shared across dialog lifetime)
-    // Статический указатель на выходной буфер (общий на время жизни диалога)
+    // РЎС‚Р°С‚РёС‡РµСЃРєРёР№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РІС‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ (РѕР±С‰РёР№ РЅР° РІСЂРµРјСЏ Р¶РёР·РЅРё РґРёР°Р»РѕРіР°)
     static char* pOut;
     
     if (m == WM_INITDIALOG) {
-        // Store output buffer pointer / Сохранить указатель на выходной буфер
+        // Store output buffer pointer / РЎРѕС…СЂР°РЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РІС‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ
         pOut = (char*)l;
         
         // Set dialog title and prompt text (localized strings)
-        // Установить заголовок диалога и текст подсказки (локализованные строки)
+        // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє РґРёР°Р»РѕРіР° Рё С‚РµРєСЃС‚ РїРѕРґСЃРєР°Р·РєРё (Р»РѕРєР°Р»РёР·РѕРІР°РЅРЅС‹Рµ СЃС‚СЂРѕРєРё)
         SetWindowText(h, RENAME_TITLE);
         SetDlgItemText(h, 100, RENAME_PROMPT);
         
         // Set initial text in edit box (current skin name)
-        // Установить начальный текст в поле редактирования (текущее имя скина)
+        // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅР°С‡Р°Р»СЊРЅС‹Р№ С‚РµРєСЃС‚ РІ РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ (С‚РµРєСѓС‰РµРµ РёРјСЏ СЃРєРёРЅР°)
         SetDlgItemText(h, 101, pOut);
         
         // Set focus to edit box and select all text for easy editing
-        // Установить фокус на поле редактирования и выделить весь текст для лёгкого редактирования
+        // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С„РѕРєСѓСЃ РЅР° РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ Рё РІС‹РґРµР»РёС‚СЊ РІРµСЃСЊ С‚РµРєСЃС‚ РґР»СЏ Р»С‘РіРєРѕРіРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
         SetFocus(GetDlgItem(h, 101));
         SendMessage(GetDlgItem(h, 101), EM_SETSEL, 0, -1);
         
-        return FALSE;  // We set focus manually / Мы установили фокус вручную
+        return FALSE;  // We set focus manually / РњС‹ СѓСЃС‚Р°РЅРѕРІРёР»Рё С„РѕРєСѓСЃ РІСЂСѓС‡РЅСѓСЋ
     }
     
     if (m == WM_COMMAND) {
         if (LOWORD(w) == IDOK) {
             // OK button clicked - retrieve edited text
-            // Кнопка OK нажата - получить отредактированный текст
+            // РљРЅРѕРїРєР° OK РЅР°Р¶Р°С‚Р° - РїРѕР»СѓС‡РёС‚СЊ РѕС‚СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРЅС‹Р№ С‚РµРєСЃС‚
             GetDlgItemText(h, 101, pOut, MAX_PATH);
-            EndDialog(h, 1);  // Return 1 to indicate success / Вернуть 1 для обозначения успеха
+            EndDialog(h, 1);  // Return 1 to indicate success / Р’РµСЂРЅСѓС‚СЊ 1 РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ СѓСЃРїРµС…Р°
         } else if (LOWORD(w) == IDCANCEL) {
             // Cancel button clicked
-            // Кнопка Отмена нажата
-            EndDialog(h, 0);  // Return 0 to indicate cancellation / Вернуть 0 для обозначения отмены
+            // РљРЅРѕРїРєР° РћС‚РјРµРЅР° РЅР°Р¶Р°С‚Р°
+            EndDialog(h, 0);  // Return 0 to indicate cancellation / Р’РµСЂРЅСѓС‚СЊ 0 РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ РѕС‚РјРµРЅС‹
         }
     }
     return FALSE;
@@ -682,116 +682,116 @@ static INT_PTR CALLBACK RenameDlgProc(HWND h, UINT m, WPARAM w, LPARAM l) {
 /*******************************************************************************
  * PromptRename
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates and displays a modal rename dialog by building a dialog template
  * in memory. This avoids the need for a resource file.
  * 
- * Создаёт и отображает модальный диалог переименования, создавая шаблон
- * диалога в памяти. Это избавляет от необходимости файла ресурсов.
+ * РЎРѕР·РґР°С‘С‚ Рё РѕС‚РѕР±СЂР°Р¶Р°РµС‚ РјРѕРґР°Р»СЊРЅС‹Р№ РґРёР°Р»РѕРі РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ, СЃРѕР·РґР°РІР°СЏ С€Р°Р±Р»РѕРЅ
+ * РґРёР°Р»РѕРіР° РІ РїР°РјСЏС‚Рё. Р­С‚Рѕ РёР·Р±Р°РІР»СЏРµС‚ РѕС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё С„Р°Р№Р»Р° СЂРµСЃСѓСЂСЃРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * owner - Handle to owner window / Дескриптор окна-владельца
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * owner - Handle to owner window / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР°-РІР»Р°РґРµР»СЊС†Р°
  * buf   - Buffer containing current name (input) and receiving new name (output)
- *         Буфер, содержащий текущее имя (вход) и принимающий новое имя (выход)
+ *         Р‘СѓС„РµСЂ, СЃРѕРґРµСЂР¶Р°С‰РёР№ С‚РµРєСѓС‰РµРµ РёРјСЏ (РІС…РѕРґ) Рё РїСЂРёРЅРёРјР°СЋС‰РёР№ РЅРѕРІРѕРµ РёРјСЏ (РІС‹С…РѕРґ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if user clicked OK, FALSE if cancelled
- *        TRUE если пользователь нажал OK, FALSE если отменил
+ *        TRUE РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅР°Р¶Р°Р» OK, FALSE РµСЃР»Рё РѕС‚РјРµРЅРёР»
  * 
- * DIALOG LAYOUT / МАКЕТ ДИАЛОГА:
- * - Size: 180x55 dialog units / Размер: 180x55 единиц диалога
- * - Font: MS Sans Serif, 8pt / Шрифт: MS Sans Serif, 8pt
+ * DIALOG LAYOUT / РњРђРљР•Рў Р”РРђР›РћР“Рђ:
+ * - Size: 180x55 dialog units / Р Р°Р·РјРµСЂ: 180x55 РµРґРёРЅРёС† РґРёР°Р»РѕРіР°
+ * - Font: MS Sans Serif, 8pt / РЁСЂРёС„С‚: MS Sans Serif, 8pt
  * - Controls: Label, Edit box, OK button, Cancel button
- *             Элементы: ярлык, поле редактирования, кнопка OK, кнопка Отмена
+ *             Р­Р»РµРјРµРЅС‚С‹: СЏСЂР»С‹Рє, РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ, РєРЅРѕРїРєР° OK, РєРЅРѕРїРєР° РћС‚РјРµРЅР°
  * 
- * IMPLEMENTATION NOTES / ПРИМЕЧАНИЯ К РЕАЛИЗАЦИИ:
+ * IMPLEMENTATION NOTES / РџР РРњР•Р§РђРќРРЇ Рљ Р Р•РђР›РР—РђР¦РР:
  * This function manually constructs a DLGTEMPLATE structure in memory,
  * including all dialog items. The ALIGN macro ensures proper alignment
  * of structures as required by DialogBoxIndirect.
  * 
- * Эта функция вручную создаёт структуру DLGTEMPLATE в памяти, включая все
- * элементы диалога. Макрос ALIGN обеспечивает правильное выравнивание
- * структур, требуемое DialogBoxIndirect.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ РІСЂСѓС‡РЅСѓСЋ СЃРѕР·РґР°С‘С‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ DLGTEMPLATE РІ РїР°РјСЏС‚Рё, РІРєР»СЋС‡Р°СЏ РІСЃРµ
+ * СЌР»РµРјРµРЅС‚С‹ РґРёР°Р»РѕРіР°. РњР°РєСЂРѕСЃ ALIGN РѕР±РµСЃРїРµС‡РёРІР°РµС‚ РїСЂР°РІРёР»СЊРЅРѕРµ РІС‹СЂР°РІРЅРёРІР°РЅРёРµ
+ * СЃС‚СЂСѓРєС‚СѓСЂ, С‚СЂРµР±СѓРµРјРѕРµ DialogBoxIndirect.
  ******************************************************************************/
 static BOOL PromptRename(HWND owner, char* buf) {
-    const int W=180, H=55;  // Dialog dimensions in dialog units / Размеры диалога в единицах диалога
+    const int W=180, H=55;  // Dialog dimensions in dialog units / Р Р°Р·РјРµСЂС‹ РґРёР°Р»РѕРіР° РІ РµРґРёРЅРёС†Р°С… РґРёР°Р»РѕРіР°
     
     // Allocate memory for dialog template (1024 bytes should be enough)
-    // Выделить память для шаблона диалога (1024 байта должно быть достаточно)
+    // Р’С‹РґРµР»РёС‚СЊ РїР°РјСЏС‚СЊ РґР»СЏ С€Р°Р±Р»РѕРЅР° РґРёР°Р»РѕРіР° (1024 Р±Р°Р№С‚Р° РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ)
     BYTE* mem = (BYTE*)LocalAlloc(LPTR, 1024);
     if (!mem) return FALSE;
     
-    BYTE* p = mem;  // Pointer for building template / Указатель для создания шаблона
+    BYTE* p = mem;  // Pointer for building template / РЈРєР°Р·Р°С‚РµР»СЊ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ С€Р°Р±Р»РѕРЅР°
     
-    // Build dialog header / Создать заголовок диалога
+    // Build dialog header / РЎРѕР·РґР°С‚СЊ Р·Р°РіРѕР»РѕРІРѕРє РґРёР°Р»РѕРіР°
     DLGTEMPLATE* head = (DLGTEMPLATE*)p;
     head->style = DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU;
-    head->cdit = 4;  // Number of controls / Количество элементов управления
+    head->cdit = 4;  // Number of controls / РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ СѓРїСЂР°РІР»РµРЅРёСЏ
     head->cx = W; 
     head->cy = H;
     p += sizeof(DLGTEMPLATE); 
-    p += 6;  // Skip menu, class, title (all empty) / Пропустить меню, класс, заголовок (все пустые)
+    p += 6;  // Skip menu, class, title (all empty) / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РјРµРЅСЋ, РєР»Р°СЃСЃ, Р·Р°РіРѕР»РѕРІРѕРє (РІСЃРµ РїСѓСЃС‚С‹Рµ)
     
-    // Set font / Установить шрифт
-    *(WORD*)p = 8; p += 2;  // Font size / Размер шрифта
+    // Set font / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С€СЂРёС„С‚
+    *(WORD*)p = 8; p += 2;  // Font size / Р Р°Р·РјРµСЂ С€СЂРёС„С‚Р°
     lstrcpyW((WCHAR*)p, L"MS Sans Serif"); 
     p += 28;
 
     // Macro to align pointer to DWORD boundary (required by DialogBoxIndirect)
-    // Макрос для выравнивания указателя на границу DWORD (требуется DialogBoxIndirect)
+    // РњР°РєСЂРѕСЃ РґР»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СѓРєР°Р·Р°С‚РµР»СЏ РЅР° РіСЂР°РЅРёС†Сѓ DWORD (С‚СЂРµР±СѓРµС‚СЃСЏ DialogBoxIndirect)
     #define ALIGN(x) x = (BYTE*)(((DWORD_PTR)(x) + 3) & ~3)
     
     // Control 1: Static text label (prompt)
-    // Элемент управления 1: статический текстовый ярлык (подсказка)
+    // Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ 1: СЃС‚Р°С‚РёС‡РµСЃРєРёР№ С‚РµРєСЃС‚РѕРІС‹Р№ СЏСЂР»С‹Рє (РїРѕРґСЃРєР°Р·РєР°)
     ALIGN(p); {
         DLGITEMTEMPLATE* it = (DLGITEMTEMPLATE*)p;
         it->style = WS_CHILD | WS_VISIBLE | SS_LEFT;
         it->x = 5; it->y = 5; it->cx = 170; it->cy = 10; it->id = 100;
         p += sizeof(DLGITEMTEMPLATE);
-        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / Класс: предопределённый
-        *(WORD*)p = 0x0082; p+=2;  // Static control / Статический элемент управления
-        *(WORD*)p = 0; p+=2;       // No text (set later) / Нет текста (установить позже)
-        *(WORD*)p = 0; p+=2;       // No creation data / Нет данных создания
+        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / РљР»Р°СЃСЃ: РїСЂРµРґРѕРїСЂРµРґРµР»С‘РЅРЅС‹Р№
+        *(WORD*)p = 0x0082; p+=2;  // Static control / РЎС‚Р°С‚РёС‡РµСЃРєРёР№ СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ
+        *(WORD*)p = 0; p+=2;       // No text (set later) / РќРµС‚ С‚РµРєСЃС‚Р° (СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР·Р¶Рµ)
+        *(WORD*)p = 0; p+=2;       // No creation data / РќРµС‚ РґР°РЅРЅС‹С… СЃРѕР·РґР°РЅРёСЏ
     }
     
     // Control 2: Edit box for entering new name
-    // Элемент управления 2: поле редактирования для ввода нового имени
+    // Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ 2: РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ РІРІРѕРґР° РЅРѕРІРѕРіРѕ РёРјРµРЅРё
     ALIGN(p); {
         DLGITEMTEMPLATE* it = (DLGITEMTEMPLATE*)p;
         it->style = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL;
         it->x = 5; it->y = 18; it->cx = 170; it->cy = 12; it->id = 101;
         p += sizeof(DLGITEMTEMPLATE);
-        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / Класс: предопределённый
-        *(WORD*)p = 0x0081; p+=2;  // Edit control / Элемент управления редактирования
-        *(WORD*)p = 0; p+=2;       // No initial text / Нет начального текста
-        *(WORD*)p = 0; p+=2;       // No creation data / Нет данных создания
+        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / РљР»Р°СЃСЃ: РїСЂРµРґРѕРїСЂРµРґРµР»С‘РЅРЅС‹Р№
+        *(WORD*)p = 0x0081; p+=2;  // Edit control / Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
+        *(WORD*)p = 0; p+=2;       // No initial text / РќРµС‚ РЅР°С‡Р°Р»СЊРЅРѕРіРѕ С‚РµРєСЃС‚Р°
+        *(WORD*)p = 0; p+=2;       // No creation data / РќРµС‚ РґР°РЅРЅС‹С… СЃРѕР·РґР°РЅРёСЏ
     }
     
     // Control 3: OK button (default button)
-    // Элемент управления 3: кнопка OK (кнопка по умолчанию)
+    // Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ 3: РєРЅРѕРїРєР° OK (РєРЅРѕРїРєР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ)
     ALIGN(p); {
         DLGITEMTEMPLATE* it = (DLGITEMTEMPLATE*)p;
         it->style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON;
         it->x = 65; it->y = 35; it->cx = 50; it->cy = 14; it->id = IDOK;
         p += sizeof(DLGITEMTEMPLATE);
-        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / Класс: предопределённый
-        *(WORD*)p = 0x0080; p+=2;  // Button control / Элемент управления кнопки
-        lstrcpyW((WCHAR*)p, L"OK"); p += 6;  // Button text / Текст кнопки
-        *(WORD*)p = 0; p+=2;  // No creation data / Нет данных создания
+        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / РљР»Р°СЃСЃ: РїСЂРµРґРѕРїСЂРµРґРµР»С‘РЅРЅС‹Р№
+        *(WORD*)p = 0x0080; p+=2;  // Button control / Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ РєРЅРѕРїРєРё
+        lstrcpyW((WCHAR*)p, L"OK"); p += 6;  // Button text / РўРµРєСЃС‚ РєРЅРѕРїРєРё
+        *(WORD*)p = 0; p+=2;  // No creation data / РќРµС‚ РґР°РЅРЅС‹С… СЃРѕР·РґР°РЅРёСЏ
     }
     
     // Control 4: Cancel button
-    // Элемент управления 4: кнопка Отмена
+    // Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ 4: РєРЅРѕРїРєР° РћС‚РјРµРЅР°
     ALIGN(p); {
         DLGITEMTEMPLATE* it = (DLGITEMTEMPLATE*)p;
         it->style = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
         it->x = 120; it->y = 35; it->cx = 50; it->cy = 14; it->id = IDCANCEL;
         p += sizeof(DLGITEMTEMPLATE);
-        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / Класс: предопределённый
-        *(WORD*)p = 0x0080; p+=2;  // Button control / Элемент управления кнопки
+        *(WORD*)p = 0xFFFF; p+=2;  // Class: predefined / РљР»Р°СЃСЃ: РїСЂРµРґРѕРїСЂРµРґРµР»С‘РЅРЅС‹Р№
+        *(WORD*)p = 0x0080; p+=2;  // Button control / Р­Р»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ РєРЅРѕРїРєРё
         
         // Use localized Cancel text if available, otherwise use default
-        // Использовать локализованный текст Отмена, если доступен, иначе использовать по умолчанию
+        // РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»РѕРєР°Р»РёР·РѕРІР°РЅРЅС‹Р№ С‚РµРєСЃС‚ РћС‚РјРµРЅР°, РµСЃР»Рё РґРѕСЃС‚СѓРїРµРЅ, РёРЅР°С‡Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         if (WINDOW_CANCEL && WINDOW_CANCEL[0]) {
             MultiByteToWideChar(CP_ACP, 0, WINDOW_CANCEL, -1, (WCHAR*)p, 64);
         } else {
@@ -799,38 +799,38 @@ static BOOL PromptRename(HWND owner, char* buf) {
         }
         p += (lstrlenW((WCHAR*)p) + 1) * sizeof(WCHAR); 
 
-        *(WORD*)p = 0; p+=2;  // No creation data / Нет данных создания
+        *(WORD*)p = 0; p+=2;  // No creation data / РќРµС‚ РґР°РЅРЅС‹С… СЃРѕР·РґР°РЅРёСЏ
     }
 
     // Display the dialog and get result
-    // Отобразить диалог и получить результат
+    // РћС‚РѕР±СЂР°Р·РёС‚СЊ РґРёР°Р»РѕРі Рё РїРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚
     INT_PTR res = DialogBoxIndirectParamA(GetModuleHandle(NULL), (DLGTEMPLATE*)mem, owner, RenameDlgProc, (LPARAM)buf);
     
-    // Free allocated memory / Освободить выделенную память
+    // Free allocated memory / РћСЃРІРѕР±РѕРґРёС‚СЊ РІС‹РґРµР»РµРЅРЅСѓСЋ РїР°РјСЏС‚СЊ
     LocalFree(mem);
     
-    return (res == 1);  // Return TRUE if OK was clicked / Вернуть TRUE, если была нажата OK
+    return (res == 1);  // Return TRUE if OK was clicked / Р’РµСЂРЅСѓС‚СЊ TRUE, РµСЃР»Рё Р±С‹Р»Р° РЅР°Р¶Р°С‚Р° OK
 }
 
 /*******************************************************************************
  * SKIN OPERATION FUNCTIONS
- * ФУНКЦИИ ОПЕРАЦИЙ СО СКИНАМИ
+ * Р¤РЈРќРљР¦РР РћРџР•Р РђР¦РР™ РЎРћ РЎРљРРќРђРњР
  ******************************************************************************/
 
 /*******************************************************************************
  * DoDelete
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Deletes the currently selected skin using shell file operations (moves to
  * Recycle Bin for safety).
  * 
- * Удаляет текущий выбранный скин, используя операции оболочки с файлами
- * (перемещает в корзину для безопасности).
+ * РЈРґР°Р»СЏРµС‚ С‚РµРєСѓС‰РёР№ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ, РёСЃРїРѕР»СЊР·СѓСЏ РѕРїРµСЂР°С†РёРё РѕР±РѕР»РѕС‡РєРё СЃ С„Р°Р№Р»Р°РјРё
+ * (РїРµСЂРµРјРµС‰Р°РµС‚ РІ РєРѕСЂР·РёРЅСѓ РґР»СЏ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Get selected item index and text (skin name)
  * 2. Resolve skin name to full path
  * 3. If this is the active skin, switch to default skin first
@@ -839,62 +839,62 @@ static BOOL PromptRename(HWND owner, char* buf) {
  * 6. Select previous item
  * 7. Trigger list refresh (F5)
  * 
- * 1. Получить индекс и текст выбранного элемента (имя скина)
- * 2. Преобразовать имя скина в полный путь
- * 3. Если это активный скин, сначала переключиться на скин по умолчанию
- * 4. Использовать SHFileOperation для удаления (перемещение в корзину)
- * 5. Удалить элемент из списка
- * 6. Выбрать предыдущий элемент
- * 7. Вызвать обновление списка (F5)
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РёРЅРґРµРєСЃ Рё С‚РµРєСЃС‚ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° (РёРјСЏ СЃРєРёРЅР°)
+ * 2. РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РёРјСЏ СЃРєРёРЅР° РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ
+ * 3. Р•СЃР»Рё СЌС‚Рѕ Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ, СЃРЅР°С‡Р°Р»Р° РїРµСЂРµРєР»СЋС‡РёС‚СЊСЃСЏ РЅР° СЃРєРёРЅ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+ * 4. РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ SHFileOperation РґР»СЏ СѓРґР°Р»РµРЅРёСЏ (РїРµСЂРµРјРµС‰РµРЅРёРµ РІ РєРѕСЂР·РёРЅСѓ)
+ * 5. РЈРґР°Р»РёС‚СЊ СЌР»РµРјРµРЅС‚ РёР· СЃРїРёСЃРєР°
+ * 6. Р’С‹Р±СЂР°С‚СЊ РїСЂРµРґС‹РґСѓС‰РёР№ СЌР»РµРјРµРЅС‚
+ * 7. Р’С‹Р·РІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ СЃРїРёСЃРєР° (F5)
  * 
- * SAFETY FEATURES / ФУНКЦИИ БЕЗОПАСНОСТИ:
+ * SAFETY FEATURES / Р¤РЈРќРљР¦РР Р‘Р•Р—РћРџРђРЎРќРћРЎРўР:
  * - Uses FOF_ALLOWUNDO to enable Recycle Bin
  * - Switches away from active skin before deletion
  * - Brief delay after skin switch to ensure stability
  * 
- * - Использует FOF_ALLOWUNDO для включения корзины
- * - Переключается с активного скина перед удалением
- * - Короткая задержка после переключения скина для обеспечения стабильности
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ FOF_ALLOWUNDO РґР»СЏ РІРєР»СЋС‡РµРЅРёСЏ РєРѕСЂР·РёРЅС‹
+ * - РџРµСЂРµРєР»СЋС‡Р°РµС‚СЃСЏ СЃ Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР° РїРµСЂРµРґ СѓРґР°Р»РµРЅРёРµРј
+ * - РљРѕСЂРѕС‚РєР°СЏ Р·Р°РґРµСЂР¶РєР° РїРѕСЃР»Рµ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ СЃРєРёРЅР° РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ СЃС‚Р°Р±РёР»СЊРЅРѕСЃС‚Рё
  ******************************************************************************/
 static void DoDelete(HWND h) {
-    // Get selected item / Получить выбранный элемент
+    // Get selected item / РџРѕР»СѓС‡РёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЌР»РµРјРµРЅС‚
     int sel = List_GetSel(h);
     char buf[MAX_PATH], full[MAX_PATH];
     
     // Validate selection and resolve to full path
-    // Проверить выбор и преобразовать в полный путь
+    // РџСЂРѕРІРµСЂРёС‚СЊ РІС‹Р±РѕСЂ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ
     if (sel < 0 || !List_GetText(h, sel, buf) || !ResolveSkin(buf, full)) return;
 
     // If deleting active skin, switch to default first
-    // Если удаляем активный скин, сначала переключиться на скин по умолчанию
+    // Р•СЃР»Рё СѓРґР°Р»СЏРµРј Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ, СЃРЅР°С‡Р°Р»Р° РїРµСЂРµРєР»СЋС‡РёС‚СЊСЃСЏ РЅР° СЃРєРёРЅ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     if (IsActiveSkin(full)) {
         SendMessage(FindWinamp(), WM_WA_IPC, (WPARAM)"", IPC_SETSKIN);
-        Sleep(100);  // Brief delay to ensure skin is unloaded / Короткая задержка для гарантии выгрузки скина
+        Sleep(100);  // Brief delay to ensure skin is unloaded / РљРѕСЂРѕС‚РєР°СЏ Р·Р°РґРµСЂР¶РєР° РґР»СЏ РіР°СЂР°РЅС‚РёРё РІС‹РіСЂСѓР·РєРё СЃРєРёРЅР°
     }
 
     // Prepare path for SHFileOperation (must be double-null terminated)
-    // Подготовить путь для SHFileOperation (должен заканчиваться двумя нулями)
+    // РџРѕРґРіРѕС‚РѕРІРёС‚СЊ РїСѓС‚СЊ РґР»СЏ SHFileOperation (РґРѕР»Р¶РµРЅ Р·Р°РєР°РЅС‡РёРІР°С‚СЊСЃСЏ РґРІСѓРјСЏ РЅСѓР»СЏРјРё)
     char from[MAX_PATH+2] = {0}; 
     lstrcpyA(from, full);
     
     // Configure file operation structure
-    // Настроить структуру операции с файлом
+    // РќР°СЃС‚СЂРѕРёС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ РѕРїРµСЂР°С†РёРё СЃ С„Р°Р№Р»РѕРј
     SHFILEOPSTRUCTA op = {0};
-    op.wFunc = FO_DELETE;                                      // Delete operation / Операция удаления
-    op.pFrom = from;                                           // Source file / Исходный файл
-    op.fFlags = FOF_ALLOWUNDO|FOF_NOCONFIRMATION|FOF_SILENT;  // Use Recycle Bin, no UI / Использовать корзину, без интерфейса
+    op.wFunc = FO_DELETE;                                      // Delete operation / РћРїРµСЂР°С†РёСЏ СѓРґР°Р»РµРЅРёСЏ
+    op.pFrom = from;                                           // Source file / РСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р»
+    op.fFlags = FOF_ALLOWUNDO|FOF_NOCONFIRMATION|FOF_SILENT;  // Use Recycle Bin, no UI / РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРѕСЂР·РёРЅСѓ, Р±РµР· РёРЅС‚РµСЂС„РµР№СЃР°
     
-    // Perform deletion / Выполнить удаление
+    // Perform deletion / Р’С‹РїРѕР»РЅРёС‚СЊ СѓРґР°Р»РµРЅРёРµ
     if (SHFileOperationA(&op) == 0) {
-        // Remove from list control / Удалить из элемента управления списком
+        // Remove from list control / РЈРґР°Р»РёС‚СЊ РёР· СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
         if (g_isLB) SendMessage(h, LB_DELETESTRING, sel, 0);
         else        SendMessage(h, LVM_DELETEITEM, sel, 0);
         
         // Select previous item (or first if we deleted first item)
-        // Выбрать предыдущий элемент (или первый, если удалили первый элемент)
+        // Р’С‹Р±СЂР°С‚СЊ РїСЂРµРґС‹РґСѓС‰РёР№ СЌР»РµРјРµРЅС‚ (РёР»Рё РїРµСЂРІС‹Р№, РµСЃР»Рё СѓРґР°Р»РёР»Рё РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚)
         List_SetSel(h, (sel > 0) ? sel - 1 : 0);
         
-        // Trigger list refresh / Вызвать обновление списка
+        // Trigger list refresh / Р’С‹Р·РІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ СЃРїРёСЃРєР°
         SendMessage(h, WM_KEYDOWN, VK_F5, 0); 
         SendMessage(h, WM_KEYUP, VK_F5, 0); 
     }
@@ -903,18 +903,18 @@ static void DoDelete(HWND h) {
 /*******************************************************************************
  * DoRename
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Renames the currently selected skin using a custom dialog, handling both
  * files (.wsz, .zip) and directories, with special handling for active skins.
  * 
- * Переименовывает текущий выбранный скин, используя пользовательский диалог,
- * обрабатывая как файлы (.wsz, .zip), так и каталоги, со специальной
- * обработкой активных скинов.
+ * РџРµСЂРµРёРјРµРЅРѕРІС‹РІР°РµС‚ С‚РµРєСѓС‰РёР№ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ, РёСЃРїРѕР»СЊР·СѓСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РґРёР°Р»РѕРі,
+ * РѕР±СЂР°Р±Р°С‚С‹РІР°СЏ РєР°Рє С„Р°Р№Р»С‹ (.wsz, .zip), С‚Р°Рє Рё РєР°С‚Р°Р»РѕРіРё, СЃРѕ СЃРїРµС†РёР°Р»СЊРЅРѕР№
+ * РѕР±СЂР°Р±РѕС‚РєРѕР№ Р°РєС‚РёРІРЅС‹С… СЃРєРёРЅРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Get selected item and resolve to full path
  * 2. Determine if it's a directory or file, and save extension if file
  * 3. Strip extension from display name for editing
@@ -926,44 +926,44 @@ static void DoDelete(HWND h) {
  * 9. Trigger list refresh
  * 10. If was active, schedule reapplication of renamed skin
  * 
- * 1. Получить выбранный элемент и преобразовать в полный путь
- * 2. Определить, является ли это каталогом или файлом, и сохранить расширение, если файл
- * 3. Убрать расширение из отображаемого имени для редактирования
- * 4. Показать диалог переименования
- * 5. Если подтверждено, создать новый путь с восстановленным расширением
- * 6. Если активный скин, временно переключиться на скин по умолчанию
- * 7. Выполнить операцию переименования файла
- * 8. Обновить список для отражения нового имени
- * 9. Вызвать обновление списка
- * 10. Если был активным, запланировать повторное применение переименованного скина
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЌР»РµРјРµРЅС‚ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ
+ * 2. РћРїСЂРµРґРµР»РёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ РєР°С‚Р°Р»РѕРіРѕРј РёР»Рё С„Р°Р№Р»РѕРј, Рё СЃРѕС…СЂР°РЅРёС‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ, РµСЃР»Рё С„Р°Р№Р»
+ * 3. РЈР±СЂР°С‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ РёР· РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕРіРѕ РёРјРµРЅРё РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
+ * 4. РџРѕРєР°Р·Р°С‚СЊ РґРёР°Р»РѕРі РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
+ * 5. Р•СЃР»Рё РїРѕРґС‚РІРµСЂР¶РґРµРЅРѕ, СЃРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ РїСѓС‚СЊ СЃ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рј СЂР°СЃС€РёСЂРµРЅРёРµРј
+ * 6. Р•СЃР»Рё Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ, РІСЂРµРјРµРЅРЅРѕ РїРµСЂРµРєР»СЋС‡РёС‚СЊСЃСЏ РЅР° СЃРєРёРЅ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+ * 7. Р’С‹РїРѕР»РЅРёС‚СЊ РѕРїРµСЂР°С†РёСЋ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ С„Р°Р№Р»Р°
+ * 8. РћР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє РґР»СЏ РѕС‚СЂР°Р¶РµРЅРёСЏ РЅРѕРІРѕРіРѕ РёРјРµРЅРё
+ * 9. Р’С‹Р·РІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ СЃРїРёСЃРєР°
+ * 10. Р•СЃР»Рё Р±С‹Р» Р°РєС‚РёРІРЅС‹Рј, Р·Р°РїР»Р°РЅРёСЂРѕРІР°С‚СЊ РїРѕРІС‚РѕСЂРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРЅРѕРіРѕ СЃРєРёРЅР°
  * 
- * SPECIAL HANDLING / СПЕЦИАЛЬНАЯ ОБРАБОТКА:
+ * SPECIAL HANDLING / РЎРџР•Р¦РРђР›Р¬РќРђРЇ РћР‘Р РђР‘РћРўРљРђ:
  * - Preserves file extension (.wsz or .zip) transparently
  * - Switches away from active skin before rename
  * - Schedules reapplication after rename completes
  * - Updates both ListBox and ListView appropriately
  * 
- * - Прозрачно сохраняет расширение файла (.wsz или .zip)
- * - Переключается с активного скина перед переименованием
- * - Планирует повторное применение после завершения переименования
- * - Соответствующим образом обновляет как ListBox, так и ListView
+ * - РџСЂРѕР·СЂР°С‡РЅРѕ СЃРѕС…СЂР°РЅСЏРµС‚ СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° (.wsz РёР»Рё .zip)
+ * - РџРµСЂРµРєР»СЋС‡Р°РµС‚СЃСЏ СЃ Р°РєС‚РёРІРЅРѕРіРѕ СЃРєРёРЅР° РїРµСЂРµРґ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµРј
+ * - РџР»Р°РЅРёСЂСѓРµС‚ РїРѕРІС‚РѕСЂРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ РїРѕСЃР»Рµ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
+ * - РЎРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРј РѕР±СЂР°Р·РѕРј РѕР±РЅРѕРІР»СЏРµС‚ РєР°Рє ListBox, С‚Р°Рє Рё ListView
  ******************************************************************************/
 static void DoRename(HWND h) {
-    // Get selected item / Получить выбранный элемент
+    // Get selected item / РџРѕР»СѓС‡РёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЌР»РµРјРµРЅС‚
     int sel = List_GetSel(h);
     char buf[MAX_PATH], full[MAX_PATH]; 
     
     // Validate selection and resolve to full path
-    // Проверить выбор и преобразовать в полный путь
+    // РџСЂРѕРІРµСЂРёС‚СЊ РІС‹Р±РѕСЂ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ
     if (sel < 0 || !List_GetText(h, sel, buf) || !ResolveSkin(buf, full)) return;
 
     // Determine if this is a directory or file
-    // Определить, является ли это каталогом или файлом
+    // РћРїСЂРµРґРµР»РёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ РєР°С‚Р°Р»РѕРіРѕРј РёР»Рё С„Р°Р№Р»РѕРј
     BOOL isDir = (GetFileAttributesA(full) & FILE_ATTRIBUTE_DIRECTORY);
     char savedExt[16] = {0};
 
     // For files, detect and save extension (.wsz or .zip)
-    // Для файлов обнаружить и сохранить расширение (.wsz или .zip)
+    // Р”Р»СЏ С„Р°Р№Р»РѕРІ РѕР±РЅР°СЂСѓР¶РёС‚СЊ Рё СЃРѕС…СЂР°РЅРёС‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ (.wsz РёР»Рё .zip)
     if (!isDir) {
         int fullLen = lstrlenA(full);
         if (fullLen > 4) {
@@ -974,58 +974,58 @@ static void DoRename(HWND h) {
     }
 
     // Prepare display name for editing (without extension)
-    // Подготовить отображаемое имя для редактирования (без расширения)
+    // РџРѕРґРіРѕС‚РѕРІРёС‚СЊ РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕРµ РёРјСЏ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ (Р±РµР· СЂР°СЃС€РёСЂРµРЅРёСЏ)
     char editName[MAX_PATH]; 
     lstrcpyA(editName, buf);
 
     // Strip extension from display name if it exists
-    // Убрать расширение из отображаемого имени, если оно существует
+    // РЈР±СЂР°С‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ РёР· РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕРіРѕ РёРјРµРЅРё, РµСЃР»Рё РѕРЅРѕ СЃСѓС‰РµСЃС‚РІСѓРµС‚
     if (savedExt[0]) {
         int editLen = lstrlenA(editName);
         if (editLen > 4) {
             if (lstrcmpiA(editName + editLen - 4, savedExt) == 0) {
-                editName[editLen - 4] = 0;  // Null-terminate before extension / Завершить нулём перед расширением
+                editName[editLen - 4] = 0;  // Null-terminate before extension / Р—Р°РІРµСЂС€РёС‚СЊ РЅСѓР»С‘Рј РїРµСЂРµРґ СЂР°СЃС€РёСЂРµРЅРёРµРј
             }
         }
     }
 
-    // Show rename dialog / Показать диалог переименования
+    // Show rename dialog / РџРѕРєР°Р·Р°С‚СЊ РґРёР°Р»РѕРі РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
     if (PromptRename(h, editName)) {
-        // Build new full path / Создать новый полный путь
+        // Build new full path / РЎРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ
         char newFull[MAX_PATH];
         
         lstrcpyA(newFull, g_SkinsDir);
         int len = lstrlenA(newFull);
         if (len && newFull[len-1]!='\\') lstrcatA(newFull, "\\");
         
-        lstrcatA(newFull, editName);  // Append new name / Добавить новое имя
+        lstrcatA(newFull, editName);  // Append new name / Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІРѕРµ РёРјСЏ
         
         // Restore extension if this was a file
-        // Восстановить расширение, если это был файл
+        // Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ, РµСЃР»Рё СЌС‚Рѕ Р±С‹Р» С„Р°Р№Р»
         if (!isDir && savedExt[0]) {
             lstrcatA(newFull, savedExt);
         }
 
-        // Check if this is the active skin / Проверить, является ли это активным скином
+        // Check if this is the active skin / РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ Р°РєС‚РёРІРЅС‹Рј СЃРєРёРЅРѕРј
         BOOL wasActive = IsActiveSkin(full);
         
         // If active, switch to default temporarily
-        // Если активный, временно переключиться на скин по умолчанию
+        // Р•СЃР»Рё Р°РєС‚РёРІРЅС‹Р№, РІСЂРµРјРµРЅРЅРѕ РїРµСЂРµРєР»СЋС‡РёС‚СЊСЃСЏ РЅР° СЃРєРёРЅ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         if (wasActive) {
             SendMessage(FindWinamp(), WM_WA_IPC, (WPARAM)"", IPC_SETSKIN);
-            Sleep(50);  // Brief delay / Короткая задержка
+            Sleep(50);  // Brief delay / РљРѕСЂРѕС‚РєР°СЏ Р·Р°РґРµСЂР¶РєР°
         }
 
-        // Perform the rename operation / Выполнить операцию переименования
+        // Perform the rename operation / Р’С‹РїРѕР»РЅРёС‚СЊ РѕРїРµСЂР°С†РёСЋ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
         if (MoveFileA(full, newFull)) {
-            // Update list control / Обновить элемент управления списком
+            // Update list control / РћР±РЅРѕРІРёС‚СЊ СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
             if (g_isLB) {
-                // ListBox: delete and reinsert / ListBox: удалить и повторно вставить
+                // ListBox: delete and reinsert / ListBox: СѓРґР°Р»РёС‚СЊ Рё РїРѕРІС‚РѕСЂРЅРѕ РІСЃС‚Р°РІРёС‚СЊ
                 SendMessage(h, LB_DELETESTRING, sel, 0);
                 int n = SendMessage(h, LB_INSERTSTRING, sel, (LPARAM)editName);
                 List_SetSel(h, n);
             } else {
-                // ListView: update text in place / ListView: обновить текст на месте
+                // ListView: update text in place / ListView: РѕР±РЅРѕРІРёС‚СЊ С‚РµРєСЃС‚ РЅР° РјРµСЃС‚Рµ
                 LVITEMA lv={0}; 
                 lv.iItem=sel; 
                 lv.mask=LVIF_TEXT; 
@@ -1033,15 +1033,15 @@ static void DoRename(HWND h) {
                 SendMessage(h, LVM_SETITEMTEXT, sel, (LPARAM)&lv);
             }
 
-            // Trigger list refresh / Вызвать обновление списка
+            // Trigger list refresh / Р’С‹Р·РІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ СЃРїРёСЃРєР°
             SendMessage(h, WM_KEYDOWN, VK_F5, 0);
             SendMessage(h, WM_KEYUP, VK_F5, 0);
 
             // If this was active, schedule reapplication of renamed skin
-            // Если это был активный скин, запланировать повторное применение переименованного скина
+            // Р•СЃР»Рё СЌС‚Рѕ Р±С‹Р» Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ, Р·Р°РїР»Р°РЅРёСЂРѕРІР°С‚СЊ РїРѕРІС‚РѕСЂРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРЅРѕРіРѕ СЃРєРёРЅР°
             if (wasActive) {
                 lstrcpynA(g_pendingSkinPath, newFull, MAX_PATH);
-                SetTimer(h, RETRY_TIMER_ID, 200, NULL);  // 200ms delay / Задержка 200мс
+                SetTimer(h, RETRY_TIMER_ID, 200, NULL);  // 200ms delay / Р—Р°РґРµСЂР¶РєР° 200РјСЃ
             }
         }
     }
@@ -1049,118 +1049,118 @@ static void DoRename(HWND h) {
 
 /*******************************************************************************
  * SUBCLASS WINDOW PROCEDURE
- * ПРОЦЕДУРА ПОДМЕНЫ ОКНА
+ * РџР РћР¦Р•Р”РЈР Рђ РџРћР”РњР•РќР« РћРљРќРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * SkinProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Custom window procedure for the skin list control. Intercepts keyboard
  * events, mouse events, and timers to provide delete, rename, and auto-
  * selection functionality.
  * 
- * Пользовательская оконная процедура для элемента управления списком скинов.
- * Перехватывает события клавиатуры, мыши и таймеры для предоставления
- * функциональности удаления, переименования и автоматического выбора.
+ * РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєР°СЏ РѕРєРѕРЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РґР»СЏ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј СЃРєРёРЅРѕРІ.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕР±С‹С‚РёСЏ РєР»Р°РІРёР°С‚СѓСЂС‹, РјС‹С€Рё Рё С‚Р°Р№РјРµСЂС‹ РґР»СЏ РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅРёСЏ
+ * С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚Рё СѓРґР°Р»РµРЅРёСЏ, РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ Рё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РІС‹Р±РѕСЂР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Handle to list control / Дескриптор элемента управления списком
- * m - Message identifier / Идентификатор сообщения
- * w - First message parameter / Первый параметр сообщения
- * l - Second message parameter / Второй параметр сообщения
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Handle to list control / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј
+ * m - Message identifier / РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕРѕР±С‰РµРЅРёСЏ
+ * w - First message parameter / РџРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ
+ * l - Second message parameter / Р’С‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ
  * 
- * HANDLED MESSAGES / ОБРАБАТЫВАЕМЫЕ СООБЩЕНИЯ:
+ * HANDLED MESSAGES / РћР‘Р РђР‘РђРўР«Р’РђР•РњР«Р• РЎРћРћР‘Р©Р•РќРРЇ:
  * 
  * WM_KEYDOWN:
  *   Delete - Deletes selected skin
  *   F2     - Renames selected skin
  * 
- *   Delete - удаляет выбранный скин
- *   F2     - переименовывает выбранный скин
+ *   Delete - СѓРґР°Р»СЏРµС‚ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ
+ *   F2     - РїРµСЂРµРёРјРµРЅРѕРІС‹РІР°РµС‚ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ
  * 
  * WM_KEYUP / WM_LBUTTONUP:
  *   Triggers delayed skin application (250ms after selection change)
  * 
- *   Вызывает отложенное применение скина (250мс после изменения выбора)
+ *   Р’С‹Р·С‹РІР°РµС‚ РѕС‚Р»РѕР¶РµРЅРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ СЃРєРёРЅР° (250РјСЃ РїРѕСЃР»Рµ РёР·РјРµРЅРµРЅРёСЏ РІС‹Р±РѕСЂР°)
  * 
  * WM_CONTEXTMENU:
  *   Shows context menu with Rename and Delete options
  * 
- *   Показывает контекстное меню с опциями Переименовать и Удалить
+ *   РџРѕРєР°Р·С‹РІР°РµС‚ РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ СЃ РѕРїС†РёСЏРјРё РџРµСЂРµРёРјРµРЅРѕРІР°С‚СЊ Рё РЈРґР°Р»РёС‚СЊ
  * 
  * WM_TIMER:
  *   RETRY_TIMER_ID  - Reapplies skin after rename
  *   APPLY_TIMER_ID  - Applies selected skin after delay
  *   SELECT_TIMER_ID - Auto-selects active skin when dialog opens
  * 
- *   RETRY_TIMER_ID  - повторно применяет скин после переименования
- *   APPLY_TIMER_ID  - применяет выбранный скин после задержки
- *   SELECT_TIMER_ID - автоматически выбирает активный скин при открытии диалога
+ *   RETRY_TIMER_ID  - РїРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅСЏРµС‚ СЃРєРёРЅ РїРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
+ *   APPLY_TIMER_ID  - РїСЂРёРјРµРЅСЏРµС‚ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ РїРѕСЃР»Рµ Р·Р°РґРµСЂР¶РєРё
+ *   SELECT_TIMER_ID - Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р±РёСЂР°РµС‚ Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ РїСЂРё РѕС‚РєСЂС‹С‚РёРё РґРёР°Р»РѕРіР°
  ******************************************************************************/
 static LRESULT CALLBACK SkinProc(HWND h, UINT m, WPARAM w, LPARAM l) {
-    // Handle keyboard shortcuts / Обработка горячих клавиш
+    // Handle keyboard shortcuts / РћР±СЂР°Р±РѕС‚РєР° РіРѕСЂСЏС‡РёС… РєР»Р°РІРёС€
     if (m == WM_KEYDOWN) {
-        if (w == VK_DELETE) { DoDelete(h); return 0; }  // Delete key / Клавиша Delete
-        if (w == VK_F2)     { DoRename(h); return 0; }  // F2 key / Клавиша F2
+        if (w == VK_DELETE) { DoDelete(h); return 0; }  // Delete key / РљР»Р°РІРёС€Р° Delete
+        if (w == VK_F2)     { DoRename(h); return 0; }  // F2 key / РљР»Р°РІРёС€Р° F2
     }
     
     // Handle selection changes - set up delayed skin application
-    // Обработка изменений выбора - настроить отложенное применение скина
+    // РћР±СЂР°Р±РѕС‚РєР° РёР·РјРµРЅРµРЅРёР№ РІС‹Р±РѕСЂР° - РЅР°СЃС‚СЂРѕРёС‚СЊ РѕС‚Р»РѕР¶РµРЅРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ СЃРєРёРЅР°
     if (m == WM_KEYUP || m == WM_LBUTTONUP) {
         // Only apply if not in initial selection phase (g_anchor)
-        // Применять только если не в фазе начального выбора (g_anchor)
+        // РџСЂРёРјРµРЅСЏС‚СЊ С‚РѕР»СЊРєРѕ РµСЃР»Рё РЅРµ РІ С„Р°Р·Рµ РЅР°С‡Р°Р»СЊРЅРѕРіРѕ РІС‹Р±РѕСЂР° (g_anchor)
         if (!g_anchor) {
-            // Cancel any existing timer / Отменить любой существующий таймер
+            // Cancel any existing timer / РћС‚РјРµРЅРёС‚СЊ Р»СЋР±РѕР№ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ С‚Р°Р№РјРµСЂ
             if (g_tmApply) KillTimer(h, APPLY_TIMER_ID);
             
             // Set new timer for delayed application (250ms)
-            // Установить новый таймер для отложенного применения (250мс)
+            // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ С‚Р°Р№РјРµСЂ РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕРіРѕ РїСЂРёРјРµРЅРµРЅРёСЏ (250РјСЃ)
             g_tmApply = SetTimer(h, APPLY_TIMER_ID, 250, NULL);
         }
     }
 
-    // Handle context menu / Обработка контекстного меню
+    // Handle context menu / РћР±СЂР°Р±РѕС‚РєР° РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ
     if (m == WM_CONTEXTMENU) {
         int sel = List_GetSel(h);
-        if (sel >= 0) {  // Only show menu if item is selected / Показывать меню только если элемент выбран
-            // Create context menu / Создать контекстное меню
+        if (sel >= 0) {  // Only show menu if item is selected / РџРѕРєР°Р·С‹РІР°С‚СЊ РјРµРЅСЋ С‚РѕР»СЊРєРѕ РµСЃР»Рё СЌР»РµРјРµРЅС‚ РІС‹Р±СЂР°РЅ
+            // Create context menu / РЎРѕР·РґР°С‚СЊ РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ
             HMENU menu = CreatePopupMenu();
             AppendMenuA(menu, MF_STRING, IDM_CTX_RENAME, MENU_RENAME);
             AppendMenuA(menu, MF_STRING, IDM_CTX_DELETE, MENU_DELITEM);
             
-            // Show menu at cursor position / Показать меню в позиции курсора
+            // Show menu at cursor position / РџРѕРєР°Р·Р°С‚СЊ РјРµРЅСЋ РІ РїРѕР·РёС†РёРё РєСѓСЂСЃРѕСЂР°
             POINT pt; GetCursorPos(&pt);
             int cmd = TrackPopupMenu(menu, TPM_RETURNCMD, pt.x, pt.y, 0, h, NULL);
             DestroyMenu(menu);
             
-            // Execute selected command / Выполнить выбранную команду
+            // Execute selected command / Р’С‹РїРѕР»РЅРёС‚СЊ РІС‹Р±СЂР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ
             if (cmd == IDM_CTX_RENAME) DoRename(h);
             if (cmd == IDM_CTX_DELETE) DoDelete(h);
             return 0;
         }
     }
 
-    // Handle timers / Обработка таймеров
+    // Handle timers / РћР±СЂР°Р±РѕС‚РєР° С‚Р°Р№РјРµСЂРѕРІ
     if (m == WM_TIMER) {
         // Retry timer: reapply skin after rename
-        // Таймер повтора: повторно применить скин после переименования
+        // РўР°Р№РјРµСЂ РїРѕРІС‚РѕСЂР°: РїРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅРёС‚СЊ СЃРєРёРЅ РїРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ
         if (w == RETRY_TIMER_ID) {
             KillTimer(h, RETRY_TIMER_ID);
             if (g_pendingSkinPath[0]) {
                 ApplySkin(g_pendingSkinPath);
-                g_pendingSkinPath[0] = 0;  // Clear pending path / Очистить ожидающий путь
+                g_pendingSkinPath[0] = 0;  // Clear pending path / РћС‡РёСЃС‚РёС‚СЊ РѕР¶РёРґР°СЋС‰РёР№ РїСѓС‚СЊ
             }
             return 0;
         }
 
         // Apply timer: apply selected skin after delay
-        // Таймер применения: применить выбранный скин после задержки
+        // РўР°Р№РјРµСЂ РїСЂРёРјРµРЅРµРЅРёСЏ: РїСЂРёРјРµРЅРёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ РїРѕСЃР»Рµ Р·Р°РґРµСЂР¶РєРё
         if (w == APPLY_TIMER_ID) {
             KillTimer(h, APPLY_TIMER_ID); 
             g_tmApply = 0;
             
-            // Get selected skin and apply it / Получить выбранный скин и применить его
+            // Get selected skin and apply it / РџРѕР»СѓС‡РёС‚СЊ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ Рё РїСЂРёРјРµРЅРёС‚СЊ РµРіРѕ
             int sel = List_GetSel(h);
             char buf[MAX_PATH], full[MAX_PATH];
             if (sel >= 0 && List_GetText(h, sel, buf) && ResolveSkin(buf, full)) {
@@ -1170,19 +1170,19 @@ static LRESULT CALLBACK SkinProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         }
         
         // Select timer: auto-select active skin when dialog opens
-        // Таймер выбора: автоматически выбрать активный скин при открытии диалога
+        // РўР°Р№РјРµСЂ РІС‹Р±РѕСЂР°: Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р±СЂР°С‚СЊ Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ РїСЂРё РѕС‚РєСЂС‹С‚РёРё РґРёР°Р»РѕРіР°
         if (w == SELECT_TIMER_ID) {
             int idx = FindActiveIndex(h);
             if (idx >= 0) {
                 // Found active skin - select it and stop timer
-                // Найден активный скин - выбрать его и остановить таймер
+                // РќР°Р№РґРµРЅ Р°РєС‚РёРІРЅС‹Р№ СЃРєРёРЅ - РІС‹Р±СЂР°С‚СЊ РµРіРѕ Рё РѕСЃС‚Р°РЅРѕРІРёС‚СЊ С‚Р°Р№РјРµСЂ
                 KillTimer(h, SELECT_TIMER_ID); 
                 g_tmSel = 0;
-                g_anchor = FALSE;  // Allow normal skin application now / Разрешить обычное применение скина теперь
+                g_anchor = FALSE;  // Allow normal skin application now / Р Р°Р·СЂРµС€РёС‚СЊ РѕР±С‹С‡РЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ СЃРєРёРЅР° С‚РµРїРµСЂСЊ
                 List_SetSel(h, idx);
             } else if (++g_selTries > 30) {
                 // Give up after 30 attempts (300ms)
-                // Сдаться после 30 попыток (300мс)
+                // РЎРґР°С‚СЊСЃСЏ РїРѕСЃР»Рµ 30 РїРѕРїС‹С‚РѕРє (300РјСЃ)
                 KillTimer(h, SELECT_TIMER_ID); 
                 g_tmSel = 0;
                 g_anchor = FALSE;
@@ -1192,113 +1192,113 @@ static LRESULT CALLBACK SkinProc(HWND h, UINT m, WPARAM w, LPARAM l) {
     }
 
     // Forward all other messages to original window procedure
-    // Пересылка всех остальных сообщений оригинальной оконной процедуре
+    // РџРµСЂРµСЃС‹Р»РєР° РІСЃРµС… РѕСЃС‚Р°Р»СЊРЅС‹С… СЃРѕРѕР±С‰РµРЅРёР№ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ РѕРєРѕРЅРЅРѕР№ РїСЂРѕС†РµРґСѓСЂРµ
     return CallWindowProc(g_oldProc, h, m, w, l);
 }
 
 /*******************************************************************************
  * DIALOG MONITORING FUNCTIONS
- * ФУНКЦИИ МОНИТОРИНГА ДИАЛОГА
+ * Р¤РЈРќРљР¦РР РњРћРќРРўРћР РРќР“Рђ Р”РРђР›РћР“Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * EnumChild
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Callback function for EnumChildWindows. Searches for the skin list control
  * within a dialog and subclasses it if found.
  * 
- * Функция обратного вызова для EnumChildWindows. Ищет элемент управления
- * списком скинов в диалоге и подменяет его, если найден.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° РґР»СЏ EnumChildWindows. РС‰РµС‚ СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ
+ * СЃРїРёСЃРєРѕРј СЃРєРёРЅРѕРІ РІ РґРёР°Р»РѕРіРµ Рё РїРѕРґРјРµРЅСЏРµС‚ РµРіРѕ, РµСЃР»Рё РЅР°Р№РґРµРЅ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * h - Handle to child window being enumerated
- *     Дескриптор дочернего окна, которое перечисляется
+ *     Р”РµСЃРєСЂРёРїС‚РѕСЂ РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР°, РєРѕС‚РѕСЂРѕРµ РїРµСЂРµС‡РёСЃР»СЏРµС‚СЃСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE to continue enumeration, FALSE to stop
- *        TRUE для продолжения перечисления, FALSE для остановки
+ *        TRUE РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ, FALSE РґР»СЏ РѕСЃС‚Р°РЅРѕРІРєРё
  * 
- * IDENTIFICATION LOGIC / ЛОГИКА ИДЕНТИФИКАЦИИ:
+ * IDENTIFICATION LOGIC / Р›РћР“РРљРђ РР”Р•РќРўРР¤РРљРђР¦РР:
  * 1. Check if control ID matches SKIN_CTL_ID (1122)
  * 2. Verify parent dialog doesn't have OK/Cancel buttons (to avoid wrong dialogs)
  * 3. Check if control is ListBox or ListView (SysListView32)
  * 4. If not already subclassed, install our window procedure
  * 5. Initialize state variables and start auto-selection timer
  * 
- * 1. Проверить, соответствует ли ID элемента управления SKIN_CTL_ID (1122)
- * 2. Проверить, что родительский диалог не имеет кнопок OK/Отмена (чтобы избежать неправильных диалогов)
- * 3. Проверить, является ли элемент управления ListBox или ListView (SysListView32)
- * 4. Если ещё не подменён, установить нашу оконную процедуру
- * 5. Инициализировать переменные состояния и запустить таймер автоматического выбора
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р»Рё ID СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ SKIN_CTL_ID (1122)
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РґРёР°Р»РѕРі РЅРµ РёРјРµРµС‚ РєРЅРѕРїРѕРє OK/РћС‚РјРµРЅР° (С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РЅРµРїСЂР°РІРёР»СЊРЅС‹С… РґРёР°Р»РѕРіРѕРІ)
+ * 3. РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌР»РµРјРµРЅС‚ СѓРїСЂР°РІР»РµРЅРёСЏ ListBox РёР»Рё ListView (SysListView32)
+ * 4. Р•СЃР»Рё РµС‰С‘ РЅРµ РїРѕРґРјРµРЅС‘РЅ, СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅР°С€Сѓ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ
+ * 5. РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РІС‹Р±РѕСЂР°
  ******************************************************************************/
 static BOOL CALLBACK EnumChild(HWND h, LPARAM) {
     // Check if this is the skin list control (ID 1122)
-    // Проверить, является ли это элементом управления списком скинов (ID 1122)
+    // РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ СЌР»РµРјРµРЅС‚РѕРј СѓРїСЂР°РІР»РµРЅРёСЏ СЃРїРёСЃРєРѕРј СЃРєРёРЅРѕРІ (ID 1122)
     if (GetDlgCtrlID(h) == SKIN_CTL_ID) { 
-        // Get parent dialog / Получить родительский диалог
+        // Get parent dialog / РџРѕР»СѓС‡РёС‚СЊ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РґРёР°Р»РѕРі
         HWND hParent = GetParent(h);
         if (!hParent) return TRUE;
 
         // Skip dialogs with Cancel button (e.g., About dialog)
-        // Пропустить диалоги с кнопкой Отмена (например, диалог О программе)
+        // РџСЂРѕРїСѓСЃС‚РёС‚СЊ РґРёР°Р»РѕРіРё СЃ РєРЅРѕРїРєРѕР№ РћС‚РјРµРЅР° (РЅР°РїСЂРёРјРµСЂ, РґРёР°Р»РѕРі Рћ РїСЂРѕРіСЂР°РјРјРµ)
         if (GetDlgItem(hParent, IDCANCEL) != NULL) {
             return TRUE; 
         }
 
         // Skip dialogs with OK button (e.g., preference dialogs)
-        // Пропустить диалоги с кнопкой OK (например, диалоги настроек)
+        // РџСЂРѕРїСѓСЃС‚РёС‚СЊ РґРёР°Р»РѕРіРё СЃ РєРЅРѕРїРєРѕР№ OK (РЅР°РїСЂРёРјРµСЂ, РґРёР°Р»РѕРіРё РЅР°СЃС‚СЂРѕРµРє)
         if (GetDlgItem(hParent, IDOK) != NULL) {
             return TRUE; 
         }
 
-        // Check control class / Проверить класс элемента управления
+        // Check control class / РџСЂРѕРІРµСЂРёС‚СЊ РєР»Р°СЃСЃ СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ
         char cls[32]; 
         GetClassNameA(h, cls, 31);
         BOOL isLB = (lstrcmpiA(cls, "ListBox") == 0);
         
-        // Only handle ListBox or ListView / Обрабатывать только ListBox или ListView
+        // Only handle ListBox or ListView / РћР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ С‚РѕР»СЊРєРѕ ListBox РёР»Рё ListView
         if (isLB || lstrcmpiA(cls, "SysListView32") == 0) {
             // Only subclass if not already subclassed
-            // Подменять только если ещё не подменено
+            // РџРѕРґРјРµРЅСЏС‚СЊ С‚РѕР»СЊРєРѕ РµСЃР»Рё РµС‰С‘ РЅРµ РїРѕРґРјРµРЅРµРЅРѕ
             if (GetWindowLongPtrA(h, GWLP_WNDPROC) != (LONG_PTR)SkinProc) {
-                // Cache control handle and type / Кэшировать дескриптор и тип элемента управления
+                // Cache control handle and type / РљСЌС€РёСЂРѕРІР°С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ Рё С‚РёРї СЌР»РµРјРµРЅС‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ
                 g_hList = h;
                 g_isLB = isLB;
                 
-                // Install our window procedure / Установить нашу оконную процедуру
+                // Install our window procedure / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅР°С€Сѓ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ
                 g_oldProc = (WNDPROC)SetWindowLongPtrA(h, GWLP_WNDPROC, (LONG_PTR)SkinProc);
                 
-                // Initialize state / Инициализировать состояние
-                GetSkinsDir();  // Determine skins directory / Определить каталог скинов
+                // Initialize state / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                GetSkinsDir();  // Determine skins directory / РћРїСЂРµРґРµР»РёС‚СЊ РєР°С‚Р°Р»РѕРі СЃРєРёРЅРѕРІ
                 g_selTries = 0;
-                g_anchor = TRUE;  // Prevent auto-apply during initial selection / Предотвратить автоматическое применение во время начального выбора
+                g_anchor = TRUE;  // Prevent auto-apply during initial selection / РџСЂРµРґРѕС‚РІСЂР°С‚РёС‚СЊ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ РІРѕ РІСЂРµРјСЏ РЅР°С‡Р°Р»СЊРЅРѕРіРѕ РІС‹Р±РѕСЂР°
                 
                 // Start auto-selection timer (10ms interval)
-                // Запустить таймер автоматического выбора (интервал 10мс)
+                // Р—Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РІС‹Р±РѕСЂР° (РёРЅС‚РµСЂРІР°Р» 10РјСЃ)
                 g_tmSel = SetTimer(h, SELECT_TIMER_ID, 10, NULL);
             }
-            return FALSE;  // Stop enumeration / Остановить перечисление
+            return FALSE;  // Stop enumeration / РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
         }
     }
-    return TRUE;  // Continue enumeration / Продолжить перечисление
+    return TRUE;  // Continue enumeration / РџСЂРѕРґРѕР»Р¶РёС‚СЊ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
 }
 
 /*******************************************************************************
  * MonitorTimer
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Timer callback that monitors for the appearance of Winamp's skin selection
  * dialog. Called every second to check for the dialog.
  * 
- * Обратный вызов таймера, который отслеживает появление диалога выбора скинов
- * Winamp. Вызывается каждую секунду для проверки диалога.
+ * РћР±СЂР°С‚РЅС‹Р№ РІС‹Р·РѕРІ С‚Р°Р№РјРµСЂР°, РєРѕС‚РѕСЂС‹Р№ РѕС‚СЃР»РµР¶РёРІР°РµС‚ РїРѕСЏРІР»РµРЅРёРµ РґРёР°Р»РѕРіР° РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ
+ * Winamp. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РєР°Р¶РґСѓСЋ СЃРµРєСѓРЅРґСѓ РґР»СЏ РїСЂРѕРІРµСЂРєРё РґРёР°Р»РѕРіР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * Standard timer callback parameters (unused)
- * Стандартные параметры обратного вызова таймера (не используются)
+ * РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° С‚Р°Р№РјРµСЂР° (РЅРµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ)
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. If list already found and visible, return immediately
  * 2. Find main Winamp window and get its process ID
  * 3. Enumerate all #32770 (dialog) windows
@@ -1306,48 +1306,48 @@ static BOOL CALLBACK EnumChild(HWND h, LPARAM) {
  * 5. If dialog is visible, enumerate its children to find skin list
  * 6. Stop when skin list is found
  * 
- * 1. Если список уже найден и виден, вернуться немедленно
- * 2. Найти главное окно Winamp и получить его идентификатор процесса
- * 3. Перечислить все окна #32770 (диалоги)
- * 4. Проверить, принадлежит ли каждый диалог процессу Winamp
- * 5. Если диалог видим, перечислить его дочерние элементы для поиска списка скинов
- * 6. Остановиться, когда список скинов найден
+ * 1. Р•СЃР»Рё СЃРїРёСЃРѕРє СѓР¶Рµ РЅР°Р№РґРµРЅ Рё РІРёРґРµРЅ, РІРµСЂРЅСѓС‚СЊСЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ
+ * 2. РќР°Р№С‚Рё РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ Winamp Рё РїРѕР»СѓС‡РёС‚СЊ РµРіРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРѕС†РµСЃСЃР°
+ * 3. РџРµСЂРµС‡РёСЃР»РёС‚СЊ РІСЃРµ РѕРєРЅР° #32770 (РґРёР°Р»РѕРіРё)
+ * 4. РџСЂРѕРІРµСЂРёС‚СЊ, РїСЂРёРЅР°РґР»РµР¶РёС‚ Р»Рё РєР°Р¶РґС‹Р№ РґРёР°Р»РѕРі РїСЂРѕС†РµСЃСЃСѓ Winamp
+ * 5. Р•СЃР»Рё РґРёР°Р»РѕРі РІРёРґРёРј, РїРµСЂРµС‡РёСЃР»РёС‚СЊ РµРіРѕ РґРѕС‡РµСЂРЅРёРµ СЌР»РµРјРµРЅС‚С‹ РґР»СЏ РїРѕРёСЃРєР° СЃРїРёСЃРєР° СЃРєРёРЅРѕРІ
+ * 6. РћСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ, РєРѕРіРґР° СЃРїРёСЃРѕРє СЃРєРёРЅРѕРІ РЅР°Р№РґРµРЅ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This timer-based approach ensures we catch the skin dialog whenever it opens,
  * regardless of how it was opened (menu, hotkey, etc.).
  * 
- * Этот подход на основе таймера гарантирует, что мы поймаем диалог скинов
- * когда бы он ни открылся, независимо от способа открытия (меню, горячая клавиша и т.д.).
+ * Р­С‚РѕС‚ РїРѕРґС…РѕРґ РЅР° РѕСЃРЅРѕРІРµ С‚Р°Р№РјРµСЂР° РіР°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ РјС‹ РїРѕР№РјР°РµРј РґРёР°Р»РѕРі СЃРєРёРЅРѕРІ
+ * РєРѕРіРґР° Р±С‹ РѕРЅ РЅРё РѕС‚РєСЂС‹Р»СЃСЏ, РЅРµР·Р°РІРёСЃРёРјРѕ РѕС‚ СЃРїРѕСЃРѕР±Р° РѕС‚РєСЂС‹С‚РёСЏ (РјРµРЅСЋ, РіРѕСЂСЏС‡Р°СЏ РєР»Р°РІРёС€Р° Рё С‚.Рґ.).
  ******************************************************************************/
 static VOID CALLBACK MonitorTimer(HWND, UINT, UINT_PTR, DWORD) {
     // If list already found and visible, nothing to do
-    // Если список уже найден и виден, нечего делать
+    // Р•СЃР»Рё СЃРїРёСЃРѕРє СѓР¶Рµ РЅР°Р№РґРµРЅ Рё РІРёРґРµРЅ, РЅРµС‡РµРіРѕ РґРµР»Р°С‚СЊ
     if (g_hList && IsVis(g_hList)) return;
     
-    // Find main Winamp window / Найти главное окно Winamp
+    // Find main Winamp window / РќР°Р№С‚Рё РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ Winamp
     HWND wa = FindWinamp();
     if (!wa) return;
     
-    // Get Winamp process ID / Получить идентификатор процесса Winamp
+    // Get Winamp process ID / РџРѕР»СѓС‡РёС‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРѕС†РµСЃСЃР° Winamp
     DWORD pid; 
     GetWindowThreadProcessId(wa, &pid);
     
-    // Enumerate all dialogs / Перечислить все диалоги
+    // Enumerate all dialogs / РџРµСЂРµС‡РёСЃР»РёС‚СЊ РІСЃРµ РґРёР°Р»РѕРіРё
     HWND hDlg = NULL;
     while ((hDlg = FindWindowEx(NULL, hDlg, "#32770", NULL))) {
         // Check if dialog belongs to Winamp process
-        // Проверить, принадлежит ли диалог процессу Winamp
+        // РџСЂРѕРІРµСЂРёС‚СЊ, РїСЂРёРЅР°РґР»РµР¶РёС‚ Р»Рё РґРёР°Р»РѕРі РїСЂРѕС†РµСЃСЃСѓ Winamp
         DWORD tpid; 
         GetWindowThreadProcessId(hDlg, &tpid);
         
         if (tpid == pid && IsWindowVisible(hDlg)) {
             // Dialog is from Winamp and visible - enumerate children
-            // Диалог от Winamp и видим - перечислить дочерние элементы
+            // Р”РёР°Р»РѕРі РѕС‚ Winamp Рё РІРёРґРёРј - РїРµСЂРµС‡РёСЃР»РёС‚СЊ РґРѕС‡РµСЂРЅРёРµ СЌР»РµРјРµРЅС‚С‹
             EnumChildWindows(hDlg, EnumChild, 0);
             
             // If we found the list, stop searching
-            // Если нашли список, остановить поиск
+            // Р•СЃР»Рё РЅР°С€Р»Рё СЃРїРёСЃРѕРє, РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕРёСЃРє
             if (g_hList) break;
         }
     }
@@ -1355,56 +1355,56 @@ static VOID CALLBACK MonitorTimer(HWND, UINT, UINT_PTR, DWORD) {
 
 /*******************************************************************************
  * EXPORTED FUNCTIONS
- * ЭКСПОРТИРУЕМЫЕ ФУНКЦИИ
+ * Р­РљРЎРџРћР РўРР РЈР•РњР«Р• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 /*******************************************************************************
  * SkinDel_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the skin delete/rename module by starting the monitor timer.
  * 
- * Инициализирует модуль удаления/переименования скинов, запуская таймер
- * мониторинга.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ СѓРґР°Р»РµРЅРёСЏ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅРѕРІ, Р·Р°РїСѓСЃРєР°СЏ С‚Р°Р№РјРµСЂ
+ * РјРѕРЅРёС‚РѕСЂРёРЅРіР°.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This is called when the plugin/module is loaded. The timer will run every
  * second to check for the skin selection dialog.
  * 
- * Это вызывается при загрузке плагина/модуля. Таймер будет работать каждую
- * секунду для проверки диалога выбора скинов.
+ * Р­С‚Рѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°/РјРѕРґСѓР»СЏ. РўР°Р№РјРµСЂ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РєР°Р¶РґСѓСЋ
+ * СЃРµРєСѓРЅРґСѓ РґР»СЏ РїСЂРѕРІРµСЂРєРё РґРёР°Р»РѕРіР° РІС‹Р±РѕСЂР° СЃРєРёРЅРѕРІ.
  ******************************************************************************/
 void SkinDel_Init(void) {
     // Start monitor timer (1 second interval)
-    // Запустить таймер мониторинга (интервал 1 секунда)
+    // Р—Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ РјРѕРЅРёС‚РѕСЂРёРЅРіР° (РёРЅС‚РµСЂРІР°Р» 1 СЃРµРєСѓРЅРґР°)
     g_hTimer = SetTimer(NULL, 0, 1000, MonitorTimer);
 }
 
 /*******************************************************************************
  * SkinDel_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the skin delete/rename module by stopping the monitor timer
  * and restoring the original window procedure.
  * 
- * Очищает модуль удаления/переименования скинов, останавливая таймер
- * мониторинга и восстанавливая оригинальную оконную процедуру.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ СѓРґР°Р»РµРЅРёСЏ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅРѕРІ, РѕСЃС‚Р°РЅР°РІР»РёРІР°СЏ С‚Р°Р№РјРµСЂ
+ * РјРѕРЅРёС‚РѕСЂРёРЅРіР° Рё РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°СЏ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ.
  * 
- * IMPORTANCE / ВАЖНОСТЬ:
+ * IMPORTANCE / Р’РђР–РќРћРЎРўР¬:
  * CRITICAL: This function must be called before module unload to prevent
  * crashes. Failing to restore the window procedure will cause Winamp to
  * call unloaded code.
  * 
- * КРИТИЧНО: Эта функция должна быть вызвана перед выгрузкой модуля для
- * предотвращения крашей. Неспособность восстановить оконную процедуру
- * приведёт к тому, что Winamp попытается вызвать выгруженный код.
+ * РљР РРўРР§РќРћ: Р­С‚Р° С„СѓРЅРєС†РёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РІС‹Р·РІР°РЅР° РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№ РјРѕРґСѓР»СЏ РґР»СЏ
+ * РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РєСЂР°С€РµР№. РќРµСЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ
+ * РїСЂРёРІРµРґС‘С‚ Рє С‚РѕРјСѓ, С‡С‚Рѕ Winamp РїРѕРїС‹С‚Р°РµС‚СЃСЏ РІС‹Р·РІР°С‚СЊ РІС‹РіСЂСѓР¶РµРЅРЅС‹Р№ РєРѕРґ.
  ******************************************************************************/
 void SkinDel_Quit(void) {
-    // Stop monitor timer / Остановить таймер мониторинга
+    // Stop monitor timer / РћСЃС‚Р°РЅРѕРІРёС‚СЊ С‚Р°Р№РјРµСЂ РјРѕРЅРёС‚РѕСЂРёРЅРіР°
     if (g_hTimer) KillTimer(NULL, g_hTimer);
     
     // Restore original window procedure if we subclassed it
-    // Восстановить оригинальную оконную процедуру, если мы её подменили
+    // Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ, РµСЃР»Рё РјС‹ РµС‘ РїРѕРґРјРµРЅРёР»Рё
     if (g_hList && IsWindow(g_hList) && g_oldProc) {
         SetWindowLongPtrA(g_hList, GWLP_WNDPROC, (LONG_PTR)g_oldProc);
     }
