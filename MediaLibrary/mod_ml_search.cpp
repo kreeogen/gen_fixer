@@ -1,76 +1,76 @@
 /*******************************************************************************
  * WINAMP MEDIA LIBRARY CYRILLIC SEARCH FIX MODULE
- * МОДУЛЬ ИСПРАВЛЕНИЯ ПОИСКА КИРИЛЛИЦЫ В МЕДИАТЕКЕ WINAMP
+ * РњРћР”РЈР›Р¬ РРЎРџР РђР’Р›Р•РќРРЇ РџРћРРЎРљРђ РљРР РР›Р›РР¦Р« Р’ РњР•Р”РРђРўР•РљР• WINAMP
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Fixes case-insensitive search for Russian/Cyrillic text in Winamp 2.95
  * Media Library. The standard MSVCRT string comparison functions (_stricmp,
  * _strnicmp, strstr) do not handle Cyrillic characters correctly, causing
  * search to fail when query and database use different cases.
  * 
- * Исправляет поиск без учёта регистра для русского/кириллического текста в
- * библиотеке Winamp 2.95. Стандартные функции сравнения строк MSVCRT (_stricmp,
- * _strnicmp, strstr) не обрабатывают кириллические символы правильно, вызывая
- * сбой поиска, когда запрос и база данных используют разные регистры.
+ * РСЃРїСЂР°РІР»СЏРµС‚ РїРѕРёСЃРє Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР° РґР»СЏ СЂСѓСЃСЃРєРѕРіРѕ/РєРёСЂРёР»Р»РёС‡РµСЃРєРѕРіРѕ С‚РµРєСЃС‚Р° РІ
+ * Р±РёР±Р»РёРѕС‚РµРєРµ Winamp 2.95. РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ С„СѓРЅРєС†РёРё СЃСЂР°РІРЅРµРЅРёСЏ СЃС‚СЂРѕРє MSVCRT (_stricmp,
+ * _strnicmp, strstr) РЅРµ РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‚ РєРёСЂРёР»Р»РёС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹ РїСЂР°РІРёР»СЊРЅРѕ, РІС‹Р·С‹РІР°СЏ
+ * СЃР±РѕР№ РїРѕРёСЃРєР°, РєРѕРіРґР° Р·Р°РїСЂРѕСЃ Рё Р±Р°Р·Р° РґР°РЅРЅС‹С… РёСЃРїРѕР»СЊР·СѓСЋС‚ СЂР°Р·РЅС‹Рµ СЂРµРіРёСЃС‚СЂС‹.
  * 
- * PROBLEM / ПРОБЛЕМА:
+ * PROBLEM / РџР РћР‘Р›Р•РњРђ:
  * MSVCRT functions only handle ASCII case conversion (A-Z - a-z). Cyrillic
- * characters (А-Я, а-я) are not recognized as having upper/lower case variants.
+ * characters (Рђ-РЇ, Р°-СЏ) are not recognized as having upper/lower case variants.
  * 
  * Example:
- * _stricmp("МУЗЫКА", "музыка") returns non-zero (not equal)
- * strstr("Любимая МУЗЫКА", "музыка") returns NULL (not found)
+ * _stricmp("РњРЈР—Р«РљРђ", "РјСѓР·С‹РєР°") returns non-zero (not equal)
+ * strstr("Р›СЋР±РёРјР°СЏ РњРЈР—Р«РљРђ", "РјСѓР·С‹РєР°") returns NULL (not found)
  * 
- * Функции MSVCRT обрабатывают только ASCII преобразование регистра (A-Z - a-z).
- * Кириллические символы (А-Я, а-я) не распознаются как имеющие варианты верхнего/нижнего регистра.
+ * Р¤СѓРЅРєС†РёРё MSVCRT РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‚ С‚РѕР»СЊРєРѕ ASCII РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЂРµРіРёСЃС‚СЂР° (A-Z - a-z).
+ * РљРёСЂРёР»Р»РёС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹ (Рђ-РЇ, Р°-СЏ) РЅРµ СЂР°СЃРїРѕР·РЅР°СЋС‚СЃСЏ РєР°Рє РёРјРµСЋС‰РёРµ РІР°СЂРёР°РЅС‚С‹ РІРµСЂС…РЅРµРіРѕ/РЅРёР¶РЅРµРіРѕ СЂРµРіРёСЃС‚СЂР°.
  * 
- * Пример:
- * _stricmp("МУЗЫКА", "музыка") возвращает ненулевое значение (не равны)
- * strstr("Любимая МУЗЫКА", "музыка") возвращает NULL (не найдено)
+ * РџСЂРёРјРµСЂ:
+ * _stricmp("РњРЈР—Р«РљРђ", "РјСѓР·С‹РєР°") РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРµРЅСѓР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ (РЅРµ СЂР°РІРЅС‹)
+ * strstr("Р›СЋР±РёРјР°СЏ РњРЈР—Р«РљРђ", "РјСѓР·С‹РєР°") РІРѕР·РІСЂР°С‰Р°РµС‚ NULL (РЅРµ РЅР°Р№РґРµРЅРѕ)
  * 
- * SOLUTION / РЕШЕНИЕ:
+ * SOLUTION / Р Р•РЁР•РќРР•:
  * Replace MSVCRT functions with Windows locale-aware equivalents via IAT hooking:
  * - _stricmp  > lstrcmpiA   (locale-aware case-insensitive compare)
  * - _strnicmp > CompareStringA with NORM_IGNORECASE
  * - strstr    > StrStrIA     (case-insensitive substring search)
  * 
- * Заменить функции MSVCRT на Windows locale-aware эквиваленты через IAT hooking:
- * - _stricmp  > lstrcmpiA   (locale-aware сравнение без учёта регистра)
- * - _strnicmp > CompareStringA с NORM_IGNORECASE
- * - strstr    > StrStrIA     (поиск подстроки без учёта регистра)
+ * Р—Р°РјРµРЅРёС‚СЊ С„СѓРЅРєС†РёРё MSVCRT РЅР° Windows locale-aware СЌРєРІРёРІР°Р»РµРЅС‚С‹ С‡РµСЂРµР· IAT hooking:
+ * - _stricmp  > lstrcmpiA   (locale-aware СЃСЂР°РІРЅРµРЅРёРµ Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°)
+ * - _strnicmp > CompareStringA СЃ NORM_IGNORECASE
+ * - strstr    > StrStrIA     (РїРѕРёСЃРє РїРѕРґСЃС‚СЂРѕРєРё Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°)
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 
- * 1. DELAYED INITIALIZATION / ОТЛОЖЕННАЯ ИНИЦИАЛИЗАЦИЯ:
+ * 1. DELAYED INITIALIZATION / РћРўР›РћР–Р•РќРќРђРЇ РРќРР¦РРђР›РР—РђР¦РРЇ:
  *    Uses timer to wait for gen_ml.dll to load (Media Library plugin).
  *    gen_ml.dll may not be loaded at plugin initialization time.
  * 
- *    Использует таймер для ожидания загрузки gen_ml.dll (плагин библиотеки).
- *    gen_ml.dll может быть не загружен во время инициализации плагина.
+ *    РСЃРїРѕР»СЊР·СѓРµС‚ С‚Р°Р№РјРµСЂ РґР»СЏ РѕР¶РёРґР°РЅРёСЏ Р·Р°РіСЂСѓР·РєРё gen_ml.dll (РїР»Р°РіРёРЅ Р±РёР±Р»РёРѕС‚РµРєРё).
+ *    gen_ml.dll РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°.
  * 
- * 2. IAT PATCHING / ПАТЧИНГ IAT:
+ * 2. IAT PATCHING / РџРђРўР§РРќР“ IAT:
  *    Modifies gen_ml.dll's Import Address Table to redirect MSVCRT function
  *    calls to our locale-aware replacements.
  * 
- *    Изменяет таблицу импорта gen_ml.dll для перенаправления вызовов функций
- *    MSVCRT на наши locale-aware замены.
+ *    РР·РјРµРЅСЏРµС‚ С‚Р°Р±Р»РёС†Сѓ РёРјРїРѕСЂС‚Р° gen_ml.dll РґР»СЏ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РІС‹Р·РѕРІРѕРІ С„СѓРЅРєС†РёР№
+ *    MSVCRT РЅР° РЅР°С€Рё locale-aware Р·Р°РјРµРЅС‹.
  * 
- * 3. LOCALE-AWARE COMPARISON / LOCALE-AWARE СРАВНЕНИЕ:
+ * 3. LOCALE-AWARE COMPARISON / LOCALE-AWARE РЎР РђР’РќР•РќРР•:
  *    Uses Windows CompareStringA with LOCALE_USER_DEFAULT to respect user's
  *    language settings. Correctly handles Cyrillic, Latin, and other scripts.
  * 
- *    Использует Windows CompareStringA с LOCALE_USER_DEFAULT для уважения
- *    языковых настроек пользователя. Правильно обрабатывает кириллицу, латиницу
- *    и другие алфавиты.
+ *    РСЃРїРѕР»СЊР·СѓРµС‚ Windows CompareStringA СЃ LOCALE_USER_DEFAULT РґР»СЏ СѓРІР°Р¶РµРЅРёСЏ
+ *    СЏР·С‹РєРѕРІС‹С… РЅР°СЃС‚СЂРѕРµРє РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. РџСЂР°РІРёР»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РєРёСЂРёР»Р»РёС†Сѓ, Р»Р°С‚РёРЅРёС†Сѓ
+ *    Рё РґСЂСѓРіРёРµ Р°Р»С„Р°РІРёС‚С‹.
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - Win98+: Uses CompareStringA (always available)
  * - Win2000+: Prefers StrStrIA from shlwapi.dll (faster)
  * - Fallback: Manual implementation using CompareStringA
  * 
- * - Win98+: Использует CompareStringA (всегда доступна)
- * - Win2000+: Предпочитает StrStrIA из shlwapi.dll (быстрее)
- * - Резерв: Ручная реализация с использованием CompareStringA
+ * - Win98+: РСЃРїРѕР»СЊР·СѓРµС‚ CompareStringA (РІСЃРµРіРґР° РґРѕСЃС‚СѓРїРЅР°)
+ * - Win2000+: РџСЂРµРґРїРѕС‡РёС‚Р°РµС‚ StrStrIA РёР· shlwapi.dll (Р±С‹СЃС‚СЂРµРµ)
+ * - Р РµР·РµСЂРІ: Р СѓС‡РЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј CompareStringA
  * 
  ******************************************************************************/
 
@@ -88,50 +88,50 @@
 
 /*******************************************************************************
  * CONFIGURATION
- * КОНФИГУРАЦИЯ
+ * РљРћРќР¤РР“РЈР РђР¦РРЇ
  ******************************************************************************/
 
-// Target module to patch / Целевой модуль для патчинга
+// Target module to patch / Р¦РµР»РµРІРѕР№ РјРѕРґСѓР»СЊ РґР»СЏ РїР°С‚С‡РёРЅРіР°
 static const char* TARGET_MODULE = "gen_ml.dll";
 
 /*******************************************************************************
  * IAT HOOK STRUCTURES
- * СТРУКТУРЫ ПЕРЕХВАТА IAT
+ * РЎРўР РЈРљРўРЈР Р« РџР•Р Р•РҐР’РђРўРђ IAT
  ******************************************************************************/
 
 typedef struct {
-    const char* funcName;  // Function name to hook / Имя функции для перехвата
-    void* newFunc;         // Replacement function / Функция-замена
-    void* origFunc;        // Original function pointer / Указатель на оригинальную функцию
+    const char* funcName;  // Function name to hook / РРјСЏ С„СѓРЅРєС†РёРё РґР»СЏ РїРµСЂРµС…РІР°С‚Р°
+    void* newFunc;         // Replacement function / Р¤СѓРЅРєС†РёСЏ-Р·Р°РјРµРЅР°
+    void* origFunc;        // Original function pointer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
 } HookEntry;
 
 /*******************************************************************************
  * REPLACEMENT FUNCTIONS
- * ФУНКЦИИ-ЗАМЕНЫ
+ * Р¤РЈРќРљР¦РР-Р—РђРњР•РќР«
  ******************************************************************************/
 
 /*******************************************************************************
  * My_strstr_fallback
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Fallback implementation of case-insensitive substring search using
  * CompareStringA. Used when StrStrIA is not available (Win98).
  * 
- * Резервная реализация поиска подстроки без учёта регистра с использованием
- * CompareStringA. Используется, когда StrStrIA недоступна (Win98).
+ * Р РµР·РµСЂРІРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ РїРѕРёСЃРєР° РїРѕРґСЃС‚СЂРѕРєРё Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР° СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј
+ * CompareStringA. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, РєРѕРіРґР° StrStrIA РЅРµРґРѕСЃС‚СѓРїРЅР° (Win98).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * haystack - String to search in / Строка, в которой искать
- * needle   - Substring to find / Подстрока для поиска
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * haystack - String to search in / РЎС‚СЂРѕРєР°, РІ РєРѕС‚РѕСЂРѕР№ РёСЃРєР°С‚СЊ
+ * needle   - Substring to find / РџРѕРґСЃС‚СЂРѕРєР° РґР»СЏ РїРѕРёСЃРєР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Pointer to first occurrence of needle in haystack (case-insensitive),
  * or NULL if not found.
  * 
- * Указатель на первое вхождение needle в haystack (без учёта регистра),
- * или NULL если не найдено.
+ * РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РїРµСЂРІРѕРµ РІС…РѕР¶РґРµРЅРёРµ needle РІ haystack (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°),
+ * РёР»Рё NULL РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅРѕ.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Validate inputs
  * 2. Check if needle is empty (special case)
  * 3. For each position in haystack:
@@ -139,29 +139,29 @@ typedef struct {
  *    - Use CompareStringA with NORM_IGNORECASE
  *    - Return position if match found
  * 
- * 1. Проверить входы
- * 2. Проверить, пуста ли needle (специальный случай)
- * 3. Для каждой позиции в haystack:
- *    - Сравнить подстроку длиной needleLen символов
- *    - Использовать CompareStringA с NORM_IGNORECASE
- *    - Вернуть позицию, если найдено совпадение
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ РІС…РѕРґС‹
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, РїСѓСЃС‚Р° Р»Рё needle (СЃРїРµС†РёР°Р»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№)
+ * 3. Р”Р»СЏ РєР°Р¶РґРѕР№ РїРѕР·РёС†РёРё РІ haystack:
+ *    - РЎСЂР°РІРЅРёС‚СЊ РїРѕРґСЃС‚СЂРѕРєСѓ РґР»РёРЅРѕР№ needleLen СЃРёРјРІРѕР»РѕРІ
+ *    - РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ CompareStringA СЃ NORM_IGNORECASE
+ *    - Р’РµСЂРЅСѓС‚СЊ РїРѕР·РёС†РёСЋ, РµСЃР»Рё РЅР°Р№РґРµРЅРѕ СЃРѕРІРїР°РґРµРЅРёРµ
  ******************************************************************************/
 static char* My_strstr_fallback(const char* haystack, const char* needle)
 {
     if (!haystack || !needle) return NULL;
-    if (!*needle) return (char*)haystack;  // Empty needle always matches / Пустая needle всегда совпадает
+    if (!*needle) return (char*)haystack;  // Empty needle always matches / РџСѓСЃС‚Р°СЏ needle РІСЃРµРіРґР° СЃРѕРІРїР°РґР°РµС‚
 
     int needleLen = lstrlenA(needle);
     int haystackLen = lstrlenA(haystack);
 
     if (needleLen > haystackLen) return NULL;
 
-    // Scan through haystack / Сканировать haystack
+    // Scan through haystack / РЎРєР°РЅРёСЂРѕРІР°С‚СЊ haystack
     for (int i = 0; i <= haystackLen - needleLen; i++) {
-        // Compare substring at position i / Сравнить подстроку на позиции i
+        // Compare substring at position i / РЎСЂР°РІРЅРёС‚СЊ РїРѕРґСЃС‚СЂРѕРєСѓ РЅР° РїРѕР·РёС†РёРё i
         int cmp = CompareStringA(
-            LOCALE_USER_DEFAULT,  // Use user's locale / Использовать локаль пользователя
-            NORM_IGNORECASE,      // Ignore case / Игнорировать регистр
+            LOCALE_USER_DEFAULT,  // Use user's locale / РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»РѕРєР°Р»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+            NORM_IGNORECASE,      // Ignore case / РРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ СЂРµРіРёСЃС‚СЂ
             haystack + i, needleLen,
             needle, needleLen);
         
@@ -175,12 +175,12 @@ static char* My_strstr_fallback(const char* haystack, const char* needle)
 /*******************************************************************************
  * StrStrIA dynamic loading
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * StrStrIA is faster than our fallback but only available on Win2000+.
  * We load it dynamically and fall back if unavailable.
  * 
- * StrStrIA быстрее нашего fallback, но доступна только на Win2000+.
- * Загружаем её динамически и используем fallback, если недоступна.
+ * StrStrIA Р±С‹СЃС‚СЂРµРµ РЅР°С€РµРіРѕ fallback, РЅРѕ РґРѕСЃС‚СѓРїРЅР° С‚РѕР»СЊРєРѕ РЅР° Win2000+.
+ * Р—Р°РіСЂСѓР¶Р°РµРј РµС‘ РґРёРЅР°РјРёС‡РµСЃРєРё Рё РёСЃРїРѕР»СЊР·СѓРµРј fallback, РµСЃР»Рё РЅРµРґРѕСЃС‚СѓРїРЅР°.
  ******************************************************************************/
 typedef LPSTR (WINAPI *PFN_StrStrIA)(LPCSTR, LPCSTR);
 static PFN_StrStrIA g_pStrStrIA = NULL;
@@ -189,25 +189,25 @@ static BOOL g_StrStrIA_checked = FALSE;
 /*******************************************************************************
  * My_stricmp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Replacement for _stricmp that handles Cyrillic characters correctly.
  * 
- * Замена для _stricmp, которая правильно обрабатывает кириллические символы.
+ * Р—Р°РјРµРЅР° РґР»СЏ _stricmp, РєРѕС‚РѕСЂР°СЏ РїСЂР°РІРёР»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РєРёСЂРёР»Р»РёС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s1, s2 - Strings to compare / Строки для сравнения
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s1, s2 - Strings to compare / РЎС‚СЂРѕРєРё РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * < 0 if s1 < s2
  * = 0 if s1 == s2
  * > 0 if s1 > s2
  * 
- * IMPLEMENTATION / РЕАЛИЗАЦИЯ:
+ * IMPLEMENTATION / Р Р•РђР›РР—РђР¦РРЇ:
  * Uses lstrcmpiA which is locale-aware and handles all Unicode characters
  * correctly in their ANSI (codepage) representation.
  * 
- * Использует lstrcmpiA, которая учитывает локаль и правильно обрабатывает
- * все Unicode символы в их ANSI (кодовая страница) представлении.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ lstrcmpiA, РєРѕС‚РѕСЂР°СЏ СѓС‡РёС‚С‹РІР°РµС‚ Р»РѕРєР°Р»СЊ Рё РїСЂР°РІРёР»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚
+ * РІСЃРµ Unicode СЃРёРјРІРѕР»С‹ РІ РёС… ANSI (РєРѕРґРѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р°) РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРё.
  ******************************************************************************/
 static int __cdecl My_stricmp(const char* s1, const char* s2)
 {
@@ -217,23 +217,23 @@ static int __cdecl My_stricmp(const char* s1, const char* s2)
 /*******************************************************************************
  * My_strstr
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Replacement for strstr that performs case-insensitive substring search
  * with proper Cyrillic support.
  * 
- * Замена для strstr, которая выполняет поиск подстроки без учёта регистра
- * с правильной поддержкой кириллицы.
+ * Р—Р°РјРµРЅР° РґР»СЏ strstr, РєРѕС‚РѕСЂР°СЏ РІС‹РїРѕР»РЅСЏРµС‚ РїРѕРёСЃРє РїРѕРґСЃС‚СЂРѕРєРё Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°
+ * СЃ РїСЂР°РІРёР»СЊРЅРѕР№ РїРѕРґРґРµСЂР¶РєРѕР№ РєРёСЂРёР»Р»РёС†С‹.
  * 
- * IMPLEMENTATION / РЕАЛИЗАЦИЯ:
+ * IMPLEMENTATION / Р Р•РђР›РР—РђР¦РРЇ:
  * First tries to load StrStrIA from shlwapi.dll (Win2000+).
  * Falls back to manual implementation if unavailable.
  * 
- * Сначала пытается загрузить StrStrIA из shlwapi.dll (Win2000+).
- * Использует ручную реализацию, если недоступна.
+ * РЎРЅР°С‡Р°Р»Р° РїС‹С‚Р°РµС‚СЃСЏ Р·Р°РіСЂСѓР·РёС‚СЊ StrStrIA РёР· shlwapi.dll (Win2000+).
+ * РСЃРїРѕР»СЊР·СѓРµС‚ СЂСѓС‡РЅСѓСЋ СЂРµР°Р»РёР·Р°С†РёСЋ, РµСЃР»Рё РЅРµРґРѕСЃС‚СѓРїРЅР°.
  ******************************************************************************/
 static char* __cdecl My_strstr(const char* haystack, const char* needle)
 {
-    // One-time dynamic loading of StrStrIA / Одноразовая динамическая загрузка StrStrIA
+    // One-time dynamic loading of StrStrIA / РћРґРЅРѕСЂР°Р·РѕРІР°СЏ РґРёРЅР°РјРёС‡РµСЃРєР°СЏ Р·Р°РіСЂСѓР·РєР° StrStrIA
     if (!g_StrStrIA_checked) {
         HMODULE hShlwapi = GetModuleHandleA("shlwapi.dll");
         if (!hShlwapi) hShlwapi = LoadLibraryA("shlwapi.dll");
@@ -243,49 +243,49 @@ static char* __cdecl My_strstr(const char* haystack, const char* needle)
         g_StrStrIA_checked = TRUE;
     }
 
-    // Prefer StrStrIA if available (faster) / Предпочесть StrStrIA, если доступна (быстрее)
+    // Prefer StrStrIA if available (faster) / РџСЂРµРґРїРѕС‡РµСЃС‚СЊ StrStrIA, РµСЃР»Рё РґРѕСЃС‚СѓРїРЅР° (Р±С‹СЃС‚СЂРµРµ)
     if (g_pStrStrIA) {
         return g_pStrStrIA(haystack, needle);
     }
 
-    // Fallback to manual implementation / Резерв - ручная реализация
+    // Fallback to manual implementation / Р РµР·РµСЂРІ - СЂСѓС‡РЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ
     return My_strstr_fallback(haystack, needle);
 }
 
 /*******************************************************************************
  * My_strnicmp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Replacement for _strnicmp that handles Cyrillic characters correctly.
  * 
- * Замена для _strnicmp, которая правильно обрабатывает кириллические символы.
+ * Р—Р°РјРµРЅР° РґР»СЏ _strnicmp, РєРѕС‚РѕСЂР°СЏ РїСЂР°РІРёР»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РєРёСЂРёР»Р»РёС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s1, s2 - Strings to compare / Строки для сравнения
- * count  - Maximum number of characters to compare / Максимальное количество символов для сравнения
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s1, s2 - Strings to compare / РЎС‚СЂРѕРєРё РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
+ * count  - Maximum number of characters to compare / РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * < 0 if s1 < s2
  * = 0 if s1 == s2
  * > 0 if s1 > s2
  * 
- * IMPLEMENTATION / РЕАЛИЗАЦИЯ:
+ * IMPLEMENTATION / Р Р•РђР›РР—РђР¦РРЇ:
  * Uses CompareStringA with count parameter to limit comparison length.
  * LOCALE_USER_DEFAULT respects user's codepage and language settings.
  * 
- * Использует CompareStringA с параметром count для ограничения длины сравнения.
- * LOCALE_USER_DEFAULT уважает кодовую страницу и языковые настройки пользователя.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ CompareStringA СЃ РїР°СЂР°РјРµС‚СЂРѕРј count РґР»СЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РґР»РёРЅС‹ СЃСЂР°РІРЅРµРЅРёСЏ.
+ * LOCALE_USER_DEFAULT СѓРІР°Р¶Р°РµС‚ РєРѕРґРѕРІСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ Рё СЏР·С‹РєРѕРІС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
  ******************************************************************************/
 static int __cdecl My_strnicmp(const char* s1, const char* s2, size_t count)
 {
     int result = CompareStringA(
-        LOCALE_USER_DEFAULT,  // Use user's locale / Использовать локаль пользователя
-        NORM_IGNORECASE,      // Ignore case / Игнорировать регистр
+        LOCALE_USER_DEFAULT,  // Use user's locale / РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»РѕРєР°Р»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+        NORM_IGNORECASE,      // Ignore case / РРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ СЂРµРіРёСЃС‚СЂ
         s1, (int)count, 
         s2, (int)count);
     
     // Convert CompareStringA result to standard comparison result
-    // Преобразовать результат CompareStringA в стандартный результат сравнения
+    // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ CompareStringA РІ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ СЃСЂР°РІРЅРµРЅРёСЏ
     if (result == CSTR_LESS_THAN) return -1;
     if (result == CSTR_GREATER_THAN) return 1;
     return 0;
@@ -293,32 +293,32 @@ static int __cdecl My_strnicmp(const char* s1, const char* s2, size_t count)
 
 /*******************************************************************************
  * IAT PATCHING CODE
- * КОД ПАТЧИНГА IAT
+ * РљРћР” РџРђРўР§РРќР“Рђ IAT
  ******************************************************************************/
 
 /*******************************************************************************
  * PatchIAT
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches Import Address Table (IAT) of a module to redirect function calls.
  * 
- * Патчит таблицу адресов импорта (IAT) модуля для перенаправления вызовов функций.
+ * РџР°С‚С‡РёС‚ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT) РјРѕРґСѓР»СЏ РґР»СЏ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РІС‹Р·РѕРІРѕРІ С„СѓРЅРєС†РёР№.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hModule  - Module to patch / Модуль для патчинга
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hModule  - Module to patch / РњРѕРґСѓР»СЊ РґР»СЏ РїР°С‚С‡РёРЅРіР°
  * dllName  - DLL name containing function (e.g., "MSVCRT.dll")
- *            Имя DLL, содержащей функцию (напр., "MSVCRT.dll")
+ *            РРјСЏ DLL, СЃРѕРґРµСЂР¶Р°С‰РµР№ С„СѓРЅРєС†РёСЋ (РЅР°РїСЂ., "MSVCRT.dll")
  * funcName - Function name to hook (e.g., "_stricmp")
- *            Имя функции для перехвата (напр., "_stricmp")
- * newFunc  - Replacement function pointer / Указатель на функцию-замену
+ *            РРјСЏ С„СѓРЅРєС†РёРё РґР»СЏ РїРµСЂРµС…РІР°С‚Р° (РЅР°РїСЂ., "_stricmp")
+ * newFunc  - Replacement function pointer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ-Р·Р°РјРµРЅСѓ
  * oldFunc  - Output: original function pointer (optional)
- *            Выход: указатель на оригинальную функцию (необязательно)
+ *            Р’С‹С…РѕРґ: СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ (РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅРѕ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE on success, FALSE on failure
- * TRUE при успехе, FALSE при неудаче
+ * TRUE РїСЂРё СѓСЃРїРµС…Рµ, FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Validate PE headers (DOS + NT)
  * 2. Locate import directory in PE
  * 3. Scan import descriptors for matching DLL
@@ -328,79 +328,79 @@ static int __cdecl My_strnicmp(const char* s1, const char* s2, size_t count)
  *    - Store old pointer if requested
  * 5. Restore memory protection
  * 
- * 1. Проверить PE заголовки (DOS + NT)
- * 2. Найти каталог импорта в PE
- * 3. Сканировать дескрипторы импорта для совпадения DLL
- * 4. Для каждого импорта из этой DLL:
- *    - Проверить совпадение имени функции
- *    - При совпадении: изменить запись IAT с VirtualProtect
- *    - Сохранить старый указатель, если запрошено
- * 5. Восстановить защиту памяти
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ PE Р·Р°РіРѕР»РѕРІРєРё (DOS + NT)
+ * 2. РќР°Р№С‚Рё РєР°С‚Р°Р»РѕРі РёРјРїРѕСЂС‚Р° РІ PE
+ * 3. РЎРєР°РЅРёСЂРѕРІР°С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРјРїРѕСЂС‚Р° РґР»СЏ СЃРѕРІРїР°РґРµРЅРёСЏ DLL
+ * 4. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РёРјРїРѕСЂС‚Р° РёР· СЌС‚РѕР№ DLL:
+ *    - РџСЂРѕРІРµСЂРёС‚СЊ СЃРѕРІРїР°РґРµРЅРёРµ РёРјРµРЅРё С„СѓРЅРєС†РёРё
+ *    - РџСЂРё СЃРѕРІРїР°РґРµРЅРёРё: РёР·РјРµРЅРёС‚СЊ Р·Р°РїРёСЃСЊ IAT СЃ VirtualProtect
+ *    - РЎРѕС…СЂР°РЅРёС‚СЊ СЃС‚Р°СЂС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ, РµСЃР»Рё Р·Р°РїСЂРѕС€РµРЅРѕ
+ * 5. Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must use VirtualProtect to make IAT writable before modification.
  * IAT is normally in read-only section of PE.
  * 
- * Должен использовать VirtualProtect для записи в IAT перед изменением.
- * IAT обычно находится в read-only секции PE.
+ * Р”РѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ VirtualProtect РґР»СЏ Р·Р°РїРёСЃРё РІ IAT РїРµСЂРµРґ РёР·РјРµРЅРµРЅРёРµРј.
+ * IAT РѕР±С‹С‡РЅРѕ РЅР°С…РѕРґРёС‚СЃСЏ РІ read-only СЃРµРєС†РёРё PE.
  ******************************************************************************/
 static BOOL PatchIAT(HMODULE hModule, const char* dllName, const char* funcName, 
                      void* newFunc, void** oldFunc)
 {
     if (!hModule || !dllName || !funcName || !newFunc) return FALSE;
 
-    // Validate DOS header / Проверить DOS заголовок
+    // Validate DOS header / РџСЂРѕРІРµСЂРёС‚СЊ DOS Р·Р°РіРѕР»РѕРІРѕРє
     PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)hModule;
     if (pDosHeader->e_magic != IMAGE_DOS_SIGNATURE) return FALSE;
 
-    // Validate NT headers / Проверить NT заголовки
+    // Validate NT headers / РџСЂРѕРІРµСЂРёС‚СЊ NT Р·Р°РіРѕР»РѕРІРєРё
     PIMAGE_NT_HEADERS pNtHeaders = (PIMAGE_NT_HEADERS)((BYTE*)hModule + pDosHeader->e_lfanew);
     if (pNtHeaders->Signature != IMAGE_NT_SIGNATURE) return FALSE;
 
-    // Get import directory / Получить каталог импорта
+    // Get import directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі РёРјРїРѕСЂС‚Р°
     DWORD importDirRVA = pNtHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     if (importDirRVA == 0) return FALSE;
 
     PIMAGE_IMPORT_DESCRIPTOR pImportDesc = (PIMAGE_IMPORT_DESCRIPTOR)((BYTE*)hModule + importDirRVA);
 
-    // Scan import descriptors / Сканировать дескрипторы импорта
+    // Scan import descriptors / РЎРєР°РЅРёСЂРѕРІР°С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРјРїРѕСЂС‚Р°
     while (pImportDesc->Name != 0) {
         const char* modName = (const char*)((BYTE*)hModule + pImportDesc->Name);
 
-        // Check if this is the target DLL / Проверить, является ли это целевой DLL
+        // Check if this is the target DLL / РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ С†РµР»РµРІРѕР№ DLL
         if (lstrcmpiA(modName, dllName) == 0) {
             // OriginalFirstThunk: points to Import Name Table (INT)
             // FirstThunk: points to Import Address Table (IAT)
-            // OriginalFirstThunk: указывает на таблицу имён импорта (INT)
-            // FirstThunk: указывает на таблицу адресов импорта (IAT)
+            // OriginalFirstThunk: СѓРєР°Р·С‹РІР°РµС‚ РЅР° С‚Р°Р±Р»РёС†Сѓ РёРјС‘РЅ РёРјРїРѕСЂС‚Р° (INT)
+            // FirstThunk: СѓРєР°Р·С‹РІР°РµС‚ РЅР° С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT)
             
             PIMAGE_THUNK_DATA pOrigThunk = (PIMAGE_THUNK_DATA)((BYTE*)hModule + pImportDesc->OriginalFirstThunk);
             PIMAGE_THUNK_DATA pThunk = (PIMAGE_THUNK_DATA)((BYTE*)hModule + pImportDesc->FirstThunk);
 
-            // Scan imports from this DLL / Сканировать импорты из этой DLL
+            // Scan imports from this DLL / РЎРєР°РЅРёСЂРѕРІР°С‚СЊ РёРјРїРѕСЂС‚С‹ РёР· СЌС‚РѕР№ DLL
             while (pOrigThunk->u1.AddressOfData != 0) {
                 // Check if import by name (not by ordinal)
-                // Проверить, импорт по имени (не по ординалу)
+                // РџСЂРѕРІРµСЂРёС‚СЊ, РёРјРїРѕСЂС‚ РїРѕ РёРјРµРЅРё (РЅРµ РїРѕ РѕСЂРґРёРЅР°Р»Сѓ)
                 if (!(pOrigThunk->u1.Ordinal & IMAGE_ORDINAL_FLAG)) {
                     PIMAGE_IMPORT_BY_NAME pImportByName = 
                         (PIMAGE_IMPORT_BY_NAME)((BYTE*)hModule + pOrigThunk->u1.AddressOfData);
 
-                    // Check if function name matches / Проверить совпадение имени функции
+                    // Check if function name matches / РџСЂРѕРІРµСЂРёС‚СЊ СЃРѕРІРїР°РґРµРЅРёРµ РёРјРµРЅРё С„СѓРЅРєС†РёРё
                     if (lstrcmpA((const char*)pImportByName->Name, funcName) == 0) {
                         DWORD oldProtect;
 
-                        // Make IAT writable / Сделать IAT записываемой
+                        // Make IAT writable / РЎРґРµР»Р°С‚СЊ IAT Р·Р°РїРёСЃС‹РІР°РµРјРѕР№
                         if (VirtualProtect(&pThunk->u1.Function, sizeof(void*), 
                                          PAGE_READWRITE, &oldProtect)) {
-                            // Save original function pointer / Сохранить оригинальный указатель функции
+                            // Save original function pointer / РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё
                             if (oldFunc) {
                                 *oldFunc = (void*)pThunk->u1.Function;
                             }
 
-                            // Patch IAT entry / Пропатчить запись IAT
+                            // Patch IAT entry / РџСЂРѕРїР°С‚С‡РёС‚СЊ Р·Р°РїРёСЃСЊ IAT
                             pThunk->u1.Function = (DWORD)newFunc;
 
-                            // Restore original protection / Восстановить оригинальную защиту
+                            // Restore original protection / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ
                             VirtualProtect(&pThunk->u1.Function, sizeof(void*), 
                                          oldProtect, &oldProtect);
                             return TRUE;
@@ -421,42 +421,42 @@ static BOOL PatchIAT(HMODULE hModule, const char* dllName, const char* funcName,
 
 /*******************************************************************************
  * MODULE STATE
- * СОСТОЯНИЕ МОДУЛЯ
+ * РЎРћРЎРўРћРЇРќРР• РњРћР”РЈР›РЇ
  ******************************************************************************/
 
-static HMODULE g_hGenML = NULL;  // Handle to gen_ml.dll / Дескриптор gen_ml.dll
-static BOOL g_Hooked = FALSE;    // TRUE if hooks installed / TRUE если хуки установлены
+static HMODULE g_hGenML = NULL;  // Handle to gen_ml.dll / Р”РµСЃРєСЂРёРїС‚РѕСЂ gen_ml.dll
+static BOOL g_Hooked = FALSE;    // TRUE if hooks installed / TRUE РµСЃР»Рё С…СѓРєРё СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹
 
-// Original function pointers / Оригинальные указатели функций
+// Original function pointers / РћСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№
 static void* g_Orig_stricmp = NULL;
 static void* g_Orig_strnicmp = NULL;
 static void* g_Orig_strstr = NULL;
 
-// Timer for delayed initialization / Таймер для отложенной инициализации
+// Timer for delayed initialization / РўР°Р№РјРµСЂ РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
 static UINT_PTR g_InitTimerID = 0;
 
 /*******************************************************************************
  * TIMER-BASED INITIALIZATION
- * ИНИЦИАЛИЗАЦИЯ НА ОСНОВЕ ТАЙМЕРА
+ * РРќРР¦РРђР›РР—РђР¦РРЇ РќРђ РћРЎРќРћР’Р• РўРђР™РњР•Р Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * InitTimerProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Timer callback that waits for gen_ml.dll to load, then installs IAT hooks.
  * 
- * Функция обратного вызова таймера, которая ждёт загрузки gen_ml.dll, затем
- * устанавливает хуки IAT.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° С‚Р°Р№РјРµСЂР°, РєРѕС‚РѕСЂР°СЏ Р¶РґС‘С‚ Р·Р°РіСЂСѓР·РєРё gen_ml.dll, Р·Р°С‚РµРј
+ * СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё IAT.
  * 
- * WHY NEEDED / ЗАЧЕМ НУЖНО:
+ * WHY NEEDED / Р—РђР§Р•Рњ РќРЈР–РќРћ:
  * gen_ml.dll (Media Library plugin) may not be loaded when our plugin initializes.
  * We use a timer to poll for its presence and hook when available.
  * 
- * gen_ml.dll (плагин библиотеки) может быть не загружен, когда наш плагин
- * инициализируется. Используем таймер для опроса его наличия и хука при доступности.
+ * gen_ml.dll (РїР»Р°РіРёРЅ Р±РёР±Р»РёРѕС‚РµРєРё) РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ, РєРѕРіРґР° РЅР°С€ РїР»Р°РіРёРЅ
+ * РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚СЃСЏ. РСЃРїРѕР»СЊР·СѓРµРј С‚Р°Р№РјРµСЂ РґР»СЏ РѕРїСЂРѕСЃР° РµРіРѕ РЅР°Р»РёС‡РёСЏ Рё С…СѓРєР° РїСЂРё РґРѕСЃС‚СѓРїРЅРѕСЃС‚Рё.
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Kill timer (will be restarted if needed)
  * 2. Check if already hooked (idempotent)
  * 3. Try to get gen_ml.dll module handle
@@ -464,12 +464,12 @@ static UINT_PTR g_InitTimerID = 0;
  * 5. If found: patch IAT for all three functions
  * 6. Mark as hooked
  * 
- * 1. Убить таймер (будет перезапущен при необходимости)
- * 2. Проверить, уже захучено (идемпотентно)
- * 3. Попытаться получить дескриптор модуля gen_ml.dll
- * 4. Если не найдено: перезапустить таймер и ждать
- * 5. Если найдено: пропатчить IAT для всех трёх функций
- * 6. Отметить как захученное
+ * 1. РЈР±РёС‚СЊ С‚Р°Р№РјРµСЂ (Р±СѓРґРµС‚ РїРµСЂРµР·Р°РїСѓС‰РµРЅ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё)
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, СѓР¶Рµ Р·Р°С…СѓС‡РµРЅРѕ (РёРґРµРјРїРѕС‚РµРЅС‚РЅРѕ)
+ * 3. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ gen_ml.dll
+ * 4. Р•СЃР»Рё РЅРµ РЅР°Р№РґРµРЅРѕ: РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ Рё Р¶РґР°С‚СЊ
+ * 5. Р•СЃР»Рё РЅР°Р№РґРµРЅРѕ: РїСЂРѕРїР°С‚С‡РёС‚СЊ IAT РґР»СЏ РІСЃРµС… С‚СЂС‘С… С„СѓРЅРєС†РёР№
+ * 6. РћС‚РјРµС‚РёС‚СЊ РєР°Рє Р·Р°С…СѓС‡РµРЅРЅРѕРµ
  ******************************************************************************/
 static VOID CALLBACK InitTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
@@ -478,24 +478,24 @@ static VOID CALLBACK InitTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
     (void)idEvent;
     (void)dwTime;
 
-    // Kill current timer / Убить текущий таймер
+    // Kill current timer / РЈР±РёС‚СЊ С‚РµРєСѓС‰РёР№ С‚Р°Р№РјРµСЂ
     if (g_InitTimerID) {
         KillTimer(NULL, g_InitTimerID);
         g_InitTimerID = 0;
     }
 
-    // Already hooked? / Уже захучено?
+    // Already hooked? / РЈР¶Рµ Р·Р°С…СѓС‡РµРЅРѕ?
     if (g_Hooked) return;
 
-    // Try to get gen_ml.dll / Попытаться получить gen_ml.dll
+    // Try to get gen_ml.dll / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїРѕР»СѓС‡РёС‚СЊ gen_ml.dll
     g_hGenML = GetModuleHandleA(TARGET_MODULE);
     if (!g_hGenML) {
-        // Not loaded yet, restart timer / Ещё не загружен, перезапустить таймер
-        g_InitTimerID = SetTimer(NULL, 0, 250, InitTimerProc);  // Poll every 250ms / Опрашивать каждые 250мс
+        // Not loaded yet, restart timer / Р•С‰С‘ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ, РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ
+        g_InitTimerID = SetTimer(NULL, 0, 250, InitTimerProc);  // Poll every 250ms / РћРїСЂР°С€РёРІР°С‚СЊ РєР°Р¶РґС‹Рµ 250РјСЃ
         return;
     }
 
-    // Patch IAT for all three functions / Пропатчить IAT для всех трёх функций
+    // Patch IAT for all three functions / РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT РґР»СЏ РІСЃРµС… С‚СЂС‘С… С„СѓРЅРєС†РёР№
     PatchIAT(g_hGenML, "MSVCRT.dll", "_stricmp", (void*)My_stricmp, &g_Orig_stricmp);
     PatchIAT(g_hGenML, "MSVCRT.dll", "_strnicmp", (void*)My_strnicmp, &g_Orig_strnicmp);
     PatchIAT(g_hGenML, "MSVCRT.dll", "strstr", (void*)My_strstr, &g_Orig_strstr);
@@ -505,34 +505,34 @@ static VOID CALLBACK InitTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
 
 /*******************************************************************************
  * PUBLIC API
- * ПУБЛИЧНЫЙ API
+ * РџРЈР‘Р›РР§РќР«Р™ API
  ******************************************************************************/
 
 /*******************************************************************************
  * ML_CyrSearchFix_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the Cyrillic search fix module. Starts timer-based waiting
  * for gen_ml.dll to load.
  * 
- * Инициализирует модуль исправления поиска кириллицы. Запускает ожидание
- * на основе таймера для загрузки gen_ml.dll.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РїРѕРёСЃРєР° РєРёСЂРёР»Р»РёС†С‹. Р—Р°РїСѓСЃРєР°РµС‚ РѕР¶РёРґР°РЅРёРµ
+ * РЅР° РѕСЃРЅРѕРІРµ С‚Р°Р№РјРµСЂР° РґР»СЏ Р·Р°РіСЂСѓР·РєРё gen_ml.dll.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE on success, FALSE on failure
- * TRUE при успехе, FALSE при неудаче
+ * TRUE РїСЂРё СѓСЃРїРµС…Рµ, FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Safe to call multiple times (idempotent).
- * Безопасно вызывать несколько раз (идемпотентно).
+ * Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЂР°Р· (РёРґРµРјРїРѕС‚РµРЅС‚РЅРѕ).
  ******************************************************************************/
 BOOL ML_CyrSearchFix_Init(void)
 {
-    // Already initialized? / Уже инициализировано?
+    // Already initialized? / РЈР¶Рµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРѕ?
     if (g_Hooked) return TRUE;
     if (g_InitTimerID) return TRUE;
 
-    // Start timer / Запустить таймер
+    // Start timer / Р—Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ
     g_InitTimerID = SetTimer(NULL, 0, 250, InitTimerProc);
     return (g_InitTimerID != 0);
 }
@@ -540,23 +540,23 @@ BOOL ML_CyrSearchFix_Init(void)
 /*******************************************************************************
  * ML_CyrSearchFix_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the Cyrillic search fix module. Stops timer and restores
  * original IAT entries.
  * 
- * Очищает модуль исправления поиска кириллицы. Останавливает таймер и
- * восстанавливает оригинальные записи IAT.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РїРѕРёСЃРєР° РєРёСЂРёР»Р»РёС†С‹. РћСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚Р°Р№РјРµСЂ Рё
+ * РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ Р·Р°РїРёСЃРё IAT.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must restore original function pointers before module unload to prevent
  * crashes from dangling pointers.
  * 
- * Должен восстановить оригинальные указатели функций перед выгрузкой модуля
- * для предотвращения крашей от висячих указателей.
+ * Р”РѕР»Р¶РµРЅ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№ РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№ РјРѕРґСѓР»СЏ
+ * РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РєСЂР°С€РµР№ РѕС‚ РІРёСЃСЏС‡РёС… СѓРєР°Р·Р°С‚РµР»РµР№.
  ******************************************************************************/
 void ML_CyrSearchFix_Quit(void)
 {
-    // Stop timer if running / Остановить таймер, если запущен
+    // Stop timer if running / РћСЃС‚Р°РЅРѕРІРёС‚СЊ С‚Р°Р№РјРµСЂ, РµСЃР»Рё Р·Р°РїСѓС‰РµРЅ
     if (g_InitTimerID) {
         KillTimer(NULL, g_InitTimerID);
         g_InitTimerID = 0;
@@ -564,7 +564,7 @@ void ML_CyrSearchFix_Quit(void)
 
     if (!g_Hooked || !g_hGenML) return;
 
-    // Restore original IAT entries / Восстановить оригинальные записи IAT
+    // Restore original IAT entries / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ Р·Р°РїРёСЃРё IAT
     if (g_Orig_stricmp) {
         PatchIAT(g_hGenML, "MSVCRT.dll", "_stricmp", g_Orig_stricmp, NULL);
     }
