@@ -34,7 +34,6 @@
 
 // Winamp SDK
 #include "..\SDK\wa_ipc.h"
-#include "..\SDK\wa_msgids.h"
 
 #ifndef WM_WA_IPC
 #define WM_WA_IPC (WM_USER)

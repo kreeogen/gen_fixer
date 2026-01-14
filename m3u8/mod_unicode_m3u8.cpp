@@ -1,54 +1,54 @@
 /*******************************************************************************
  * M3U8 AND UNICODE PLAYLIST LOADER MODULE
- * МОДУЛЬ ЗАГРУЗЧИКА M3U8 И UNICODE ПЛЕЙЛИСТОВ
+ * РњРћР”РЈР›Р¬ Р—РђР“Р РЈР—Р§РРљРђ M3U8 Р UNICODE РџР›Р•Р™Р›РРЎРўРћР’
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Enables Winamp 2.95 to load playlists with Unicode (non-ASCII) filenames
  * and content. Winamp's playlist engine only supports ANSI encoding, causing
  * failures when loading files with Cyrillic, Chinese, or other non-Latin text.
  * 
- * Позволяет Winamp 2.95 загружать плейлисты с Unicode (не-ASCII) именами файлов
- * и содержимым. Движок плейлистов Winamp поддерживает только ANSI кодировку,
- * вызывая сбои при загрузке файлов с кириллицей, китайскими или другими не-латинскими текстами.
+ * РџРѕР·РІРѕР»СЏРµС‚ Winamp 2.95 Р·Р°РіСЂСѓР¶Р°С‚СЊ РїР»РµР№Р»РёСЃС‚С‹ СЃ Unicode (РЅРµ-ASCII) РёРјРµРЅР°РјРё С„Р°Р№Р»РѕРІ
+ * Рё СЃРѕРґРµСЂР¶РёРјС‹Рј. Р”РІРёР¶РѕРє РїР»РµР№Р»РёСЃС‚РѕРІ Winamp РїРѕРґРґРµСЂР¶РёРІР°РµС‚ С‚РѕР»СЊРєРѕ ANSI РєРѕРґРёСЂРѕРІРєСѓ,
+ * РІС‹Р·С‹РІР°СЏ СЃР±РѕРё РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»РѕРІ СЃ РєРёСЂРёР»Р»РёС†РµР№, РєРёС‚Р°Р№СЃРєРёРјРё РёР»Рё РґСЂСѓРіРёРјРё РЅРµ-Р»Р°С‚РёРЅСЃРєРёРјРё С‚РµРєСЃС‚Р°РјРё.
  * 
  * 
- * SOLUTION / РЕШЕНИЕ:
+ * SOLUTION / Р Р•РЁР•РќРР•:
  * 1. Hook file I/O functions via IAT patching
  * 2. Detect Unicode playlists (UTF-8, UTF-16LE BOM)
  * 3. Convert to ANSI temporary file
  * 4. Redirect Winamp to load temp file
  * 5. Clean up temp files when closed
  * 
- * 1. Перехватить функции файлового I/O через IAT патчинг
- * 2. Обнаружить Unicode плейлисты (UTF-8, UTF-16LE BOM)
- * 3. Преобразовать во временный ANSI файл
- * 4. Перенаправить Winamp на загрузку временного файла
- * 5. Очистить временные файлы при закрытии
+ * 1. РџРµСЂРµС…РІР°С‚РёС‚СЊ С„СѓРЅРєС†РёРё С„Р°Р№Р»РѕРІРѕРіРѕ I/O С‡РµСЂРµР· IAT РїР°С‚С‡РёРЅРі
+ * 2. РћР±РЅР°СЂСѓР¶РёС‚СЊ Unicode РїР»РµР№Р»РёСЃС‚С‹ (UTF-8, UTF-16LE BOM)
+ * 3. РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ ANSI С„Р°Р№Р»
+ * 4. РџРµСЂРµРЅР°РїСЂР°РІРёС‚СЊ Winamp РЅР° Р·Р°РіСЂСѓР·РєСѓ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°
+ * 5. РћС‡РёСЃС‚РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ РїСЂРё Р·Р°РєСЂС‹С‚РёРё
  * 
- * SUPPORTED FORMATS / ПОДДЕРЖИВАЕМЫЕ ФОРМАТЫ:
+ * SUPPORTED FORMATS / РџРћР”Р”Р•Р Р–РР’РђР•РњР«Р• Р¤РћР РњРђРўР«:
  * - M3U8 files (UTF-8 encoded M3U)
  * - M3U files with UTF-8 encoding
  * - PLS files with UTF-8 or UTF-16LE encoding
  * 
- * - Файлы M3U8 (M3U в кодировке UTF-8)
- * - Файлы M3U с кодировкой UTF-8
- * - Файлы PLS с кодировкой UTF-8 или UTF-16LE
+ * - Р¤Р°Р№Р»С‹ M3U8 (M3U РІ РєРѕРґРёСЂРѕРІРєРµ UTF-8)
+ * - Р¤Р°Р№Р»С‹ M3U СЃ РєРѕРґРёСЂРѕРІРєРѕР№ UTF-8
+ * - Р¤Р°Р№Р»С‹ PLS СЃ РєРѕРґРёСЂРѕРІРєРѕР№ UTF-8 РёР»Рё UTF-16LE
  * 
- * HOOKED FUNCTIONS / ПЕРЕХВАЧЕННЫЕ ФУНКЦИИ:
- * fopen()                     - M3U8 file reading / Чтение файлов M3U8
- * fclose()                    - Temp file cleanup / Очистка временных файлов
- * _stricmp()                  - M3U/M3U8 extension matching / Сопоставление расширений M3U/M3U8
- * GetPrivateProfileStringA()  - PLS file reading / Чтение файлов PLS
- * GetOpenFileNameA()          - File dialog filter / Фильтр диалога файлов
+ * HOOKED FUNCTIONS / РџР•Р Р•РҐР’РђР§Р•РќРќР«Р• Р¤РЈРќРљР¦РР:
+ * fopen()                     - M3U8 file reading / Р§С‚РµРЅРёРµ С„Р°Р№Р»РѕРІ M3U8
+ * fclose()                    - Temp file cleanup / РћС‡РёСЃС‚РєР° РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ
+ * _stricmp()                  - M3U/M3U8 extension matching / РЎРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ СЂР°СЃС€РёСЂРµРЅРёР№ M3U/M3U8
+ * GetPrivateProfileStringA()  - PLS file reading / Р§С‚РµРЅРёРµ С„Р°Р№Р»РѕРІ PLS
+ * GetOpenFileNameA()          - File dialog filter / Р¤РёР»СЊС‚СЂ РґРёР°Р»РѕРіР° С„Р°Р№Р»РѕРІ
  * 
- * THREAD SAFETY / ПОТОКОБЕЗОПАСНОСТЬ:
+ * THREAD SAFETY / РџРћРўРћРљРћР‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * Uses TLS (Thread Local Storage) to prevent recursive hook calls.
  * Falls back to global atomic guards if TLS unavailable.
  * Critical sections protect temp file cache.
  * 
- * Использует TLS (Thread Local Storage) для предотвращения рекурсивных вызовов хуков.
- * Использует глобальные атомарные защиты, если TLS недоступен.
- * Критические секции защищают кеш временных файлов.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ TLS (Thread Local Storage) РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ СЂРµРєСѓСЂСЃРёРІРЅС‹С… РІС‹Р·РѕРІРѕРІ С…СѓРєРѕРІ.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ РіР»РѕР±Р°Р»СЊРЅС‹Рµ Р°С‚РѕРјР°СЂРЅС‹Рµ Р·Р°С‰РёС‚С‹, РµСЃР»Рё TLS РЅРµРґРѕСЃС‚СѓРїРµРЅ.
+ * РљСЂРёС‚РёС‡РµСЃРєРёРµ СЃРµРєС†РёРё Р·Р°С‰РёС‰Р°СЋС‚ РєРµС€ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ.
  * 
  ******************************************************************************/
 
@@ -62,27 +62,27 @@
 
 /*******************************************************************************
  * CONFIGURATION
- * КОНФИГУРАЦИЯ
+ * РљРћРќР¤РР“РЈР РђР¦РРЇ
  ******************************************************************************/
 
-#define PL_DEBUG 0  // Debug logging (0=off, 1=on) / Отладочное логирование (0=выкл, 1=вкл)
-#define PL_SANITY_LIMIT (64u*1024u*1024u)  // 64MB max playlist size / Макс. размер плейлиста 64МБ
+#define PL_DEBUG 0  // Debug logging (0=off, 1=on) / РћС‚Р»Р°РґРѕС‡РЅРѕРµ Р»РѕРіРёСЂРѕРІР°РЅРёРµ (0=РІС‹РєР», 1=РІРєР»)
+#define PL_SANITY_LIMIT (64u*1024u*1024u)  // 64MB max playlist size / РњР°РєСЃ. СЂР°Р·РјРµСЂ РїР»РµР№Р»РёСЃС‚Р° 64РњР‘
 
-// IAT Patcher / Патчер IAT
+// IAT Patcher / РџР°С‚С‡РµСЂ IAT
 extern "C" BOOL IAT_PatchByName(HMODULE hMod, const char* importDll, const char* funcName, 
                                 void* hookFunc, void** ppOrigFunc);
 
 /*******************************************************************************
  * HELPER FUNCTIONS: EXTENSIONS AND PATHS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ: РАСШИРЕНИЯ И ПУТИ
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР: Р РђРЎРЁРР Р•РќРРЇ Р РџРЈРўР
  ******************************************************************************/
 
 /*******************************************************************************
  * PL_ToLower
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Simple ASCII lowercase conversion.
- * Простое преобразование ASCII в нижний регистр.
+ * РџСЂРѕСЃС‚РѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ ASCII РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ.
  ******************************************************************************/
 static char PL_ToLower(char c) {
     return (c >= 'A' && c <= 'Z') ? (char)(c - 'A' + 'a') : c;
@@ -91,9 +91,9 @@ static char PL_ToLower(char c) {
 /*******************************************************************************
  * PL_CheckExt
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if string ends with given extension (case-insensitive).
- * Проверяет, заканчивается ли строка данным расширением (без учёта регистра).
+ * РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєР°РЅС‡РёРІР°РµС‚СЃСЏ Р»Рё СЃС‚СЂРѕРєР° РґР°РЅРЅС‹Рј СЂР°СЃС€РёСЂРµРЅРёРµРј (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°).
  ******************************************************************************/
 static BOOL PL_CheckExt(const char* s, const char* ext) {
     if (!s || !ext) return FALSE;
@@ -111,11 +111,11 @@ static BOOL PL_CheckExt(const char* s, const char* ext) {
 /*******************************************************************************
  * PL_MatchExtLoose
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Matches extension without requiring dot prefix.
- * Сопоставляет расширение без требования префикса точки.
+ * РЎРѕРїРѕСЃС‚Р°РІР»СЏРµС‚ СЂР°СЃС€РёСЂРµРЅРёРµ Р±РµР· С‚СЂРµР±РѕРІР°РЅРёСЏ РїСЂРµС„РёРєСЃР° С‚РѕС‡РєРё.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * PL_MatchExtLoose("file.m3u8", "m3u8") > TRUE
  * PL_MatchExtLoose("file.m3u8", ".m3u8") > FALSE
  ******************************************************************************/
@@ -133,7 +133,7 @@ static BOOL PL_MatchExtLoose(const char* s, const char* extNoDot) {
 
 /*******************************************************************************
  * File Type Detection
- * Определение типа файла
+ * РћРїСЂРµРґРµР»РµРЅРёРµ С‚РёРїР° С„Р°Р№Р»Р°
  ******************************************************************************/
 static BOOL IsPlaylistFile(const char* path) {
     return PL_MatchExtLoose(path, "m3u") || 
@@ -151,54 +151,54 @@ static BOOL IsM3u8File(const char* path) {
 
 /*******************************************************************************
  * UNICODE TO ANSI CONVERTER
- * КОНВЕРТЕР UNICODE В ANSI
+ * РљРћРќР’Р•Р РўР•Р  UNICODE Р’ ANSI
  ******************************************************************************/
 
 /*******************************************************************************
  * ReadFileToBuf
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Reads entire file into memory buffer.
- * Читает весь файл в буфер памяти.
+ * Р§РёС‚Р°РµС‚ РІРµСЃСЊ С„Р°Р№Р» РІ Р±СѓС„РµСЂ РїР°РјСЏС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * path   - File path / Путь к файлу
- * outBuf - Output: allocated buffer (caller must free) / Выход: выделенный буфер (вызывающая сторона должна освободить)
- * outSz  - Output: buffer size / Выход: размер буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * path   - File path / РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+ * outBuf - Output: allocated buffer (caller must free) / Р’С‹С…РѕРґ: РІС‹РґРµР»РµРЅРЅС‹Р№ Р±СѓС„РµСЂ (РІС‹Р·С‹РІР°СЋС‰Р°СЏ СЃС‚РѕСЂРѕРЅР° РґРѕР»Р¶РЅР° РѕСЃРІРѕР±РѕРґРёС‚СЊ)
+ * outSz  - Output: buffer size / Р’С‹С…РѕРґ: СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE on success, FALSE on failure
- * TRUE при успехе, FALSE при неудаче
+ * TRUE РїСЂРё СѓСЃРїРµС…Рµ, FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Enforces PL_SANITY_LIMIT to prevent memory exhaustion.
- * Применяет PL_SANITY_LIMIT для предотвращения исчерпания памяти.
+ * РџСЂРёРјРµРЅСЏРµС‚ PL_SANITY_LIMIT РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РёСЃС‡РµСЂРїР°РЅРёСЏ РїР°РјСЏС‚Рё.
  ******************************************************************************/
 static BOOL ReadFileToBuf(const char* path, BYTE** outBuf, DWORD* outSz) {
     if (!outBuf || !outSz || !path) return FALSE;
     *outBuf = NULL; 
     *outSz = 0;
 
-    // Open file / Открыть файл
+    // Open file / РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»
     HANDLE h = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 
                           NULL, OPEN_EXISTING, 0, NULL);
     if (h == INVALID_HANDLE_VALUE) return FALSE;
 
-    // Check file size / Проверить размер файла
+    // Check file size / РџСЂРѕРІРµСЂРёС‚СЊ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
     DWORD sz = GetFileSize(h, NULL);
     if (sz == 0 || sz == INVALID_FILE_SIZE || sz > PL_SANITY_LIMIT) {
         CloseHandle(h);
         return FALSE;
     }
 
-    // Allocate buffer / Выделить буфер
+    // Allocate buffer / Р’С‹РґРµР»РёС‚СЊ Р±СѓС„РµСЂ
     BYTE* b = (BYTE*)HeapAlloc(GetProcessHeap(), 0, sz);
     if (!b) {
         CloseHandle(h);
         return FALSE;
     }
 
-    // Read file / Прочитать файл
+    // Read file / РџСЂРѕС‡РёС‚Р°С‚СЊ С„Р°Р№Р»
     DWORD rd = 0;
     BOOL ok = ReadFile(h, b, sz, &rd, NULL);
     CloseHandle(h);
@@ -216,20 +216,20 @@ static BOOL ReadFileToBuf(const char* path, BYTE** outBuf, DWORD* outSz) {
 /*******************************************************************************
  * CreateAnsiTemp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts Unicode playlist file to ANSI temporary file.
- * Преобразует Unicode файл плейлиста во временный ANSI файл.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ Unicode С„Р°Р№Р» РїР»РµР№Р»РёСЃС‚Р° РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ ANSI С„Р°Р№Р».
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * srcPath  - Source playlist file path / Путь к исходному файлу плейлиста
- * outTemp  - Output: path to created temp file / Выход: путь к созданному временному файлу
- * forcePls - Force PLS format (unused) / Принудительный формат PLS (не используется)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * srcPath  - Source playlist file path / РџСѓС‚СЊ Рє РёСЃС…РѕРґРЅРѕРјСѓ С„Р°Р№Р»Сѓ РїР»РµР№Р»РёСЃС‚Р°
+ * outTemp  - Output: path to created temp file / Р’С‹С…РѕРґ: РїСѓС‚СЊ Рє СЃРѕР·РґР°РЅРЅРѕРјСѓ РІСЂРµРјРµРЅРЅРѕРјСѓ С„Р°Р№Р»Сѓ
+ * forcePls - Force PLS format (unused) / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ PLS (РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if temp file created successfully
- * TRUE если временный файл создан успешно
+ * TRUE РµСЃР»Рё РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» СЃРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Read source file into buffer
  * 2. Detect encoding:
  *    - UTF-16LE (FF FE BOM) > WideCharToMultiByte
@@ -239,14 +239,14 @@ static BOOL ReadFileToBuf(const char* path, BYTE** outBuf, DWORD* outSz) {
  * 4. Write ANSI data to temp file
  * 5. Return temp file path
  * 
- * 1. Прочитать исходный файл в буфер
- * 2. Определить кодировку:
+ * 1. РџСЂРѕС‡РёС‚Р°С‚СЊ РёСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р» РІ Р±СѓС„РµСЂ
+ * 2. РћРїСЂРµРґРµР»РёС‚СЊ РєРѕРґРёСЂРѕРІРєСѓ:
  *    - UTF-16LE (FF FE BOM) > WideCharToMultiByte
- *    - UTF-8 (EF BB BF BOM или авто-определение) > конвертация UTF8 в ANSI
- *    - ANSI > передать как есть
- * 3. Создать временный файл в системном временном каталоге
- * 4. Записать ANSI данные во временный файл
- * 5. Вернуть путь временного файла
+ *    - UTF-8 (EF BB BF BOM РёР»Рё Р°РІС‚Рѕ-РѕРїСЂРµРґРµР»РµРЅРёРµ) > РєРѕРЅРІРµСЂС‚Р°С†РёСЏ UTF8 РІ ANSI
+ *    - ANSI > РїРµСЂРµРґР°С‚СЊ РєР°Рє РµСЃС‚СЊ
+ * 3. РЎРѕР·РґР°С‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» РІ СЃРёСЃС‚РµРјРЅРѕРј РІСЂРµРјРµРЅРЅРѕРј РєР°С‚Р°Р»РѕРіРµ
+ * 4. Р—Р°РїРёСЃР°С‚СЊ ANSI РґР°РЅРЅС‹Рµ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
+ * 5. Р’РµСЂРЅСѓС‚СЊ РїСѓС‚СЊ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°
  ******************************************************************************/
 static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
     (void)forcePls;
@@ -254,7 +254,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
     if (!srcPath || !outTemp) return FALSE;
     outTemp[0] = 0;
 
-    // Read source file / Прочитать исходный файл
+    // Read source file / РџСЂРѕС‡РёС‚Р°С‚СЊ РёСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р»
     BYTE* raw = NULL; 
     DWORD rSz = 0;
     if (!ReadFileToBuf(srcPath, &raw, &rSz)) return FALSE;
@@ -262,7 +262,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
     BYTE* ansi = NULL; 
     DWORD aSz = 0;
 
-    // Detect and convert encoding / Определить и преобразовать кодировку
+    // Detect and convert encoding / РћРїСЂРµРґРµР»РёС‚СЊ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РєРѕРґРёСЂРѕРІРєСѓ
     // UTF-16LE BOM (FF FE)
     if (rSz >= 2 && raw[0] == 0xFF && raw[1] == 0xFE) {
         int wLen = (int)((rSz - 2) / 2);
@@ -276,7 +276,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
         memcpy(wBuf, raw + 2, wLen * sizeof(WCHAR));
         wBuf[wLen] = 0;
 
-        // Convert UTF-16LE to ANSI / Преобразовать UTF-16LE в ANSI
+        // Convert UTF-16LE to ANSI / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ UTF-16LE РІ ANSI
         int need = wLen * 3 + 4;
         ansi = (BYTE*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, need);
         if (ansi) {
@@ -301,7 +301,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
 
         char* start = src;
         
-        // Skip UTF-8 BOM (EF BB BF) / Пропустить UTF-8 BOM
+        // Skip UTF-8 BOM (EF BB BF) / РџСЂРѕРїСѓСЃС‚РёС‚СЊ UTF-8 BOM
         if (rSz >= 3 && 
             (unsigned char)src[0] == 0xEF && 
             (unsigned char)src[1] == 0xBB && 
@@ -309,7 +309,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
             start = src + 3;
         }
 
-        // Convert UTF-8 to ANSI / Преобразовать UTF-8 в ANSI
+        // Convert UTF-8 to ANSI / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ UTF-8 РІ ANSI
         int need = (int)rSz * 3 + 4;
         ansi = (BYTE*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, need);
         if (ansi) {
@@ -319,7 +319,7 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
                 aSz = (DWORD)lstrlenA((char*)ansi);
             }
             else {
-                // Fallback: treat as ANSI / Резерв: считать ANSI
+                // Fallback: treat as ANSI / Р РµР·РµСЂРІ: СЃС‡РёС‚Р°С‚СЊ ANSI
                 lstrcpynA((char*)ansi, start, need);
                 aSz = (DWORD)lstrlenA((char*)ansi);
             }
@@ -335,14 +335,14 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
         return FALSE;
     }
 
-    // Trim trailing nulls / Обрезать завершающие нули
+    // Trim trailing nulls / РћР±СЂРµР·Р°С‚СЊ Р·Р°РІРµСЂС€Р°СЋС‰РёРµ РЅСѓР»Рё
     while (aSz > 0 && ansi[aSz - 1] == 0) aSz--;
     if (aSz == 0) {
         HeapFree(GetProcessHeap(), 0, ansi);
         return FALSE;
     }
 
-    // Get temp directory / Получить временный каталог
+    // Get temp directory / РџРѕР»СѓС‡РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ РєР°С‚Р°Р»РѕРі
     char tmpDir[MAX_PATH];
     DWORD tLen = GetTempPathA(MAX_PATH, tmpDir);
     if (tLen == 0 || tLen >= MAX_PATH) {
@@ -350,13 +350,13 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
         return FALSE;
     }
 
-    // Create unique temp file name / Создать уникальное имя временного файла
+    // Create unique temp file name / РЎРѕР·РґР°С‚СЊ СѓРЅРёРєР°Р»СЊРЅРѕРµ РёРјСЏ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°
     if (!GetTempFileNameA(tmpDir, "waPL", 0, outTemp)) {
         HeapFree(GetProcessHeap(), 0, ansi);
         return FALSE;
     }
 
-    // Write ANSI data to temp file / Записать ANSI данные во временный файл
+    // Write ANSI data to temp file / Р—Р°РїРёСЃР°С‚СЊ ANSI РґР°РЅРЅС‹Рµ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
     HANDLE h = CreateFileA(outTemp, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 
                           FILE_ATTRIBUTE_TEMPORARY | FILE_ATTRIBUTE_HIDDEN, NULL);
     if (h == INVALID_HANDLE_VALUE) {
@@ -383,55 +383,55 @@ static BOOL CreateAnsiTemp(const char* srcPath, char* outTemp, BOOL forcePls) {
 
 /*******************************************************************************
  * CACHE MANAGER (TEMPORARY FILE TRACKING)
- * МЕНЕДЖЕР КЕША (ОТСЛЕЖИВАНИЕ ВРЕМЕННЫХ ФАЙЛОВ)
+ * РњР•РќР•Р”Р–Р•Р  РљР•РЁРђ (РћРўРЎР›Р•Р–РР’РђРќРР• Р’Р Р•РњР•РќРќР«РҐ Р¤РђР™Р›РћР’)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Tracks temporary ANSI files so they can be deleted after use.
  * Two types of temp files:
  * - M3U8: tracked by FILE* pointer (closed via fclose)
  * - PLS: tracked by original path (read via GetPrivateProfileStringA)
  * 
- * Отслеживает временные ANSI файлы для удаления после использования.
- * Два типа временных файлов:
- * - M3U8: отслеживается по указателю FILE* (закрывается через fclose)
- * - PLS: отслеживается по оригинальному пути (читается через GetPrivateProfileStringA)
+ * РћС‚СЃР»РµР¶РёРІР°РµС‚ РІСЂРµРјРµРЅРЅС‹Рµ ANSI С„Р°Р№Р»С‹ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РїРѕСЃР»Рµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ.
+ * Р”РІР° С‚РёРїР° РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ:
+ * - M3U8: РѕС‚СЃР»РµР¶РёРІР°РµС‚СЃСЏ РїРѕ СѓРєР°Р·Р°С‚РµР»СЋ FILE* (Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ С‡РµСЂРµР· fclose)
+ * - PLS: РѕС‚СЃР»РµР¶РёРІР°РµС‚СЃСЏ РїРѕ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРјСѓ РїСѓС‚Рё (С‡РёС‚Р°РµС‚СЃСЏ С‡РµСЂРµР· GetPrivateProfileStringA)
  ******************************************************************************/
 
-// M3U8 temp file node (linked to FILE*) / Узел временного файла M3U8 (привязан к FILE*)
+// M3U8 temp file node (linked to FILE*) / РЈР·РµР» РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р° M3U8 (РїСЂРёРІСЏР·Р°РЅ Рє FILE*)
 typedef struct { 
-    FILE* fp;           // File pointer / Указатель на файл
-    char path[MAX_PATH]; // Temp file path / Путь временного файла
-    void* next;         // Next node / Следующий узел
+    FILE* fp;           // File pointer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С„Р°Р№Р»
+    char path[MAX_PATH]; // Temp file path / РџСѓС‚СЊ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°
+    void* next;         // Next node / РЎР»РµРґСѓСЋС‰РёР№ СѓР·РµР»
 } TmpNode;
 
-// PLS temp file node (linked to original path) / Узел временного файла PLS (привязан к оригинальному пути)
+// PLS temp file node (linked to original path) / РЈР·РµР» РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р° PLS (РїСЂРёРІСЏР·Р°РЅ Рє РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРјСѓ РїСѓС‚Рё)
 typedef struct { 
-    char orig[MAX_PATH]; // Original file path / Путь оригинального файла
-    char tmp[MAX_PATH];  // Temp file path / Путь временного файла
-    void* next;          // Next node / Следующий узел
+    char orig[MAX_PATH]; // Original file path / РџСѓС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С„Р°Р№Р»Р°
+    char tmp[MAX_PATH];  // Temp file path / РџСѓС‚СЊ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°
+    void* next;          // Next node / РЎР»РµРґСѓСЋС‰РёР№ СѓР·РµР»
 } PlsNode;
 
-static TmpNode* g_HeadM3U = NULL;  // M3U8 temp file list / Список временных файлов M3U8
-static PlsNode* g_HeadPLS = NULL;  // PLS temp file list / Список временных файлов PLS
+static TmpNode* g_HeadM3U = NULL;  // M3U8 temp file list / РЎРїРёСЃРѕРє РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ M3U8
+static PlsNode* g_HeadPLS = NULL;  // PLS temp file list / РЎРїРёСЃРѕРє РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ PLS
 
-// Critical section state / Состояние критической секции
+// Critical section state / РЎРѕСЃС‚РѕСЏРЅРёРµ РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё
 static CRITICAL_SECTION g_cs;
 static LONG g_csState = 0; // 0=uninit, 1=initing, 2=ready, -1=disabled
 
 /*******************************************************************************
  * Lock/Unlock
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-safe critical section with lazy initialization and error handling.
- * Потокобезопасная критическая секция с ленивой инициализацией и обработкой ошибок.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РєСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ СЃ Р»РµРЅРёРІРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРµР№ Рё РѕР±СЂР°Р±РѕС‚РєРѕР№ РѕС€РёР±РѕРє.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Uses atomic operations to ensure only one thread initializes critical section.
  * If initialization fails, disables critical section permanently (g_csState=-1).
  * 
- * Использует атомарные операции для обеспечения инициализации критической секции
- * только одним потоком. При неудаче инициализации отключает критическую секцию
- * навсегда (g_csState=-1).
+ * РСЃРїРѕР»СЊР·СѓРµС‚ Р°С‚РѕРјР°СЂРЅС‹Рµ РѕРїРµСЂР°С†РёРё РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё
+ * С‚РѕР»СЊРєРѕ РѕРґРЅРёРј РїРѕС‚РѕРєРѕРј. РџСЂРё РЅРµСѓРґР°С‡Рµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РѕС‚РєР»СЋС‡Р°РµС‚ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
+ * РЅР°РІСЃРµРіРґР° (g_csState=-1).
  ******************************************************************************/
 static void Lock(void) {
     if (g_csState == 2) { 
@@ -441,7 +441,7 @@ static void Lock(void) {
     if (g_csState == -1) return;
 
     // Lazy initialization with double-checked locking
-    // Ленивая инициализация с двойной проверкой блокировки
+    // Р›РµРЅРёРІР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃ РґРІРѕР№РЅРѕР№ РїСЂРѕРІРµСЂРєРѕР№ Р±Р»РѕРєРёСЂРѕРІРєРё
     for (;;) {
         LONG s = g_csState;
         if (s == 2) { 
@@ -451,7 +451,7 @@ static void Lock(void) {
         if (s == -1) return;
 
         if (s == 0) {
-            // Try to acquire initialization right / Попытаться получить право инициализации
+            // Try to acquire initialization right / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїРѕР»СѓС‡РёС‚СЊ РїСЂР°РІРѕ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
             if (InterlockedCompareExchange(&g_csState, 1, 0) == 0) {
                 BOOL ok = TRUE;
                 __try {
@@ -467,12 +467,12 @@ static void Lock(void) {
                     return;
                 }
                 // Initialization failed, disable permanently
-                // Инициализация не удалась, отключить навсегда
+                // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РЅРµ СѓРґР°Р»Р°СЃСЊ, РѕС‚РєР»СЋС‡РёС‚СЊ РЅР°РІСЃРµРіРґР°
                 InterlockedExchange(&g_csState, -1);
                 return;
             }
         }
-        Sleep(0);  // Yield to other threads / Уступить другим потокам
+        Sleep(0);  // Yield to other threads / РЈСЃС‚СѓРїРёС‚СЊ РґСЂСѓРіРёРј РїРѕС‚РѕРєР°Рј
     }
 }
 
@@ -483,10 +483,10 @@ static void Unlock(void) {
 
 /*******************************************************************************
  * M3U8 Temp File Tracking
- * Отслеживание временных файлов M3U8
+ * РћС‚СЃР»РµР¶РёРІР°РЅРёРµ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ M3U8
  ******************************************************************************/
 
-// Add M3U8 temp file to tracking list / Добавить временный файл M3U8 в список отслеживания
+// Add M3U8 temp file to tracking list / Р”РѕР±Р°РІРёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» M3U8 РІ СЃРїРёСЃРѕРє РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ
 static void TrackM3U(FILE* fp, const char* path) {
     if (!fp || !path) return;
     TmpNode* n = (TmpNode*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(TmpNode));
@@ -501,7 +501,7 @@ static void TrackM3U(FILE* fp, const char* path) {
     Unlock();
 }
 
-// Remove M3U8 temp file from tracking list / Удалить временный файл M3U8 из списка отслеживания
+// Remove M3U8 temp file from tracking list / РЈРґР°Р»РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» M3U8 РёР· СЃРїРёСЃРєР° РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ
 static BOOL UntrackM3U(FILE* fp, char* outPath) {
     if (outPath) outPath[0] = 0;
     if (!fp) return FALSE;
@@ -525,10 +525,10 @@ static BOOL UntrackM3U(FILE* fp, char* outPath) {
 
 /*******************************************************************************
  * PLS Temp File Caching
- * Кеширование временных файлов PLS
+ * РљРµС€РёСЂРѕРІР°РЅРёРµ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ PLS
  ******************************************************************************/
 
-// Get cached PLS temp file / Получить кешированный временный файл PLS
+// Get cached PLS temp file / РџРѕР»СѓС‡РёС‚СЊ РєРµС€РёСЂРѕРІР°РЅРЅС‹Р№ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» PLS
 static BOOL GetCachedPLS(const char* orig, char* outTmp) {
     if (!orig || !outTmp) return FALSE;
     outTmp[0] = 0;
@@ -547,7 +547,7 @@ static BOOL GetCachedPLS(const char* orig, char* outTmp) {
     return FALSE;
 }
 
-// Add PLS temp file to cache / Добавить временный файл PLS в кеш
+// Add PLS temp file to cache / Р”РѕР±Р°РІРёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» PLS РІ РєРµС€
 static void CachePLS(const char* orig, const char* tmp) {
     if (!orig || !tmp) return;
 
@@ -566,22 +566,22 @@ static void CachePLS(const char* orig, const char* tmp) {
 /*******************************************************************************
  * ClearAllCache
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Clears all temp file caches and deletes temp files.
  * Called on module shutdown.
  * 
- * Очищает все кеши временных файлов и удаляет временные файлы.
- * Вызывается при завершении модуля.
+ * РћС‡РёС‰Р°РµС‚ РІСЃРµ РєРµС€Рё РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ Рё СѓРґР°Р»СЏРµС‚ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹.
+ * Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё РјРѕРґСѓР»СЏ.
  ******************************************************************************/
 static void ClearAllCache(void) {
     if (g_csState != 2 && g_csState != -1) {
-        // Critical section not initialized / Критическая секция не инициализирована
+        // Critical section not initialized / РљСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°
         return;
     }
 
     Lock();
     
-    // Clear M3U8 temp files / Очистить временные файлы M3U8
+    // Clear M3U8 temp files / РћС‡РёСЃС‚РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ M3U8
     while (g_HeadM3U) {
         TmpNode* d = g_HeadM3U;
         g_HeadM3U = (TmpNode*)d->next;
@@ -589,7 +589,7 @@ static void ClearAllCache(void) {
         HeapFree(GetProcessHeap(), 0, d);
     }
     
-    // Clear PLS temp files / Очистить временные файлы PLS
+    // Clear PLS temp files / РћС‡РёСЃС‚РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ PLS
     while (g_HeadPLS) {
         PlsNode* d = g_HeadPLS;
         g_HeadPLS = (PlsNode*)d->next;
@@ -599,7 +599,7 @@ static void ClearAllCache(void) {
     
     Unlock();
 
-    // Delete critical section / Удалить критическую секцию
+    // Delete critical section / РЈРґР°Р»РёС‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
     if (g_csState == 2) {
         DeleteCriticalSection(&g_cs);
     }
@@ -608,12 +608,12 @@ static void ClearAllCache(void) {
 
 /*******************************************************************************
  * HOOK IMPLEMENTATIONS
- * РЕАЛИЗАЦИИ ХУКОВ
+ * Р Р•РђР›РР—РђР¦РР РҐРЈРљРћР’
  ******************************************************************************/
 
 /*******************************************************************************
  * Original Function Pointers
- * Указатели на оригинальные функции
+ * РЈРєР°Р·Р°С‚РµР»Рё РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
  ******************************************************************************/
 typedef FILE* (__cdecl *PFN_fopen)(const char*, const char*);
 typedef int   (__cdecl *PFN_fclose)(FILE*);
@@ -629,49 +629,49 @@ static PFN_GOFNA   Real_GOFNA   = NULL;
 
 /*******************************************************************************
  * RECURSION GUARDS (TLS-BASED)
- * ЗАЩИТА ОТ РЕКУРСИИ (НА ОСНОВЕ TLS)
+ * Р—РђР©РРўРђ РћРў Р Р•РљРЈР РЎРР (РќРђ РћРЎРќРћР’Р• TLS)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Prevents infinite recursion when our hooks call functions that may trigger
  * the same hooks again. Uses TLS for per-thread tracking.
  * 
- * Предотвращает бесконечную рекурсию, когда наши хуки вызывают функции, которые
- * могут снова запустить те же хуки. Использует TLS для отслеживания на каждый поток.
+ * РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ Р±РµСЃРєРѕРЅРµС‡РЅСѓСЋ СЂРµРєСѓСЂСЃРёСЋ, РєРѕРіРґР° РЅР°С€Рё С…СѓРєРё РІС‹Р·С‹РІР°СЋС‚ С„СѓРЅРєС†РёРё, РєРѕС‚РѕСЂС‹Рµ
+ * РјРѕРіСѓС‚ СЃРЅРѕРІР° Р·Р°РїСѓСЃС‚РёС‚СЊ С‚Рµ Р¶Рµ С…СѓРєРё. РСЃРїРѕР»СЊР·СѓРµС‚ TLS РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ РЅР° РєР°Р¶РґС‹Р№ РїРѕС‚РѕРє.
  * 
- * FALLBACK / РЕЗЕРВ:
+ * FALLBACK / Р Р•Р—Р•Р Р’:
  * If TLS allocation fails, uses global atomic counters (less precise but safe).
- * Если выделение TLS не удаётся, использует глобальные атомарные счётчики (менее точно, но безопасно).
+ * Р•СЃР»Рё РІС‹РґРµР»РµРЅРёРµ TLS РЅРµ СѓРґР°С‘С‚СЃСЏ, РёСЃРїРѕР»СЊР·СѓРµС‚ РіР»РѕР±Р°Р»СЊРЅС‹Рµ Р°С‚РѕРјР°СЂРЅС‹Рµ СЃС‡С‘С‚С‡РёРєРё (РјРµРЅРµРµ С‚РѕС‡РЅРѕ, РЅРѕ Р±РµР·РѕРїР°СЃРЅРѕ).
  ******************************************************************************/
-static DWORD g_tlsFopen = TLS_OUT_OF_INDEXES;  // TLS slot for fopen guard / Слот TLS для защиты fopen
-static DWORD g_tlsGPPS  = TLS_OUT_OF_INDEXES;  // TLS slot for GPPSA guard / Слот TLS для защиты GPPSA
+static DWORD g_tlsFopen = TLS_OUT_OF_INDEXES;  // TLS slot for fopen guard / РЎР»РѕС‚ TLS РґР»СЏ Р·Р°С‰РёС‚С‹ fopen
+static DWORD g_tlsGPPS  = TLS_OUT_OF_INDEXES;  // TLS slot for GPPSA guard / РЎР»РѕС‚ TLS РґР»СЏ Р·Р°С‰РёС‚С‹ GPPSA
 
-// Fallback global guards if TLS not available / Резервные глобальные защиты, если TLS недоступен
+// Fallback global guards if TLS not available / Р РµР·РµСЂРІРЅС‹Рµ РіР»РѕР±Р°Р»СЊРЅС‹Рµ Р·Р°С‰РёС‚С‹, РµСЃР»Рё TLS РЅРµРґРѕСЃС‚СѓРїРµРЅ
 static LONG g_guardFopen = 0;
 static LONG g_guardGPPS  = 0;
 
 /*******************************************************************************
  * GuardEnter_TlsOrGlobal
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Enters recursion guard using TLS if available, global counter otherwise.
- * Входит в защиту рекурсии, используя TLS если доступен, иначе глобальный счётчик.
+ * Р’С…РѕРґРёС‚ РІ Р·Р°С‰РёС‚Сѓ СЂРµРєСѓСЂСЃРёРё, РёСЃРїРѕР»СЊР·СѓСЏ TLS РµСЃР»Рё РґРѕСЃС‚СѓРїРµРЅ, РёРЅР°С‡Рµ РіР»РѕР±Р°Р»СЊРЅС‹Р№ СЃС‡С‘С‚С‡РёРє.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if guard acquired (safe to proceed)
  * FALSE if already in hook (recursion detected, skip hook)
  ******************************************************************************/
 static BOOL GuardEnter_TlsOrGlobal(DWORD tlsIndex, LONG* pGlobal) {
     if (tlsIndex != TLS_OUT_OF_INDEXES) {
         LPVOID v = TlsGetValue(tlsIndex);
-        if (v) return FALSE;  // Already in hook / Уже в хуке
+        if (v) return FALSE;  // Already in hook / РЈР¶Рµ РІ С…СѓРєРµ
         TlsSetValue(tlsIndex, (LPVOID)1);
         return TRUE;
     }
     
-    // Global fallback / Глобальный резерв
+    // Global fallback / Р“Р»РѕР±Р°Р»СЊРЅС‹Р№ СЂРµР·РµСЂРІ
     if (InterlockedIncrement(pGlobal) != 1) {
         InterlockedDecrement(pGlobal);
-        return FALSE;  // Another thread in hook / Другой поток в хуке
+        return FALSE;  // Another thread in hook / Р”СЂСѓРіРѕР№ РїРѕС‚РѕРє РІ С…СѓРєРµ
     }
     return TRUE;
 }
@@ -687,11 +687,11 @@ static void GuardLeave_TlsOrGlobal(DWORD tlsIndex, LONG* pGlobal) {
 /*******************************************************************************
  * Hook_fopen (M3U8 HANDLING)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts fopen to detect M3U8 files and redirect to ANSI temp file.
- * Перехватывает fopen для обнаружения M3U8 файлов и перенаправления на ANSI временный файл.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ fopen РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ M3U8 С„Р°Р№Р»РѕРІ Рё РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РЅР° ANSI РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р».
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Check if opening M3U8 file for reading
  * 2. Enter recursion guard
  * 3. Create ANSI temp file
@@ -699,18 +699,18 @@ static void GuardLeave_TlsOrGlobal(DWORD tlsIndex, LONG* pGlobal) {
  * 5. Track FILE* pointer for cleanup
  * 6. Return FILE* to temp file
  * 
- * 1. Проверить, открывается ли M3U8 файл для чтения
- * 2. Войти в защиту рекурсии
- * 3. Создать ANSI временный файл
- * 4. Открыть временный файл вместо оригинального
- * 5. Отследить указатель FILE* для очистки
- * 6. Вернуть FILE* на временный файл
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ, РѕС‚РєСЂС‹РІР°РµС‚СЃСЏ Р»Рё M3U8 С„Р°Р№Р» РґР»СЏ С‡С‚РµРЅРёСЏ
+ * 2. Р’РѕР№С‚Рё РІ Р·Р°С‰РёС‚Сѓ СЂРµРєСѓСЂСЃРёРё
+ * 3. РЎРѕР·РґР°С‚СЊ ANSI РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
+ * 4. РћС‚РєСЂС‹С‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» РІРјРµСЃС‚Рѕ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ
+ * 5. РћС‚СЃР»РµРґРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ FILE* РґР»СЏ РѕС‡РёСЃС‚РєРё
+ * 6. Р’РµСЂРЅСѓС‚СЊ FILE* РЅР° РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
  ******************************************************************************/
 static FILE* __cdecl Hook_fopen(const char* path, const char* mode) {
     if (!Real_fopen) return NULL;
     if (!path || !mode) return Real_fopen(path, mode);
 
-    // Hook only for reading M3U8 files / Хук только для чтения M3U8 файлов
+    // Hook only for reading M3U8 files / РҐСѓРє С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ M3U8 С„Р°Р№Р»РѕРІ
     if (mode[0] == 'r' && IsM3u8File(path)) {
         if (!GuardEnter_TlsOrGlobal(g_tlsFopen, &g_guardFopen)) {
             return Real_fopen(path, mode);
@@ -721,7 +721,7 @@ static FILE* __cdecl Hook_fopen(const char* path, const char* mode) {
         if (CreateAnsiTemp(path, tmp, FALSE)) {
             fp = Real_fopen(tmp, mode);
             if (fp) {
-                TrackM3U(fp, tmp);  // Track for cleanup / Отследить для очистки
+                TrackM3U(fp, tmp);  // Track for cleanup / РћС‚СЃР»РµРґРёС‚СЊ РґР»СЏ РѕС‡РёСЃС‚РєРё
             } else {
                 DeleteFileA(tmp);
             }
@@ -737,20 +737,20 @@ static FILE* __cdecl Hook_fopen(const char* path, const char* mode) {
 /*******************************************************************************
  * Hook_fclose
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts fclose to delete temp M3U8 files.
- * Перехватывает fclose для удаления временных M3U8 файлов.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ fclose РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РІСЂРµРјРµРЅРЅС‹С… M3U8 С„Р°Р№Р»РѕРІ.
  ******************************************************************************/
 static int __cdecl Hook_fclose(FILE* fp) {
     if (!Real_fclose) return EOF;
     
     char tmp[MAX_PATH];
-    BOOL myFile = UntrackM3U(fp, tmp);  // Check if it's our temp file / Проверить, наш ли это временный файл
+    BOOL myFile = UntrackM3U(fp, tmp);  // Check if it's our temp file / РџСЂРѕРІРµСЂРёС‚СЊ, РЅР°С€ Р»Рё СЌС‚Рѕ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
     
     int res = Real_fclose(fp);
     
     if (myFile) 
-        DeleteFileA(tmp);  // Delete temp file / Удалить временный файл
+        DeleteFileA(tmp);  // Delete temp file / РЈРґР°Р»РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
     
     return res;
 }
@@ -758,29 +758,29 @@ static int __cdecl Hook_fclose(FILE* fp) {
 /*******************************************************************************
  * Hook_stricmp (M3U VS M3U8 MATCHING)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Makes M3U and M3U8 extensions equivalent for Winamp's extension checks.
  * Winamp checks if file extension matches playlist type; we want both to match.
  * 
- * Делает расширения M3U и M3U8 эквивалентными для проверок расширений Winamp.
- * Winamp проверяет, совпадает ли расширение файла с типом плейлиста; мы хотим, чтобы оба совпадали.
+ * Р”РµР»Р°РµС‚ СЂР°СЃС€РёСЂРµРЅРёСЏ M3U Рё M3U8 СЌРєРІРёРІР°Р»РµРЅС‚РЅС‹РјРё РґР»СЏ РїСЂРѕРІРµСЂРѕРє СЂР°СЃС€РёСЂРµРЅРёР№ Winamp.
+ * Winamp РїСЂРѕРІРµСЂСЏРµС‚, СЃРѕРІРїР°РґР°РµС‚ Р»Рё СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° СЃ С‚РёРїРѕРј РїР»РµР№Р»РёСЃС‚Р°; РјС‹ С…РѕС‚РёРј, С‡С‚РѕР±С‹ РѕР±Р° СЃРѕРІРїР°РґР°Р»Рё.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * If both strings are M3U or M3U8 extensions, return 0 (equal).
  * Otherwise, use real _stricmp.
  * 
- * Если обе строки - расширения M3U или M3U8, вернуть 0 (равны).
- * Иначе использовать настоящий _stricmp.
+ * Р•СЃР»Рё РѕР±Рµ СЃС‚СЂРѕРєРё - СЂР°СЃС€РёСЂРµРЅРёСЏ M3U РёР»Рё M3U8, РІРµСЂРЅСѓС‚СЊ 0 (СЂР°РІРЅС‹).
+ * РРЅР°С‡Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РЅР°СЃС‚РѕСЏС‰РёР№ _stricmp.
  ******************************************************************************/
 static int __cdecl Hook_stricmp(const char* s1, const char* s2) {
     if (!s1 && !s2) return 0;
     if (!s1) return -1;
     if (!s2) return 1;
 
-    // Check if both are M3U/M3U8 / Проверить, оба ли M3U/M3U8
+    // Check if both are M3U/M3U8 / РџСЂРѕРІРµСЂРёС‚СЊ, РѕР±Р° Р»Рё M3U/M3U8
     BOOL a = PL_MatchExtLoose(s1, "m3u") || PL_MatchExtLoose(s1, "m3u8");
     BOOL b = PL_MatchExtLoose(s2, "m3u") || PL_MatchExtLoose(s2, "m3u8");
-    if (a && b) return 0;  // Treat as equal / Считать равными
+    if (a && b) return 0;  // Treat as equal / РЎС‡РёС‚Р°С‚СЊ СЂР°РІРЅС‹РјРё
 
     return Real_stricmp ? Real_stricmp(s1, s2) : lstrcmpiA(s1, s2);
 }
@@ -788,30 +788,30 @@ static int __cdecl Hook_stricmp(const char* s1, const char* s2) {
 /*******************************************************************************
  * Hook_GPPSA (PLS FILE HANDLING)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts GetPrivateProfileStringA to handle Unicode PLS files.
  * PLS files use INI format read via GetPrivateProfileStringA.
  * 
- * Перехватывает GetPrivateProfileStringA для обработки Unicode PLS файлов.
- * PLS файлы используют формат INI, читаемый через GetPrivateProfileStringA.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ GetPrivateProfileStringA РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё Unicode PLS С„Р°Р№Р»РѕРІ.
+ * PLS С„Р°Р№Р»С‹ РёСЃРїРѕР»СЊР·СѓСЋС‚ С„РѕСЂРјР°С‚ INI, С‡РёС‚Р°РµРјС‹Р№ С‡РµСЂРµР· GetPrivateProfileStringA.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Check if reading from PLS file
  * 2. Check cache for existing temp file
  * 3. If not cached: create temp file and cache it
  * 4. Redirect GetPrivateProfileStringA to temp file
  * 
- * 1. Проверить, читается ли из PLS файла
- * 2. Проверить кеш на существующий временный файл
- * 3. Если не кешировано: создать временный файл и закешировать его
- * 4. Перенаправить GetPrivateProfileStringA на временный файл
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ, С‡РёС‚Р°РµС‚СЃСЏ Р»Рё РёР· PLS С„Р°Р№Р»Р°
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ РєРµС€ РЅР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
+ * 3. Р•СЃР»Рё РЅРµ РєРµС€РёСЂРѕРІР°РЅРѕ: СЃРѕР·РґР°С‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» Рё Р·Р°РєРµС€РёСЂРѕРІР°С‚СЊ РµРіРѕ
+ * 4. РџРµСЂРµРЅР°РїСЂР°РІРёС‚СЊ GetPrivateProfileStringA РЅР° РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
  * 
- * CACHING / КЕШИРОВАНИЕ:
+ * CACHING / РљР•РЁРР РћР’РђРќРР•:
  * PLS files are read multiple times (once per entry), so we cache the temp file
  * to avoid recreating it on each read.
  * 
- * PLS файлы читаются многократно (один раз на запись), поэтому кешируем временный
- * файл, чтобы избежать пересоздания при каждом чтении.
+ * PLS С„Р°Р№Р»С‹ С‡РёС‚Р°СЋС‚СЃСЏ РјРЅРѕРіРѕРєСЂР°С‚РЅРѕ (РѕРґРёРЅ СЂР°Р· РЅР° Р·Р°РїРёСЃСЊ), РїРѕСЌС‚РѕРјСѓ РєРµС€РёСЂСѓРµРј РІСЂРµРјРµРЅРЅС‹Р№
+ * С„Р°Р№Р», С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїРµСЂРµСЃРѕР·РґР°РЅРёСЏ РїСЂРё РєР°Р¶РґРѕРј С‡С‚РµРЅРёРё.
  ******************************************************************************/
 static DWORD WINAPI Hook_GPPSA(LPCSTR App, LPCSTR Key, LPCSTR Def, LPSTR Ret, DWORD Sz, LPCSTR File) {
     if (Real_GPPSA && File && IsPlsFile(File)) {
@@ -822,11 +822,11 @@ static DWORD WINAPI Hook_GPPSA(LPCSTR App, LPCSTR Key, LPCSTR Def, LPSTR Ret, DW
         DWORD res = 0;
         char tmp[MAX_PATH];
         
-        // Check cache / Проверить кеш
+        // Check cache / РџСЂРѕРІРµСЂРёС‚СЊ РєРµС€
         if (GetCachedPLS(File, tmp)) {
             res = Real_GPPSA(App, Key, Def, Ret, Sz, tmp);
         } else {
-            // Create and cache temp file / Создать и закешировать временный файл
+            // Create and cache temp file / РЎРѕР·РґР°С‚СЊ Рё Р·Р°РєРµС€РёСЂРѕРІР°С‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»
             if (CreateAnsiTemp(File, tmp, TRUE)) {
                 CachePLS(File, tmp);
                 res = Real_GPPSA(App, Key, Def, Ret, Sz, tmp);
@@ -845,64 +845,64 @@ static DWORD WINAPI Hook_GPPSA(LPCSTR App, LPCSTR Key, LPCSTR Def, LPSTR Ret, DW
 /*******************************************************************************
  * Hook_GOFNA (FILE DIALOG FILTER)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Modifies playlist file dialogs to include M3U8 in filter.
- * Изменяет диалоги файлов плейлистов для включения M3U8 в фильтр.
+ * РР·РјРµРЅСЏРµС‚ РґРёР°Р»РѕРіРё С„Р°Р№Р»РѕРІ РїР»РµР№Р»РёСЃС‚РѕРІ РґР»СЏ РІРєР»СЋС‡РµРЅРёСЏ M3U8 РІ С„РёР»СЊС‚СЂ.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Detect if dialog is for playlists (by title or filter)
  * 2. Replace filter with custom one including M3U8
  * 3. Adjust filter index if needed
  * 
- * 1. Определить, является ли диалог для плейлистов (по заголовку или фильтру)
- * 2. Заменить фильтр на пользовательский, включающий M3U8
- * 3. Скорректировать индекс фильтра при необходимости
+ * 1. РћРїСЂРµРґРµР»РёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РґРёР°Р»РѕРі РґР»СЏ РїР»РµР№Р»РёСЃС‚РѕРІ (РїРѕ Р·Р°РіРѕР»РѕРІРєСѓ РёР»Рё С„РёР»СЊС‚СЂСѓ)
+ * 2. Р—Р°РјРµРЅРёС‚СЊ С„РёР»СЊС‚СЂ РЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№, РІРєР»СЋС‡Р°СЋС‰РёР№ M3U8
+ * 3. РЎРєРѕСЂСЂРµРєС‚РёСЂРѕРІР°С‚СЊ РёРЅРґРµРєСЃ С„РёР»СЊС‚СЂР° РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
  * 
- * FILTER FORMAT / ФОРМАТ ФИЛЬТРА:
+ * FILTER FORMAT / Р¤РћР РњРђРў Р¤РР›Р¬РўР Рђ:
  * String with double-null termination:
  * "All Playlists\0*.m3u;*.m3u8;*.pls\0M3U Files\0*.m3u;*.m3u8\0PLS Files\0*.pls\0\0"
  * 
- * Строка с двойным null завершением:
- * "Все плейлисты\0*.m3u;*.m3u8;*.pls\0M3U файлы\0*.m3u;*.m3u8\0PLS файлы\0*.pls\0\0"
+ * РЎС‚СЂРѕРєР° СЃ РґРІРѕР№РЅС‹Рј null Р·Р°РІРµСЂС€РµРЅРёРµРј:
+ * "Р’СЃРµ РїР»РµР№Р»РёСЃС‚С‹\0*.m3u;*.m3u8;*.pls\0M3U С„Р°Р№Р»С‹\0*.m3u;*.m3u8\0PLS С„Р°Р№Р»С‹\0*.pls\0\0"
  ******************************************************************************/
-static char g_Filter[512] = { 0 };  // Custom filter string / Пользовательская строка фильтра
+static char g_Filter[512] = { 0 };  // Custom filter string / РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєР°СЏ СЃС‚СЂРѕРєР° С„РёР»СЊС‚СЂР°
 
 static BOOL WINAPI Hook_GOFNA(LPOPENFILENAMEA ofn) {
     if (ofn && Real_GOFNA) {
         BOOL isPL = FALSE;
         
-        // Detect playlist dialog / Определить диалог плейлистов
+        // Detect playlist dialog / РћРїСЂРµРґРµР»РёС‚СЊ РґРёР°Р»РѕРі РїР»РµР№Р»РёСЃС‚РѕРІ
         if (ofn->lpstrTitle && 
-            (strstr(ofn->lpstrTitle, "Playlist") || strstr(ofn->lpstrTitle, "лейлист"))) 
+            (strstr(ofn->lpstrTitle, "Playlist") || strstr(ofn->lpstrTitle, "Р»РµР№Р»РёСЃС‚"))) 
             isPL = TRUE;
         if (!isPL && ofn->lpstrFilter && 
             (strstr(ofn->lpstrFilter, "M3U") || strstr(ofn->lpstrFilter, "m3u"))) 
             isPL = TRUE;
 
         if (isPL) {
-            // Build custom filter once / Построить пользовательский фильтр один раз
+            // Build custom filter once / РџРѕСЃС‚СЂРѕРёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ С„РёР»СЊС‚СЂ РѕРґРёРЅ СЂР°Р·
             if (!g_Filter[0]) {
                 char* p = g_Filter;
                 
-                // All Playlists / Все плейлисты
+                // All Playlists / Р’СЃРµ РїР»РµР№Р»РёСЃС‚С‹
                 lstrcpyA(p, ALL_PL);      
                 p += lstrlenA(p) + 1; 
                 lstrcpyA(p, "*.m3u;*.m3u8;*.pls"); 
                 p += lstrlenA(p) + 1;
                 
-                // M3U Files / M3U файлы
+                // M3U Files / M3U С„Р°Р№Р»С‹
                 lstrcpyA(p, M3U_FILES);   
                 p += lstrlenA(p) + 1; 
                 lstrcpyA(p, "*.m3u;*.m3u8");      
                 p += lstrlenA(p) + 1;
                 
-                // PLS Files / PLS файлы
+                // PLS Files / PLS С„Р°Р№Р»С‹
                 lstrcpyA(p, PLS_FILES);   
                 p += lstrlenA(p) + 1; 
                 lstrcpyA(p, "*.pls");              
                 p += lstrlenA(p) + 1;
                 
-                *p = 0;  // Double-null termination / Двойное null завершение
+                *p = 0;  // Double-null termination / Р”РІРѕР№РЅРѕРµ null Р·Р°РІРµСЂС€РµРЅРёРµ
             }
             
             ofn->lpstrFilter = g_Filter;
@@ -915,56 +915,56 @@ static BOOL WINAPI Hook_GOFNA(LPOPENFILENAMEA ofn) {
 
 /*******************************************************************************
  * INSTALLATION LOGIC
- * ЛОГИКА УСТАНОВКИ
+ * Р›РћР“РРљРђ РЈРЎРўРђРќРћР’РљР
  ******************************************************************************/
 
 /*******************************************************************************
  * PatchModule
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches IAT of a module to install all hooks.
- * Патчит IAT модуля для установки всех хуков.
+ * РџР°С‚С‡РёС‚ IAT РјРѕРґСѓР»СЏ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё РІСЃРµС… С…СѓРєРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMod - Module to patch (exe or dll) / Модуль для патчинга (exe или dll)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMod - Module to patch (exe or dll) / РњРѕРґСѓР»СЊ РґР»СЏ РїР°С‚С‡РёРЅРіР° (exe РёР»Рё dll)
  * 
- * HOOKS INSTALLED / УСТАНОВЛЕННЫЕ ХУКИ:
+ * HOOKS INSTALLED / РЈРЎРўРђРќРћР’Р›Р•РќРќР«Р• РҐРЈРљР:
  * 1. CRT functions (MSVCRT.dll): fopen, fclose, _stricmp
  * 2. Kernel32: GetPrivateProfileStringA
  * 3. ComDlg32: GetOpenFileNameA
  * 
- * 1. CRT функции (MSVCRT.dll): fopen, fclose, _stricmp
+ * 1. CRT С„СѓРЅРєС†РёРё (MSVCRT.dll): fopen, fclose, _stricmp
  * 2. Kernel32: GetPrivateProfileStringA
  * 3. ComDlg32: GetOpenFileNameA
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Tries multiple CRT DLL names for compatibility (MSVCRT, MSVCR71, MSVCR70).
- * Пробует несколько имён CRT DLL для совместимости (MSVCRT, MSVCR71, MSVCR70).
+ * РџСЂРѕР±СѓРµС‚ РЅРµСЃРєРѕР»СЊРєРѕ РёРјС‘РЅ CRT DLL РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё (MSVCRT, MSVCR71, MSVCR70).
  ******************************************************************************/
 static void PatchModule(HMODULE hMod) {
     if (!hMod) return;
 
-    // 1. CRT Hooks (fopen, fclose, _stricmp) / CRT хуки
+    // 1. CRT Hooks (fopen, fclose, _stricmp) / CRT С…СѓРєРё
     const char* crts[] = { "MSVCRT.dll", "msvcrt.dll", "MSVCR71.dll", "MSVCR70.dll" };
     for (int i = 0; i < 4; i++) {
         HMODULE hC = GetModuleHandleA(crts[i]);
         if (!hC) continue;
 
-        // Get original function pointers / Получить оригинальные указатели функций
+        // Get original function pointers / РџРѕР»СѓС‡РёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№
         if (!Real_fopen)   Real_fopen   = (PFN_fopen)GetProcAddress(hC, "fopen");
         if (!Real_fclose)  Real_fclose  = (PFN_fclose)GetProcAddress(hC, "fclose");
         if (!Real_stricmp) Real_stricmp = (PFN_stricmp)GetProcAddress(hC, "_stricmp");
 
-        // Patch IAT / Пропатчить IAT
+        // Patch IAT / РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT
         if (Real_fopen)   IAT_PatchByName(hMod, crts[i], "fopen",   (void*)Hook_fopen,   NULL);
         if (Real_fclose)  IAT_PatchByName(hMod, crts[i], "fclose",  (void*)Hook_fclose,  NULL);
         if (Real_stricmp) IAT_PatchByName(hMod, crts[i], "_stricmp", (void*)Hook_stricmp, NULL);
 
-        // Some CRTs export as "stricmp" without underscore / Некоторые CRT экспортируют как "stricmp" без подчёркивания
+        // Some CRTs export as "stricmp" without underscore / РќРµРєРѕС‚РѕСЂС‹Рµ CRT СЌРєСЃРїРѕСЂС‚РёСЂСѓСЋС‚ РєР°Рє "stricmp" Р±РµР· РїРѕРґС‡С‘СЂРєРёРІР°РЅРёСЏ
         if (Real_stricmp) IAT_PatchByName(hMod, crts[i], "stricmp", (void*)Hook_stricmp, NULL);
     }
 
-    // 2. Kernel32 Hooks (GetPrivateProfileStringA) / Хуки Kernel32
+    // 2. Kernel32 Hooks (GetPrivateProfileStringA) / РҐСѓРєРё Kernel32
     if (!Real_GPPSA) {
         HMODULE hK = GetModuleHandleA("KERNEL32.dll");
         if (hK) Real_GPPSA = (PFN_GPPSA)GetProcAddress(hK, "GetPrivateProfileStringA");
@@ -973,7 +973,7 @@ static void PatchModule(HMODULE hMod) {
         IAT_PatchByName(hMod, "KERNEL32.dll", "GetPrivateProfileStringA", (void*)Hook_GPPSA, NULL);
     }
 
-    // 3. ComDlg32 Hooks (GetOpenFileNameA) / Хуки ComDlg32
+    // 3. ComDlg32 Hooks (GetOpenFileNameA) / РҐСѓРєРё ComDlg32
     if (!Real_GOFNA) {
         HMODULE hD = GetModuleHandleA("COMDLG32.dll");
         if (hD) Real_GOFNA = (PFN_GOFNA)GetProcAddress(hD, "GetOpenFileNameA");
@@ -986,12 +986,12 @@ static void PatchModule(HMODULE hMod) {
 /*******************************************************************************
  * InitTimer
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Timer callback that waits for gen_ml.dll to load, then patches it.
  * Media Library (gen_ml.dll) may not be loaded immediately.
  * 
- * Функция обратного вызова таймера, которая ждёт загрузки gen_ml.dll, затем патчит её.
- * Библиотека (gen_ml.dll) может быть не загружена сразу.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° С‚Р°Р№РјРµСЂР°, РєРѕС‚РѕСЂР°СЏ Р¶РґС‘С‚ Р·Р°РіСЂСѓР·РєРё gen_ml.dll, Р·Р°С‚РµРј РїР°С‚С‡РёС‚ РµС‘.
+ * Р‘РёР±Р»РёРѕС‚РµРєР° (gen_ml.dll) РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ Р·Р°РіСЂСѓР¶РµРЅР° СЃСЂР°Р·Сѓ.
  ******************************************************************************/
 static VOID CALLBACK InitTimer(HWND, UINT, UINT_PTR id, DWORD) {
     HMODULE hML = GetModuleHandleA("gen_ml.dll");
@@ -1003,54 +1003,54 @@ static VOID CALLBACK InitTimer(HWND, UINT, UINT_PTR id, DWORD) {
 
 /*******************************************************************************
  * PUBLIC API
- * ПУБЛИЧНЫЙ API
+ * РџРЈР‘Р›РР§РќР«Р™ API
  ******************************************************************************/
 
 /*******************************************************************************
  * m3u8_Loader_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the M3U8 loader module. Allocates TLS slots and installs hooks.
- * Инициализирует модуль загрузчика M3U8. Выделяет слоты TLS и устанавливает хуки.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ Р·Р°РіСЂСѓР·С‡РёРєР° M3U8. Р’С‹РґРµР»СЏРµС‚ СЃР»РѕС‚С‹ TLS Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё.
  ******************************************************************************/
 extern "C" void m3u8_Loader_Init(void) {
-    // Allocate TLS slots for recursion guards / Выделить слоты TLS для защиты от рекурсии
+    // Allocate TLS slots for recursion guards / Р’С‹РґРµР»РёС‚СЊ СЃР»РѕС‚С‹ TLS РґР»СЏ Р·Р°С‰РёС‚С‹ РѕС‚ СЂРµРєСѓСЂСЃРёРё
     if (g_tlsFopen == TLS_OUT_OF_INDEXES) {
         g_tlsFopen = TlsAlloc();
         if (g_tlsFopen == TLS_OUT_OF_INDEXES) {
-            // Fallback to global guard / Резерв на глобальную защиту
+            // Fallback to global guard / Р РµР·РµСЂРІ РЅР° РіР»РѕР±Р°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ
         }
     }
     if (g_tlsGPPS == TLS_OUT_OF_INDEXES) {
         g_tlsGPPS = TlsAlloc();
         if (g_tlsGPPS == TLS_OUT_OF_INDEXES) {
-            // Fallback to global guard / Резерв на глобальную защиту
+            // Fallback to global guard / Р РµР·РµСЂРІ РЅР° РіР»РѕР±Р°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ
         }
     }
 
-    // Patch main executable / Пропатчить главный исполняемый файл
+    // Patch main executable / РџСЂРѕРїР°С‚С‡РёС‚СЊ РіР»Р°РІРЅС‹Р№ РёСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р»
     PatchModule(GetModuleHandle(NULL));
 
-    // Wait for gen_ml.dll to load / Ждать загрузки gen_ml.dll
+    // Wait for gen_ml.dll to load / Р–РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё gen_ml.dll
     SetTimer(NULL, 0, 500, InitTimer);
 }
 
 /*******************************************************************************
  * m3u8_Loader_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the M3U8 loader module. Deletes all temp files and frees TLS.
- * Очищает модуль загрузчика M3U8. Удаляет все временные файлы и освобождает TLS.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ Р·Р°РіСЂСѓР·С‡РёРєР° M3U8. РЈРґР°Р»СЏРµС‚ РІСЃРµ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ Рё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ TLS.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must be called before module unload to prevent temp file leaks.
- * Должна быть вызвана перед выгрузкой модуля для предотвращения утечек временных файлов.
+ * Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ РІС‹Р·РІР°РЅР° РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№ РјРѕРґСѓР»СЏ РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ СѓС‚РµС‡РµРє РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ.
  ******************************************************************************/
 extern "C" void m3u8_Loader_Quit(void) {
-    // Clear all temp files / Очистить все временные файлы
+    // Clear all temp files / РћС‡РёСЃС‚РёС‚СЊ РІСЃРµ РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹
     ClearAllCache();
 
-    // Free TLS slots / Освободить слоты TLS
+    // Free TLS slots / РћСЃРІРѕР±РѕРґРёС‚СЊ СЃР»РѕС‚С‹ TLS
     if (g_tlsFopen != TLS_OUT_OF_INDEXES) {
         TlsFree(g_tlsFopen);
         g_tlsFopen = TLS_OUT_OF_INDEXES;
