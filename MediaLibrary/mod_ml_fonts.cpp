@@ -1,73 +1,73 @@
 /*******************************************************************************
  * WINAMP MEDIA LIBRARY AND PLAYLIST SMOOTH FONTS MODULE
- * МОДУЛЬ СГЛАЖЕННЫХ ШРИФТОВ ДЛЯ ПЛЕЙЛИСТА И БИБЛИОТЕКИ WINAMP
+ * РњРћР”РЈР›Р¬ РЎР“Р›РђР–Р•РќРќР«РҐ РЁР РР¤РўРћР’ Р”Р›РЇ РџР›Р•Р™Р›РРЎРўРђ Р Р‘РР‘Р›РРћРўР•РљР WINAMP
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module replaces bitmap fonts in Winamp's Media Library and Playlist
  * Editor with smooth, anti-aliased TrueType fonts. It improves text rendering
  * quality on modern displays while maintaining compatibility with classic skins.
  * 
- * Этот модуль заменяет растровые шрифты в библиотеке Winamp и редакторе
- * плейлистов на сглаженные TrueType-шрифты с антиалиасингом. Улучшает качество
- * отрисовки текста на современных дисплеях, сохраняя совместимость с классическими скинами.
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ Р·Р°РјРµРЅСЏРµС‚ СЂР°СЃС‚СЂРѕРІС‹Рµ С€СЂРёС„С‚С‹ РІ Р±РёР±Р»РёРѕС‚РµРєРµ Winamp Рё СЂРµРґР°РєС‚РѕСЂРµ
+ * РїР»РµР№Р»РёСЃС‚РѕРІ РЅР° СЃРіР»Р°Р¶РµРЅРЅС‹Рµ TrueType-С€СЂРёС„С‚С‹ СЃ Р°РЅС‚РёР°Р»РёР°СЃРёРЅРіРѕРј. РЈР»СѓС‡С€Р°РµС‚ РєР°С‡РµСЃС‚РІРѕ
+ * РѕС‚СЂРёСЃРѕРІРєРё С‚РµРєСЃС‚Р° РЅР° СЃРѕРІСЂРµРјРµРЅРЅС‹С… РґРёСЃРїР»РµСЏС…, СЃРѕС…СЂР°РЅСЏСЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ СЃ РєР»Р°СЃСЃРёС‡РµСЃРєРёРјРё СЃРєРёРЅР°РјРё.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 
- * 1. FONT INTERCEPTION / ПЕРЕХВАТ ШРИФТОВ:
+ * 1. FONT INTERCEPTION / РџР•Р Р•РҐР’РђРў РЁР РР¤РўРћР’:
  *    - Subclasses all controls in Media Library and Playlist Editor windows
  *    - Intercepts WM_SETFONT messages to replace fonts
  *    - Optional IAT hooking of SelectObject to catch GDI font selections
  * 
- *    - Создаёт subclass всех контролов в окнах библиотеки и редактора плейлистов
- *    - Перехватывает сообщения WM_SETFONT для замены шрифтов
- *    - Опциональный перехват SelectObject через IAT для захвата выбора шрифтов GDI
+ *    - РЎРѕР·РґР°С‘С‚ subclass РІСЃРµС… РєРѕРЅС‚СЂРѕР»РѕРІ РІ РѕРєРЅР°С… Р±РёР±Р»РёРѕС‚РµРєРё Рё СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
+ *    - РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёСЏ WM_SETFONT РґР»СЏ Р·Р°РјРµРЅС‹ С€СЂРёС„С‚РѕРІ
+ *    - РћРїС†РёРѕРЅР°Р»СЊРЅС‹Р№ РїРµСЂРµС…РІР°С‚ SelectObject С‡РµСЂРµР· IAT РґР»СЏ Р·Р°С…РІР°С‚Р° РІС‹Р±РѕСЂР° С€СЂРёС„С‚РѕРІ GDI
  * 
- * 2. FONT REPLACEMENT / ЗАМЕНА ШРИФТОВ:
+ * 2. FONT REPLACEMENT / Р—РђРњР•РќРђ РЁР РР¤РўРћР’:
  *    - Reads skin font preferences (face, size, charset) from Winamp
  *    - Converts bitmap fonts (MS Sans Serif, System) to vector fonts (Microsoft Sans Serif)
  *    - Applies ClearType or antialiased quality
  *    - Caches replacement fonts to avoid recreation
  * 
- *    - Читает настройки шрифтов скина (гарнитура, размер, кодировка) из Winamp
- *    - Преобразует растровые шрифты (MS Sans Serif, System) в векторные (Microsoft Sans Serif)
- *    - Применяет качество ClearType или antialiased
- *    - Кеширует заменённые шрифты для избежания пересоздания
+ *    - Р§РёС‚Р°РµС‚ РЅР°СЃС‚СЂРѕР№РєРё С€СЂРёС„С‚РѕРІ СЃРєРёРЅР° (РіР°СЂРЅРёС‚СѓСЂР°, СЂР°Р·РјРµСЂ, РєРѕРґРёСЂРѕРІРєР°) РёР· Winamp
+ *    - РџСЂРµРѕР±СЂР°Р·СѓРµС‚ СЂР°СЃС‚СЂРѕРІС‹Рµ С€СЂРёС„С‚С‹ (MS Sans Serif, System) РІ РІРµРєС‚РѕСЂРЅС‹Рµ (Microsoft Sans Serif)
+ *    - РџСЂРёРјРµРЅСЏРµС‚ РєР°С‡РµСЃС‚РІРѕ ClearType РёР»Рё antialiased
+ *    - РљРµС€РёСЂСѓРµС‚ Р·Р°РјРµРЅС‘РЅРЅС‹Рµ С€СЂРёС„С‚С‹ РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїРµСЂРµСЃРѕР·РґР°РЅРёСЏ
  * 
- * 3. SPECIAL CONTROL HANDLING / СПЕЦИАЛЬНАЯ ОБРАБОТКА КОНТРОЛОВ:
+ * 3. SPECIAL CONTROL HANDLING / РЎРџР•Р¦РРђР›Р¬РќРђРЇ РћР‘Р РђР‘РћРўРљРђ РљРћРќРўР РћР›РћР’:
  *    TreeView: Automatically adjusts item height to fit new fonts
  *    ListView: Forces relayout after font change (especially critical on Win9x)
  * 
- *    TreeView: Автоматически корректирует высоту элементов под новые шрифты
- *    ListView: Принудительно перестраивает макет после смены шрифта (критично на Win9x)
+ *    TreeView: РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РєРѕСЂСЂРµРєС‚РёСЂСѓРµС‚ РІС‹СЃРѕС‚Сѓ СЌР»РµРјРµРЅС‚РѕРІ РїРѕРґ РЅРѕРІС‹Рµ С€СЂРёС„С‚С‹
+ *    ListView: РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµСЃС‚СЂР°РёРІР°РµС‚ РјР°РєРµС‚ РїРѕСЃР»Рµ СЃРјРµРЅС‹ С€СЂРёС„С‚Р° (РєСЂРёС‚РёС‡РЅРѕ РЅР° Win9x)
  * 
- * 4. WIN9X COMPATIBILITY / СОВМЕСТИМОСТЬ С WIN9X:
+ * 4. WIN9X COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬ РЎ WIN9X:
  *    - Uses parent window subclassing to catch child creation (no CBT hook)
  *    - Implements aggressive ListView relayout (view type toggle)
  *    - Polls for font resets that occur during tab/page switches
  *    - Uses skin parameter polling instead of IPC_SKIN_CHANGED (unreliable on 9x)
  * 
- *    - Использует subclassing родительских окон для перехвата создания детей (нет CBT hook)
- *    - Реализует агрессивную перестройку ListView (переключение типа вида)
- *    - Опрашивает сбросы шрифтов, происходящие при переключении вкладок/страниц
- *    - Использует опрос параметров скина вместо IPC_SKIN_CHANGED (ненадёжен на 9x)
+ *    - РСЃРїРѕР»СЊР·СѓРµС‚ subclassing СЂРѕРґРёС‚РµР»СЊСЃРєРёС… РѕРєРѕРЅ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° СЃРѕР·РґР°РЅРёСЏ РґРµС‚РµР№ (РЅРµС‚ CBT hook)
+ *    - Р РµР°Р»РёР·СѓРµС‚ Р°РіСЂРµСЃСЃРёРІРЅСѓСЋ РїРµСЂРµСЃС‚СЂРѕР№РєСѓ ListView (РїРµСЂРµРєР»СЋС‡РµРЅРёРµ С‚РёРїР° РІРёРґР°)
+ *    - РћРїСЂР°С€РёРІР°РµС‚ СЃР±СЂРѕСЃС‹ С€СЂРёС„С‚РѕРІ, РїСЂРѕРёСЃС…РѕРґСЏС‰РёРµ РїСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё РІРєР»Р°РґРѕРє/СЃС‚СЂР°РЅРёС†
+ *    - РСЃРїРѕР»СЊР·СѓРµС‚ РѕРїСЂРѕСЃ РїР°СЂР°РјРµС‚СЂРѕРІ СЃРєРёРЅР° РІРјРµСЃС‚Рѕ IPC_SKIN_CHANGED (РЅРµРЅР°РґС‘Р¶РµРЅ РЅР° 9x)
  * 
- * CONTEXT SYSTEM / СИСТЕМА КОНТЕКСТОВ:
+ * CONTEXT SYSTEM / РЎРРЎРўР•РњРђ РљРћРќРўР•РљРЎРўРћР’:
  * CTX_LIB (1) - Media Library windows use skin-defined fonts
  * CTX_PL  (2) - Playlist Editor uses its own font (learned from first observation)
  * 
- * CTX_LIB (1) - Окна библиотеки используют шрифты, определённые скином
- * CTX_PL  (2) - Редактор плейлистов использует собственный шрифт (изучается при первом наблюдении)
+ * CTX_LIB (1) - РћРєРЅР° Р±РёР±Р»РёРѕС‚РµРєРё РёСЃРїРѕР»СЊР·СѓСЋС‚ С€СЂРёС„С‚С‹, РѕРїСЂРµРґРµР»С‘РЅРЅС‹Рµ СЃРєРёРЅРѕРј
+ * CTX_PL  (2) - Р РµРґР°РєС‚РѕСЂ РїР»РµР№Р»РёСЃС‚РѕРІ РёСЃРїРѕР»СЊР·СѓРµС‚ СЃРѕР±СЃС‚РІРµРЅРЅС‹Р№ С€СЂРёС„С‚ (РёР·СѓС‡Р°РµС‚СЃСЏ РїСЂРё РїРµСЂРІРѕРј РЅР°Р±Р»СЋРґРµРЅРёРё)
  * 
- * PERFORMANCE OPTIMIZATIONS / ОПТИМИЗАЦИИ ПРОИЗВОДИТЕЛЬНОСТИ:
+ * PERFORMANCE OPTIMIZATIONS / РћРџРўРРњРР—РђР¦РР РџР РћРР—Р’РћР”РРўР•Р›Р¬РќРћРЎРўР:
  * - Font cache with 1024 entries and last-access optimization
  * - DC tagging to avoid repeated context lookups
  * - Stamp-based change detection to skip unnecessary updates
  * - Debounced timers to batch multiple change events
  * 
- * - Кеш шрифтов с 1024 записями и оптимизацией последнего доступа
- * - Тегирование DC для избежания повторных поисков контекста
- * - Обнаружение изменений на основе отпечатков для пропуска ненужных обновлений
- * - Антидребезговые таймеры для пакетирования нескольких событий изменений
+ * - РљРµС€ С€СЂРёС„С‚РѕРІ СЃ 1024 Р·Р°РїРёСЃСЏРјРё Рё РѕРїС‚РёРјРёР·Р°С†РёРµР№ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
+ * - РўРµРіРёСЂРѕРІР°РЅРёРµ DC РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїРѕРІС‚РѕСЂРЅС‹С… РїРѕРёСЃРєРѕРІ РєРѕРЅС‚РµРєСЃС‚Р°
+ * - РћР±РЅР°СЂСѓР¶РµРЅРёРµ РёР·РјРµРЅРµРЅРёР№ РЅР° РѕСЃРЅРѕРІРµ РѕС‚РїРµС‡Р°С‚РєРѕРІ РґР»СЏ РїСЂРѕРїСѓСЃРєР° РЅРµРЅСѓР¶РЅС‹С… РѕР±РЅРѕРІР»РµРЅРёР№
+ * - РђРЅС‚РёРґСЂРµР±РµР·РіРѕРІС‹Рµ С‚Р°Р№РјРµСЂС‹ РґР»СЏ РїР°РєРµС‚РёСЂРѕРІР°РЅРёСЏ РЅРµСЃРєРѕР»СЊРєРёС… СЃРѕР±С‹С‚РёР№ РёР·РјРµРЅРµРЅРёР№
  * 
  ******************************************************************************/
 
@@ -80,92 +80,92 @@
 
 /*******************************************************************************
  * CONSTANT DEFINITIONS
- * ОПРЕДЕЛЕНИЯ КОНСТАНТ
+ * РћРџР Р•Р”Р•Р›Р•РќРРЇ РљРћРќРЎРўРђРќРў
  ******************************************************************************/
 
-// Windows message for theme changes / Сообщение Windows для изменений темы
+// Windows message for theme changes / РЎРѕРѕР±С‰РµРЅРёРµ Windows РґР»СЏ РёР·РјРµРЅРµРЅРёР№ С‚РµРјС‹
 #ifndef WM_THEMECHANGED
 #define WM_THEMECHANGED 0x031A
 #endif
 
-// Font quality values / Значения качества шрифтов
+// Font quality values / Р—РЅР°С‡РµРЅРёСЏ РєР°С‡РµСЃС‚РІР° С€СЂРёС„С‚РѕРІ
 #ifndef CLEARTYPE_QUALITY
-#define CLEARTYPE_QUALITY 5  // ClearType anti-aliasing (best for LCDs) / Антиалиасинг ClearType (лучше для LCD)
+#define CLEARTYPE_QUALITY 5  // ClearType anti-aliasing (best for LCDs) / РђРЅС‚РёР°Р»РёР°СЃРёРЅРі ClearType (Р»СѓС‡С€Рµ РґР»СЏ LCD)
 #endif
 #ifndef ANTIALIASED_QUALITY
-#define ANTIALIASED_QUALITY 4  // Standard anti-aliasing / Стандартный антиалиасинг
+#define ANTIALIASED_QUALITY 4  // Standard anti-aliasing / РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ Р°РЅС‚РёР°Р»РёР°СЃРёРЅРі
 #endif
 
-// PE/DOS signature for module validation / Сигнатура PE/DOS для проверки модуля
+// PE/DOS signature for module validation / РЎРёРіРЅР°С‚СѓСЂР° PE/DOS РґР»СЏ РїСЂРѕРІРµСЂРєРё РјРѕРґСѓР»СЏ
 #ifndef IMAGE_DOS_SIGNATURE
 #define IMAGE_DOS_SIGNATURE 0x5A4D  // "MZ" signature
 #endif
 
-// Winamp IPC messages / IPC-сообщения Winamp
+// Winamp IPC messages / IPC-СЃРѕРѕР±С‰РµРЅРёСЏ Winamp
 #ifndef WM_WA_IPC
-#define WM_WA_IPC WM_USER  // Base message for Winamp IPC / Базовое сообщение для Winamp IPC
+#define WM_WA_IPC WM_USER  // Base message for Winamp IPC / Р‘Р°Р·РѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РґР»СЏ Winamp IPC
 #endif
 #ifndef IPC_GET_GENSKINBITMAP
-#define IPC_GET_GENSKINBITMAP 503  // Get skin font parameters / Получить параметры шрифта скина
+#define IPC_GET_GENSKINBITMAP 503  // Get skin font parameters / РџРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚Р° СЃРєРёРЅР°
 #endif
 #ifndef IPC_GETSKIN
-#define IPC_GETSKIN 201  // Get skin directory / Получить каталог скина
+#define IPC_GETSKIN 201  // Get skin directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі СЃРєРёРЅР°
 #endif
 #ifndef IPC_SKIN_CHANGED
-#define IPC_SKIN_CHANGED 3018  // Notification: skin was changed / Уведомление: скин был изменён
+#define IPC_SKIN_CHANGED 3018  // Notification: skin was changed / РЈРІРµРґРѕРјР»РµРЅРёРµ: СЃРєРёРЅ Р±С‹Р» РёР·РјРµРЅС‘РЅ
 #endif
 
-// Feature flags for IAT hooking / Флаги функций для перехвата IAT
+// Feature flags for IAT hooking / Р¤Р»Р°РіРё С„СѓРЅРєС†РёР№ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° IAT
 #ifndef ENABLE_IAT_HOOK_ON_NT
-#define ENABLE_IAT_HOOK_ON_NT 1  // Enable IAT hooks on Windows NT/2000/XP+ / Включить хуки IAT на Windows NT/2000/XP+
+#define ENABLE_IAT_HOOK_ON_NT 1  // Enable IAT hooks on Windows NT/2000/XP+ / Р’РєР»СЋС‡РёС‚СЊ С…СѓРєРё IAT РЅР° Windows NT/2000/XP+
 #endif
 #ifndef ENABLE_IAT_HOOK_ON_9X
-#define ENABLE_IAT_HOOK_ON_9X 0  // Disable on Win9x (causes crashes on exit) / Отключить на Win9x (вызывает краши при выходе)
+#define ENABLE_IAT_HOOK_ON_9X 0  // Disable on Win9x (causes crashes on exit) / РћС‚РєР»СЋС‡РёС‚СЊ РЅР° Win9x (РІС‹Р·С‹РІР°РµС‚ РєСЂР°С€Рё РїСЂРё РІС‹С…РѕРґРµ)
 #endif
 
-// Enumeration context flag / Флаг контекста перечисления
-#define ENUM_CTX_CONFIRMED 1  // EnumWnd called with pre-confirmed context / EnumWnd вызвана с предварительно подтверждённым контекстом
+// Enumeration context flag / Р¤Р»Р°Рі РєРѕРЅС‚РµРєСЃС‚Р° РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ
+#define ENUM_CTX_CONFIRMED 1  // EnumWnd called with pre-confirmed context / EnumWnd РІС‹Р·РІР°РЅР° СЃ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ РїРѕРґС‚РІРµСЂР¶РґС‘РЅРЅС‹Рј РєРѕРЅС‚РµРєСЃС‚РѕРј
 
-// Window context types / Типы контекстов окон
-#define CTX_LIB  1  // Media Library context / Контекст библиотеки
-#define CTX_PL   2  // Playlist Editor context / Контекст редактора плейлистов
+// Window context types / РўРёРїС‹ РєРѕРЅС‚РµРєСЃС‚РѕРІ РѕРєРѕРЅ
+#define CTX_LIB  1  // Media Library context / РљРѕРЅС‚РµРєСЃС‚ Р±РёР±Р»РёРѕС‚РµРєРё
+#define CTX_PL   2  // Playlist Editor context / РљРѕРЅС‚РµРєСЃС‚ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
 
 /*******************************************************************************
  * EXTERNAL FUNCTIONS
- * ВНЕШНИЕ ФУНКЦИИ
+ * Р’РќР•РЁРќРР• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
-// IAT patching function (defined elsewhere) / Функция патчинга IAT (определена в другом месте)
+// IAT patching function (defined elsewhere) / Р¤СѓРЅРєС†РёСЏ РїР°С‚С‡РёРЅРіР° IAT (РѕРїСЂРµРґРµР»РµРЅР° РІ РґСЂСѓРіРѕРј РјРµСЃС‚Рµ)
 extern "C" BOOL IAT_PatchByName(HMODULE, const char*, const char*, void*, void**);
 
-// Get module instance for current DLL / Получить экземпляр модуля для текущей DLL
+// Get module instance for current DLL / РџРѕР»СѓС‡РёС‚СЊ СЌРєР·РµРјРїР»СЏСЂ РјРѕРґСѓР»СЏ РґР»СЏ С‚РµРєСѓС‰РµР№ DLL
 extern "C" IMAGE_DOS_HEADER __ImageBase;
 #define HINST_THIS ((HINSTANCE)&__ImageBase)
 
 /*******************************************************************************
  * GLOBAL STATE
- * ГЛОБАЛЬНОЕ СОСТОЯНИЕ
+ * Р“Р›РћР‘РђР›Р¬РќРћР• РЎРћРЎРўРћРЇРќРР•
  ******************************************************************************/
 
-// Critical section for thread-safe access / Критическая секция для потокобезопасного доступа
+// Critical section for thread-safe access / РљСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕРіРѕ РґРѕСЃС‚СѓРїР°
 static CRITICAL_SECTION g_cs;
-static BOOL  g_cs_inited = FALSE;  // TRUE if critical section initialized / TRUE если критическая секция инициализирована
-static BOOL  g_init = FALSE;       // TRUE if module initialized / TRUE если модуль инициализирован
-static volatile LONG g_shuttingDown = 0;  // Atomic flag: shutting down / Атомарный флаг: завершение работы
-static DWORD g_pid = 0;            // Current process ID / ID текущего процесса
+static BOOL  g_cs_inited = FALSE;  // TRUE if critical section initialized / TRUE РµСЃР»Рё РєСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°
+static BOOL  g_init = FALSE;       // TRUE if module initialized / TRUE РµСЃР»Рё РјРѕРґСѓР»СЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ
+static volatile LONG g_shuttingDown = 0;  // Atomic flag: shutting down / РђС‚РѕРјР°СЂРЅС‹Р№ С„Р»Р°Рі: Р·Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹
+static DWORD g_pid = 0;            // Current process ID / ID С‚РµРєСѓС‰РµРіРѕ РїСЂРѕС†РµСЃСЃР°
 
-// OS detection flags / Флаги определения ОС
+// OS detection flags / Р¤Р»Р°РіРё РѕРїСЂРµРґРµР»РµРЅРёСЏ РћРЎ
 static BOOL g_isNT = FALSE;   // Windows NT/2000/XP+ / Windows NT/2000/XP+
 static BOOL g_is9x = FALSE;   // Windows 95/98/ME / Windows 95/98/ME
-static BOOL g_allowIatHook = FALSE;  // IAT hooking enabled / Перехват IAT включён
-static BYTE g_forceQuality = DEFAULT_QUALITY;  // Font quality to apply / Качество шрифта для применения
+static BOOL g_allowIatHook = FALSE;  // IAT hooking enabled / РџРµСЂРµС…РІР°С‚ IAT РІРєР»СЋС‡С‘РЅ
+static BYTE g_forceQuality = DEFAULT_QUALITY;  // Font quality to apply / РљР°С‡РµСЃС‚РІРѕ С€СЂРёС„С‚Р° РґР»СЏ РїСЂРёРјРµРЅРµРЅРёСЏ
 
-// Default font face / Гарнитура шрифта по умолчанию
+// Default font face / Р“Р°СЂРЅРёС‚СѓСЂР° С€СЂРёС„С‚Р° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 static const char kFaceDef[] = "Microsoft Sans Serif";
 
 /*******************************************************************************
  * CRITICAL SECTION HELPERS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ КРИТИЧЕСКОЙ СЕКЦИИ
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР РљР РРўРР§Р•РЎРљРћР™ РЎР•РљР¦РР
  ******************************************************************************/
 
 static void Lock()   { if(g_cs_inited) EnterCriticalSection(&g_cs); }
@@ -174,19 +174,19 @@ static void Unlock() { if(g_cs_inited) LeaveCriticalSection(&g_cs); }
 /*******************************************************************************
  * Hash
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * FNV-1a hash function for strings. Used to create unique stamps for font
  * configurations and skin parameters.
  * 
- * Хеш-функция FNV-1a для строк. Используется для создания уникальных отпечатков
- * для конфигураций шрифтов и параметров скинов.
+ * РҐРµС€-С„СѓРЅРєС†РёСЏ FNV-1a РґР»СЏ СЃС‚СЂРѕРє. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ СѓРЅРёРєР°Р»СЊРЅС‹С… РѕС‚РїРµС‡Р°С‚РєРѕРІ
+ * РґР»СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёР№ С€СЂРёС„С‚РѕРІ Рё РїР°СЂР°РјРµС‚СЂРѕРІ СЃРєРёРЅРѕРІ.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * FNV-1a: hash = (hash XOR byte) * FNV_prime
  * Known for good distribution and fast computation.
  * 
- * FNV-1a: хеш = (хеш XOR байт) * FNV_prime
- * Известна хорошим распределением и быстрым вычислением.
+ * FNV-1a: С…РµС€ = (С…РµС€ XOR Р±Р°Р№С‚) * FNV_prime
+ * РР·РІРµСЃС‚РЅР° С…РѕСЂРѕС€РёРј СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµРј Рё Р±С‹СЃС‚СЂС‹Рј РІС‹С‡РёСЃР»РµРЅРёРµРј.
  ******************************************************************************/
 static DWORD Hash(const char* s) {
     DWORD h = 2166136261u;  // FNV offset basis
@@ -194,17 +194,17 @@ static DWORD Hash(const char* s) {
         h ^= (BYTE)(*s++); 
         h *= 16777619u;  // FNV prime
     }
-    return h ? h : 1;  // Never return 0 / Никогда не возвращать 0
+    return h ? h : 1;  // Never return 0 / РќРёРєРѕРіРґР° РЅРµ РІРѕР·РІСЂР°С‰Р°С‚СЊ 0
 }
 
 /*******************************************************************************
  * IsValidPtr
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Safely checks if a pointer is readable using structured exception handling.
  * 
- * Безопасно проверяет, доступен ли указатель для чтения, используя структурную
- * обработку исключений.
+ * Р‘РµР·РѕРїР°СЃРЅРѕ РїСЂРѕРІРµСЂСЏРµС‚, РґРѕСЃС‚СѓРїРµРЅ Р»Рё СѓРєР°Р·Р°С‚РµР»СЊ РґР»СЏ С‡С‚РµРЅРёСЏ, РёСЃРїРѕР»СЊР·СѓСЏ СЃС‚СЂСѓРєС‚СѓСЂРЅСѓСЋ
+ * РѕР±СЂР°Р±РѕС‚РєСѓ РёСЃРєР»СЋС‡РµРЅРёР№.
  ******************************************************************************/
 static BOOL IsValidPtr(const void* p) {
     if(!p) return FALSE;
@@ -220,10 +220,10 @@ static BOOL IsValidPtr(const void* p) {
 /*******************************************************************************
  * IsWindowInThisProcess
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if a window belongs to the current process.
  * 
- * Проверяет, принадлежит ли окно текущему процессу.
+ * РџСЂРѕРІРµСЂСЏРµС‚, РїСЂРёРЅР°РґР»РµР¶РёС‚ Р»Рё РѕРєРЅРѕ С‚РµРєСѓС‰РµРјСѓ РїСЂРѕС†РµСЃСЃСѓ.
  ******************************************************************************/
 static BOOL IsWindowInThisProcess(HWND h) {
     if(!h) return FALSE;
@@ -234,55 +234,55 @@ static BOOL IsWindowInThisProcess(HWND h) {
 
 /*******************************************************************************
  * FONT CACHE SYSTEM
- * СИСТЕМА КЕША ШРИФТОВ
+ * РЎРРЎРўР•РњРђ РљР•РЁРђ РЁР РР¤РўРћР’
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Caches replacement fonts to avoid recreating them on every SelectObject call.
  * Uses a simple linear search with last-access optimization.
  * 
- * Кеширует заменённые шрифты для избежания пересоздания при каждом вызове SelectObject.
- * Использует простой линейный поиск с оптимизацией последнего доступа.
+ * РљРµС€РёСЂСѓРµС‚ Р·Р°РјРµРЅС‘РЅРЅС‹Рµ С€СЂРёС„С‚С‹ РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїРµСЂРµСЃРѕР·РґР°РЅРёСЏ РїСЂРё РєР°Р¶РґРѕРј РІС‹Р·РѕРІРµ SelectObject.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ РїСЂРѕСЃС‚РѕР№ Р»РёРЅРµР№РЅС‹Р№ РїРѕРёСЃРє СЃ РѕРїС‚РёРјРёР·Р°С†РёРµР№ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°.
  * 
- * STRUCTURE / СТРУКТУРА:
+ * STRUCTURE / РЎРўР РЈРљРўРЈР Рђ:
  * - Separate caches for each context (CTX_LIB, CTX_PL)
  * - Maps original HFONT > replacement HFONT
  * - Last-access cache (c_orig/c_repl) for O(1) repeat lookups
  * 
- * - Отдельные кеши для каждого контекста (CTX_LIB, CTX_PL)
- * - Сопоставляет оригинальный HFONT > заменённый HFONT
- * - Кеш последнего доступа (c_orig/c_repl) для повторных поисков O(1)
+ * - РћС‚РґРµР»СЊРЅС‹Рµ РєРµС€Рё РґР»СЏ РєР°Р¶РґРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р° (CTX_LIB, CTX_PL)
+ * - РЎРѕРїРѕСЃС‚Р°РІР»СЏРµС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ HFONT > Р·Р°РјРµРЅС‘РЅРЅС‹Р№ HFONT
+ * - РљРµС€ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР° (c_orig/c_repl) РґР»СЏ РїРѕРІС‚РѕСЂРЅС‹С… РїРѕРёСЃРєРѕРІ O(1)
  ******************************************************************************/
 
-#define CACHE_SIZE 1024  // Maximum cached font pairs per context / Максимум пар кешированных шрифтов на контекст
+#define CACHE_SIZE 1024  // Maximum cached font pairs per context / РњР°РєСЃРёРјСѓРј РїР°СЂ РєРµС€РёСЂРѕРІР°РЅРЅС‹С… С€СЂРёС„С‚РѕРІ РЅР° РєРѕРЅС‚РµРєСЃС‚
 
-// Font mapping entry / Запись сопоставления шрифтов
+// Font mapping entry / Р—Р°РїРёСЃСЊ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ
 struct FontMap { 
-    HFONT o;  // Original font / Оригинальный шрифт
-    HFONT r;  // Replacement font / Заменённый шрифт
+    HFONT o;  // Original font / РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ С€СЂРёС„С‚
+    HFONT r;  // Replacement font / Р—Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚
 };
 
-// Font cache structure / Структура кеша шрифтов
+// Font cache structure / РЎС‚СЂСѓРєС‚СѓСЂР° РєРµС€Р° С€СЂРёС„С‚РѕРІ
 struct FontCache {
-    FontMap map[CACHE_SIZE];  // Font mapping table / Таблица сопоставления шрифтов
-    UINT used;                // Number of entries used / Количество использованных записей
-    HFONT c_orig, c_repl;     // Last-access cache / Кеш последнего доступа
+    FontMap map[CACHE_SIZE];  // Font mapping table / РўР°Р±Р»РёС†Р° СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ
+    UINT used;                // Number of entries used / РљРѕР»РёС‡РµСЃС‚РІРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРЅС‹С… Р·Р°РїРёСЃРµР№
+    HFONT c_orig, c_repl;     // Last-access cache / РљРµС€ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
 };
 
 // Three caches: [0]=unused, [1]=CTX_LIB, [2]=CTX_PL
-// Три кеша: [0]=не используется, [1]=CTX_LIB, [2]=CTX_PL
+// РўСЂРё РєРµС€Р°: [0]=РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, [1]=CTX_LIB, [2]=CTX_PL
 static FontCache g_caches[3];
 
-// Global font tracking for cleanup / Глобальное отслеживание шрифтов для очистки
-static HFONT g_tracked[4096];  // All created replacement fonts / Все созданные заменённые шрифты
-static UINT  g_tracked_cnt = 0;  // Count of tracked fonts / Количество отслеживаемых шрифтов
+// Global font tracking for cleanup / Р“Р»РѕР±Р°Р»СЊРЅРѕРµ РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ С€СЂРёС„С‚РѕРІ РґР»СЏ РѕС‡РёСЃС‚РєРё
+static HFONT g_tracked[4096];  // All created replacement fonts / Р’СЃРµ СЃРѕР·РґР°РЅРЅС‹Рµ Р·Р°РјРµРЅС‘РЅРЅС‹Рµ С€СЂРёС„С‚С‹
+static UINT  g_tracked_cnt = 0;  // Count of tracked fonts / РљРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚СЃР»РµР¶РёРІР°РµРјС‹С… С€СЂРёС„С‚РѕРІ
 
 /*******************************************************************************
  * TrackFont
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Adds a replacement font to the global tracking array for cleanup on exit.
  * 
- * Добавляет заменённый шрифт в глобальный массив отслеживания для очистки при выходе.
+ * Р”РѕР±Р°РІР»СЏРµС‚ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚ РІ РіР»РѕР±Р°Р»СЊРЅС‹Р№ РјР°СЃСЃРёРІ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ РґР»СЏ РѕС‡РёСЃС‚РєРё РїСЂРё РІС‹С…РѕРґРµ.
  ******************************************************************************/
 static BOOL TrackFont(HFONT f) {
     if(!f) return FALSE;
@@ -296,12 +296,12 @@ static BOOL TrackFont(HFONT f) {
 /*******************************************************************************
  * ResetCache
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Clears a font cache when skin parameters change. Doesn't delete font objects
  * (they're tracked globally and deleted on module exit).
  * 
- * Очищает кеш шрифтов при изменении параметров скина. Не удаляет объекты
- * шрифтов (они отслеживаются глобально и удаляются при выходе из модуля).
+ * РћС‡РёС‰Р°РµС‚ РєРµС€ С€СЂРёС„С‚РѕРІ РїСЂРё РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂРѕРІ СЃРєРёРЅР°. РќРµ СѓРґР°Р»СЏРµС‚ РѕР±СЉРµРєС‚С‹
+ * С€СЂРёС„С‚РѕРІ (РѕРЅРё РѕС‚СЃР»РµР¶РёРІР°СЋС‚СЃСЏ РіР»РѕР±Р°Р»СЊРЅРѕ Рё СѓРґР°Р»СЏСЋС‚СЃСЏ РїСЂРё РІС‹С…РѕРґРµ РёР· РјРѕРґСѓР»СЏ).
  ******************************************************************************/
 static void ResetCache(int ctx) {
     Lock();
@@ -313,35 +313,35 @@ static void ResetCache(int ctx) {
 /*******************************************************************************
  * Cache_Find
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Looks up a replacement font in the cache. Uses last-access optimization
  * for repeated lookups of the same font.
  * 
- * Ищет заменённый шрифт в кеше. Использует оптимизацию последнего доступа
- * для повторных поисков того же шрифта.
+ * РС‰РµС‚ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚ РІ РєРµС€Рµ. РСЃРїРѕР»СЊР·СѓРµС‚ РѕРїС‚РёРјРёР·Р°С†РёСЋ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
+ * РґР»СЏ РїРѕРІС‚РѕСЂРЅС‹С… РїРѕРёСЃРєРѕРІ С‚РѕРіРѕ Р¶Рµ С€СЂРёС„С‚Р°.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Replacement font handle if found, NULL otherwise
- * Дескриптор заменённого шрифта, если найден, NULL иначе
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ Р·Р°РјРµРЅС‘РЅРЅРѕРіРѕ С€СЂРёС„С‚Р°, РµСЃР»Рё РЅР°Р№РґРµРЅ, NULL РёРЅР°С‡Рµ
  ******************************************************************************/
 static HFONT Cache_Find(int ctx, HFONT o) {
     if(!o) return NULL;
     Lock();
     FontCache* C = &g_caches[ctx];
     
-    // Fast path: check last-access cache / Быстрый путь: проверить кеш последнего доступа
+    // Fast path: check last-access cache / Р‘С‹СЃС‚СЂС‹Р№ РїСѓС‚СЊ: РїСЂРѕРІРµСЂРёС‚СЊ РєРµС€ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
     if(o == C->c_orig) { 
         HFONT r = C->c_repl; 
         Unlock(); 
         return r; 
     }
 
-    // Linear search / Линейный поиск
+    // Linear search / Р›РёРЅРµР№РЅС‹Р№ РїРѕРёСЃРє
     HFONT r = NULL;
     for(UINT i=0; i<C->used; i++) {
         if(C->map[i].o == o) {
             r = C->map[i].r;
-            // Update last-access cache / Обновить кеш последнего доступа
+            // Update last-access cache / РћР±РЅРѕРІРёС‚СЊ РєРµС€ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
             C->c_orig = o; 
             C->c_repl = r;
             break;
@@ -354,10 +354,10 @@ static HFONT Cache_Find(int ctx, HFONT o) {
 /*******************************************************************************
  * Cache_Add
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Adds a new font mapping to the cache.
  * 
- * Добавляет новое сопоставление шрифтов в кеш.
+ * Р”РѕР±Р°РІР»СЏРµС‚ РЅРѕРІРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ С€СЂРёС„С‚РѕРІ РІ РєРµС€.
  ******************************************************************************/
 static void Cache_Add(int ctx, HFONT o, HFONT r) {
     if(!o || !r) return;
@@ -367,7 +367,7 @@ static void Cache_Add(int ctx, HFONT o, HFONT r) {
         C->map[C->used].o = o;
         C->map[C->used].r = r;
         C->used++;
-        // Set last-access cache / Установить кеш последнего доступа
+        // Set last-access cache / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РєРµС€ РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР°
         C->c_orig = o; 
         C->c_repl = r;
     }
@@ -377,10 +377,10 @@ static void Cache_Add(int ctx, HFONT o, HFONT r) {
 /*******************************************************************************
  * InvalidateFont
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Invalidates last-access cache entries for a font. Called when a DC is deleted.
  * 
- * Инвалидирует записи кеша последнего доступа для шрифта. Вызывается при удалении DC.
+ * РРЅРІР°Р»РёРґРёСЂСѓРµС‚ Р·Р°РїРёСЃРё РєРµС€Р° РїРѕСЃР»РµРґРЅРµРіРѕ РґРѕСЃС‚СѓРїР° РґР»СЏ С€СЂРёС„С‚Р°. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё СѓРґР°Р»РµРЅРёРё DC.
  ******************************************************************************/
 static void InvalidateFont(HFONT f) {
     if(!f) return;
@@ -395,44 +395,44 @@ static void InvalidateFont(HFONT f) {
 
 /*******************************************************************************
  * DC TAGGING SYSTEM (IAT HOOK MODE ONLY)
- * СИСТЕМА ТЕГИРОВАНИЯ DC (ТОЛЬКО В РЕЖИМЕ ПЕРЕХВАТА IAT)
+ * РЎРРЎРўР•РњРђ РўР•Р“РР РћР’РђРќРРЇ DC (РўРћР›Р¬РљРћ Р’ Р Р•Р–РРњР• РџР•Р Р•РҐР’РђРўРђ IAT)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * When IAT hooking is enabled, we need to know which context (CTX_LIB/CTX_PL)
  * a DC belongs to so we can select the correct replacement font in SelectObject.
  * 
- * Когда перехват IAT включён, нам нужно знать, какому контексту (CTX_LIB/CTX_PL)
- * принадлежит DC, чтобы выбрать правильный заменённый шрифт в SelectObject.
+ * РљРѕРіРґР° РїРµСЂРµС…РІР°С‚ IAT РІРєР»СЋС‡С‘РЅ, РЅР°Рј РЅСѓР¶РЅРѕ Р·РЅР°С‚СЊ, РєР°РєРѕРјСѓ РєРѕРЅС‚РµРєСЃС‚Сѓ (CTX_LIB/CTX_PL)
+ * РїСЂРёРЅР°РґР»РµР¶РёС‚ DC, С‡С‚РѕР±С‹ РІС‹Р±СЂР°С‚СЊ РїСЂР°РІРёР»СЊРЅС‹Р№ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚ РІ SelectObject.
  * 
- * METHOD / МЕТОД:
+ * METHOD / РњР•РўРћР”:
  * - Tag DCs when created (BeginPaint, GetDC, etc.) with window context
  * - Use TLS to propagate context through CreateCompatibleDC
  * - Look up context in SelectObject hook
  * 
- * - Тегировать DC при создании (BeginPaint, GetDC и т.д.) с контекстом окна
- * - Использовать TLS для распространения контекста через CreateCompatibleDC
- * - Искать контекст в хуке SelectObject
+ * - РўРµРіРёСЂРѕРІР°С‚СЊ DC РїСЂРё СЃРѕР·РґР°РЅРёРё (BeginPaint, GetDC Рё С‚.Рґ.) СЃ РєРѕРЅС‚РµРєСЃС‚РѕРј РѕРєРЅР°
+ * - РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ TLS РґР»СЏ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р° С‡РµСЂРµР· CreateCompatibleDC
+ * - РСЃРєР°С‚СЊ РєРѕРЅС‚РµРєСЃС‚ РІ С…СѓРєРµ SelectObject
  ******************************************************************************/
 
-#define DC_MAP_SIZE 1024  // Maximum tracked DCs / Максимум отслеживаемых DC
+#define DC_MAP_SIZE 1024  // Maximum tracked DCs / РњР°РєСЃРёРјСѓРј РѕС‚СЃР»РµР¶РёРІР°РµРјС‹С… DC
 
-// DC tag entry / Запись тега DC
+// DC tag entry / Р—Р°РїРёСЃСЊ С‚РµРіР° DC
 struct DcTag { 
-    HDC dc;     // DC handle / Дескриптор DC
-    BYTE ctx;   // Context (CTX_LIB or CTX_PL) / Контекст (CTX_LIB или CTX_PL)
+    HDC dc;     // DC handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ DC
+    BYTE ctx;   // Context (CTX_LIB or CTX_PL) / РљРѕРЅС‚РµРєСЃС‚ (CTX_LIB РёР»Рё CTX_PL)
 };
 
-static DcTag g_dctags[DC_MAP_SIZE];  // DC tag table / Таблица тегов DC
-static UINT  g_dc_cnt = 0;           // Number of tagged DCs / Количество помеченных DC
-static DWORD g_tls_ctx = 0xFFFFFFFF; // TLS slot for context propagation / Слот TLS для распространения контекста
+static DcTag g_dctags[DC_MAP_SIZE];  // DC tag table / РўР°Р±Р»РёС†Р° С‚РµРіРѕРІ DC
+static UINT  g_dc_cnt = 0;           // Number of tagged DCs / РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРјРµС‡РµРЅРЅС‹С… DC
+static DWORD g_tls_ctx = 0xFFFFFFFF; // TLS slot for context propagation / РЎР»РѕС‚ TLS РґР»СЏ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р°
 
 /*******************************************************************************
  * GetDcCtx / SetDcCtx
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Gets/sets the context tag for a DC.
  * 
- * Получает/устанавливает тег контекста для DC.
+ * РџРѕР»СѓС‡Р°РµС‚/СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚РµРі РєРѕРЅС‚РµРєСЃС‚Р° РґР»СЏ DC.
  ******************************************************************************/
 static BYTE GetDcCtx(HDC dc) {
     if(!dc) return 0;
@@ -452,7 +452,7 @@ static void SetDcCtx(HDC dc, BYTE ctx) {
     if(!dc) return;
     Lock();
     
-    // Find existing entry / Найти существующую запись
+    // Find existing entry / РќР°Р№С‚Рё СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ Р·Р°РїРёСЃСЊ
     int idx = -1;
     for(UINT i=0; i<g_dc_cnt; i++) 
         if(g_dctags[i].dc == dc) { 
@@ -461,15 +461,15 @@ static void SetDcCtx(HDC dc, BYTE ctx) {
         }
 
     if(idx != -1) {
-        // Update or remove existing entry / Обновить или удалить существующую запись
+        // Update or remove existing entry / РћР±РЅРѕРІРёС‚СЊ РёР»Рё СѓРґР°Р»РёС‚СЊ СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ Р·Р°РїРёСЃСЊ
         if(ctx) 
             g_dctags[idx].ctx = ctx;
         else { 
-            // Remove by swapping with last / Удалить, поменяв с последним
+            // Remove by swapping with last / РЈРґР°Р»РёС‚СЊ, РїРѕРјРµРЅСЏРІ СЃ РїРѕСЃР»РµРґРЅРёРј
             g_dctags[idx] = g_dctags[--g_dc_cnt]; 
         }
     } else if(ctx && g_dc_cnt < DC_MAP_SIZE) {
-        // Add new entry / Добавить новую запись
+        // Add new entry / Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ
         g_dctags[g_dc_cnt].dc = dc;
         g_dctags[g_dc_cnt].ctx = ctx;
         g_dc_cnt++;
@@ -480,10 +480,10 @@ static void SetDcCtx(HDC dc, BYTE ctx) {
 /*******************************************************************************
  * TLS Context Functions
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-local storage for context propagation through CreateCompatibleDC.
  * 
- * Локальное хранилище потока для распространения контекста через CreateCompatibleDC.
+ * Р›РѕРєР°Р»СЊРЅРѕРµ С…СЂР°РЅРёР»РёС‰Рµ РїРѕС‚РѕРєР° РґР»СЏ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р° С‡РµСЂРµР· CreateCompatibleDC.
  ******************************************************************************/
 static BYTE GetTlsCtx() { 
     return (g_tls_ctx != 0xFFFFFFFF) ? (BYTE)(UINT_PTR)TlsGetValue(g_tls_ctx) : 0; 
@@ -497,12 +497,12 @@ static void SetTlsCtx(BYTE c) {
 /*******************************************************************************
  * ResolveDcCtx
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Resolves context for a DC. First checks DC tag, then falls back to TLS.
  * If found in TLS, tags the DC for future lookups.
  * 
- * Определяет контекст для DC. Сначала проверяет тег DC, затем использует TLS.
- * Если найден в TLS, помечает DC для будущих поисков.
+ * РћРїСЂРµРґРµР»СЏРµС‚ РєРѕРЅС‚РµРєСЃС‚ РґР»СЏ DC. РЎРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµС‚ С‚РµРі DC, Р·Р°С‚РµРј РёСЃРїРѕР»СЊР·СѓРµС‚ TLS.
+ * Р•СЃР»Рё РЅР°Р№РґРµРЅ РІ TLS, РїРѕРјРµС‡Р°РµС‚ DC РґР»СЏ Р±СѓРґСѓС‰РёС… РїРѕРёСЃРєРѕРІ.
  ******************************************************************************/
 static BYTE ResolveDcCtx(HDC dc) {
     BYTE c = GetDcCtx(dc);
@@ -515,64 +515,64 @@ static BYTE ResolveDcCtx(HDC dc) {
 
 /*******************************************************************************
  * WINDOW CONTEXT DETECTION
- * ОПРЕДЕЛЕНИЕ КОНТЕКСТА ОКНА
+ * РћРџР Р•Р”Р•Р›Р•РќРР• РљРћРќРўР•РљРЎРўРђ РћРљРќРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * IsFileDlg
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Detects file dialogs (Open/Save) which should not have fonts replaced.
  * 
- * Обнаруживает файловые диалоги (Открыть/Сохранить), в которых не следует заменять шрифты.
+ * РћР±РЅР°СЂСѓР¶РёРІР°РµС‚ С„Р°Р№Р»РѕРІС‹Рµ РґРёР°Р»РѕРіРё (РћС‚РєСЂС‹С‚СЊ/РЎРѕС…СЂР°РЅРёС‚СЊ), РІ РєРѕС‚РѕСЂС‹С… РЅРµ СЃР»РµРґСѓРµС‚ Р·Р°РјРµРЅСЏС‚СЊ С€СЂРёС„С‚С‹.
  ******************************************************************************/
 static BOOL IsFileDlg(HWND w) {
     char c[64]; 
     GetClassNameA(w, c, 63);
     
-    // Check for dialog window class / Проверить класс окна диалога
+    // Check for dialog window class / РџСЂРѕРІРµСЂРёС‚СЊ РєР»Р°СЃСЃ РѕРєРЅР° РґРёР°Р»РѕРіР°
     if(!lstrcmpA(c,"#32770")) {
-        // Top-level dialog or contains shell view / Диалог верхнего уровня или содержит shell view
+        // Top-level dialog or contains shell view / Р”РёР°Р»РѕРі РІРµСЂС…РЅРµРіРѕ СѓСЂРѕРІРЅСЏ РёР»Рё СЃРѕРґРµСЂР¶РёС‚ shell view
         if(!(GetWindowLongA(w, GWL_STYLE) & WS_CHILD)) return TRUE;
         if(FindWindowExA(w, 0, "SHELLDLL_DefView", 0)) return TRUE;
     }
     
-    // DirectUI or shell view classes / Классы DirectUI или shell view
+    // DirectUI or shell view classes / РљР»Р°СЃСЃС‹ DirectUI РёР»Рё shell view
     return (!lstrcmpA(c,"DirectUIHWND") || !lstrcmpA(c,"SHELLDLL_DefView"));
 }
 
 /*******************************************************************************
  * GetWinCtx
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Determines the context (CTX_LIB or CTX_PL) of a window by walking up the
  * parent chain looking for known Winamp window classes.
  * 
- * Определяет контекст (CTX_LIB или CTX_PL) окна, поднимаясь по цепочке
- * родителей в поисках известных классов окон Winamp.
+ * РћРїСЂРµРґРµР»СЏРµС‚ РєРѕРЅС‚РµРєСЃС‚ (CTX_LIB РёР»Рё CTX_PL) РѕРєРЅР°, РїРѕРґРЅРёРјР°СЏСЃСЊ РїРѕ С†РµРїРѕС‡РєРµ
+ * СЂРѕРґРёС‚РµР»РµР№ РІ РїРѕРёСЃРєР°С… РёР·РІРµСЃС‚РЅС‹С… РєР»Р°СЃСЃРѕРІ РѕРєРѕРЅ Winamp.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * CTX_PL  - Playlist Editor window / Окно редактора плейлистов
- * CTX_LIB - Media Library window / Окно библиотеки
- * 0       - Not a Winamp window or file dialog / Не окно Winamp или файловый диалог
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * CTX_PL  - Playlist Editor window / РћРєРЅРѕ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
+ * CTX_LIB - Media Library window / РћРєРЅРѕ Р±РёР±Р»РёРѕС‚РµРєРё
+ * 0       - Not a Winamp window or file dialog / РќРµ РѕРєРЅРѕ Winamp РёР»Рё С„Р°Р№Р»РѕРІС‹Р№ РґРёР°Р»РѕРі
  ******************************************************************************/
 static BYTE GetWinCtx(HWND w) {
     while(w) {
-        // Exclude file dialogs / Исключить файловые диалоги
+        // Exclude file dialogs / РСЃРєР»СЋС‡РёС‚СЊ С„Р°Р№Р»РѕРІС‹Рµ РґРёР°Р»РѕРіРё
         if(IsFileDlg(w)) return 0;
         
         char c[64]; 
         GetClassNameA(w, c, 63);
         
-        // Check for Playlist Editor windows / Проверить окна редактора плейлистов
+        // Check for Playlist Editor windows / РџСЂРѕРІРµСЂРёС‚СЊ РѕРєРЅР° СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
         if(!lstrcmpA(c,"Winamp PE") || !lstrcmpA(c,"WinampLibraryPE")) 
             return CTX_PL;
         
-        // Check for Media Library windows / Проверить окна библиотеки
+        // Check for Media Library windows / РџСЂРѕРІРµСЂРёС‚СЊ РѕРєРЅР° Р±РёР±Р»РёРѕС‚РµРєРё
         if(!lstrcmpA(c,"Winamp Gen") || !lstrcmpA(c,"WinampLibrary")) 
             return CTX_LIB;
         
-        // Exclude main window and equalizer / Исключить главное окно и эквалайзер
+        // Exclude main window and equalizer / РСЃРєР»СЋС‡РёС‚СЊ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ Рё СЌРєРІР°Р»Р°Р№Р·РµСЂ
         if(!lstrcmpA(c,"Winamp v1.x") || !lstrcmpA(c,"Winamp EQ")) 
             return 0;
         
@@ -583,53 +583,53 @@ static BYTE GetWinCtx(HWND w) {
 
 /*******************************************************************************
  * SKIN PARAMETERS AND FONT CONFIGURATION
- * ПАРАМЕТРЫ СКИНА И КОНФИГУРАЦИЯ ШРИФТОВ
+ * РџРђР РђРњР•РўР Р« РЎРљРРќРђ Р РљРћРќР¤РР“РЈР РђР¦РРЇ РЁР РР¤РўРћР’
  ******************************************************************************/
 
-// Skin parameters (from Winamp IPC) / Параметры скина (из Winamp IPC)
-static char  g_skin_dir[MAX_PATH];         // Current skin directory / Текущий каталог скина
-static DWORD g_skin_hash = 0;              // Hash of skin directory / Хеш каталога скина
-static char  g_skin_face[LF_FACESIZE];     // Skin font face / Гарнитура шрифта скина
-static int   g_skin_h = 0;                 // Skin font height / Высота шрифта скина
-static int   g_skin_cs = DEFAULT_CHARSET;  // Skin font charset / Кодировка шрифта скина
-static DWORD g_stamp = 0;                  // Combined stamp for change detection / Объединённый отпечаток для обнаружения изменений
+// Skin parameters (from Winamp IPC) / РџР°СЂР°РјРµС‚СЂС‹ СЃРєРёРЅР° (РёР· Winamp IPC)
+static char  g_skin_dir[MAX_PATH];         // Current skin directory / РўРµРєСѓС‰РёР№ РєР°С‚Р°Р»РѕРі СЃРєРёРЅР°
+static DWORD g_skin_hash = 0;              // Hash of skin directory / РҐРµС€ РєР°С‚Р°Р»РѕРіР° СЃРєРёРЅР°
+static char  g_skin_face[LF_FACESIZE];     // Skin font face / Р“Р°СЂРЅРёС‚СѓСЂР° С€СЂРёС„С‚Р° СЃРєРёРЅР°
+static int   g_skin_h = 0;                 // Skin font height / Р’С‹СЃРѕС‚Р° С€СЂРёС„С‚Р° СЃРєРёРЅР°
+static int   g_skin_cs = DEFAULT_CHARSET;  // Skin font charset / РљРѕРґРёСЂРѕРІРєР° С€СЂРёС„С‚Р° СЃРєРёРЅР°
+static DWORD g_stamp = 0;                  // Combined stamp for change detection / РћР±СЉРµРґРёРЅС‘РЅРЅС‹Р№ РѕС‚РїРµС‡Р°С‚РѕРє РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РёР·РјРµРЅРµРЅРёР№
 
-// Playlist Editor parameters (learned from observation) / Параметры редактора плейлистов (изучаются из наблюдения)
-static char  g_pl_face[LF_FACESIZE];       // PE font face / Гарнитура шрифта PE
-static int   g_pl_h = 0;                   // PE font height / Высота шрифта PE
-static int   g_pl_cs = DEFAULT_CHARSET;    // PE font charset / Кодировка шрифта PE
-static DWORD g_pl_stamp = 0;               // PE stamp for change detection / Отпечаток PE для обнаружения изменений
+// Playlist Editor parameters (learned from observation) / РџР°СЂР°РјРµС‚СЂС‹ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ (РёР·СѓС‡Р°СЋС‚СЃСЏ РёР· РЅР°Р±Р»СЋРґРµРЅРёСЏ)
+static char  g_pl_face[LF_FACESIZE];       // PE font face / Р“Р°СЂРЅРёС‚СѓСЂР° С€СЂРёС„С‚Р° PE
+static int   g_pl_h = 0;                   // PE font height / Р’С‹СЃРѕС‚Р° С€СЂРёС„С‚Р° PE
+static int   g_pl_cs = DEFAULT_CHARSET;    // PE font charset / РљРѕРґРёСЂРѕРІРєР° С€СЂРёС„С‚Р° PE
+static DWORD g_pl_stamp = 0;               // PE stamp for change detection / РћС‚РїРµС‡Р°С‚РѕРє PE РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РёР·РјРµРЅРµРЅРёР№
 
-// Winamp window hooks / Хуки окна Winamp
-static HWND   g_hWA = 0;      // Winamp main window / Главное окно Winamp
-static WNDPROC g_oldWA = 0;   // Original window procedure / Оригинальная процедура окна
-static HHOOK  g_hkCBT = 0;    // CBT hook (NT only) / Хук CBT (только NT)
+// Winamp window hooks / РҐСѓРєРё РѕРєРЅР° Winamp
+static HWND   g_hWA = 0;      // Winamp main window / Р“Р»Р°РІРЅРѕРµ РѕРєРЅРѕ Winamp
+static WNDPROC g_oldWA = 0;   // Original window procedure / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РѕРєРЅР°
+static HHOOK  g_hkCBT = 0;    // CBT hook (NT only) / РҐСѓРє CBT (С‚РѕР»СЊРєРѕ NT)
 
-// Skin polling stamp (Win9x only) / Отпечаток опроса скина (только Win9x)
+// Skin polling stamp (Win9x only) / РћС‚РїРµС‡Р°С‚РѕРє РѕРїСЂРѕСЃР° СЃРєРёРЅР° (С‚РѕР»СЊРєРѕ Win9x)
 static DWORD g_skinPollStamp = 0;
 
-// Forward declarations / Предварительные объявления
+// Forward declarations / РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РѕР±СЉСЏРІР»РµРЅРёСЏ
 static void ScheduleUpdate();
 static void StartScan_Arm();
 
 /*******************************************************************************
  * UpdateSkinData
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Queries Winamp for current skin parameters (directory, font face, size, charset).
  * If any parameter changed, resets font caches.
  * 
- * Запрашивает у Winamp текущие параметры скина (каталог, гарнитура шрифта, размер, кодировка).
- * Если какой-либо параметр изменился, сбрасывает кеши шрифтов.
+ * Р—Р°РїСЂР°С€РёРІР°РµС‚ Сѓ Winamp С‚РµРєСѓС‰РёРµ РїР°СЂР°РјРµС‚СЂС‹ СЃРєРёРЅР° (РєР°С‚Р°Р»РѕРі, РіР°СЂРЅРёС‚СѓСЂР° С€СЂРёС„С‚Р°, СЂР°Р·РјРµСЂ, РєРѕРґРёСЂРѕРІРєР°).
+ * Р•СЃР»Рё РєР°РєРѕР№-Р»РёР±Рѕ РїР°СЂР°РјРµС‚СЂ РёР·РјРµРЅРёР»СЃСЏ, СЃР±СЂР°СЃС‹РІР°РµС‚ РєРµС€Рё С€СЂРёС„С‚РѕРІ.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Uses __try/__except to protect against crashes if Winamp window is invalid.
- * Использует __try/__except для защиты от крашей, если окно Winamp недопустимо.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ __try/__except РґР»СЏ Р·Р°С‰РёС‚С‹ РѕС‚ РєСЂР°С€РµР№, РµСЃР»Рё РѕРєРЅРѕ Winamp РЅРµРґРѕРїСѓСЃС‚РёРјРѕ.
  ******************************************************************************/
 static void UpdateSkinData() {
     if(!g_hWA) return;
 
-    // Get skin directory / Получить каталог скина
+    // Get skin directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі СЃРєРёРЅР°
     char dir[MAX_PATH] = {0};
     __try { 
         SendMessageA(g_hWA, WM_WA_IPC, (WPARAM)dir, IPC_GETSKIN); 
@@ -640,7 +640,7 @@ static void UpdateSkinData() {
     lstrcpynA(g_skin_dir, dir, MAX_PATH); 
     Unlock();
 
-    // Check if skin directory changed / Проверить, изменился ли каталог скина
+    // Check if skin directory changed / РџСЂРѕРІРµСЂРёС‚СЊ, РёР·РјРµРЅРёР»СЃСЏ Р»Рё РєР°С‚Р°Р»РѕРі СЃРєРёРЅР°
     DWORD h = Hash(dir);
     Lock();
     if(h != g_skin_hash) { 
@@ -650,16 +650,16 @@ static void UpdateSkinData() {
     }
     Unlock();
 
-    // Get skin font parameters / Получить параметры шрифта скина
+    // Get skin font parameters / РџРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚Р° СЃРєРёРЅР°
     __try {
         // IPC_GET_GENSKINBITMAP returns different values based on first parameter:
         // wParam=1: font face name
         // wParam=2: charset
         // wParam=3: height
-        // IPC_GET_GENSKINBITMAP возвращает разные значения в зависимости от первого параметра:
-        // wParam=1: имя гарнитуры шрифта
-        // wParam=2: кодировка
-        // wParam=3: высота
+        // IPC_GET_GENSKINBITMAP РІРѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРµСЂРІРѕРіРѕ РїР°СЂР°РјРµС‚СЂР°:
+        // wParam=1: РёРјСЏ РіР°СЂРЅРёС‚СѓСЂС‹ С€СЂРёС„С‚Р°
+        // wParam=2: РєРѕРґРёСЂРѕРІРєР°
+        // wParam=3: РІС‹СЃРѕС‚Р°
         
         char* p = (char*)SendMessageA(g_hWA, WM_WA_IPC, 1, IPC_GET_GENSKINBITMAP);
         if(p && IsValidPtr(p) && *p) {
@@ -670,11 +670,11 @@ static void UpdateSkinData() {
             int cs = (int)SendMessageA(g_hWA, WM_WA_IPC, 2, IPC_GET_GENSKINBITMAP);
             int ht = (int)SendMessageA(g_hWA, WM_WA_IPC, 3, IPC_GET_GENSKINBITMAP);
             
-            // Sanity checks / Проверки разумности
+            // Sanity checks / РџСЂРѕРІРµСЂРєРё СЂР°Р·СѓРјРЅРѕСЃС‚Рё
             if(cs<0||cs>255) cs = DEFAULT_CHARSET;
             if(ht<1||ht>72) ht = 11;
 
-            // Check if any parameter changed / Проверить, изменился ли какой-либо параметр
+            // Check if any parameter changed / РџСЂРѕРІРµСЂРёС‚СЊ, РёР·РјРµРЅРёР»СЃСЏ Р»Рё РєР°РєРѕР№-Р»РёР±Рѕ РїР°СЂР°РјРµС‚СЂ
             Lock();
             if(lstrcmpA(g_skin_face, face) || g_skin_h!=ht || g_skin_cs!=cs) {
                 lstrcpynA(g_skin_face, face, LF_FACESIZE);
@@ -690,16 +690,16 @@ static void UpdateSkinData() {
 /*******************************************************************************
  * UpdatePlData
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Learns Playlist Editor font from first observation. The PE uses its own font
  * which may differ from the skin font.
  * 
- * Изучает шрифт редактора плейлистов при первом наблюдении. PE использует собственный
- * шрифт, который может отличаться от шрифта скина.
+ * РР·СѓС‡Р°РµС‚ С€СЂРёС„С‚ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ РїСЂРё РїРµСЂРІРѕРј РЅР°Р±Р»СЋРґРµРЅРёРё. PE РёСЃРїРѕР»СЊР·СѓРµС‚ СЃРѕР±СЃС‚РІРµРЅРЅС‹Р№
+ * С€СЂРёС„С‚, РєРѕС‚РѕСЂС‹Р№ РјРѕР¶РµС‚ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ РѕС‚ С€СЂРёС„С‚Р° СЃРєРёРЅР°.
  * 
- * NOTE / ПРИМЕЧАНИЕ:
+ * NOTE / РџР РРњР•Р§РђРќРР•:
  * Only updates if font is not italic or underlined (those are special styles).
- * Обновляет только если шрифт не курсивный и не подчёркнутый (это специальные стили).
+ * РћР±РЅРѕРІР»СЏРµС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё С€СЂРёС„С‚ РЅРµ РєСѓСЂСЃРёРІРЅС‹Р№ Рё РЅРµ РїРѕРґС‡С‘СЂРєРЅСѓС‚С‹Р№ (СЌС‚Рѕ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ СЃС‚РёР»Рё).
  ******************************************************************************/
 static void UpdatePlData(const LOGFONTA* lf) {
     if(!lf || lf->lfItalic || lf->lfUnderline) return;
@@ -708,7 +708,7 @@ static void UpdatePlData(const LOGFONTA* lf) {
     int h = (lf->lfHeight < 0) ? -lf->lfHeight : lf->lfHeight;
     int c = (BYTE)lf->lfCharSet;
     
-    // Create stamp from parameters / Создать отпечаток из параметров
+    // Create stamp from parameters / РЎРѕР·РґР°С‚СЊ РѕС‚РїРµС‡Р°С‚РѕРє РёР· РїР°СЂР°РјРµС‚СЂРѕРІ
     DWORD s = Hash(f) ^ (DWORD)h ^ ((DWORD)c<<24);
 
     BOOL diff = FALSE;
@@ -722,38 +722,38 @@ static void UpdatePlData(const LOGFONTA* lf) {
     }
     Unlock();
 
-    // Schedule update if changed / Запланировать обновление, если изменилось
+    // Schedule update if changed / Р—Р°РїР»Р°РЅРёСЂРѕРІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ, РµСЃР»Рё РёР·РјРµРЅРёР»РѕСЃСЊ
     if(diff) ScheduleUpdate();
 }
 
 /*******************************************************************************
  * GetParams
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Gets the desired font parameters for a given context.
  * 
- * Получает желаемые параметры шрифта для данного контекста.
+ * РџРѕР»СѓС‡Р°РµС‚ Р¶РµР»Р°РµРјС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚Р° РґР»СЏ РґР°РЅРЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * ctx - Context (CTX_LIB or CTX_PL) / Контекст (CTX_LIB или CTX_PL)
- * f   - Output: font face / Выход: гарнитура шрифта
- * h   - Output: font height / Выход: высота шрифта
- * c   - Output: charset / Выход: кодировка
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * ctx - Context (CTX_LIB or CTX_PL) / РљРѕРЅС‚РµРєСЃС‚ (CTX_LIB РёР»Рё CTX_PL)
+ * f   - Output: font face / Р’С‹С…РѕРґ: РіР°СЂРЅРёС‚СѓСЂР° С€СЂРёС„С‚Р°
+ * h   - Output: font height / Р’С‹С…РѕРґ: РІС‹СЃРѕС‚Р° С€СЂРёС„С‚Р°
+ * c   - Output: charset / Р’С‹С…РѕРґ: РєРѕРґРёСЂРѕРІРєР°
  ******************************************************************************/
 static void GetParams(int ctx, char* f, int* h, int* c) {
     Lock();
     if(ctx == CTX_PL && g_pl_stamp) {
-        // Use learned PE font / Использовать изученный шрифт PE
+        // Use learned PE font / РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РёР·СѓС‡РµРЅРЅС‹Р№ С€СЂРёС„С‚ PE
         lstrcpynA(f, g_pl_face, LF_FACESIZE); 
         *h = g_pl_h; 
         *c = g_pl_cs;
     } else if(g_skin_face[0]) {
-        // Use skin font / Использовать шрифт скина
+        // Use skin font / РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С€СЂРёС„С‚ СЃРєРёРЅР°
         lstrcpynA(f, g_skin_face, LF_FACESIZE); 
         *h = g_skin_h; 
         *c = g_skin_cs;
     } else {
-        // Fallback to default / Резервный вариант по умолчанию
+        // Fallback to default / Р РµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         lstrcpynA(f, kFaceDef, LF_FACESIZE); 
         *h = 0; 
         *c = DEFAULT_CHARSET;
@@ -764,21 +764,21 @@ static void GetParams(int ctx, char* f, int* h, int* c) {
 /*******************************************************************************
  * VectorizeFace
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts bitmap fonts to their vector equivalents for better rendering.
  * 
- * Преобразует растровые шрифты в их векторные эквиваленты для лучшей отрисовки.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ СЂР°СЃС‚СЂРѕРІС‹Рµ С€СЂРёС„С‚С‹ РІ РёС… РІРµРєС‚РѕСЂРЅС‹Рµ СЌРєРІРёРІР°Р»РµРЅС‚С‹ РґР»СЏ Р»СѓС‡С€РµР№ РѕС‚СЂРёСЃРѕРІРєРё.
  * 
- * CONVERSIONS / ПРЕОБРАЗОВАНИЯ:
+ * CONVERSIONS / РџР Р•РћР‘Р РђР—РћР’РђРќРРЇ:
  * MS Sans Serif > Microsoft Sans Serif (vector, scalable)
  * System        > Microsoft Sans Serif
  * MS Serif      > Times New Roman
  * Fixedsys      > Lucida Console
  * Terminal      > Lucida Console
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if font was replaced, FALSE if left unchanged
- * TRUE если шрифт был заменён, FALSE если оставлен без изменений
+ * TRUE РµСЃР»Рё С€СЂРёС„С‚ Р±С‹Р» Р·Р°РјРµРЅС‘РЅ, FALSE РµСЃР»Рё РѕСЃС‚Р°РІР»РµРЅ Р±РµР· РёР·РјРµРЅРµРЅРёР№
  ******************************************************************************/
 static BOOL VectorizeFace(char* face) {
     if(!_stricmp(face, "MS Sans Serif") || !_stricmp(face, "System")) {
@@ -799,22 +799,22 @@ static BOOL VectorizeFace(char* face) {
 /*******************************************************************************
  * GetReplFont
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates a replacement font with corrected parameters. This is the core
  * function that implements the font replacement logic.
  * 
- * Создаёт заменённый шрифт с исправленными параметрами. Это основная функция,
- * реализующая логику замены шрифтов.
+ * РЎРѕР·РґР°С‘С‚ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚ СЃ РёСЃРїСЂР°РІР»РµРЅРЅС‹РјРё РїР°СЂР°РјРµС‚СЂР°РјРё. Р­С‚Рѕ РѕСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ,
+ * СЂРµР°Р»РёР·СѓСЋС‰Р°СЏ Р»РѕРіРёРєСѓ Р·Р°РјРµРЅС‹ С€СЂРёС„С‚РѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * o   - Original font handle / Дескриптор оригинального шрифта
- * ctx - Context (CTX_LIB or CTX_PL) / Контекст (CTX_LIB или CTX_PL)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * o   - Original font handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С€СЂРёС„С‚Р°
+ * ctx - Context (CTX_LIB or CTX_PL) / РљРѕРЅС‚РµРєСЃС‚ (CTX_LIB РёР»Рё CTX_PL)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Replacement font handle, or NULL if no replacement needed
- * Дескриптор заменённого шрифта или NULL, если замена не требуется
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ Р·Р°РјРµРЅС‘РЅРЅРѕРіРѕ С€СЂРёС„С‚Р° РёР»Рё NULL, РµСЃР»Рё Р·Р°РјРµРЅР° РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Check cache for existing replacement
  * 2. Get original font's LOGFONT
  * 3. For PE context: learn font and vectorize face
@@ -823,64 +823,64 @@ static BOOL VectorizeFace(char* face) {
  * 6. Create new font if parameters differ
  * 7. Add to cache and tracking
  * 
- * 1. Проверить кеш на существующую замену
- * 2. Получить LOGFONT оригинального шрифта
- * 3. Для контекста PE: изучить шрифт и векторизовать гарнитуру
- * 4. Для контекста LIB: использовать параметры скина и векторизовать
- * 5. Применить качество (ClearType или antialiased)
- * 6. Создать новый шрифт, если параметры отличаются
- * 7. Добавить в кеш и отслеживание
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ РєРµС€ РЅР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ Р·Р°РјРµРЅСѓ
+ * 2. РџРѕР»СѓС‡РёС‚СЊ LOGFONT РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С€СЂРёС„С‚Р°
+ * 3. Р”Р»СЏ РєРѕРЅС‚РµРєСЃС‚Р° PE: РёР·СѓС‡РёС‚СЊ С€СЂРёС„С‚ Рё РІРµРєС‚РѕСЂРёР·РѕРІР°С‚СЊ РіР°СЂРЅРёС‚СѓСЂСѓ
+ * 4. Р”Р»СЏ РєРѕРЅС‚РµРєСЃС‚Р° LIB: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃРєРёРЅР° Рё РІРµРєС‚РѕСЂРёР·РѕРІР°С‚СЊ
+ * 5. РџСЂРёРјРµРЅРёС‚СЊ РєР°С‡РµСЃС‚РІРѕ (ClearType РёР»Рё antialiased)
+ * 6. РЎРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ С€СЂРёС„С‚, РµСЃР»Рё РїР°СЂР°РјРµС‚СЂС‹ РѕС‚Р»РёС‡Р°СЋС‚СЃСЏ
+ * 7. Р”РѕР±Р°РІРёС‚СЊ РІ РєРµС€ Рё РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ
  ******************************************************************************/
 static HFONT GetReplFont(HFONT o, int ctx) {
     if(!o) return NULL;
 
-    // Check cache first / Сначала проверить кеш
+    // Check cache first / РЎРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂРёС‚СЊ РєРµС€
     HFONT cached = Cache_Find(ctx, o);
     if(cached) return cached;
 
-    // Get original font parameters / Получить параметры оригинального шрифта
+    // Get original font parameters / РџРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С€СЂРёС„С‚Р°
     LOGFONTA lf;
     if(!GetObjectA(o, sizeof(lf), &lf)) return NULL;
 
     LOGFONTA lf_new = lf;
 
     if(ctx == CTX_PL) {
-        // Playlist Editor: learn and vectorize / Редактор плейлистов: изучить и векторизовать
+        // Playlist Editor: learn and vectorize / Р РµРґР°РєС‚РѕСЂ РїР»РµР№Р»РёСЃС‚РѕРІ: РёР·СѓС‡РёС‚СЊ Рё РІРµРєС‚РѕСЂРёР·РѕРІР°С‚СЊ
         UpdatePlData(&lf_new);
         VectorizeFace(lf_new.lfFaceName);
     } else {
-        // Media Library: use skin parameters / Библиотека: использовать параметры скина
+        // Media Library: use skin parameters / Р‘РёР±Р»РёРѕС‚РµРєР°: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃРєРёРЅР°
         char f[LF_FACESIZE]; 
         int wantH, wantCS;
         GetParams(ctx, f, &wantH, &wantCS);
 
-        // Vectorize face / Векторизовать гарнитуру
+        // Vectorize face / Р’РµРєС‚РѕСЂРёР·РѕРІР°С‚СЊ РіР°СЂРЅРёС‚СѓСЂСѓ
         char f_vec[LF_FACESIZE]; 
         lstrcpynA(f_vec, f, LF_FACESIZE);
         VectorizeFace(f_vec);
 
-        // Apply parameters / Применить параметры
+        // Apply parameters / РџСЂРёРјРµРЅРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹
         lstrcpynA(lf_new.lfFaceName, f_vec, LF_FACESIZE);
         lf_new.lfCharSet = (BYTE)wantCS;
-        if(wantH > 0) lf_new.lfHeight = -wantH;  // Negative = character height / Отрицательное = высота символа
+        if(wantH > 0) lf_new.lfHeight = -wantH;  // Negative = character height / РћС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ = РІС‹СЃРѕС‚Р° СЃРёРјРІРѕР»Р°
     }
 
-    // Apply quality / Применить качество
+    // Apply quality / РџСЂРёРјРµРЅРёС‚СЊ РєР°С‡РµСЃС‚РІРѕ
     lf_new.lfQuality = g_forceQuality;
 
-    // Check if replacement needed / Проверить, требуется ли замена
+    // Check if replacement needed / РџСЂРѕРІРµСЂРёС‚СЊ, С‚СЂРµР±СѓРµС‚СЃСЏ Р»Рё Р·Р°РјРµРЅР°
     if(!_stricmp(lf.lfFaceName, lf_new.lfFaceName) &&
        (BYTE)lf.lfCharSet == (BYTE)lf_new.lfCharSet &&
        lf.lfHeight == lf_new.lfHeight &&
        (BYTE)lf.lfQuality == (BYTE)lf_new.lfQuality)
     {
-        return NULL;  // No change needed / Изменение не требуется
+        return NULL;  // No change needed / РР·РјРµРЅРµРЅРёРµ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ
     }
 
-    // Create replacement font / Создать заменённый шрифт
+    // Create replacement font / РЎРѕР·РґР°С‚СЊ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚
     HFONT r = CreateFontIndirectA(&lf_new);
     if(r) {
-        // Track and cache / Отслеживать и кешировать
+        // Track and cache / РћС‚СЃР»РµР¶РёРІР°С‚СЊ Рё РєРµС€РёСЂРѕРІР°С‚СЊ
         if(TrackFont(r)) 
             Cache_Add(ctx, o, r);
         else { 
@@ -893,39 +893,39 @@ static HFONT GetReplFont(HFONT o, int ctx) {
 
 /*******************************************************************************
  * TREEVIEW SUPPORT: FONT + ITEM HEIGHT
- * ПОДДЕРЖКА TREEVIEW: ШРИФТ + ВЫСОТА ЭЛЕМЕНТА
+ * РџРћР”Р”Р•Р Р–РљРђ TREEVIEW: РЁР РР¤Рў + Р’Р«РЎРћРўРђ Р­Р›Р•РњР•РќРўРђ
  ******************************************************************************/
 
-// TreeView message constants / Константы сообщений TreeView
+// TreeView message constants / РљРѕРЅСЃС‚Р°РЅС‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ TreeView
 #ifndef TV_FIRST
 #define TV_FIRST 0x1100
 #endif
 #ifndef TVM_SETITEMHEIGHT
-#define TVM_SETITEMHEIGHT (TV_FIRST + 27)  // Set item height / Установить высоту элемента
+#define TVM_SETITEMHEIGHT (TV_FIRST + 27)  // Set item height / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РІС‹СЃРѕС‚Сѓ СЌР»РµРјРµРЅС‚Р°
 #endif
 #ifndef TVM_GETITEMHEIGHT
-#define TVM_GETITEMHEIGHT (TV_FIRST + 28)  // Get item height / Получить высоту элемента
+#define TVM_GETITEMHEIGHT (TV_FIRST + 28)  // Get item height / РџРѕР»СѓС‡РёС‚СЊ РІС‹СЃРѕС‚Сѓ СЌР»РµРјРµРЅС‚Р°
 #endif
 #ifndef TVM_GETIMAGELIST
-#define TVM_GETIMAGELIST (TV_FIRST + 8)    // Get image list / Получить список изображений
+#define TVM_GETIMAGELIST (TV_FIRST + 8)    // Get image list / РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef TVSIL_NORMAL
-#define TVSIL_NORMAL 0  // Normal image list / Обычный список изображений
+#define TVSIL_NORMAL 0  // Normal image list / РћР±С‹С‡РЅС‹Р№ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef TVS_NONEVENHEIGHT
-#define TVS_NONEVENHEIGHT 0x4000  // Allow odd heights / Разрешить нечётные высоты
+#define TVS_NONEVENHEIGHT 0x4000  // Allow odd heights / Р Р°Р·СЂРµС€РёС‚СЊ РЅРµС‡С‘С‚РЅС‹Рµ РІС‹СЃРѕС‚С‹
 #endif
 
-// Control type enumeration / Перечисление типов контролов
+// Control type enumeration / РџРµСЂРµС‡РёСЃР»РµРЅРёРµ С‚РёРїРѕРІ РєРѕРЅС‚СЂРѕР»РѕРІ
 enum { CTRL_NONE=0, CTRL_TV=1, CTRL_LV=2 };
 
 /*******************************************************************************
  * GetCtrlKind
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Determines if a window is a TreeView or ListView control.
  * 
- * Определяет, является ли окно контролом TreeView или ListView.
+ * РћРїСЂРµРґРµР»СЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕРєРЅРѕ РєРѕРЅС‚СЂРѕР»РѕРј TreeView РёР»Рё ListView.
  ******************************************************************************/
 static BYTE GetCtrlKind(HWND h) {
     char c[64]; 
@@ -938,42 +938,42 @@ static BYTE GetCtrlKind(HWND h) {
 
 /*******************************************************************************
  * LISTVIEW CONSTANTS AND HELPERS
- * КОНСТАНТЫ И ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ LISTVIEW
+ * РљРћРќРЎРўРђРќРўР« Р Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР LISTVIEW
  ******************************************************************************/
 
 #ifndef LVM_FIRST
 #define LVM_FIRST 0x1000
 #endif
 #ifndef LVM_GETIMAGELIST
-#define LVM_GETIMAGELIST (LVM_FIRST + 2)  // Get image list / Получить список изображений
+#define LVM_GETIMAGELIST (LVM_FIRST + 2)  // Get image list / РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef LVM_SETIMAGELIST
-#define LVM_SETIMAGELIST (LVM_FIRST + 3)  // Set image list / Установить список изображений
+#define LVM_SETIMAGELIST (LVM_FIRST + 3)  // Set image list / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef LVSIL_NORMAL
-#define LVSIL_NORMAL 0  // Large icon image list / Список изображений больших иконок
+#define LVSIL_NORMAL 0  // Large icon image list / РЎРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№ Р±РѕР»СЊС€РёС… РёРєРѕРЅРѕРє
 #endif
 #ifndef LVSIL_SMALL
-#define LVSIL_SMALL 1   // Small icon image list / Список изображений маленьких иконок
+#define LVSIL_SMALL 1   // Small icon image list / РЎРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№ РјР°Р»РµРЅСЊРєРёС… РёРєРѕРЅРѕРє
 #endif
 #ifndef LVS_TYPEMASK
-#define LVS_TYPEMASK 0x0003  // Mask for view type / Маска для типа вида
+#define LVS_TYPEMASK 0x0003  // Mask for view type / РњР°СЃРєР° РґР»СЏ С‚РёРїР° РІРёРґР°
 #endif
 #ifndef LVS_REPORT
-#define LVS_REPORT 0x0001    // Report (details) view / Вид отчёта (детали)
+#define LVS_REPORT 0x0001    // Report (details) view / Р’РёРґ РѕС‚С‡С‘С‚Р° (РґРµС‚Р°Р»Рё)
 #endif
 #ifndef LVS_LIST
-#define LVS_LIST   0x0003    // List view / Вид списка
+#define LVS_LIST   0x0003    // List view / Р’РёРґ СЃРїРёСЃРєР°
 #endif
 
 /*******************************************************************************
  * TreeView_GetMinHeightFromImages
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Calculates minimum item height based on TreeView's image list icon size.
  * 
- * Вычисляет минимальную высоту элемента на основе размера иконок в списке
- * изображений TreeView.
+ * Р’С‹С‡РёСЃР»СЏРµС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РІС‹СЃРѕС‚Сѓ СЌР»РµРјРµРЅС‚Р° РЅР° РѕСЃРЅРѕРІРµ СЂР°Р·РјРµСЂР° РёРєРѕРЅРѕРє РІ СЃРїРёСЃРєРµ
+ * РёР·РѕР±СЂР°Р¶РµРЅРёР№ TreeView.
  ******************************************************************************/
 static int TreeView_GetMinHeightFromImages(HWND hwndTV) {
     int minH = 0;
@@ -981,7 +981,7 @@ static int TreeView_GetMinHeightFromImages(HWND hwndTV) {
     if(himg) {
         int cx=0, cy=0;
         if(ImageList_GetIconSize(himg, &cx, &cy)) {
-            if(cy > 0) minH = cy + 2;  // Icon height + 2px padding / Высота иконки + 2px отступ
+            if(cy > 0) minH = cy + 2;  // Icon height + 2px padding / Р’С‹СЃРѕС‚Р° РёРєРѕРЅРєРё + 2px РѕС‚СЃС‚СѓРї
         }
     }
     return minH;
@@ -990,22 +990,22 @@ static int TreeView_GetMinHeightFromImages(HWND hwndTV) {
 /*******************************************************************************
  * CalcFontHeightPx
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Calculates required pixel height for TreeView items based on font metrics.
  * 
- * Вычисляет требуемую высоту в пикселях для элементов TreeView на основе
- * метрик шрифта.
+ * Р’С‹С‡РёСЃР»СЏРµС‚ С‚СЂРµР±СѓРµРјСѓСЋ РІС‹СЃРѕС‚Сѓ РІ РїРёРєСЃРµР»СЏС… РґР»СЏ СЌР»РµРјРµРЅС‚РѕРІ TreeView РЅР° РѕСЃРЅРѕРІРµ
+ * РјРµС‚СЂРёРє С€СЂРёС„С‚Р°.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get font metrics (tmHeight + tmExternalLeading)
  * 2. Add 6px padding
  * 3. Ensure at least as tall as image list icons
  * 4. Ensure minimum 18px
  * 
- * 1. Получить метрики шрифта (tmHeight + tmExternalLeading)
- * 2. Добавить 6px отступ
- * 3. Обеспечить высоту не меньше иконок списка изображений
- * 4. Обеспечить минимум 18px
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РјРµС‚СЂРёРєРё С€СЂРёС„С‚Р° (tmHeight + tmExternalLeading)
+ * 2. Р”РѕР±Р°РІРёС‚СЊ 6px РѕС‚СЃС‚СѓРї
+ * 3. РћР±РµСЃРїРµС‡РёС‚СЊ РІС‹СЃРѕС‚Сѓ РЅРµ РјРµРЅСЊС€Рµ РёРєРѕРЅРѕРє СЃРїРёСЃРєР° РёР·РѕР±СЂР°Р¶РµРЅРёР№
+ * 4. РћР±РµСЃРїРµС‡РёС‚СЊ РјРёРЅРёРјСѓРј 18px
  ******************************************************************************/
 static int CalcFontHeightPx(HWND hwnd, HFONT hFont) {
     if(!hwnd || !hFont) return 0;
@@ -1013,7 +1013,7 @@ static int CalcFontHeightPx(HWND hwnd, HFONT hFont) {
     HDC dc = GetDC(hwnd);
     if(!dc) return 0;
 
-    // Select font and get metrics / Выбрать шрифт и получить метрики
+    // Select font and get metrics / Р’С‹Р±СЂР°С‚СЊ С€СЂРёС„С‚ Рё РїРѕР»СѓС‡РёС‚СЊ РјРµС‚СЂРёРєРё
     HFONT old = (HFONT)SelectObject(dc, hFont);
     TEXTMETRIC tm; 
     ZeroMemory(&tm, sizeof(tm));
@@ -1021,14 +1021,14 @@ static int CalcFontHeightPx(HWND hwnd, HFONT hFont) {
     SelectObject(dc, old);
     ReleaseDC(hwnd, dc);
 
-    // Calculate height with padding / Вычислить высоту с отступом
+    // Calculate height with padding / Р’С‹С‡РёСЃР»РёС‚СЊ РІС‹СЃРѕС‚Сѓ СЃ РѕС‚СЃС‚СѓРїРѕРј
     int h = tm.tmHeight + tm.tmExternalLeading + 6;
     
-    // Ensure tall enough for images / Обеспечить достаточную высоту для изображений
+    // Ensure tall enough for images / РћР±РµСЃРїРµС‡РёС‚СЊ РґРѕСЃС‚Р°С‚РѕС‡РЅСѓСЋ РІС‹СЃРѕС‚Сѓ РґР»СЏ РёР·РѕР±СЂР°Р¶РµРЅРёР№
     int minImg = TreeView_GetMinHeightFromImages(hwnd);
     if(h < minImg) h = minImg;
     
-    // Absolute minimum / Абсолютный минимум
+    // Absolute minimum / РђР±СЃРѕР»СЋС‚РЅС‹Р№ РјРёРЅРёРјСѓРј
     if(h < 18) h = 18;
     
     return h;
@@ -1037,16 +1037,16 @@ static int CalcFontHeightPx(HWND hwnd, HFONT hFont) {
 /*******************************************************************************
  * TreeView_EnableNonevenHeight
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Enables TVS_NONEVENHEIGHT style to allow odd item heights (NT only).
  * 
- * Включает стиль TVS_NONEVENHEIGHT для разрешения нечётных высот элементов (только NT).
+ * Р’РєР»СЋС‡Р°РµС‚ СЃС‚РёР»СЊ TVS_NONEVENHEIGHT РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ РЅРµС‡С‘С‚РЅС‹С… РІС‹СЃРѕС‚ СЌР»РµРјРµРЅС‚РѕРІ (С‚РѕР»СЊРєРѕ NT).
  ******************************************************************************/
 static void TreeView_EnableNonevenHeight(HWND hwndTV) {
     LONG st = GetWindowLongA(hwndTV, GWL_STYLE);
     if(!(st & TVS_NONEVENHEIGHT)) {
         SetWindowLongA(hwndTV, GWL_STYLE, st | TVS_NONEVENHEIGHT);
-        // Force style update / Принудительно обновить стиль
+        // Force style update / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РѕР±РЅРѕРІРёС‚СЊ СЃС‚РёР»СЊ
         SetWindowPos(hwndTV, NULL, 0,0,0,0,
             SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_FRAMECHANGED);
     }
@@ -1055,19 +1055,19 @@ static void TreeView_EnableNonevenHeight(HWND hwndTV) {
 /*******************************************************************************
  * TreeView_EnsureReplFont
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Ensures TreeView has replacement font applied.
  * 
- * Обеспечивает применение заменённого шрифта к TreeView.
+ * РћР±РµСЃРїРµС‡РёРІР°РµС‚ РїСЂРёРјРµРЅРµРЅРёРµ Р·Р°РјРµРЅС‘РЅРЅРѕРіРѕ С€СЂРёС„С‚Р° Рє TreeView.
  ******************************************************************************/
 static void TreeView_EnsureReplFont(HWND hwndTV, BYTE ctx) {
     if(!hwndTV || !ctx) return;
 
-    // Get current font / Получить текущий шрифт
+    // Get current font / РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёР№ С€СЂРёС„С‚
     HFONT cur = (HFONT)SendMessageA(hwndTV, WM_GETFONT, 0, 0);
     if(!cur) cur = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
 
-    // Get and apply replacement / Получить и применить замену
+    // Get and apply replacement / РџРѕР»СѓС‡РёС‚СЊ Рё РїСЂРёРјРµРЅРёС‚СЊ Р·Р°РјРµРЅСѓ
     HFONT repl = GetReplFont(cur, ctx);
     if(repl) {
         SendMessageA(hwndTV, WM_SETFONT, (WPARAM)repl, FALSE);
@@ -1078,42 +1078,42 @@ static void TreeView_EnsureReplFont(HWND hwndTV, BYTE ctx) {
 /*******************************************************************************
  * TreeView_AutoFixItemHeight
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Automatically adjusts TreeView item height to fit the current font.
  * 
- * Автоматически корректирует высоту элементов TreeView под текущий шрифт.
+ * РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РєРѕСЂСЂРµРєС‚РёСЂСѓРµС‚ РІС‹СЃРѕС‚Сѓ СЌР»РµРјРµРЅС‚РѕРІ TreeView РїРѕРґ С‚РµРєСѓС‰РёР№ С€СЂРёС„С‚.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * On NT, uses WM_SETREDRAW batching to prevent flicker.
  * On 9x, RDW_NOERASE is not used as it causes issues.
  * 
- * На NT использует пакетирование WM_SETREDRAW для предотвращения мигания.
- * На 9x RDW_NOERASE не используется, так как вызывает проблемы.
+ * РќР° NT РёСЃРїРѕР»СЊР·СѓРµС‚ РїР°РєРµС‚РёСЂРѕРІР°РЅРёРµ WM_SETREDRAW РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РјРёРіР°РЅРёСЏ.
+ * РќР° 9x RDW_NOERASE РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, С‚Р°Рє РєР°Рє РІС‹Р·С‹РІР°РµС‚ РїСЂРѕР±Р»РµРјС‹.
  ******************************************************************************/
 static void TreeView_AutoFixItemHeight(HWND hwndTV) {
     if(!hwndTV || !IsWindow(hwndTV)) return;
 
-    // Get window context / Получить контекст окна
+    // Get window context / РџРѕР»СѓС‡РёС‚СЊ РєРѕРЅС‚РµРєСЃС‚ РѕРєРЅР°
     BYTE ctx = GetWinCtx(hwndTV);
     if(!ctx) return;
 
-    // Ensure replacement font / Обеспечить заменённый шрифт
+    // Ensure replacement font / РћР±РµСЃРїРµС‡РёС‚СЊ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚
     TreeView_EnsureReplFont(hwndTV, ctx);
     TreeView_EnableNonevenHeight(hwndTV);
 
-    // Get current font / Получить текущий шрифт
+    // Get current font / РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёР№ С€СЂРёС„С‚
     HFONT base = (HFONT)SendMessageA(hwndTV, WM_GETFONT, 0, 0);
     if(!base) base = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
 
-    // Calculate desired height / Вычислить желаемую высоту
+    // Calculate desired height / Р’С‹С‡РёСЃР»РёС‚СЊ Р¶РµР»Р°РµРјСѓСЋ РІС‹СЃРѕС‚Сѓ
     int wantH = CalcFontHeightPx(hwndTV, base);
     if(wantH <= 0) return;
 
-    // Get current height / Получить текущую высоту
+    // Get current height / РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰СѓСЋ РІС‹СЃРѕС‚Сѓ
     int curH  = (int)SendMessageA(hwndTV, TVM_GETITEMHEIGHT, 0, 0);
     if(curH != wantH) {
         // On NT: batch updates with WM_SETREDRAW
-        // На NT: пакетировать обновления через WM_SETREDRAW
+        // РќР° NT: РїР°РєРµС‚РёСЂРѕРІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёСЏ С‡РµСЂРµР· WM_SETREDRAW
         if(!g_is9x) SendMessageA(hwndTV, WM_SETREDRAW, FALSE, 0);
         
         SendMessageA(hwndTV, TVM_SETITEMHEIGHT, (WPARAM)wantH, 0);
@@ -1121,7 +1121,7 @@ static void TreeView_AutoFixItemHeight(HWND hwndTV) {
         if(!g_is9x) {
             SendMessageA(hwndTV, WM_SETREDRAW, TRUE, 0);
             // RDW_NOERASE to avoid background flicker
-            // RDW_NOERASE для избежания мигания фона
+            // RDW_NOERASE РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РјРёРіР°РЅРёСЏ С„РѕРЅР°
             RedrawWindow(hwndTV, NULL, NULL, RDW_INVALIDATE|RDW_ALLCHILDREN|RDW_NOERASE);
         } else {
             RedrawWindow(hwndTV, NULL, NULL, RDW_INVALIDATE|RDW_ALLCHILDREN);
@@ -1131,22 +1131,22 @@ static void TreeView_AutoFixItemHeight(HWND hwndTV) {
 
 /*******************************************************************************
  * LISTVIEW HELPERS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ LISTVIEW
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР LISTVIEW
  ******************************************************************************/
 
-// Window property keys for ListView / Ключи свойств окна для ListView
-#define PROP_LV_STAMP "MLF_LV_ST"  // Font stamp / Отпечаток шрифта
-#define PROP_LV_IP    "MLF_LV_IP"  // In-progress flag / Флаг выполнения
+// Window property keys for ListView / РљР»СЋС‡Рё СЃРІРѕР№СЃС‚РІ РѕРєРЅР° РґР»СЏ ListView
+#define PROP_LV_STAMP "MLF_LV_ST"  // Font stamp / РћС‚РїРµС‡Р°С‚РѕРє С€СЂРёС„С‚Р°
+#define PROP_LV_IP    "MLF_LV_IP"  // In-progress flag / Р¤Р»Р°Рі РІС‹РїРѕР»РЅРµРЅРёСЏ
 
 /*******************************************************************************
  * MakeDesiredFontStamp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates a stamp that uniquely identifies desired font configuration.
  * Used to detect when ListView needs font update.
  * 
- * Создаёт отпечаток, который уникально идентифицирует желаемую конфигурацию шрифта.
- * Используется для обнаружения, когда ListView нуждается в обновлении шрифта.
+ * РЎРѕР·РґР°С‘С‚ РѕС‚РїРµС‡Р°С‚РѕРє, РєРѕС‚РѕСЂС‹Р№ СѓРЅРёРєР°Р»СЊРЅРѕ РёРґРµРЅС‚РёС„РёС†РёСЂСѓРµС‚ Р¶РµР»Р°РµРјСѓСЋ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ С€СЂРёС„С‚Р°.
+ * РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ, РєРѕРіРґР° ListView РЅСѓР¶РґР°РµС‚СЃСЏ РІ РѕР±РЅРѕРІР»РµРЅРёРё С€СЂРёС„С‚Р°.
  ******************************************************************************/
 static DWORD MakeDesiredFontStamp(BYTE ctx) {
     char f[LF_FACESIZE]; 
@@ -1158,36 +1158,36 @@ static DWORD MakeDesiredFontStamp(BYTE ctx) {
 /*******************************************************************************
  * ListView_ForceRelayout_9x
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Forces ListView to relayout after font change on Win9x. Win9x ListViews are
  * stubborn and don't automatically recalculate item sizes when font changes.
  * 
- * Принудительно перестраивает ListView после смены шрифта на Win9x. ListView
- * на Win9x упрямы и не пересчитывают размеры элементов автоматически при смене шрифта.
+ * РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµСЃС‚СЂР°РёРІР°РµС‚ ListView РїРѕСЃР»Рµ СЃРјРµРЅС‹ С€СЂРёС„С‚Р° РЅР° Win9x. ListView
+ * РЅР° Win9x СѓРїСЂСЏРјС‹ Рё РЅРµ РїРµСЂРµСЃС‡РёС‚С‹РІР°СЋС‚ СЂР°Р·РјРµСЂС‹ СЌР»РµРјРµРЅС‚РѕРІ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРё СЃРјРµРЅРµ С€СЂРёС„С‚Р°.
  * 
- * WIN9X SPECIFIC / СПЕЦИФИЧНО ДЛЯ WIN9X:
+ * WIN9X SPECIFIC / РЎРџР•Р¦РР¤РР§РќРћ Р”Р›РЇ WIN9X:
  * This aggressive approach toggles view type to force full recalculation.
  * On NT, a simple SetWindowPos with SWP_FRAMECHANGED is sufficient.
  * 
- * Этот агрессивный подход переключает тип вида для принудительного полного
- * пересчёта. На NT достаточно простого SetWindowPos с SWP_FRAMECHANGED.
+ * Р­С‚РѕС‚ Р°РіСЂРµСЃСЃРёРІРЅС‹Р№ РїРѕРґС…РѕРґ РїРµСЂРµРєР»СЋС‡Р°РµС‚ С‚РёРї РІРёРґР° РґР»СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ РїРѕР»РЅРѕРіРѕ
+ * РїРµСЂРµСЃС‡С‘С‚Р°. РќР° NT РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РїСЂРѕСЃС‚РѕРіРѕ SetWindowPos СЃ SWP_FRAMECHANGED.
  ******************************************************************************/
 static void ListView_ForceRelayout_9x(HWND lv) {
     if(!lv || !IsWindow(lv)) return;
     if(!g_is9x) return;
 
-    // Batch updates / Пакетировать обновления
+    // Batch updates / РџР°РєРµС‚РёСЂРѕРІР°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёСЏ
     SendMessageA(lv, WM_SETREDRAW, FALSE, 0);
 
     // Re-apply imagelists to trigger internal recalculation
-    // Повторно применить списки изображений для запуска внутреннего пересчёта
+    // РџРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅРёС‚СЊ СЃРїРёСЃРєРё РёР·РѕР±СЂР°Р¶РµРЅРёР№ РґР»СЏ Р·Р°РїСѓСЃРєР° РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїРµСЂРµСЃС‡С‘С‚Р°
     HIMAGELIST ilS = (HIMAGELIST)SendMessageA(lv, LVM_GETIMAGELIST, (WPARAM)LVSIL_SMALL, 0);
     if(ilS) SendMessageA(lv, LVM_SETIMAGELIST, (WPARAM)LVSIL_SMALL, (LPARAM)ilS);
     HIMAGELIST ilN = (HIMAGELIST)SendMessageA(lv, LVM_GETIMAGELIST, (WPARAM)LVSIL_NORMAL, 0);
     if(ilN) SendMessageA(lv, LVM_SETIMAGELIST, (WPARAM)LVSIL_NORMAL, (LPARAM)ilN);
 
     // Toggle view type to force full recalc
-    // Переключить тип вида для принудительного полного пересчёта
+    // РџРµСЂРµРєР»СЋС‡РёС‚СЊ С‚РёРї РІРёРґР° РґР»СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ РїРѕР»РЅРѕРіРѕ РїРµСЂРµСЃС‡С‘С‚Р°
     LONG st = GetWindowLongA(lv, GWL_STYLE);
     LONG type = st & LVS_TYPEMASK;
     LONG other = (type == LVS_REPORT) ? LVS_LIST : LVS_REPORT;
@@ -1206,22 +1206,22 @@ static void ListView_ForceRelayout_9x(HWND lv) {
 /*******************************************************************************
  * ListView_AutoFixFontAndRelayout
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Ensures ListView has correct font and triggers relayout if needed.
  * 
- * Обеспечивает правильный шрифт в ListView и запускает перестройку при необходимости.
+ * РћР±РµСЃРїРµС‡РёРІР°РµС‚ РїСЂР°РІРёР»СЊРЅС‹Р№ С€СЂРёС„С‚ РІ ListView Рё Р·Р°РїСѓСЃРєР°РµС‚ РїРµСЂРµСЃС‚СЂРѕР№РєСѓ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * lv            - ListView handle / Дескриптор ListView
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * lv            - ListView handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ ListView
  * forceRelayout - Force relayout even if stamp hasn't changed
- *                 Принудительно перестроить, даже если отпечаток не изменился
+ *                 РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµСЃС‚СЂРѕРёС‚СЊ, РґР°Р¶Рµ РµСЃР»Рё РѕС‚РїРµС‡Р°С‚РѕРє РЅРµ РёР·РјРµРЅРёР»СЃСЏ
  * 
- * STAMP SYSTEM / СИСТЕМА ОТПЕЧАТКОВ:
+ * STAMP SYSTEM / РЎРРЎРўР•РњРђ РћРўРџР•Р§РђРўРљРћР’:
  * Stores desired font stamp in window property. Only relayouts when stamp
  * changes or forceRelayout=TRUE. This prevents excessive relayouts.
  * 
- * Хранит желаемый отпечаток шрифта в свойстве окна. Перестраивает только
- * при изменении отпечатка или forceRelayout=TRUE. Предотвращает чрезмерные перестройки.
+ * РҐСЂР°РЅРёС‚ Р¶РµР»Р°РµРјС‹Р№ РѕС‚РїРµС‡Р°С‚РѕРє С€СЂРёС„С‚Р° РІ СЃРІРѕР№СЃС‚РІРµ РѕРєРЅР°. РџРµСЂРµСЃС‚СЂР°РёРІР°РµС‚ С‚РѕР»СЊРєРѕ
+ * РїСЂРё РёР·РјРµРЅРµРЅРёРё РѕС‚РїРµС‡Р°С‚РєР° РёР»Рё forceRelayout=TRUE. РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ С‡СЂРµР·РјРµСЂРЅС‹Рµ РїРµСЂРµСЃС‚СЂРѕР№РєРё.
  ******************************************************************************/
 static void ListView_AutoFixFontAndRelayout(HWND lv, BOOL forceRelayout) {
     if(!lv || !IsWindow(lv)) return;
@@ -1229,14 +1229,14 @@ static void ListView_AutoFixFontAndRelayout(HWND lv, BOOL forceRelayout) {
     BYTE ctx = GetWinCtx(lv);
     if(!ctx) return;
 
-    // Check if font stamp changed / Проверить, изменился ли отпечаток шрифта
+    // Check if font stamp changed / РџСЂРѕРІРµСЂРёС‚СЊ, РёР·РјРµРЅРёР»СЃСЏ Р»Рё РѕС‚РїРµС‡Р°С‚РѕРє С€СЂРёС„С‚Р°
     DWORD wantStamp = MakeDesiredFontStamp(ctx);
     DWORD haveStamp = (DWORD)(UINT_PTR)GetPropA(lv, PROP_LV_STAMP);
     BOOL need = (haveStamp != wantStamp);
 
     if(need) SetPropA(lv, PROP_LV_STAMP, (HANDLE)(UINT_PTR)wantStamp);
 
-    // Ensure replacement font / Обеспечить заменённый шрифт
+    // Ensure replacement font / РћР±РµСЃРїРµС‡РёС‚СЊ Р·Р°РјРµРЅС‘РЅРЅС‹Р№ С€СЂРёС„С‚
     HFONT cur = (HFONT)SendMessageA(lv, WM_GETFONT, 0, 0);
     if(!cur) cur = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
     BOOL didFont = FALSE;
@@ -1245,7 +1245,7 @@ static void ListView_AutoFixFontAndRelayout(HWND lv, BOOL forceRelayout) {
     if(repl) {
         didFont = TRUE;
         // Guard: prevent recursion from our own WM_SETFONT
-        // Защита: предотвратить рекурсию от нашего собственного WM_SETFONT
+        // Р—Р°С‰РёС‚Р°: РїСЂРµРґРѕС‚РІСЂР°С‚РёС‚СЊ СЂРµРєСѓСЂСЃРёСЋ РѕС‚ РЅР°С€РµРіРѕ СЃРѕР±СЃС‚РІРµРЅРЅРѕРіРѕ WM_SETFONT
         SetPropA(lv, PROP_LV_IP, (HANDLE)1);
         SendMessageA(lv, WM_SETFONT, (WPARAM)repl, FALSE);
         RemovePropA(lv, PROP_LV_IP);
@@ -1253,13 +1253,13 @@ static void ListView_AutoFixFontAndRelayout(HWND lv, BOOL forceRelayout) {
 
     if(g_is9x) {
         // Win9x: aggressive relayout if stamp changed or forced
-        // Win9x: агрессивная перестройка, если отпечаток изменился или принудительно
+        // Win9x: Р°РіСЂРµСЃСЃРёРІРЅР°СЏ РїРµСЂРµСЃС‚СЂРѕР№РєР°, РµСЃР»Рё РѕС‚РїРµС‡Р°С‚РѕРє РёР·РјРµРЅРёР»СЃСЏ РёР»Рё РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ
         if(need || forceRelayout || didFont) {
             ListView_ForceRelayout_9x(lv);
         }
     } else {
         // NT: simple frame change usually sufficient
-        // NT: простое изменение фрейма обычно достаточно
+        // NT: РїСЂРѕСЃС‚РѕРµ РёР·РјРµРЅРµРЅРёРµ С„СЂРµР№РјР° РѕР±С‹С‡РЅРѕ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ
         if(need) {
             SetWindowPos(lv, NULL, 0,0,0,0,
                 SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_FRAMECHANGED);
@@ -1273,18 +1273,18 @@ static void ListView_AutoFixFontAndRelayout(HWND lv, BOOL forceRelayout) {
 
 /*******************************************************************************
  * OPTIONAL: IAT HOOKS (DISABLED ON 9X BY DEFAULT)
- * ОПЦИОНАЛЬНЫЕ: ХУКИ IAT (ОТКЛЮЧЕНЫ НА 9X ПО УМОЛЧАНИЮ)
+ * РћРџР¦РРћРќРђР›Р¬РќР«Р•: РҐРЈРљР IAT (РћРўРљР›Р®Р§Р•РќР« РќРђ 9X РџРћ РЈРњРћР›Р§РђРќРР®)
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * When enabled, hooks GDI SelectObject to intercept all font selections.
  * This catches fonts that aren't set via WM_SETFONT.
  * 
- * Когда включено, перехватывает GDI SelectObject для перехвата всех выборов шрифтов.
- * Это ловит шрифты, которые не устанавливаются через WM_SETFONT.
+ * РљРѕРіРґР° РІРєР»СЋС‡РµРЅРѕ, РїРµСЂРµС…РІР°С‚С‹РІР°РµС‚ GDI SelectObject РґР»СЏ РїРµСЂРµС…РІР°С‚Р° РІСЃРµС… РІС‹Р±РѕСЂРѕРІ С€СЂРёС„С‚РѕРІ.
+ * Р­С‚Рѕ Р»РѕРІРёС‚ С€СЂРёС„С‚С‹, РєРѕС‚РѕСЂС‹Рµ РЅРµ СѓСЃС‚Р°РЅР°РІР»РёРІР°СЋС‚СЃСЏ С‡РµСЂРµР· WM_SETFONT.
  * 
- * DISABLED ON WIN9X / ОТКЛЮЧЕНО НА WIN9X:
+ * DISABLED ON WIN9X / РћРўРљР›Р®Р§Р•РќРћ РќРђ WIN9X:
  * Causes crashes on exit due to DLL unload order issues.
- * Вызывает краши при выходе из-за проблем с порядком выгрузки DLL.
+ * Р’С‹Р·С‹РІР°РµС‚ РєСЂР°С€Рё РїСЂРё РІС‹С…РѕРґРµ РёР·-Р·Р° РїСЂРѕР±Р»РµРј СЃ РїРѕСЂСЏРґРєРѕРј РІС‹РіСЂСѓР·РєРё DLL.
  ******************************************************************************/
 
 typedef HGDIOBJ (WINAPI *SELOBJ)(HDC, HGDIOBJ);
@@ -1293,16 +1293,16 @@ static SELOBJ Real_SelectObject = 0;
 /*******************************************************************************
  * Hook_SelectObject
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts SelectObject to replace fonts with smooth versions.
  * 
- * Перехватывает SelectObject для замены шрифтов на сглаженные версии.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ SelectObject РґР»СЏ Р·Р°РјРµРЅС‹ С€СЂРёС„С‚РѕРІ РЅР° СЃРіР»Р°Р¶РµРЅРЅС‹Рµ РІРµСЂСЃРёРё.
  ******************************************************************************/
 static HGDIOBJ WINAPI Hook_SelectObject(HDC dc, HGDIOBJ o) {
     if(!Real_SelectObject) return NULL;
     if(!dc) return Real_SelectObject(dc, o);
 
-    // Check if selecting a font / Проверить, выбирается ли шрифт
+    // Check if selecting a font / РџСЂРѕРІРµСЂРёС‚СЊ, РІС‹Р±РёСЂР°РµС‚СЃСЏ Р»Рё С€СЂРёС„С‚
     if(o && GetObjectType(o) == OBJ_FONT) {
         BYTE ctx = ResolveDcCtx(dc);
         if(ctx) {
@@ -1313,7 +1313,7 @@ static HGDIOBJ WINAPI Hook_SelectObject(HDC dc, HGDIOBJ o) {
     return Real_SelectObject(dc, o);
 }
 
-// Paint hooks to tag DCs / Хуки рисования для тегирования DC
+// Paint hooks to tag DCs / РҐСѓРєРё СЂРёСЃРѕРІР°РЅРёСЏ РґР»СЏ С‚РµРіРёСЂРѕРІР°РЅРёСЏ DC
 typedef HDC (WINAPI *BP)(HWND, LPPAINTSTRUCT); 
 static BP Real_BeginPaint = 0;
 
@@ -1336,7 +1336,7 @@ static BOOL WINAPI Hook_EndPaint(HWND w, const PAINTSTRUCT* p) {
     return Real_EndPaint(w, p);
 }
 
-// Hook macro for DC functions / Макрос хуков для функций DC
+// Hook macro for DC functions / РњР°РєСЂРѕСЃ С…СѓРєРѕРІ РґР»СЏ С„СѓРЅРєС†РёР№ DC
 #define HK_D(R, N, A, C) typedef R (WINAPI *P_##N)A; static P_##N Real_##N=0; static R WINAPI Hook_##N A { C }
 
 HK_D(HDC,  GetDC,              (HWND w),                  
@@ -1380,16 +1380,16 @@ HK_D(HDC,  GetDCEx,            (HWND w, HRGN r, DWORD f),
 /*******************************************************************************
  * HookMod
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches IAT of a module to install hooks.
  * 
- * Патчит IAT модуля для установки хуков.
+ * РџР°С‚С‡РёС‚ IAT РјРѕРґСѓР»СЏ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С…СѓРєРѕРІ.
  ******************************************************************************/
 static void HookMod(HMODULE m) {
     if(!g_allowIatHook) return;
     if(!m) return;
     
-    // Validate PE header / Проверить PE-заголовок
+    // Validate PE header / РџСЂРѕРІРµСЂРёС‚СЊ PE-Р·Р°РіРѕР»РѕРІРѕРє
     __try { 
         if(((PIMAGE_DOS_HEADER)m)->e_magic != IMAGE_DOS_SIGNATURE) 
             return; 
@@ -1397,7 +1397,7 @@ static void HookMod(HMODULE m) {
         return; 
     }
 
-    // Patch function pointers / Пропатчить указатели функций
+    // Patch function pointers / РџСЂРѕРїР°С‚С‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№
     #define P(D,N,H,R) IAT_PatchByName(m, D, N, (void*)H, (void**)&R)
     P("GDI32.dll",  "SelectObject",       Hook_SelectObject,       Real_SelectObject);
     P("USER32.dll", "BeginPaint",         Hook_BeginPaint,         Real_BeginPaint);
@@ -1413,28 +1413,28 @@ static void HookMod(HMODULE m) {
 
 /*******************************************************************************
  * WINDOW SUBCLASSING
- * СУБКЛАССИНГ ОКОН
+ * РЎРЈР‘РљР›РђРЎРЎРРќР“ РћРљРћРќ
  ******************************************************************************/
 
-// Window property keys / Ключи свойств окна
-#define PROP_TAG   "MLF_TAG"    // Subclass tag / Тег субкласса
-#define PROP_OLD   "MLF_OLD"    // Original WNDPROC / Оригинальная WNDPROC
-#define PROP_TV_IP "MLF_TV_IP"  // TreeView in-progress flag / Флаг выполнения TreeView
-#define PROP_LV_WP "MLF_LV_WP"  // ListView paint guard / Защита рисования ListView
+// Window property keys / РљР»СЋС‡Рё СЃРІРѕР№СЃС‚РІ РѕРєРЅР°
+#define PROP_TAG   "MLF_TAG"    // Subclass tag / РўРµРі СЃСѓР±РєР»Р°СЃСЃР°
+#define PROP_OLD   "MLF_OLD"    // Original WNDPROC / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ WNDPROC
+#define PROP_TV_IP "MLF_TV_IP"  // TreeView in-progress flag / Р¤Р»Р°Рі РІС‹РїРѕР»РЅРµРЅРёСЏ TreeView
+#define PROP_LV_WP "MLF_LV_WP"  // ListView paint guard / Р—Р°С‰РёС‚Р° СЂРёСЃРѕРІР°РЅРёСЏ ListView
 
-// Win9x parent subclass properties / Свойства субкласса родителя Win9x
-#define PROP_PW_TAG "MLF_PW_T"  // Parent window tag / Тег родительского окна
-#define PROP_PW_OLD "MLF_PW_O"  // Parent window old proc / Старая процедура родительского окна
+// Win9x parent subclass properties / РЎРІРѕР№СЃС‚РІР° СЃСѓР±РєР»Р°СЃСЃР° СЂРѕРґРёС‚РµР»СЏ Win9x
+#define PROP_PW_TAG "MLF_PW_T"  // Parent window tag / РўРµРі СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР°
+#define PROP_PW_OLD "MLF_PW_O"  // Parent window old proc / РЎС‚Р°СЂР°СЏ РїСЂРѕС†РµРґСѓСЂР° СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР°
 
-static BOOL CALLBACK EnumWnd(HWND h, LPARAM l); // Forward declaration / Предварительное объявление
+static BOOL CALLBACK EnumWnd(HWND h, LPARAM l); // Forward declaration / РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРµ РѕР±СЉСЏРІР»РµРЅРёРµ
 
 /*******************************************************************************
  * IsStdCtrlClassA_
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if class name is a standard control that shouldn't be parent-subclassed.
  * 
- * Проверяет, является ли имя класса стандартным контролом, который не должен быть субклассирован как родитель.
+ * РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РёРјСЏ РєР»Р°СЃСЃР° СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рј РєРѕРЅС‚СЂРѕР»РѕРј, РєРѕС‚РѕСЂС‹Р№ РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°РЅ РєР°Рє СЂРѕРґРёС‚РµР»СЊ.
  ******************************************************************************/
 static BOOL IsStdCtrlClassA_(const char* c) {
     if(!c || !c[0]) return TRUE;
@@ -1455,19 +1455,19 @@ static void EnsureParentSubclass_9x(HWND h);
 /*******************************************************************************
  * ParentProc_9x
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Window procedure for parent window subclass on Win9x. Catches WM_PARENTNOTIFY
  * to detect immediate child creation (TreeView/ListView) without CBT hook overhead.
  * 
- * Процедура окна для субкласса родительского окна на Win9x. Ловит WM_PARENTNOTIFY
- * для обнаружения создания непосредственных детей (TreeView/ListView) без накладных расходов CBT hook.
+ * РџСЂРѕС†РµРґСѓСЂР° РѕРєРЅР° РґР»СЏ СЃСѓР±РєР»Р°СЃСЃР° СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР° РЅР° Win9x. Р›РѕРІРёС‚ WM_PARENTNOTIFY
+ * РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ СЃРѕР·РґР°РЅРёСЏ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅС‹С… РґРµС‚РµР№ (TreeView/ListView) Р±РµР· РЅР°РєР»Р°РґРЅС‹С… СЂР°СЃС…РѕРґРѕРІ CBT hook.
  * 
- * WHY WIN9X ONLY / ПОЧЕМУ ТОЛЬКО WIN9X:
+ * WHY WIN9X ONLY / РџРћР§Р•РњРЈ РўРћР›Р¬РљРћ WIN9X:
  * On NT, we use CBT hook which is more reliable. On Win9x, CBT hooks can cause
  * crashes on exit, so we use this lighter approach.
  * 
- * На NT мы используем CBT hook, который более надёжен. На Win9x CBT hooks могут
- * вызывать краши при выходе, поэтому используем этот более лёгкий подход.
+ * РќР° NT РјС‹ РёСЃРїРѕР»СЊР·СѓРµРј CBT hook, РєРѕС‚РѕСЂС‹Р№ Р±РѕР»РµРµ РЅР°РґС‘Р¶РµРЅ. РќР° Win9x CBT hooks РјРѕРіСѓС‚
+ * РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё РїСЂРё РІС‹С…РѕРґРµ, РїРѕСЌС‚РѕРјСѓ РёСЃРїРѕР»СЊР·СѓРµРј СЌС‚РѕС‚ Р±РѕР»РµРµ Р»С‘РіРєРёР№ РїРѕРґС…РѕРґ.
  ******************************************************************************/
 static LRESULT CALLBACK ParentProc_9x(HWND h, UINT m, WPARAM w, LPARAM l) {
     WNDPROC old = (WNDPROC)GetPropA(h, PROP_PW_OLD);
@@ -1496,14 +1496,14 @@ static LRESULT CALLBACK ParentProc_9x(HWND h, UINT m, WPARAM w, LPARAM l) {
                 GetClassNameA(ch, c, 63);
 
                 if(!lstrcmpiA(c, "SysTreeView32") || !lstrcmpiA(c, "SysListView32")) {
-                    // Immediately subclass and fix / Немедленно субклассировать и исправить
+                    // Immediately subclass and fix / РќРµРјРµРґР»РµРЅРЅРѕ СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ Рё РёСЃРїСЂР°РІРёС‚СЊ
                     EnumWnd(ch, ENUM_CTX_CONFIRMED);
                     if(!lstrcmpiA(c,"SysTreeView32")) 
                         TreeView_AutoFixItemHeight(ch);
                     else 
                         ListView_AutoFixFontAndRelayout(ch, TRUE);
                 } else {
-                    // Propagate to containers / Распространить на контейнеры
+                    // Propagate to containers / Р Р°СЃРїСЂРѕСЃС‚СЂР°РЅРёС‚СЊ РЅР° РєРѕРЅС‚РµР№РЅРµСЂС‹
                     EnsureParentSubclass_9x(ch);
                 }
             }
@@ -1516,10 +1516,10 @@ static LRESULT CALLBACK ParentProc_9x(HWND h, UINT m, WPARAM w, LPARAM l) {
 /*******************************************************************************
  * EnsureParentSubclass_9x
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Installs parent window subclass on Win9x to catch child control creation.
  * 
- * Устанавливает субкласс родительского окна на Win9x для перехвата создания дочерних контролов.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃСѓР±РєР»Р°СЃСЃ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР° РЅР° Win9x РґР»СЏ РїРµСЂРµС…РІР°С‚Р° СЃРѕР·РґР°РЅРёСЏ РґРѕС‡РµСЂРЅРёС… РєРѕРЅС‚СЂРѕР»РѕРІ.
  ******************************************************************************/
 static void EnsureParentSubclass_9x(HWND h) {
     if(!g_is9x) return;
@@ -1528,7 +1528,7 @@ static void EnsureParentSubclass_9x(HWND h) {
     if(IsFileDlg(h)) return;
 
     // Only inside Media Library area
-    // Только внутри области библиотеки
+    // РўРѕР»СЊРєРѕ РІРЅСѓС‚СЂРё РѕР±Р»Р°СЃС‚Рё Р±РёР±Р»РёРѕС‚РµРєРё
     if(GetWinCtx(h) != CTX_LIB) return;
 
     char c[64]; 
@@ -1536,12 +1536,12 @@ static void EnsureParentSubclass_9x(HWND h) {
     GetClassNameA(h, c, 63);
     if(IsStdCtrlClassA_(c)) return;
 
-    // Install subclass / Установить субкласс
+    // Install subclass / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃСѓР±РєР»Р°СЃСЃ
     WNDPROC prev = (WNDPROC)SetWindowLongA(h, GWL_WNDPROC, (LONG)ParentProc_9x);
     if(prev) {
         if(!SetPropA(h, PROP_PW_OLD, (HANDLE)prev) || 
            !SetPropA(h, PROP_PW_TAG, (HANDLE)1)) {
-            // Rollback on failure / Откатить при неудаче
+            // Rollback on failure / РћС‚РєР°С‚РёС‚СЊ РїСЂРё РЅРµСѓРґР°С‡Рµ
             SetWindowLongA(h, GWL_WNDPROC, (LONG)prev);
             RemovePropA(h, PROP_PW_OLD);
             RemovePropA(h, PROP_PW_TAG);
@@ -1552,18 +1552,18 @@ static void EnsureParentSubclass_9x(HWND h) {
 /*******************************************************************************
  * Subclass
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Main window procedure for subclassed controls. Handles:
  * - WM_SETFONT: Replaces fonts and updates TreeView/ListView
  * - Theme/style changes: Triggers updates
  * - WM_PAINT: Lazy font application
  * - WM_SHOWWINDOW (9x ListView): Re-applies font after tab/page switches
  * 
- * Основная процедура окна для субклассированных контролов. Обрабатывает:
- * - WM_SETFONT: Заменяет шрифты и обновляет TreeView/ListView
- * - Изменения темы/стиля: Запускает обновления
- * - WM_PAINT: Отложенное применение шрифта
- * - WM_SHOWWINDOW (9x ListView): Повторно применяет шрифт после переключения вкладок/страниц
+ * РћСЃРЅРѕРІРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РѕРєРЅР° РґР»СЏ СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°РЅРЅС‹С… РєРѕРЅС‚СЂРѕР»РѕРІ. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚:
+ * - WM_SETFONT: Р—Р°РјРµРЅСЏРµС‚ С€СЂРёС„С‚С‹ Рё РѕР±РЅРѕРІР»СЏРµС‚ TreeView/ListView
+ * - РР·РјРµРЅРµРЅРёСЏ С‚РµРјС‹/СЃС‚РёР»СЏ: Р—Р°РїСѓСЃРєР°РµС‚ РѕР±РЅРѕРІР»РµРЅРёСЏ
+ * - WM_PAINT: РћС‚Р»РѕР¶РµРЅРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ С€СЂРёС„С‚Р°
+ * - WM_SHOWWINDOW (9x ListView): РџРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅСЏРµС‚ С€СЂРёС„С‚ РїРѕСЃР»Рµ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РІРєР»Р°РґРѕРє/СЃС‚СЂР°РЅРёС†
  ******************************************************************************/
 static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
     WNDPROC old = (WNDPROC)GetPropA(h, PROP_OLD);
@@ -1576,7 +1576,7 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
     BYTE kind = GetCtrlKind(h);
 
     // WM_SETFONT: Replace font and update control
-    // WM_SETFONT: Заменить шрифт и обновить контрол
+    // WM_SETFONT: Р—Р°РјРµРЅРёС‚СЊ С€СЂРёС„С‚ Рё РѕР±РЅРѕРІРёС‚СЊ РєРѕРЅС‚СЂРѕР»
     if(m == WM_SETFONT) {
         BYTE c = GetWinCtx(h);
         if(c && w) {
@@ -1596,7 +1596,7 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
         return ret;
     }
 
-    // Handle theme/style changes / Обработать изменения темы/стиля
+    // Handle theme/style changes / РћР±СЂР°Р±РѕС‚Р°С‚СЊ РёР·РјРµРЅРµРЅРёСЏ С‚РµРјС‹/СЃС‚РёР»СЏ
     if(kind) {
         if(m == WM_THEMECHANGED || m == WM_STYLECHANGED || 
            m == WM_SETTINGCHANGE || m == WM_FONTCHANGE) {
@@ -1608,7 +1608,7 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
             return ret;
         }
 
-        // Win9x: ListView may reset font on show / Win9x: ListView может сбросить шрифт при показе
+        // Win9x: ListView may reset font on show / Win9x: ListView РјРѕР¶РµС‚ СЃР±СЂРѕСЃРёС‚СЊ С€СЂРёС„С‚ РїСЂРё РїРѕРєР°Р·Рµ
         if(g_is9x && kind == CTRL_LV && m == WM_SHOWWINDOW && w) {
             LRESULT ret = CallWindowProcA(old, h, m, w, l);
             if(!GetPropA(h, PROP_LV_IP)) {
@@ -1617,7 +1617,7 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
             return ret;
         }
 
-        // Lazy font application on first paint / Отложенное применение шрифта при первой отрисовке
+        // Lazy font application on first paint / РћС‚Р»РѕР¶РµРЅРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ С€СЂРёС„С‚Р° РїСЂРё РїРµСЂРІРѕР№ РѕС‚СЂРёСЃРѕРІРєРµ
         if(m == WM_PAINT) {
             const char* prop = (kind == CTRL_TV) ? PROP_TV_IP : PROP_LV_WP;
             if(!GetPropA(h, prop)) {
@@ -1633,7 +1633,7 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
         }
     }
 
-    // Cleanup on destroy / Очистка при уничтожении
+    // Cleanup on destroy / РћС‡РёСЃС‚РєР° РїСЂРё СѓРЅРёС‡С‚РѕР¶РµРЅРёРё
     if(m == WM_NCDESTROY) {
         SetWindowLongA(h, GWL_WNDPROC, (LONG)old);
         RemovePropA(h, PROP_OLD);
@@ -1651,12 +1651,12 @@ static LRESULT CALLBACK Subclass(HWND h, UINT m, WPARAM w, LPARAM l) {
 /*******************************************************************************
  * EnumWnd
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * EnumChildWindows callback. Subclasses relevant controls and applies initial
  * font replacement.
  * 
- * Функция обратного вызова EnumChildWindows. Субклассирует релевантные контролы
- * и применяет начальную замену шрифта.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° EnumChildWindows. РЎСѓР±РєР»Р°СЃСЃРёСЂСѓРµС‚ СЂРµР»РµРІР°РЅС‚РЅС‹Рµ РєРѕРЅС‚СЂРѕР»С‹
+ * Рё РїСЂРёРјРµРЅСЏРµС‚ РЅР°С‡Р°Р»СЊРЅСѓСЋ Р·Р°РјРµРЅСѓ С€СЂРёС„С‚Р°.
  ******************************************************************************/
 static BOOL CALLBACK EnumWnd(HWND h, LPARAM l) {
     if(!IsWindowInThisProcess(h) || IsFileDlg(h)) return TRUE;
@@ -1664,45 +1664,45 @@ static BOOL CALLBACK EnumWnd(HWND h, LPARAM l) {
     char c[64]; 
     GetClassNameA(h, c, 63);
 
-    // Win9x: parent-subclass containers / Win9x: субклассировать родительские контейнеры
+    // Win9x: parent-subclass containers / Win9x: СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ СЂРѕРґРёС‚РµР»СЊСЃРєРёРµ РєРѕРЅС‚РµР№РЅРµСЂС‹
     if(g_is9x && GetWinCtx(h) == CTX_LIB) {
         if(!IsStdCtrlClassA_(c)) {
             EnsureParentSubclass_9x(h);
         }
     }
 
-    // Determine control kind / Определить вид контрола
+    // Determine control kind / РћРїСЂРµРґРµР»РёС‚СЊ РІРёРґ РєРѕРЅС‚СЂРѕР»Р°
     BYTE kind = CTRL_NONE;
     if(!lstrcmpiA(c,"SysTreeView32")) kind = CTRL_TV;
     else if(!lstrcmpiA(c,"SysListView32")) kind = CTRL_LV;
 
-    // Skip irrelevant controls / Пропустить нерелевантные контролы
+    // Skip irrelevant controls / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РЅРµСЂРµР»РµРІР°РЅС‚РЅС‹Рµ РєРѕРЅС‚СЂРѕР»С‹
     if(!lstrcmpiA(c,"ListBox") && !lstrcmpiA(c,"Button") && 
        !lstrcmpiA(c,"Static") && !lstrcmpiA(c,"Edit") && !kind)
         return TRUE;
 
-    // Install subclass if not already done / Установить субкласс, если ещё не сделано
+    // Install subclass if not already done / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃСѓР±РєР»Р°СЃСЃ, РµСЃР»Рё РµС‰С‘ РЅРµ СЃРґРµР»Р°РЅРѕ
     if(!GetPropA(h, PROP_TAG)) {
         if(l != ENUM_CTX_CONFIRMED && !GetWinCtx(h)) return TRUE;
 
         WNDPROC prev = (WNDPROC)SetWindowLongA(h, GWL_WNDPROC, (LONG)Subclass);
         if(prev) {
-            // Atomic subclass installation / Атомарная установка субкласса
+            // Atomic subclass installation / РђС‚РѕРјР°СЂРЅР°СЏ СѓСЃС‚Р°РЅРѕРІРєР° СЃСѓР±РєР»Р°СЃСЃР°
             if(!SetPropA(h, PROP_OLD, (HANDLE)prev) || 
                !SetPropA(h, PROP_TAG, (HANDLE)1)) {
-                // Rollback on failure / Откатить при неудаче
+                // Rollback on failure / РћС‚РєР°С‚РёС‚СЊ РїСЂРё РЅРµСѓРґР°С‡Рµ
                 SetWindowLongA(h, GWL_WNDPROC, (LONG)prev);
                 RemovePropA(h, PROP_OLD);
                 RemovePropA(h, PROP_TAG);
                 return TRUE;
             }
 
-            // Trigger font replacement / Запустить замену шрифта
+            // Trigger font replacement / Р—Р°РїСѓСЃС‚РёС‚СЊ Р·Р°РјРµРЅСѓ С€СЂРёС„С‚Р°
             HFONT f = (HFONT)SendMessageA(h, WM_GETFONT, 0, 0);
             if(!f) f = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
             SendMessageA(h, WM_SETFONT, (WPARAM)f, TRUE);
 
-            // Apply special control fixes / Применить исправления для специальных контролов
+            // Apply special control fixes / РџСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РґР»СЏ СЃРїРµС†РёР°Р»СЊРЅС‹С… РєРѕРЅС‚СЂРѕР»РѕРІ
             if(kind == CTRL_TV) 
                 TreeView_AutoFixItemHeight(h);
             else if(kind == CTRL_LV) 
@@ -1714,16 +1714,16 @@ static BOOL CALLBACK EnumWnd(HWND h, LPARAM l) {
 
 /*******************************************************************************
  * APPLY AND REDRAW LOGIC
- * ЛОГИКА ПРИМЕНЕНИЯ И ПЕРЕРИСОВКИ
+ * Р›РћР“РРљРђ РџР РРњР•РќР•РќРРЇ Р РџР•Р Р•Р РРЎРћР’РљР
  ******************************************************************************/
 
 /*******************************************************************************
  * EnumFixProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * EnumChildWindows callback to fix special controls (TreeView/ListView).
  * 
- * Функция обратного вызова EnumChildWindows для исправления специальных контролов.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° EnumChildWindows РґР»СЏ РёСЃРїСЂР°РІР»РµРЅРёСЏ СЃРїРµС†РёР°Р»СЊРЅС‹С… РєРѕРЅС‚СЂРѕР»РѕРІ.
  ******************************************************************************/
 static BOOL CALLBACK EnumFixProc(HWND h, LPARAM lParam) {
     BOOL force = (lParam != 0);
@@ -1738,12 +1738,12 @@ static BOOL CALLBACK EnumFixProc(HWND h, LPARAM lParam) {
 /*******************************************************************************
  * EnumFixListViewsOnlyProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Win9x periodic fix: Re-applies fonts to ListViews that may have been reset
  * during tab/page switches.
  * 
- * Периодическое исправление Win9x: Повторно применяет шрифты к ListView, которые
- * могли быть сброшены во время переключения вкладок/страниц.
+ * РџРµСЂРёРѕРґРёС‡РµСЃРєРѕРµ РёСЃРїСЂР°РІР»РµРЅРёРµ Win9x: РџРѕРІС‚РѕСЂРЅРѕ РїСЂРёРјРµРЅСЏРµС‚ С€СЂРёС„С‚С‹ Рє ListView, РєРѕС‚РѕСЂС‹Рµ
+ * РјРѕРіР»Рё Р±С‹С‚СЊ СЃР±СЂРѕС€РµРЅС‹ РІРѕ РІСЂРµРјСЏ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РІРєР»Р°РґРѕРє/СЃС‚СЂР°РЅРёС†.
  ******************************************************************************/
 static BOOL CALLBACK EnumFixListViewsOnlyProc(HWND h, LPARAM lp) {
     (void)lp;
@@ -1756,12 +1756,12 @@ static BOOL CALLBACK EnumFixListViewsOnlyProc(HWND h, LPARAM lp) {
 /*******************************************************************************
  * Win9x_PollFix_ListViewsInMediaLibrary
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Win9x only: Periodically checks and fixes ListView fonts in Media Library.
  * Called from timer to catch font resets that occur during tab/page switches.
  * 
- * Только Win9x: Периодически проверяет и исправляет шрифты ListView в библиотеке.
- * Вызывается из таймера для перехвата сбросов шрифтов, происходящих при переключении вкладок/страниц.
+ * РўРѕР»СЊРєРѕ Win9x: РџРµСЂРёРѕРґРёС‡РµСЃРєРё РїСЂРѕРІРµСЂСЏРµС‚ Рё РёСЃРїСЂР°РІР»СЏРµС‚ С€СЂРёС„С‚С‹ ListView РІ Р±РёР±Р»РёРѕС‚РµРєРµ.
+ * Р’С‹Р·С‹РІР°РµС‚СЃСЏ РёР· С‚Р°Р№РјРµСЂР° РґР»СЏ РїРµСЂРµС…РІР°С‚Р° СЃР±СЂРѕСЃРѕРІ С€СЂРёС„С‚РѕРІ, РїСЂРѕРёСЃС…РѕРґСЏС‰РёС… РїСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё РІРєР»Р°РґРѕРє/СЃС‚СЂР°РЅРёС†.
  ******************************************************************************/
 static void Win9x_PollFix_ListViewsInMediaLibrary(void) {
     if(InterlockedExchangeAdd(&g_shuttingDown, 0) != 0) return;
@@ -1781,10 +1781,10 @@ static void Win9x_PollFix_ListViewsInMediaLibrary(void) {
 /*******************************************************************************
  * ForceRecalcAllSpecialControls
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Forces recalculation of all TreeView/ListView controls in Winamp windows.
  * 
- * Принудительно пересчитывает все контролы TreeView/ListView в окнах Winamp.
+ * РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµСЃС‡РёС‚С‹РІР°РµС‚ РІСЃРµ РєРѕРЅС‚СЂРѕР»С‹ TreeView/ListView РІ РѕРєРЅР°С… Winamp.
  ******************************************************************************/
 static void ForceRecalcAllSpecialControls(BOOL forceListView) {
     HWND top = GetTopWindow(NULL);
@@ -1801,10 +1801,10 @@ static void ForceRecalcAllSpecialControls(BOOL forceListView) {
 /*******************************************************************************
  * ScanWindowsOnce
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Scans all windows once to ensure subclassing without causing redraw storms.
  * 
- * Сканирует все окна один раз для обеспечения субклассинга без вызывания штормов перерисовки.
+ * РЎРєР°РЅРёСЂСѓРµС‚ РІСЃРµ РѕРєРЅР° РѕРґРёРЅ СЂР°Р· РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ СЃСѓР±РєР»Р°СЃСЃРёРЅРіР° Р±РµР· РІС‹Р·С‹РІР°РЅРёСЏ С€С‚РѕСЂРјРѕРІ РїРµСЂРµСЂРёСЃРѕРІРєРё.
  ******************************************************************************/
 static void ScanWindowsOnce() {
     HWND h = GetTopWindow(NULL);
@@ -1812,17 +1812,17 @@ static void ScanWindowsOnce() {
         if(IsWindowInThisProcess(h)) {
             BYTE c = GetWinCtx(h);
             if(c) {
-                // Win9x parent subclass / Win9x субкласс родителя
+                // Win9x parent subclass / Win9x СЃСѓР±РєР»Р°СЃСЃ СЂРѕРґРёС‚РµР»СЏ
                 if(g_is9x && c == CTX_LIB) 
                     EnsureParentSubclass_9x(h);
                 
-                // IAT hook module / IAT hook модуля
+                // IAT hook module / IAT hook РјРѕРґСѓР»СЏ
                 if(g_allowIatHook) {
                     HMODULE m = (HMODULE)GetWindowLongA(h, GWL_HINSTANCE);
                     if(m) HookMod(m);
                 }
                 
-                // Subclass children / Субклассировать детей
+                // Subclass children / РЎСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ РґРµС‚РµР№
                 EnumChildWindows(h, EnumWnd, ENUM_CTX_CONFIRMED);
             }
         }
@@ -1833,10 +1833,10 @@ static void ScanWindowsOnce() {
 /*******************************************************************************
  * KickRedraw_Minimal
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Triggers minimal redraw of Winamp windows. Uses RDW_NOERASE to avoid flicker.
  * 
- * Запускает минимальную перерисовку окон Winamp. Использует RDW_NOERASE для избежания мигания.
+ * Р—Р°РїСѓСЃРєР°РµС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РїРµСЂРµСЂРёСЃРѕРІРєСѓ РѕРєРѕРЅ Winamp. РСЃРїРѕР»СЊР·СѓРµС‚ RDW_NOERASE РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РјРёРіР°РЅРёСЏ.
  ******************************************************************************/
 static void KickRedraw_Minimal() {
     HWND h = GetTopWindow(NULL);
@@ -1855,23 +1855,23 @@ static void KickRedraw_Minimal() {
 /*******************************************************************************
  * Apply
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Main apply function. Updates skin data, detects changes, and triggers
  * necessary updates. This is called on skin changes and periodically.
  * 
- * Основная функция применения. Обновляет данные скина, обнаруживает изменения
- * и запускает необходимые обновления. Вызывается при изменениях скина и периодически.
+ * РћСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РїСЂРёРјРµРЅРµРЅРёСЏ. РћР±РЅРѕРІР»СЏРµС‚ РґР°РЅРЅС‹Рµ СЃРєРёРЅР°, РѕР±РЅР°СЂСѓР¶РёРІР°РµС‚ РёР·РјРµРЅРµРЅРёСЏ
+ * Рё Р·Р°РїСѓСЃРєР°РµС‚ РЅРµРѕР±С…РѕРґРёРјС‹Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёСЏС… СЃРєРёРЅР° Рё РїРµСЂРёРѕРґРёС‡РµСЃРєРё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * forceListViewRelayout - Force ListView relayout even if stamp unchanged
- *                         Принудительно перестроить ListView даже если отпечаток не изменился
+ *                         РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµСЃС‚СЂРѕРёС‚СЊ ListView РґР°Р¶Рµ РµСЃР»Рё РѕС‚РїРµС‡Р°С‚РѕРє РЅРµ РёР·РјРµРЅРёР»СЃСЏ
  ******************************************************************************/
 static void Apply(BOOL forceListViewRelayout) {
     if(InterlockedExchangeAdd(&g_shuttingDown, 0) != 0) return;
 
     UpdateSkinData();
 
-    // Get current parameters / Получить текущие параметры
+    // Get current parameters / РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёРµ РїР°СЂР°РјРµС‚СЂС‹
     char f[LF_FACESIZE]; 
     int h, cs;
     GetParams(CTX_LIB, f, &h, &cs);
@@ -1880,7 +1880,7 @@ static void Apply(BOOL forceListViewRelayout) {
     DWORD sh = g_skin_hash; 
     Unlock();
     
-    // Create combined stamp / Создать объединённый отпечаток
+    // Create combined stamp / РЎРѕР·РґР°С‚СЊ РѕР±СЉРµРґРёРЅС‘РЅРЅС‹Р№ РѕС‚РїРµС‡Р°С‚РѕРє
     DWORD s = Hash(f) ^ (DWORD)h ^ ((DWORD)cs<<24) ^ Hash(g_skin_dir) ^ ((sh<<1)|(sh>>31));
 
     BOOL diff = (s != g_stamp);
@@ -1905,31 +1905,31 @@ static void Apply(BOOL forceListViewRelayout) {
 
 /*******************************************************************************
  * TIMER MANAGEMENT
- * УПРАВЛЕНИЕ ТАЙМЕРАМИ
+ * РЈРџР РђР’Р›Р•РќРР• РўРђР™РњР•Р РђРњР
  ******************************************************************************/
 
-// Timer IDs / ID таймеров
-#define TMR_MLF_DEBOUNCE   0x4D4C  // Debounce timer for updates / Антидребезговый таймер для обновлений
-#define TMR_MLF_STARTSCAN  0x4D4D  // Short follow-up scan timer / Короткий таймер последующего сканирования
-#define TMR_MLF_SKINPOLL   0x4D4E  // Skin polling timer (Win9x) / Таймер опроса скина (Win9x)
+// Timer IDs / ID С‚Р°Р№РјРµСЂРѕРІ
+#define TMR_MLF_DEBOUNCE   0x4D4C  // Debounce timer for updates / РђРЅС‚РёРґСЂРµР±РµР·РіРѕРІС‹Р№ С‚Р°Р№РјРµСЂ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёР№
+#define TMR_MLF_STARTSCAN  0x4D4D  // Short follow-up scan timer / РљРѕСЂРѕС‚РєРёР№ С‚Р°Р№РјРµСЂ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ
+#define TMR_MLF_SKINPOLL   0x4D4E  // Skin polling timer (Win9x) / РўР°Р№РјРµСЂ РѕРїСЂРѕСЃР° СЃРєРёРЅР° (Win9x)
 
-static int g_followTicks = 0;  // Follow-up scan ticks remaining / Оставшиеся тики последующего сканирования
-static volatile LONG g_forceListViewOnce = 0;  // One-time ListView force flag / Одноразовый флаг принудительного ListView
+static int g_followTicks = 0;  // Follow-up scan ticks remaining / РћСЃС‚Р°РІС€РёРµСЃСЏ С‚РёРєРё РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ
+static volatile LONG g_forceListViewOnce = 0;  // One-time ListView force flag / РћРґРЅРѕСЂР°Р·РѕРІС‹Р№ С„Р»Р°Рі РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ ListView
 
 /*******************************************************************************
  * StartScan_Arm
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Arms the short follow-up scan timer. Used to catch late-created controls
  * after skin changes.
  * 
- * Взводит короткий таймер последующего сканирования. Используется для перехвата
- * поздно созданных контролов после изменений скина.
+ * Р’Р·РІРѕРґРёС‚ РєРѕСЂРѕС‚РєРёР№ С‚Р°Р№РјРµСЂ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРµСЂРµС…РІР°С‚Р°
+ * РїРѕР·РґРЅРѕ СЃРѕР·РґР°РЅРЅС‹С… РєРѕРЅС‚СЂРѕР»РѕРІ РїРѕСЃР»Рµ РёР·РјРµРЅРµРЅРёР№ СЃРєРёРЅР°.
  ******************************************************************************/
 static void StartScan_Arm() {
     if(!g_hWA) return;
     // Short window: 8 * 250ms = 2s (instead of 10s storm)
-    // Короткое окно: 8 * 250мс = 2с (вместо шторма 10с)
+    // РљРѕСЂРѕС‚РєРѕРµ РѕРєРЅРѕ: 8 * 250РјСЃ = 2СЃ (РІРјРµСЃС‚Рѕ С€С‚РѕСЂРјР° 10СЃ)
     g_followTicks = g_is9x ? 8 : 1;
     SetTimer(g_hWA, TMR_MLF_STARTSCAN, 250, NULL);
 }
@@ -1937,12 +1937,12 @@ static void StartScan_Arm() {
 /*******************************************************************************
  * ScheduleUpdate
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Schedules a debounced update. Kills existing timer and starts new one.
  * Multiple rapid changes will be batched into single update.
  * 
- * Планирует антидребезговое обновление. Убивает существующий таймер и запускает новый.
- * Множественные быстрые изменения будут пакетированы в одно обновление.
+ * РџР»Р°РЅРёСЂСѓРµС‚ Р°РЅС‚РёРґСЂРµР±РµР·РіРѕРІРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ. РЈР±РёРІР°РµС‚ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ С‚Р°Р№РјРµСЂ Рё Р·Р°РїСѓСЃРєР°РµС‚ РЅРѕРІС‹Р№.
+ * РњРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ Р±С‹СЃС‚СЂС‹Рµ РёР·РјРµРЅРµРЅРёСЏ Р±СѓРґСѓС‚ РїР°РєРµС‚РёСЂРѕРІР°РЅС‹ РІ РѕРґРЅРѕ РѕР±РЅРѕРІР»РµРЅРёРµ.
  ******************************************************************************/
 static void ScheduleUpdate() {
     if(!g_hWA) return;
@@ -1953,17 +1953,17 @@ static void ScheduleUpdate() {
 /*******************************************************************************
  * QuerySkinStampFast
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Quickly queries current skin stamp without full UpdateSkinData overhead.
  * Used by Win9x polling timer to detect skin changes.
  * 
- * Быстро запрашивает текущий отпечаток скина без полных накладных расходов UpdateSkinData.
- * Используется таймером опроса Win9x для обнаружения изменений скина.
+ * Р‘С‹СЃС‚СЂРѕ Р·Р°РїСЂР°С€РёРІР°РµС‚ С‚РµРєСѓС‰РёР№ РѕС‚РїРµС‡Р°С‚РѕРє СЃРєРёРЅР° Р±РµР· РїРѕР»РЅС‹С… РЅР°РєР»Р°РґРЅС‹С… СЂР°СЃС…РѕРґРѕРІ UpdateSkinData.
+ * РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С‚Р°Р№РјРµСЂРѕРј РѕРїСЂРѕСЃР° Win9x РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РёР·РјРµРЅРµРЅРёР№ СЃРєРёРЅР°.
  ******************************************************************************/
 static DWORD QuerySkinStampFast() {
     if(!g_hWA) return 0;
 
-    // Get skin directory / Получить каталог скина
+    // Get skin directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі СЃРєРёРЅР°
     char dir[MAX_PATH] = {0};
     __try { 
         SendMessageA(g_hWA, WM_WA_IPC, (WPARAM)dir, IPC_GETSKIN); 
@@ -1972,7 +1972,7 @@ static DWORD QuerySkinStampFast() {
     }
     DWORD hDir = Hash(dir);
 
-    // Get font parameters / Получить параметры шрифта
+    // Get font parameters / РџРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚Р°
     char face[LF_FACESIZE] = {0};
     int cs = 0, ht = 0;
 
@@ -1997,35 +1997,35 @@ static DWORD QuerySkinStampFast() {
 
 /*******************************************************************************
  * WINAMP WINDOW PROCEDURE
- * ПРОЦЕДУРА ОКНА WINAMP
+ * РџР РћР¦Р•Р”РЈР Рђ РћРљРќРђ WINAMP
  ******************************************************************************/
 
 /*******************************************************************************
  * WAProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Subclassed Winamp main window procedure. Handles:
  * - Timers (debounce, follow-up scan, skin polling)
  * - Skin change events
  * - Theme/font/display changes
  * 
- * Процедура субклассированного главного окна Winamp. Обрабатывает:
- * - Таймеры (антидребезг, последующее сканирование, опрос скина)
- * - События смены скина
- * - Изменения темы/шрифта/дисплея
+ * РџСЂРѕС†РµРґСѓСЂР° СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚:
+ * - РўР°Р№РјРµСЂС‹ (Р°РЅС‚РёРґСЂРµР±РµР·Рі, РїРѕСЃР»РµРґСѓСЋС‰РµРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ, РѕРїСЂРѕСЃ СЃРєРёРЅР°)
+ * - РЎРѕР±С‹С‚РёСЏ СЃРјРµРЅС‹ СЃРєРёРЅР°
+ * - РР·РјРµРЅРµРЅРёСЏ С‚РµРјС‹/С€СЂРёС„С‚Р°/РґРёСЃРїР»РµСЏ
  ******************************************************************************/
 static LRESULT CALLBACK WAProc(HWND h, UINT m, WPARAM w, LPARAM l) {
     if(m == WM_TIMER) {
-        // Debounce timer / Антидребезговый таймер
+        // Debounce timer / РђРЅС‚РёРґСЂРµР±РµР·РіРѕРІС‹Р№ С‚Р°Р№РјРµСЂ
         if(w == TMR_MLF_DEBOUNCE) {
             KillTimer(h, TMR_MLF_DEBOUNCE);
             BOOL forceLV = (InterlockedExchange(&g_forceListViewOnce, 0) != 0);
             Apply(forceLV);
-            StartScan_Arm();  // Short follow-up / Короткое последующее сканирование
+            StartScan_Arm();  // Short follow-up / РљРѕСЂРѕС‚РєРѕРµ РїРѕСЃР»РµРґСѓСЋС‰РµРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ
             return 0;
         }
         
-        // Follow-up scan timer / Таймер последующего сканирования
+        // Follow-up scan timer / РўР°Р№РјРµСЂ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ
         if(w == TMR_MLF_STARTSCAN) {
             if(g_followTicks <= 0) {
                 KillTimer(h, TMR_MLF_STARTSCAN);
@@ -2034,23 +2034,23 @@ static LRESULT CALLBACK WAProc(HWND h, UINT m, WPARAM w, LPARAM l) {
             g_followTicks--;
 
             // No redraw storms: only rescan+recalc
-            // Никаких штормов перерисовки: только пересканировать+пересчитать
+            // РќРёРєР°РєРёС… С€С‚РѕСЂРјРѕРІ РїРµСЂРµСЂРёСЃРѕРІРєРё: С‚РѕР»СЊРєРѕ РїРµСЂРµСЃРєР°РЅРёСЂРѕРІР°С‚СЊ+РїРµСЂРµСЃС‡РёС‚Р°С‚СЊ
             ScanWindowsOnce();
             ForceRecalcAllSpecialControls(FALSE);
             return 0;
         }
         
-        // Skin polling timer (Win9x only) / Таймер опроса скина (только Win9x)
+        // Skin polling timer (Win9x only) / РўР°Р№РјРµСЂ РѕРїСЂРѕСЃР° СЃРєРёРЅР° (С‚РѕР»СЊРєРѕ Win9x)
         if(w == TMR_MLF_SKINPOLL) {
             DWORD s = QuerySkinStampFast();
             if(s && s != g_skinPollStamp) {
                 g_skinPollStamp = s;
-                // One-time stronger ListView refresh / Одноразовое более сильное обновление ListView
+                // One-time stronger ListView refresh / РћРґРЅРѕСЂР°Р·РѕРІРѕРµ Р±РѕР»РµРµ СЃРёР»СЊРЅРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ ListView
                 InterlockedExchange(&g_forceListViewOnce, 1);
                 ScheduleUpdate();
             }
 
-            // Win9x: periodic ListView font fix / Win9x: периодическое исправление шрифта ListView
+            // Win9x: periodic ListView font fix / Win9x: РїРµСЂРёРѕРґРёС‡РµСЃРєРѕРµ РёСЃРїСЂР°РІР»РµРЅРёРµ С€СЂРёС„С‚Р° ListView
             if(g_is9x) {
                 static DWORD s_last = 0;
                 DWORD now = GetTickCount();
@@ -2063,7 +2063,7 @@ static LRESULT CALLBACK WAProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         }
     }
 
-    // Skin change events / События смены скина
+    // Skin change events / РЎРѕР±С‹С‚РёСЏ СЃРјРµРЅС‹ СЃРєРёРЅР°
     if((m==WM_DISPLAYCHANGE && !w && !l) ||
        (m==WM_WA_IPC && l==IPC_SKIN_CHANGED) ||
        m==WM_SETTINGCHANGE || m==WM_FONTCHANGE || 
@@ -2075,7 +2075,7 @@ static LRESULT CALLBACK WAProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         StartScan_Arm();
     }
 
-    // Cleanup on destroy / Очистка при уничтожении
+    // Cleanup on destroy / РћС‡РёСЃС‚РєР° РїСЂРё СѓРЅРёС‡С‚РѕР¶РµРЅРёРё
     if(m == WM_NCDESTROY) {
         WNDPROC old = g_oldWA;
 
@@ -2095,16 +2095,16 @@ static LRESULT CALLBACK WAProc(HWND h, UINT m, WPARAM w, LPARAM l) {
 
 /*******************************************************************************
  * HELPER FUNCTIONS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 /*******************************************************************************
  * HookWindowChildren
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hooks IAT and enumerates children for a window.
  * 
- * Хукает IAT и перечисляет детей для окна.
+ * РҐСѓРєР°РµС‚ IAT Рё РїРµСЂРµС‡РёСЃР»СЏРµС‚ РґРµС‚РµР№ РґР»СЏ РѕРєРЅР°.
  ******************************************************************************/
 static void HookWindowChildren(HWND h) {
     if(!h) return;
@@ -2118,16 +2118,16 @@ static void HookWindowChildren(HWND h) {
 /*******************************************************************************
  * CBTProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * CBT hook procedure (NT only). Catches window creation to immediately
  * subclass Media Library and Playlist Editor windows and their controls.
  * 
- * Процедура CBT hook (только NT). Перехватывает создание окон для немедленного
- * субклассирования окон библиотеки и редактора плейлистов и их контролов.
+ * РџСЂРѕС†РµРґСѓСЂР° CBT hook (С‚РѕР»СЊРєРѕ NT). РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕР·РґР°РЅРёРµ РѕРєРѕРЅ РґР»СЏ РЅРµРјРµРґР»РµРЅРЅРѕРіРѕ
+ * СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°РЅРёСЏ РѕРєРѕРЅ Р±РёР±Р»РёРѕС‚РµРєРё Рё СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ Рё РёС… РєРѕРЅС‚СЂРѕР»РѕРІ.
  * 
- * NOT USED ON WIN9X / НЕ ИСПОЛЬЗУЕТСЯ НА WIN9X:
+ * NOT USED ON WIN9X / РќР• РРЎРџРћР›Р¬Р—РЈР•РўРЎРЇ РќРђ WIN9X:
  * CBT hooks cause crashes on exit on Win9x. Use parent subclassing instead.
- * CBT hooks вызывают краши при выходе на Win9x. Использовать субклассинг родителя вместо этого.
+ * CBT hooks РІС‹Р·С‹РІР°СЋС‚ РєСЂР°С€Рё РїСЂРё РІС‹С…РѕРґРµ РЅР° Win9x. РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃСѓР±РєР»Р°СЃСЃРёРЅРі СЂРѕРґРёС‚РµР»СЏ РІРјРµСЃС‚Рѕ СЌС‚РѕРіРѕ.
  ******************************************************************************/
 static LRESULT CALLBACK CBTProc(int n, WPARAM w, LPARAM l) {
     if(InterlockedExchangeAdd(&g_shuttingDown, 0) != 0) {
@@ -2141,7 +2141,7 @@ static LRESULT CALLBACK CBTProc(int n, WPARAM w, LPARAM l) {
         GetClassNameA(hw, c, 63);
 
         // Check for Media Library or Playlist Editor windows
-        // Проверить окна библиотеки или редактора плейлистов
+        // РџСЂРѕРІРµСЂРёС‚СЊ РѕРєРЅР° Р±РёР±Р»РёРѕС‚РµРєРё РёР»Рё СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
         if(!lstrcmpA(c,"Winamp Gen") || !lstrcmpA(c,"WinampLibrary") ||
            !lstrcmpA(c,"Winamp PE")  || !lstrcmpA(c,"WinampLibraryPE"))
         {
@@ -2149,7 +2149,7 @@ static LRESULT CALLBACK CBTProc(int n, WPARAM w, LPARAM l) {
         }
         else if(!lstrcmpiA(c, "SysTreeView32") || !lstrcmpiA(c, "SysListView32")) {
             // Immediately subclass and fix special controls
-            // Немедленно субклассировать и исправить специальные контролы
+            // РќРµРјРµРґР»РµРЅРЅРѕ СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ Рё РёСЃРїСЂР°РІРёС‚СЊ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ РєРѕРЅС‚СЂРѕР»С‹
             EnumWnd(hw, ENUM_CTX_CONFIRMED);
             if(!lstrcmpiA(c,"SysTreeView32")) 
                 TreeView_AutoFixItemHeight(hw);
@@ -2162,16 +2162,16 @@ static LRESULT CALLBACK CBTProc(int n, WPARAM w, LPARAM l) {
 
 /*******************************************************************************
  * INITIALIZATION AND CLEANUP
- * ИНИЦИАЛИЗАЦИЯ И ОЧИСТКА
+ * РРќРР¦РРђР›РР—РђР¦РРЇ Р РћР§РРЎРўРљРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * DetectOS
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Detects OS version and sets appropriate flags and defaults.
  * 
- * Определяет версию ОС и устанавливает соответствующие флаги и значения по умолчанию.
+ * РћРїСЂРµРґРµР»СЏРµС‚ РІРµСЂСЃРёСЋ РћРЎ Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ С„Р»Р°РіРё Рё Р·РЅР°С‡РµРЅРёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.
  ******************************************************************************/
 static void DetectOS() {
     OSVERSIONINFO os; 
@@ -2182,10 +2182,10 @@ static void DetectOS() {
     g_isNT = (os.dwPlatformId == VER_PLATFORM_WIN32_NT);
     g_is9x = (os.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 
-    // Win98: no cleartype, safe default / Win98: нет cleartype, безопасное значение по умолчанию
+    // Win98: no cleartype, safe default / Win98: РЅРµС‚ cleartype, Р±РµР·РѕРїР°СЃРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     g_forceQuality = g_is9x ? DEFAULT_QUALITY : CLEARTYPE_QUALITY;
 
-    // IAT hook settings / Настройки перехвата IAT
+    // IAT hook settings / РќР°СЃС‚СЂРѕР№РєРё РїРµСЂРµС…РІР°С‚Р° IAT
     if(g_isNT) 
         g_allowIatHook = (ENABLE_IAT_HOOK_ON_NT ? TRUE : FALSE);
     else if(g_is9x) 
@@ -2197,12 +2197,12 @@ static void DetectOS() {
 /*******************************************************************************
  * ML_SmoothFonts_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the module. Called once on DLL load.
  * 
- * Инициализирует модуль. Вызывается один раз при загрузке DLL.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РѕРґРёРЅ СЂР°Р· РїСЂРё Р·Р°РіСЂСѓР·РєРµ DLL.
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Detect OS version
  * 2. Initialize critical section
  * 3. Allocate TLS slot (if IAT hooking enabled)
@@ -2213,15 +2213,15 @@ static void DetectOS() {
  * 8. Initial apply and scan
  * 9. Start skin polling timer (Win9x only)
  * 
- * 1. Определить версию ОС
- * 2. Инициализировать критическую секцию
- * 3. Выделить слот TLS (если перехват IAT включён)
- * 4. Найти и субклассировать главное окно Winamp
- * 5. Установить CBT hook (только NT)
- * 6. Обновить данные скина
- * 7. Хукнуть главный исполняемый файл
- * 8. Начальное применение и сканирование
- * 9. Запустить таймер опроса скина (только Win9x)
+ * 1. РћРїСЂРµРґРµР»РёС‚СЊ РІРµСЂСЃРёСЋ РћРЎ
+ * 2. РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
+ * 3. Р’С‹РґРµР»РёС‚СЊ СЃР»РѕС‚ TLS (РµСЃР»Рё РїРµСЂРµС…РІР°С‚ IAT РІРєР»СЋС‡С‘РЅ)
+ * 4. РќР°Р№С‚Рё Рё СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ Winamp
+ * 5. РЈСЃС‚Р°РЅРѕРІРёС‚СЊ CBT hook (С‚РѕР»СЊРєРѕ NT)
+ * 6. РћР±РЅРѕРІРёС‚СЊ РґР°РЅРЅС‹Рµ СЃРєРёРЅР°
+ * 7. РҐСѓРєРЅСѓС‚СЊ РіР»Р°РІРЅС‹Р№ РёСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р»
+ * 8. РќР°С‡Р°Р»СЊРЅРѕРµ РїСЂРёРјРµРЅРµРЅРёРµ Рё СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ
+ * 9. Р—Р°РїСѓСЃС‚РёС‚СЊ С‚Р°Р№РјРµСЂ РѕРїСЂРѕСЃР° СЃРєРёРЅР° (С‚РѕР»СЊРєРѕ Win9x)
  ******************************************************************************/
 extern "C" void ML_SmoothFonts_Init() {
     if(g_init) return;
@@ -2229,7 +2229,7 @@ extern "C" void ML_SmoothFonts_Init() {
     DetectOS();
     g_pid = GetCurrentProcessId();
 
-    // Initialize critical section / Инициализировать критическую секцию
+    // Initialize critical section / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
     __try { 
         InitializeCriticalSection(&g_cs); 
         g_cs_inited = TRUE; 
@@ -2238,27 +2238,27 @@ extern "C" void ML_SmoothFonts_Init() {
         return; 
     }
 
-    // Allocate TLS slot / Выделить слот TLS
+    // Allocate TLS slot / Р’С‹РґРµР»РёС‚СЊ СЃР»РѕС‚ TLS
     if(g_allowIatHook) 
         g_tls_ctx = TlsAlloc();
     else 
         g_tls_ctx = 0xFFFFFFFF;
 
-    // Find Winamp window / Найти окно Winamp
+    // Find Winamp window / РќР°Р№С‚Рё РѕРєРЅРѕ Winamp
     g_hWA = FindWindowA("Winamp v1.x", NULL);
     if(g_hWA) {
         DWORD p=0; 
         GetWindowThreadProcessId(g_hWA, &p);
         if(p == g_pid) {
-            // Subclass Winamp window / Субклассировать окно Winamp
+            // Subclass Winamp window / РЎСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°С‚СЊ РѕРєРЅРѕ Winamp
             g_oldWA = (WNDPROC)SetWindowLongA(g_hWA, GWL_WNDPROC, (LONG)WAProc);
 
-            // Install CBT hook (NT only) / Установить CBT hook (только NT)
+            // Install CBT hook (NT only) / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ CBT hook (С‚РѕР»СЊРєРѕ NT)
             if(g_isNT) {
                 g_hkCBT = SetWindowsHookExA(WH_CBT, CBTProc, HINST_THIS, 
                                            GetWindowThreadProcessId(g_hWA, NULL));
             } else {
-                g_hkCBT = 0;  // Win9x: no CBT hook / Win9x: нет CBT hook
+                g_hkCBT = 0;  // Win9x: no CBT hook / Win9x: РЅРµС‚ CBT hook
             }
         }
     }
@@ -2268,11 +2268,11 @@ extern "C" void ML_SmoothFonts_Init() {
         HookMod(GetModuleHandle(NULL));
 
     // Apply now (no storm), then short follow-up scan
-    // Применить сейчас (без шторма), затем короткое последующее сканирование
+    // РџСЂРёРјРµРЅРёС‚СЊ СЃРµР№С‡Р°СЃ (Р±РµР· С€С‚РѕСЂРјР°), Р·Р°С‚РµРј РєРѕСЂРѕС‚РєРѕРµ РїРѕСЃР»РµРґСѓСЋС‰РµРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ
     Apply(TRUE);
     StartScan_Arm();
 
-    // Win9x: skin polling timer / Win9x: таймер опроса скина
+    // Win9x: skin polling timer / Win9x: С‚Р°Р№РјРµСЂ РѕРїСЂРѕСЃР° СЃРєРёРЅР°
     if(g_is9x && g_hWA) {
         g_skinPollStamp = QuerySkinStampFast();
         SetTimer(g_hWA, TMR_MLF_SKINPOLL, 100, NULL);
@@ -2284,55 +2284,55 @@ extern "C" void ML_SmoothFonts_Init() {
 /*******************************************************************************
  * ML_SmoothFonts_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the module. Called on DLL unload.
  * 
- * Очищает модуль. Вызывается при выгрузке DLL.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РІС‹РіСЂСѓР·РєРµ DLL.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Sets shutdown flag first to prevent new operations during cleanup.
- * Устанавливает флаг завершения сначала для предотвращения новых операций во время очистки.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С„Р»Р°Рі Р·Р°РІРµСЂС€РµРЅРёСЏ СЃРЅР°С‡Р°Р»Р° РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РЅРѕРІС‹С… РѕРїРµСЂР°С†РёР№ РІРѕ РІСЂРµРјСЏ РѕС‡РёСЃС‚РєРё.
  ******************************************************************************/
 extern "C" void ML_SmoothFonts_Quit() {
     if(!g_init) return;
 
-    // Signal shutdown / Сигнализировать завершение
+    // Signal shutdown / РЎРёРіРЅР°Р»РёР·РёСЂРѕРІР°С‚СЊ Р·Р°РІРµСЂС€РµРЅРёРµ
     InterlockedExchange(&g_shuttingDown, 1);
 
-    // Kill timers / Убить таймеры
+    // Kill timers / РЈР±РёС‚СЊ С‚Р°Р№РјРµСЂС‹
     if(g_hWA) {
         KillTimer(g_hWA, TMR_MLF_DEBOUNCE);
         KillTimer(g_hWA, TMR_MLF_STARTSCAN);
         KillTimer(g_hWA, TMR_MLF_SKINPOLL);
     }
 
-    // Unhook / Снять хук
+    // Unhook / РЎРЅСЏС‚СЊ С…СѓРє
     if(g_hkCBT) { 
         UnhookWindowsHookEx(g_hkCBT); 
         g_hkCBT = 0; 
     }
 
-    // Unsubclass Winamp window / Снять субкласс окна Winamp
+    // Unsubclass Winamp window / РЎРЅСЏС‚СЊ СЃСѓР±РєР»Р°СЃСЃ РѕРєРЅР° Winamp
     if(g_hWA && g_oldWA) {
         SetWindowLongA(g_hWA, GWL_WNDPROC, (LONG)g_oldWA);
         g_oldWA = 0;
         g_hWA = 0;
     }
 
-    // Delete all tracked fonts / Удалить все отслеживаемые шрифты
+    // Delete all tracked fonts / РЈРґР°Р»РёС‚СЊ РІСЃРµ РѕС‚СЃР»РµР¶РёРІР°РµРјС‹Рµ С€СЂРёС„С‚С‹
     Lock();
     for(UINT i=0; i<g_tracked_cnt; i++) 
         DeleteObject(g_tracked[i]);
     g_tracked_cnt = 0;
     Unlock();
 
-    // Free TLS / Освободить TLS
+    // Free TLS / РћСЃРІРѕР±РѕРґРёС‚СЊ TLS
     if(g_tls_ctx != 0xFFFFFFFF) { 
         TlsFree(g_tls_ctx); 
         g_tls_ctx = 0xFFFFFFFF; 
     }
 
-    // Delete critical section / Удалить критическую секцию
+    // Delete critical section / РЈРґР°Р»РёС‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
     DeleteCriticalSection(&g_cs);
     g_cs_inited = FALSE;
     g_init = FALSE;
@@ -2340,10 +2340,10 @@ extern "C" void ML_SmoothFonts_Quit() {
 
 /*******************************************************************************
  * EXPORTED ALIASES
- * ЭКСПОРТИРУЕМЫЕ ПСЕВДОНИМЫ
+ * Р­РљРЎРџРћР РўРР РЈР•РњР«Р• РџРЎР•Р’Р”РћРќРРњР«
  * 
  * These are alternative entry points for compatibility.
- * Это альтернативные точки входа для совместимости.
+ * Р­С‚Рѕ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ С‚РѕС‡РєРё РІС…РѕРґР° РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё.
  ******************************************************************************/
 
 extern "C" void PeFontNoAA_Init()  { ML_SmoothFonts_Init(); }
