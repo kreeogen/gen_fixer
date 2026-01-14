@@ -71,16 +71,6 @@ CAPTION "Winamp"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
 
-/*
-// --- блок элементов диалога (.rc-стиль) ---
-    GROUPBOX      "Исправления",                -1,   5,  14, 221, 56, WS_CHILD | WS_VISIBLE
-    AUTOCHECKBOX  "Fix minimize bug on start",             2001, 15, 28, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Fix missing Preferences icon",         2002, 15, 40, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Cyrillic video font fix (restart needed)", 2007, 15, 52, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP  
-
-    GROUPBOX      "Addons",                 -1,   5,  14, 221, 66, WS_CHILD | WS_VISIBLE
-*/
-
 
     AUTOCHECKBOX  REST_ITEM,   2003, 10, 14, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
     AUTOCHECKBOX  MUTE,2004, 10, 26, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
@@ -89,50 +79,15 @@ BEGIN
 
     GROUPBOX      ADVSET, -1, 0, 0, 232, 231, WS_CHILD | WS_VISIBLE
 
-    // Битмап-статик (оставляем CONTROL, потому что нужен SS_BITMAP)
+
     CONTROL       "", 1001, "STATIC", SS_BITMAP | SS_CENTERIMAGE | WS_CHILD | WS_VISIBLE, 192, 194, 36, 32
 
-    // Правосторонний текст (SS_RIGHT -> RTEXT)
+
     RTEXT         LOGOINFO,
                   -1, 10, 206, 173, 20, WS_CHILD | WS_VISIBLE | WS_GROUP
 END
 
 
-
-
-/*
-
-// ---- RUSSIAN ----
-IDD_FIXER_CFG DIALOGEX 0, 0, 232, 231
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | WS_GROUP
-CAPTION "Winamp"
-FONT 8, "MS Sans Serif", 0, 0, 0x0
-BEGIN
-    // --- блок элементов диалога (.rc-стиль) ---
-/*    GROUPBOX      "Исправления",                -1,   5,  14, 221, 56, WS_CHILD | WS_VISIBLE
-    AUTOCHECKBOX  "Фикс бага со свёрнутым запуском",             2001, 15, 28, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Фикс исчезающей иконки в (этом) окне настроек",         2002, 15, 40, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Фикс кириллицы в полноэкранном видео (перезапуск)", 2007, 15, 52, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP  
-
-    GROUPBOX      "Дополнения",                 -1,   5,  14, 221, 66, WS_CHILD | WS_VISIBLE
-
-
-
-    AUTOCHECKBOX  "Добавить пункт 'Перезапуск' в контекстное меню",   2003, 10, 14, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Ctrl + Space = Выключение громкости (функция Mute)",2004, 10, 26, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Удалять обложки из списка кнопкой Delete (или ПКМ)",2005, 10, 38, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  "Контекстные меню вместо кнопок в плэйлисте",       2006, 10, 50, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-
-    GROUPBOX      "Расширенные настройки", -1, 0, 0, 232, 231, WS_CHILD | WS_VISIBLE
-
-    // Битмап-статик (оставляем CONTROL, потому что нужен SS_BITMAP)
-    CONTROL       "", 1001, "STATIC", SS_BITMAP | SS_CENTERIMAGE | WS_CHILD | WS_VISIBLE, 192, 194, 36, 32
-
-    // Правосторонний текст (SS_RIGHT -> RTEXT)
-    RTEXT         "Winamp Fixer 0.3 для Win98-Win11 \nkreeogen и IFkO для Пиратской Версии",
-                  -1, 10, 206, 173, 20, WS_CHILD | WS_VISIBLE | WS_GROUP
-END
-*/
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
