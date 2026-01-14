@@ -1,73 +1,73 @@
 /*******************************************************************************
  * WINAMP MEDIA LIBRARY ICONS TINT MODULE
- * МОДУЛЬ ТОНИРОВАНИЯ ИКОНОК МЕДИАТЕКИ WINAMP
+ * РњРћР”РЈР›Р¬ РўРћРќРР РћР’РђРќРРЇ РРљРћРќРћРљ РњР•Р”РРђРўР•РљР WINAMP
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Automatically tints TreeView icons in Winamp's Media Library to match the
  * current text color and background. This ensures icons remain visible and
  * aesthetically consistent across different color schemes, themes, and skins.
  * 
- * Автоматически тонирует иконки TreeView в библиотеке Winamp под текущий
- * цвет текста и фона. Гарантирует, что иконки остаются видимыми и эстетически
- * согласованными в различных цветовых схемах, темах и скинах.
+ * РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё С‚РѕРЅРёСЂСѓРµС‚ РёРєРѕРЅРєРё TreeView РІ Р±РёР±Р»РёРѕС‚РµРєРµ Winamp РїРѕРґ С‚РµРєСѓС‰РёР№
+ * С†РІРµС‚ С‚РµРєСЃС‚Р° Рё С„РѕРЅР°. Р“Р°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ РёРєРѕРЅРєРё РѕСЃС‚Р°СЋС‚СЃСЏ РІРёРґРёРјС‹РјРё Рё СЌСЃС‚РµС‚РёС‡РµСЃРєРё
+ * СЃРѕРіР»Р°СЃРѕРІР°РЅРЅС‹РјРё РІ СЂР°Р·Р»РёС‡РЅС‹С… С†РІРµС‚РѕРІС‹С… СЃС…РµРјР°С…, С‚РµРјР°С… Рё СЃРєРёРЅР°С….
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 
- * 1. ICON EXTRACTION / ИЗВЛЕЧЕНИЕ ИКОНОК:
+ * 1. ICON EXTRACTION / РР—Р’Р›Р•Р§Р•РќРР• РРљРћРќРћРљ:
  *    - Finds Media Library TreeView window
  *    - Creates baseline copies of all original icons
  *    - Stores them for repeated re-tinting
  * 
- *    - Находит окно TreeView библиотеки
- *    - Создаёт baseline копии всех оригинальных иконок
- *    - Хранит их для повторного перетонирования
+ *    - РќР°С…РѕРґРёС‚ РѕРєРЅРѕ TreeView Р±РёР±Р»РёРѕС‚РµРєРё
+ *    - РЎРѕР·РґР°С‘С‚ baseline РєРѕРїРёРё РІСЃРµС… РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… РёРєРѕРЅРѕРє
+ *    - РҐСЂР°РЅРёС‚ РёС… РґР»СЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РїРµСЂРµС‚РѕРЅРёСЂРѕРІР°РЅРёСЏ
  * 
- * 2. COLOR SAMPLING / СЭМПЛИРОВАНИЕ ЦВЕТА:
+ * 2. COLOR SAMPLING / РЎР­РњРџР›РР РћР’РђРќРР• Р¦Р’Р•РўРђ:
  *    - Reads TreeView text color (TVM_GETTEXTCOLOR)
  *    - Samples background color by rendering small area
  *    - Handles gradient/themed backgrounds correctly
  * 
- *    - Читает цвет текста TreeView (TVM_GETTEXTCOLOR)
- *    - Сэмплирует цвет фона отрисовкой маленькой области
- *    - Правильно обрабатывает градиентные/тематические фоны
+ *    - Р§РёС‚Р°РµС‚ С†РІРµС‚ С‚РµРєСЃС‚Р° TreeView (TVM_GETTEXTCOLOR)
+ *    - РЎСЌРјРїР»РёСЂСѓРµС‚ С†РІРµС‚ С„РѕРЅР° РѕС‚СЂРёСЃРѕРІРєРѕР№ РјР°Р»РµРЅСЊРєРѕР№ РѕР±Р»Р°СЃС‚Рё
+ *    - РџСЂР°РІРёР»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РіСЂР°РґРёРµРЅС‚РЅС‹Рµ/С‚РµРјР°С‚РёС‡РµСЃРєРёРµ С„РѕРЅС‹
  * 
- * 3. TINTING ALGORITHM / АЛГОРИТМ ТОНИРОВАНИЯ:
+ * 3. TINTING ALGORITHM / РђР›Р“РћР РРўРњ РўРћРќРР РћР’РђРќРРЇ:
  *    - Converts each icon to 32bpp DIB
  *    - Calculates pixel luminance (luma = 0.3R + 0.59G + 0.11B)
  *    - Blends between background and text color based on luma
  *    - Dark pixels > closer to background, light pixels > closer to text
  * 
- *    - Преобразует каждую иконку в 32bpp DIB
- *    - Вычисляет яркость пикселя (luma = 0.3R + 0.59G + 0.11B)
- *    - Смешивает между фоном и текстом на основе luma
- *    - Тёмные пиксели > ближе к фону, светлые пиксели > ближе к тексту
+ *    - РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РєР°Р¶РґСѓСЋ РёРєРѕРЅРєСѓ РІ 32bpp DIB
+ *    - Р’С‹С‡РёСЃР»СЏРµС‚ СЏСЂРєРѕСЃС‚СЊ РїРёРєСЃРµР»СЏ (luma = 0.3R + 0.59G + 0.11B)
+ *    - РЎРјРµС€РёРІР°РµС‚ РјРµР¶РґСѓ С„РѕРЅРѕРј Рё С‚РµРєСЃС‚РѕРј РЅР° РѕСЃРЅРѕРІРµ luma
+ *    - РўС‘РјРЅС‹Рµ РїРёРєСЃРµР»Рё > Р±Р»РёР¶Рµ Рє С„РѕРЅСѓ, СЃРІРµС‚Р»С‹Рµ РїРёРєСЃРµР»Рё > Р±Р»РёР¶Рµ Рє С‚РµРєСЃС‚Сѓ
  * 
- * 4. EVENT HANDLING / ОБРАБОТКА СОБЫТИЙ:
+ * 4. EVENT HANDLING / РћР‘Р РђР‘РћРўРљРђ РЎРћР‘Р«РўРР™:
  *    - Subclasses TreeView window
  *    - Monitors TVM_SETTEXTCOLOR, TVM_SETIMAGELIST
  *    - Responds to WM_SYSCOLORCHANGE, WM_THEMECHANGED
  *    - Re-tints automatically when colors change
  * 
- *    - Субклассирует окно TreeView
- *    - Отслеживает TVM_SETTEXTCOLOR, TVM_SETIMAGELIST
- *    - Реагирует на WM_SYSCOLORCHANGE, WM_THEMECHANGED
- *    - Автоматически перетонирует при изменении цветов
+ *    - РЎСѓР±РєР»Р°СЃСЃРёСЂСѓРµС‚ РѕРєРЅРѕ TreeView
+ *    - РћС‚СЃР»РµР¶РёРІР°РµС‚ TVM_SETTEXTCOLOR, TVM_SETIMAGELIST
+ *    - Р РµР°РіРёСЂСѓРµС‚ РЅР° WM_SYSCOLORCHANGE, WM_THEMECHANGED
+ *    - РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїРµСЂРµС‚РѕРЅРёСЂСѓРµС‚ РїСЂРё РёР·РјРµРЅРµРЅРёРё С†РІРµС‚РѕРІ
  * 
- * WHY BASELINE COPIES / ЗАЧЕМ BASELINE КОПИИ:
+ * WHY BASELINE COPIES / Р—РђР§Р•Рњ BASELINE РљРћРџРР:
  * Re-tinting already-tinted icons causes quality degradation. We store pristine
  * originals and always tint from baseline > final, never final > final.
  * 
- * Повторное тонирование уже тонированных иконок вызывает ухудшение качества.
- * Храним чистые оригиналы и всегда тонируем baseline > финал, никогда финал > финал.
+ * РџРѕРІС‚РѕСЂРЅРѕРµ С‚РѕРЅРёСЂРѕРІР°РЅРёРµ СѓР¶Рµ С‚РѕРЅРёСЂРѕРІР°РЅРЅС‹С… РёРєРѕРЅРѕРє РІС‹Р·С‹РІР°РµС‚ СѓС…СѓРґС€РµРЅРёРµ РєР°С‡РµСЃС‚РІР°.
+ * РҐСЂР°РЅРёРј С‡РёСЃС‚С‹Рµ РѕСЂРёРіРёРЅР°Р»С‹ Рё РІСЃРµРіРґР° С‚РѕРЅРёСЂСѓРµРј baseline > С„РёРЅР°Р», РЅРёРєРѕРіРґР° С„РёРЅР°Р» > С„РёРЅР°Р».
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - Win98: Basic DIB and icon operations only
  * - WinXP: Full theme support with WM_PRINTCLIENT
  * - Win11: Works with modern themes and high DPI
  * 
- * - Win98: Только базовые операции DIB и иконок
- * - WinXP: Полная поддержка тем с WM_PRINTCLIENT
- * - Win11: Работает с современными темами и высоким DPI
+ * - Win98: РўРѕР»СЊРєРѕ Р±Р°Р·РѕРІС‹Рµ РѕРїРµСЂР°С†РёРё DIB Рё РёРєРѕРЅРѕРє
+ * - WinXP: РџРѕР»РЅР°СЏ РїРѕРґРґРµСЂР¶РєР° С‚РµРј СЃ WM_PRINTCLIENT
+ * - Win11: Р Р°Р±РѕС‚Р°РµС‚ СЃ СЃРѕРІСЂРµРјРµРЅРЅС‹РјРё С‚РµРјР°РјРё Рё РІС‹СЃРѕРєРёРј DPI
  * 
  ******************************************************************************/
 
@@ -84,7 +84,7 @@
 
 /*******************************************************************************
  * EXPORTED FUNCTIONS
- * ЭКСПОРТИРУЕМЫЕ ФУНКЦИИ
+ * Р­РљРЎРџРћР РўРР РЈР•РњР«Р• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 extern "C" BOOL ML_IconsTint_Start(HINSTANCE hInst);
@@ -93,52 +93,52 @@ extern "C" void ML_IconsTint_ForceOnce(COLORREF forceColor);
 
 /*******************************************************************************
  * CONSTANT DEFINITIONS
- * ОПРЕДЕЛЕНИЯ КОНСТАНТ
+ * РћРџР Р•Р”Р•Р›Р•РќРРЇ РљРћРќРЎРўРђРќРў
  ******************************************************************************/
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 #endif
 
-// TreeView message constants / Константы сообщений TreeView
+// TreeView message constants / РљРѕРЅСЃС‚Р°РЅС‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ TreeView
 #ifndef TV_FIRST
 #define TV_FIRST 0x1100
 #endif
 #ifndef TVM_GETIMAGELIST
-#define TVM_GETIMAGELIST (TV_FIRST + 8)   // Get image list / Получить список изображений
+#define TVM_GETIMAGELIST (TV_FIRST + 8)   // Get image list / РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef TVM_SETIMAGELIST
-#define TVM_SETIMAGELIST (TV_FIRST + 9)   // Set image list / Установить список изображений
+#define TVM_SETIMAGELIST (TV_FIRST + 9)   // Set image list / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№
 #endif
 #ifndef TVM_GETTEXTCOLOR
-#define TVM_GETTEXTCOLOR (TV_FIRST + 32)  // Get text color / Получить цвет текста
+#define TVM_GETTEXTCOLOR (TV_FIRST + 32)  // Get text color / РџРѕР»СѓС‡РёС‚СЊ С†РІРµС‚ С‚РµРєСЃС‚Р°
 #endif
 #ifndef TVM_SETTEXTCOLOR
-#define TVM_SETTEXTCOLOR (TV_FIRST + 30)  // Set text color / Установить цвет текста
+#define TVM_SETTEXTCOLOR (TV_FIRST + 30)  // Set text color / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С†РІРµС‚ С‚РµРєСЃС‚Р°
 #endif
 #ifndef TVM_GETBKCOLOR
-#define TVM_GETBKCOLOR   (TV_FIRST + 31)  // Get background color / Получить цвет фона
+#define TVM_GETBKCOLOR   (TV_FIRST + 31)  // Get background color / РџРѕР»СѓС‡РёС‚СЊ С†РІРµС‚ С„РѕРЅР°
 #endif
 
-// System messages / Системные сообщения
+// System messages / РЎРёСЃС‚РµРјРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ
 #ifndef WM_THEMECHANGED
-#define WM_THEMECHANGED  0x031A  // Theme changed notification / Уведомление об изменении темы
+#define WM_THEMECHANGED  0x031A  // Theme changed notification / РЈРІРµРґРѕРјР»РµРЅРёРµ РѕР± РёР·РјРµРЅРµРЅРёРё С‚РµРјС‹
 #endif
 #ifndef WM_PRINTCLIENT
-#define WM_PRINTCLIENT   0x0318  // Print client area / Печать клиентской области
+#define WM_PRINTCLIENT   0x0318  // Print client area / РџРµС‡Р°С‚СЊ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё
 #endif
 
-// Print client flags / Флаги печати клиента
+// Print client flags / Р¤Р»Р°РіРё РїРµС‡Р°С‚Рё РєР»РёРµРЅС‚Р°
 #ifndef PRF_CLIENT
 #define PRF_CHECKVISIBLE 0x00000001
 #define PRF_NONCLIENT    0x00000002
-#define PRF_CLIENT       0x00000004  // Print client area / Печать клиентской области
-#define PRF_ERASEBKGND   0x00000008  // Erase background / Стереть фон
+#define PRF_CLIENT       0x00000004  // Print client area / РџРµС‡Р°С‚СЊ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё
+#define PRF_ERASEBKGND   0x00000008  // Erase background / РЎС‚РµСЂРµС‚СЊ С„РѕРЅ
 #define PRF_CHILDREN     0x00000010
 #define PRF_OWNED        0x00000020
 #endif
 
-// TreeView macro wrappers / Макрос-обёртки TreeView
+// TreeView macro wrappers / РњР°РєСЂРѕСЃ-РѕР±С‘СЂС‚РєРё TreeView
 #ifndef TreeView_GetImageList
 #define TreeView_GetImageList(hwnd, iImage) \
     (HIMAGELIST)SendMessageA((hwnd), TVM_GETIMAGELIST, (WPARAM)(iImage), 0)
@@ -154,16 +154,16 @@ extern "C" void ML_IconsTint_ForceOnce(COLORREF forceColor);
 
 /*******************************************************************************
  * UTILITY FUNCTIONS: COLOR MATH
- * УТИЛИТЫ: МАТЕМАТИКА ЦВЕТА
+ * РЈРўРР›РРўР«: РњРђРўР•РњРђРўРРљРђ Р¦Р’Р•РўРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * Clamp8
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Clamps an integer value to 0-255 range (valid byte range).
  * 
- * Ограничивает целочисленное значение диапазоном 0-255 (допустимый диапазон байта).
+ * РћРіСЂР°РЅРёС‡РёРІР°РµС‚ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РґРёР°РїР°Р·РѕРЅРѕРј 0-255 (РґРѕРїСѓСЃС‚РёРјС‹Р№ РґРёР°РїР°Р·РѕРЅ Р±Р°Р№С‚Р°).
  ******************************************************************************/
 static __inline int Clamp8(int v) { 
     if (v<0) return 0; 
@@ -174,10 +174,10 @@ static __inline int Clamp8(int v) {
 /*******************************************************************************
  * RGB_From_Channels
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates COLORREF from separate R, G, B channels with clamping.
  * 
- * Создаёт COLORREF из отдельных каналов R, G, B с ограничением.
+ * РЎРѕР·РґР°С‘С‚ COLORREF РёР· РѕС‚РґРµР»СЊРЅС‹С… РєР°РЅР°Р»РѕРІ R, G, B СЃ РѕРіСЂР°РЅРёС‡РµРЅРёРµРј.
  ******************************************************************************/
 static COLORREF RGB_From_Channels(int r, int g, int b)
 {
@@ -187,26 +187,26 @@ static COLORREF RGB_From_Channels(int r, int g, int b)
 /*******************************************************************************
  * Lerp8
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Linear interpolation between two 8-bit values.
  * 
- * Линейная интерполяция между двумя 8-битными значениями.
+ * Р›РёРЅРµР№РЅР°СЏ РёРЅС‚РµСЂРїРѕР»СЏС†РёСЏ РјРµР¶РґСѓ РґРІСѓРјСЏ 8-Р±РёС‚РЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * base   - Starting value / Начальное значение
- * target - Ending value / Конечное значение
- * t255   - Interpolation factor (0-255) / Фактор интерполяции (0-255)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * base   - Starting value / РќР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+ * target - Ending value / РљРѕРЅРµС‡РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+ * t255   - Interpolation factor (0-255) / Р¤Р°РєС‚РѕСЂ РёРЅС‚РµСЂРїРѕР»СЏС†РёРё (0-255)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Interpolated value: base when t255=0, target when t255=255
- * Интерполированное значение: base при t255=0, target при t255=255
+ * РРЅС‚РµСЂРїРѕР»РёСЂРѕРІР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ: base РїСЂРё t255=0, target РїСЂРё t255=255
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * result = (base * (255 - t) + target * t + 127) / 255
  * The +127 provides rounding instead of truncation.
  * 
- * результат = (base * (255 - t) + target * t + 127) / 255
- * +127 обеспечивает округление вместо усечения.
+ * СЂРµР·СѓР»СЊС‚Р°С‚ = (base * (255 - t) + target * t + 127) / 255
+ * +127 РѕР±РµСЃРїРµС‡РёРІР°РµС‚ РѕРєСЂСѓРіР»РµРЅРёРµ РІРјРµСЃС‚Рѕ СѓСЃРµС‡РµРЅРёСЏ.
  ******************************************************************************/
 static __inline int Lerp8(int base, int target, int t255)
 {
@@ -215,48 +215,48 @@ static __inline int Lerp8(int base, int target, int t255)
 
 /*******************************************************************************
  * DIB HELPER FUNCTIONS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ DIB
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР DIB
  ******************************************************************************/
 
 /*******************************************************************************
  * CreateDIB32
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates a 32-bit DIB section with direct pixel access.
  * 
- * Создаёт 32-битную DIB-секцию с прямым доступом к пикселям.
+ * РЎРѕР·РґР°С‘С‚ 32-Р±РёС‚РЅСѓСЋ DIB-СЃРµРєС†РёСЋ СЃ РїСЂСЏРјС‹Рј РґРѕСЃС‚СѓРїРѕРј Рє РїРёРєСЃРµР»СЏРј.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * W      - Width in pixels / Ширина в пикселях
- * H      - Height in pixels / Высота в пикселях
- * ppBits - Output: pointer to pixel buffer / Выход: указатель на буфер пикселей
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * W      - Width in pixels / РЁРёСЂРёРЅР° РІ РїРёРєСЃРµР»СЏС…
+ * H      - Height in pixels / Р’С‹СЃРѕС‚Р° РІ РїРёРєСЃРµР»СЏС…
+ * ppBits - Output: pointer to pixel buffer / Р’С‹С…РѕРґ: СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ РїРёРєСЃРµР»РµР№
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Bitmap handle or NULL on failure
- * Дескриптор битмапа или NULL при неудаче
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ Р±РёС‚РјР°РїР° РёР»Рё NULL РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * PIXEL FORMAT / ФОРМАТ ПИКСЕЛЕЙ:
+ * PIXEL FORMAT / Р¤РћР РњРђРў РџРРљРЎР•Р›Р•Р™:
  * 32bpp BGRA (or BGRX): Blue in low byte, alpha/unused in high byte
  * Each pixel is a DWORD: 0xAARRGGBB
  * 
- * 32bpp BGRA (или BGRX): Синий в младшем байте, альфа/не используется в старшем
- * Каждый пиксель - DWORD: 0xAARRGGBB
+ * 32bpp BGRA (РёР»Рё BGRX): РЎРёРЅРёР№ РІ РјР»Р°РґС€РµРј Р±Р°Р№С‚Рµ, Р°Р»СЊС„Р°/РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ СЃС‚Р°СЂС€РµРј
+ * РљР°Р¶РґС‹Р№ РїРёРєСЃРµР»СЊ - DWORD: 0xAARRGGBB
  ******************************************************************************/
 static HBITMAP CreateDIB32(int W, int H, void** ppBits)
 {
     if (W<=0 || H<=0 || !ppBits) return NULL;
     
-    // Setup BITMAPINFO structure / Настроить структуру BITMAPINFO
+    // Setup BITMAPINFO structure / РќР°СЃС‚СЂРѕРёС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ BITMAPINFO
     BITMAPINFO bi; 
     ZeroMemory(&bi, sizeof(bi));
     bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bi.bmiHeader.biWidth = W; 
-    bi.bmiHeader.biHeight = -H;  // Negative for top-down DIB / Отрицательное для DIB сверху вниз
+    bi.bmiHeader.biHeight = -H;  // Negative for top-down DIB / РћС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ РґР»СЏ DIB СЃРІРµСЂС…Сѓ РІРЅРёР·
     bi.bmiHeader.biPlanes = 1;
     bi.bmiHeader.biBitCount = 32;
     bi.bmiHeader.biCompression = BI_RGB;
     
-    // Create DIB section / Создать DIB-секцию
+    // Create DIB section / РЎРѕР·РґР°С‚СЊ DIB-СЃРµРєС†РёСЋ
     HDC hdc = GetDC(NULL);
     void* bits = NULL;
     HBITMAP h = CreateDIBSection(hdc, &bi, DIB_RGB_COLORS, &bits, NULL, 0);
@@ -270,26 +270,26 @@ static HBITMAP CreateDIB32(int W, int H, void** ppBits)
 /*******************************************************************************
  * CreateDIB32FromBitmap
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts any bitmap to a 32-bit DIB for pixel manipulation.
  * 
- * Преобразует любой битмап в 32-битный DIB для манипуляции пикселями.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ Р»СЋР±РѕР№ Р±РёС‚РјР°Рї РІ 32-Р±РёС‚РЅС‹Р№ DIB РґР»СЏ РјР°РЅРёРїСѓР»СЏС†РёРё РїРёРєСЃРµР»СЏРјРё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hbmSrc - Source bitmap (any format) / Исходный битмап (любой формат)
- * pW     - Output: width / Выход: ширина
- * pH     - Output: height / Выход: высота
- * ppBits - Output: pixel buffer / Выход: буфер пикселей
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hbmSrc - Source bitmap (any format) / РСЃС…РѕРґРЅС‹Р№ Р±РёС‚РјР°Рї (Р»СЋР±РѕР№ С„РѕСЂРјР°С‚)
+ * pW     - Output: width / Р’С‹С…РѕРґ: С€РёСЂРёРЅР°
+ * pH     - Output: height / Р’С‹С…РѕРґ: РІС‹СЃРѕС‚Р°
+ * ppBits - Output: pixel buffer / Р’С‹С…РѕРґ: Р±СѓС„РµСЂ РїРёРєСЃРµР»РµР№
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 32bpp DIB handle or NULL
- * Дескриптор 32bpp DIB или NULL
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ 32bpp DIB РёР»Рё NULL
  ******************************************************************************/
 static HBITMAP CreateDIB32FromBitmap(HBITMAP hbmSrc, int* pW, int* pH, void** ppBits)
 {
     if(!hbmSrc || !pW || !pH || !ppBits) return NULL;
     
-    // Get source bitmap info / Получить информацию об исходном битмапе
+    // Get source bitmap info / РџРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РёСЃС…РѕРґРЅРѕРј Р±РёС‚РјР°РїРµ
     BITMAP bm; 
     ZeroMemory(&bm, sizeof(bm)); 
     if(!GetObject(hbmSrc, sizeof(bm), &bm)) return NULL;
@@ -298,14 +298,14 @@ static HBITMAP CreateDIB32FromBitmap(HBITMAP hbmSrc, int* pW, int* pH, void** pp
     *pH = bm.bmHeight; 
     void* bits = NULL;
     
-    // Create 32bpp DIB / Создать 32bpp DIB
+    // Create 32bpp DIB / РЎРѕР·РґР°С‚СЊ 32bpp DIB
     HBITMAP hbm32 = CreateDIB32(*pW, *pH, &bits); 
     if(!hbm32 || !bits) { 
         if (hbm32) DeleteObject(hbm32); 
         return NULL; 
     }
     
-    // Copy source bitmap to DIB / Копировать исходный битмап в DIB
+    // Copy source bitmap to DIB / РљРѕРїРёСЂРѕРІР°С‚СЊ РёСЃС…РѕРґРЅС‹Р№ Р±РёС‚РјР°Рї РІ DIB
     HDC hdc = GetDC(NULL); 
     HDC src = CreateCompatibleDC(hdc);
     HDC dst = CreateCompatibleDC(hdc);
@@ -327,21 +327,21 @@ static HBITMAP CreateDIB32FromBitmap(HBITMAP hbmSrc, int* pW, int* pH, void** pp
 /*******************************************************************************
  * ExtractAndMask
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Extracts the AND mask from an icon's mask bitmap. Icons store XOR and AND
  * masks together; this function extracts just the AND part.
  * 
- * Извлекает маску AND из битмапа маски иконки. Иконки хранят маски XOR и AND
- * вместе; эта функция извлекает только часть AND.
+ * РР·РІР»РµРєР°РµС‚ РјР°СЃРєСѓ AND РёР· Р±РёС‚РјР°РїР° РјР°СЃРєРё РёРєРѕРЅРєРё. РРєРѕРЅРєРё С…СЂР°РЅСЏС‚ РјР°СЃРєРё XOR Рё AND
+ * РІРјРµСЃС‚Рµ; СЌС‚Р° С„СѓРЅРєС†РёСЏ РёР·РІР»РµРєР°РµС‚ С‚РѕР»СЊРєРѕ С‡Р°СЃС‚СЊ AND.
  * 
- * ICON MASK FORMAT / ФОРМАТ МАСКИ ИКОНКИ:
+ * ICON MASK FORMAT / Р¤РћР РњРђРў РњРђРЎРљР РРљРћРќРљР:
  * Classic icons store mask as double-height 1bpp bitmap:
  * - Top half: AND mask (transparency)
  * - Bottom half: XOR mask (color)
  * 
- * Классические иконки хранят маску как битмап двойной высоты 1bpp:
- * - Верхняя половина: маска AND (прозрачность)
- * - Нижняя половина: маска XOR (цвет)
+ * РљР»Р°СЃСЃРёС‡РµСЃРєРёРµ РёРєРѕРЅРєРё С…СЂР°РЅСЏС‚ РјР°СЃРєСѓ РєР°Рє Р±РёС‚РјР°Рї РґРІРѕР№РЅРѕР№ РІС‹СЃРѕС‚С‹ 1bpp:
+ * - Р’РµСЂС…РЅСЏСЏ РїРѕР»РѕРІРёРЅР°: РјР°СЃРєР° AND (РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ)
+ * - РќРёР¶РЅСЏСЏ РїРѕР»РѕРІРёРЅР°: РјР°СЃРєР° XOR (С†РІРµС‚)
  ******************************************************************************/
 static HBITMAP ExtractAndMask(HBITMAP hbmMask)
 {
@@ -355,14 +355,14 @@ static HBITMAP ExtractAndMask(HBITMAP hbmMask)
     int fullH = bm.bmHeight;
     
     // For 1bpp double-height mask, extract top half
-    // Для 1bpp маски двойной высоты извлечь верхнюю половину
+    // Р”Р»СЏ 1bpp РјР°СЃРєРё РґРІРѕР№РЅРѕР№ РІС‹СЃРѕС‚С‹ РёР·РІР»РµС‡СЊ РІРµСЂС…РЅСЋСЋ РїРѕР»РѕРІРёРЅСѓ
     int andH = (bm.bmBitsPixel==1 && (fullH%2)==0) ? (fullH/2) : fullH;
     
-    // Create 1bpp bitmap for AND mask / Создать 1bpp битмап для маски AND
+    // Create 1bpp bitmap for AND mask / РЎРѕР·РґР°С‚СЊ 1bpp Р±РёС‚РјР°Рї РґР»СЏ РјР°СЃРєРё AND
     HBITMAP hOut = CreateBitmap(W, andH, 1, 1, NULL);
     if (!hOut) return NULL;
     
-    // Copy AND mask / Копировать маску AND
+    // Copy AND mask / РљРѕРїРёСЂРѕРІР°С‚СЊ РјР°СЃРєСѓ AND
     HDC hdc = GetDC(NULL); 
     HDC src = CreateCompatibleDC(hdc);
     HDC dst = CreateCompatibleDC(hdc);
@@ -382,26 +382,26 @@ static HBITMAP ExtractAndMask(HBITMAP hbmMask)
 
 /*******************************************************************************
  * BACKGROUND SAMPLING
- * СЭМПЛИРОВАНИЕ ФОНА
+ * РЎР­РњРџР›РР РћР’РђРќРР• Р¤РћРќРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * AverageTopStrip32
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Calculates average color of a horizontal strip of pixels.
  * 
- * Вычисляет средний цвет горизонтальной полосы пикселей.
+ * Р’С‹С‡РёСЃР»СЏРµС‚ СЃСЂРµРґРЅРёР№ С†РІРµС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РїРѕР»РѕСЃС‹ РїРёРєСЃРµР»РµР№.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * px     - Pointer to 32bpp pixel buffer / Указатель на буфер 32bpp пикселей
- * W      - Width / Ширина
- * H      - Height / Высота
- * stripH - Height of strip to average / Высота полосы для усреднения
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * px     - Pointer to 32bpp pixel buffer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ 32bpp РїРёРєСЃРµР»РµР№
+ * W      - Width / РЁРёСЂРёРЅР°
+ * H      - Height / Р’С‹СЃРѕС‚Р°
+ * stripH - Height of strip to average / Р’С‹СЃРѕС‚Р° РїРѕР»РѕСЃС‹ РґР»СЏ СѓСЃСЂРµРґРЅРµРЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Average RGB color of the strip
- * Средний RGB-цвет полосы
+ * РЎСЂРµРґРЅРёР№ RGB-С†РІРµС‚ РїРѕР»РѕСЃС‹
  ******************************************************************************/
 static __inline COLORREF AverageTopStrip32(const DWORD* px, int W, int H, int stripH)
 {
@@ -409,7 +409,7 @@ static __inline COLORREF AverageTopStrip32(const DWORD* px, int W, int H, int st
     if (stripH <= 0) stripH = 1;
     if (stripH > H)  stripH = H;
     
-    // Accumulate color channels / Накапливать цветовые каналы
+    // Accumulate color channels / РќР°РєР°РїР»РёРІР°С‚СЊ С†РІРµС‚РѕРІС‹Рµ РєР°РЅР°Р»С‹
     unsigned long sr=0, sg=0, sb=0, cnt=0;
     for (int y=0; y<stripH; ++y) {
         const DWORD* row = px + y*W;
@@ -429,40 +429,40 @@ static __inline COLORREF AverageTopStrip32(const DWORD* px, int W, int H, int st
 /*******************************************************************************
  * SampleTreeBackground
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Samples the actual rendered background color of a TreeView. This is necessary
  * because TreeView backgrounds can be gradients, themes, or parent-painted.
  * Simply reading TVM_GETBKCOLOR is insufficient.
  * 
- * Сэмплирует фактический отрисованный цвет фона TreeView. Необходимо, потому
- * что фоны TreeView могут быть градиентами, темами или отрисованы родителем.
- * Простого чтения TVM_GETBKCOLOR недостаточно.
+ * РЎСЌРјРїР»РёСЂСѓРµС‚ С„Р°РєС‚РёС‡РµСЃРєРёР№ РѕС‚СЂРёСЃРѕРІР°РЅРЅС‹Р№ С†РІРµС‚ С„РѕРЅР° TreeView. РќРµРѕР±С…РѕРґРёРјРѕ, РїРѕС‚РѕРјСѓ
+ * С‡С‚Рѕ С„РѕРЅС‹ TreeView РјРѕРіСѓС‚ Р±С‹С‚СЊ РіСЂР°РґРёРµРЅС‚Р°РјРё, С‚РµРјР°РјРё РёР»Рё РѕС‚СЂРёСЃРѕРІР°РЅС‹ СЂРѕРґРёС‚РµР»РµРј.
+ * РџСЂРѕСЃС‚РѕРіРѕ С‡С‚РµРЅРёСЏ TVM_GETBKCOLOR РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Create small offscreen bitmap (64x32)
  * 2. Render TreeView background into it
  * 3. Average top strip of pixels
  * 4. Return averaged color
  * 
- * 1. Создать маленький offscreen битмап (64x32)
- * 2. Отрисовать фон TreeView в него
- * 3. Усреднить верхнюю полосу пикселей
- * 4. Вернуть усреднённый цвет
+ * 1. РЎРѕР·РґР°С‚СЊ РјР°Р»РµРЅСЊРєРёР№ offscreen Р±РёС‚РјР°Рї (64x32)
+ * 2. РћС‚СЂРёСЃРѕРІР°С‚СЊ С„РѕРЅ TreeView РІ РЅРµРіРѕ
+ * 3. РЈСЃСЂРµРґРЅРёС‚СЊ РІРµСЂС…РЅСЋСЋ РїРѕР»РѕСЃСѓ РїРёРєСЃРµР»РµР№
+ * 4. Р’РµСЂРЅСѓС‚СЊ СѓСЃСЂРµРґРЅС‘РЅРЅС‹Р№ С†РІРµС‚
  * 
- * RENDERING STRATEGY / СТРАТЕГИЯ ОТРИСОВКИ:
+ * RENDERING STRATEGY / РЎРўР РђРўР•Р“РРЇ РћРўР РРЎРћР’РљР:
  * - If TVM_GETBKCOLOR valid: use solid brush
  * - Else: try parent WM_PRINTCLIENT (for themed backgrounds)
  * - Then: TreeView WM_ERASEBKGND
  * - Fallback: system window color
  * 
- * - Если TVM_GETBKCOLOR допустим: использовать сплошную кисть
- * - Иначе: попытаться родительский WM_PRINTCLIENT (для тематических фонов)
- * - Затем: TreeView WM_ERASEBKGND
- * - Резерв: системный цвет окна
+ * - Р•СЃР»Рё TVM_GETBKCOLOR РґРѕРїСѓСЃС‚РёРј: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРїР»РѕС€РЅСѓСЋ РєРёСЃС‚СЊ
+ * - РРЅР°С‡Рµ: РїРѕРїС‹С‚Р°С‚СЊСЃСЏ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ WM_PRINTCLIENT (РґР»СЏ С‚РµРјР°С‚РёС‡РµСЃРєРёС… С„РѕРЅРѕРІ)
+ * - Р—Р°С‚РµРј: TreeView WM_ERASEBKGND
+ * - Р РµР·РµСЂРІ: СЃРёСЃС‚РµРјРЅС‹Р№ С†РІРµС‚ РѕРєРЅР°
  ******************************************************************************/
 static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
 {
-    // Get client area size / Получить размер клиентской области
+    // Get client area size / РџРѕР»СѓС‡РёС‚СЊ СЂР°Р·РјРµСЂ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё
     RECT rc; 
     if (!GetClientRect(hTree, &rc)) return fallback;
     int W = rc.right - rc.left; 
@@ -470,11 +470,11 @@ static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
     int H = rc.bottom - rc.top; 
     if (H<=0) return fallback;
     
-    // Limit sample size for performance / Ограничить размер образца для производительности
+    // Limit sample size for performance / РћРіСЂР°РЅРёС‡РёС‚СЊ СЂР°Р·РјРµСЂ РѕР±СЂР°Р·С†Р° РґР»СЏ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё
     if (W>64) W=64; 
     if (H>32) H=32;
 
-    // Create offscreen DIB / Создать offscreen DIB
+    // Create offscreen DIB / РЎРѕР·РґР°С‚СЊ offscreen DIB
     void* bits = NULL; 
     HBITMAP hbm = CreateDIB32(W, H, &bits);
     if (!hbm || !bits) { 
@@ -489,27 +489,27 @@ static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
     }
     HGDIOBJ old = SelectObject(hdc, hbm);
 
-    // Try to get TreeView background color / Попытаться получить цвет фона TreeView
+    // Try to get TreeView background color / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїРѕР»СѓС‡РёС‚СЊ С†РІРµС‚ С„РѕРЅР° TreeView
     COLORREF tvbk = TreeView_GetBkColor(hTree);
     if (tvbk != (COLORREF)-1 && tvbk != CLR_NONE && tvbk != CLR_DEFAULT) {
-        // Valid solid color / Допустимый сплошной цвет
+        // Valid solid color / Р”РѕРїСѓСЃС‚РёРјС‹Р№ СЃРїР»РѕС€РЅРѕР№ С†РІРµС‚
         HBRUSH br = CreateSolidBrush(tvbk);
         RECT r2 = {0, 0, W, H}; 
         FillRect(hdc, &r2, br); 
         DeleteObject(br);
     } else {
-        // Complex background: render it / Сложный фон: отрисовать его
+        // Complex background: render it / РЎР»РѕР¶РЅС‹Р№ С„РѕРЅ: РѕС‚СЂРёСЃРѕРІР°С‚СЊ РµРіРѕ
         HWND parent = GetParent(hTree);
         BOOL drawn = FALSE;
         
         if (parent && IsWindow(parent)) {
-            // Try parent background brush / Попытаться кисть фона родителя
+            // Try parent background brush / РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РєРёСЃС‚СЊ С„РѕРЅР° СЂРѕРґРёС‚РµР»СЏ
             HBRUSH br = (HBRUSH)(LONG_PTR)GetClassLongPtr(parent, GCLP_HBRBACKGROUND);
             RECT r2 = {0, 0, W, H};
             if (br) FillRect(hdc, &r2, br);
             
             // Parent WM_PRINTCLIENT (for themed backgrounds)
-            // Родительский WM_PRINTCLIENT (для тематических фонов)
+            // Р РѕРґРёС‚РµР»СЊСЃРєРёР№ WM_PRINTCLIENT (РґР»СЏ С‚РµРјР°С‚РёС‡РµСЃРєРёС… С„РѕРЅРѕРІ)
             SendMessageA(parent, WM_PRINTCLIENT, (WPARAM)hdc, PRF_CLIENT|PRF_ERASEBKGND);
             drawn = TRUE;
         }
@@ -517,7 +517,7 @@ static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
         // TreeView WM_ERASEBKGND / TreeView WM_ERASEBKGND
         SendMessageA(hTree, WM_ERASEBKGND, (WPARAM)hdc, 0);
         
-        // Fallback to system window color / Резерв - системный цвет окна
+        // Fallback to system window color / Р РµР·РµСЂРІ - СЃРёСЃС‚РµРјРЅС‹Р№ С†РІРµС‚ РѕРєРЅР°
         if (!drawn) {
             HBRUSH br2 = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
             RECT r3 = {0, 0, W, H}; 
@@ -526,7 +526,7 @@ static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
         }
     }
 
-    // Average top strip / Усреднить верхнюю полосу
+    // Average top strip / РЈСЃСЂРµРґРЅРёС‚СЊ РІРµСЂС…РЅСЋСЋ РїРѕР»РѕСЃСѓ
     COLORREF avg = AverageTopStrip32((const DWORD*)bits, W, H, 4);
 
     SelectObject(hdc, old); 
@@ -538,48 +538,48 @@ static COLORREF SampleTreeBackground(HWND hTree, COLORREF fallback)
 
 /*******************************************************************************
  * GLOBAL STATE
- * ГЛОБАЛЬНОЕ СОСТОЯНИЕ
+ * Р“Р›РћР‘РђР›Р¬РќРћР• РЎРћРЎРўРћРЇРќРР•
  ******************************************************************************/
 
-// Window class names / Имена классов окон
+// Window class names / РРјРµРЅР° РєР»Р°СЃСЃРѕРІ РѕРєРѕРЅ
 static const char* CLS_WINAMP_MAIN = "Winamp v1.x";
 static const char* CLS_WINAMP_GEN  = "Winamp Gen";
 
-// Worker thread / Рабочий поток
+// Worker thread / Р Р°Р±РѕС‡РёР№ РїРѕС‚РѕРє
 static HANDLE   g_thr = NULL;
 static volatile LONG g_thrRun = 0;
 
-// TreeView subclass / Субкласс TreeView
+// TreeView subclass / РЎСѓР±РєР»Р°СЃСЃ TreeView
 static HWND     g_hwndTree    = NULL;
 static WNDPROC  g_oldTreeProc = NULL;
 
-// Last tint state / Последнее состояние тонирования
+// Last tint state / РџРѕСЃР»РµРґРЅРµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ
 static HIMAGELIST g_himlLast  = NULL;
 static COLORREF   g_lastTxt   = (COLORREF)0xFFFFFFFF;
 
-// Force color override / Принудительное переопределение цвета
+// Force color override / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёРµ С†РІРµС‚Р°
 static COLORREF   g_forceClr  = 0;
 static BOOL       g_forceOnce = FALSE;
 
-// Recursion guard / Защита от рекурсии
+// Recursion guard / Р—Р°С‰РёС‚Р° РѕС‚ СЂРµРєСѓСЂСЃРёРё
 static BOOL       g_inRetint  = FALSE;
 
-// Baseline icon storage / Хранилище baseline иконок
+// Baseline icon storage / РҐСЂР°РЅРёР»РёС‰Рµ baseline РёРєРѕРЅРѕРє
 static HICON*  g_origIcons = NULL;
 static int     g_origCount = 0;
 
 /*******************************************************************************
  * WINDOW FINDING HELPERS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ПОИСКА ОКОН
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР РџРћРРЎРљРђ РћРљРћРќ
  ******************************************************************************/
 
 /*******************************************************************************
  * IsOurProcessWindow
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if window belongs to current process.
  * 
- * Проверяет, принадлежит ли окно текущему процессу.
+ * РџСЂРѕРІРµСЂСЏРµС‚, РїСЂРёРЅР°РґР»РµР¶РёС‚ Р»Рё РѕРєРЅРѕ С‚РµРєСѓС‰РµРјСѓ РїСЂРѕС†РµСЃСЃСѓ.
  ******************************************************************************/
 static BOOL IsOurProcessWindow(HWND h) { 
     DWORD pid=0; 
@@ -590,10 +590,10 @@ static BOOL IsOurProcessWindow(HWND h) {
 /*******************************************************************************
  * IsWinampAncestor
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if window has Winamp window as ancestor.
  * 
- * Проверяет, имеет ли окно окно Winamp в качестве предка.
+ * РџСЂРѕРІРµСЂСЏРµС‚, РёРјРµРµС‚ Р»Рё РѕРєРЅРѕ РѕРєРЅРѕ Winamp РІ РєР°С‡РµСЃС‚РІРµ РїСЂРµРґРєР°.
  ******************************************************************************/
 static BOOL IsWinampAncestor(HWND h)
 {
@@ -612,10 +612,10 @@ static BOOL IsWinampAncestor(HWND h)
 /*******************************************************************************
  * EnumFindTreeProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * EnumChildWindows callback to find TreeView control.
  * 
- * Функция обратного вызова EnumChildWindows для поиска контрола TreeView.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° EnumChildWindows РґР»СЏ РїРѕРёСЃРєР° РєРѕРЅС‚СЂРѕР»Р° TreeView.
  ******************************************************************************/
 static BOOL CALLBACK EnumFindTreeProc(HWND h, LPARAM lp)
 {
@@ -626,7 +626,7 @@ static BOOL CALLBACK EnumFindTreeProc(HWND h, LPARAM lp)
         IsOurProcessWindow(h) && 
         IsWinampAncestor(h)) { 
         *(HWND*)lp = h; 
-        return FALSE;  // Stop enumeration / Остановить перечисление
+        return FALSE;  // Stop enumeration / РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
     }
     
     EnumChildWindows(h, EnumFindTreeProc, lp); 
@@ -636,25 +636,25 @@ static BOOL CALLBACK EnumFindTreeProc(HWND h, LPARAM lp)
 /*******************************************************************************
  * FindMLTree
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Finds Media Library TreeView window by searching all Winamp windows.
  * 
- * Находит окно TreeView библиотеки, ища во всех окнах Winamp.
+ * РќР°С…РѕРґРёС‚ РѕРєРЅРѕ TreeView Р±РёР±Р»РёРѕС‚РµРєРё, РёС‰Р° РІРѕ РІСЃРµС… РѕРєРЅР°С… Winamp.
  * 
- * SEARCH STRATEGY / СТРАТЕГИЯ ПОИСКА:
+ * SEARCH STRATEGY / РЎРўР РђРўР•Р“РРЇ РџРћРРЎРљРђ:
  * 1. Search all "Winamp Gen" windows (Media Library)
  * 2. Search main "Winamp v1.x" window
  * 3. Recursively enumerate children looking for SysTreeView32
  * 
- * 1. Искать все окна "Winamp Gen" (Библиотека)
- * 2. Искать главное окно "Winamp v1.x"
- * 3. Рекурсивно перечислять детей в поиске SysTreeView32
+ * 1. РСЃРєР°С‚СЊ РІСЃРµ РѕРєРЅР° "Winamp Gen" (Р‘РёР±Р»РёРѕС‚РµРєР°)
+ * 2. РСЃРєР°С‚СЊ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ "Winamp v1.x"
+ * 3. Р РµРєСѓСЂСЃРёРІРЅРѕ РїРµСЂРµС‡РёСЃР»СЏС‚СЊ РґРµС‚РµР№ РІ РїРѕРёСЃРєРµ SysTreeView32
  ******************************************************************************/
 static HWND FindMLTree()
 {
     HWND tree = NULL;
     
-    // Search all Media Library windows / Искать все окна библиотеки
+    // Search all Media Library windows / РСЃРєР°С‚СЊ РІСЃРµ РѕРєРЅР° Р±РёР±Р»РёРѕС‚РµРєРё
     for (HWND gen = FindWindowA(CLS_WINAMP_GEN, NULL); 
          gen; 
          gen = FindWindowExA(NULL, gen, CLS_WINAMP_GEN, NULL)) {
@@ -663,7 +663,7 @@ static HWND FindMLTree()
         if (tree) return tree;
     }
     
-    // Search main Winamp window / Искать главное окно Winamp
+    // Search main Winamp window / РСЃРєР°С‚СЊ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ Winamp
     HWND wa = FindWindowA(CLS_WINAMP_MAIN, NULL);
     if (wa && IsOurProcessWindow(wa)) { 
         EnumChildWindows(wa, EnumFindTreeProc, (LPARAM)&tree); 
@@ -675,16 +675,16 @@ static HWND FindMLTree()
 
 /*******************************************************************************
  * BASELINE ICON MANAGEMENT
- * УПРАВЛЕНИЕ BASELINE ИКОНКАМИ
+ * РЈРџР РђР’Р›Р•РќРР• BASELINE РРљРћРќРљРђРњР
  ******************************************************************************/
 
 /*******************************************************************************
  * FreeBaseline
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Frees all stored baseline icon copies.
  * 
- * Освобождает все сохранённые копии baseline иконок.
+ * РћСЃРІРѕР±РѕР¶РґР°РµС‚ РІСЃРµ СЃРѕС…СЂР°РЅС‘РЅРЅС‹Рµ РєРѕРїРёРё baseline РёРєРѕРЅРѕРє.
  ******************************************************************************/
 static void FreeBaseline()
 {
@@ -701,26 +701,26 @@ static void FreeBaseline()
 /*******************************************************************************
  * BuildBaseline
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Creates baseline copies of all icons in an image list. These pristine copies
  * are used as source for all future re-tinting operations.
  * 
- * Создаёт baseline копии всех иконок в списке изображений. Эти чистые копии
- * используются как источник для всех будущих операций повторного тонирования.
+ * РЎРѕР·РґР°С‘С‚ baseline РєРѕРїРёРё РІСЃРµС… РёРєРѕРЅРѕРє РІ СЃРїРёСЃРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёР№. Р­С‚Рё С‡РёСЃС‚С‹Рµ РєРѕРїРёРё
+ * РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РєР°Рє РёСЃС‚РѕС‡РЅРёРє РґР»СЏ РІСЃРµС… Р±СѓРґСѓС‰РёС… РѕРїРµСЂР°С†РёР№ РїРѕРІС‚РѕСЂРЅРѕРіРѕ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ.
  * 
- * WHY NEEDED / ЗАЧЕМ НУЖНО:
+ * WHY NEEDED / Р—РђР§Р•Рњ РќРЈР–РќРћ:
  * Re-tinting already-tinted icons causes cumulative quality loss. By always
  * tinting from baseline > final, we maintain quality.
  * 
- * Повторное тонирование уже тонированных иконок вызывает накопительную потерю
- * качества. Всегда тонируя из baseline > финал, мы поддерживаем качество.
+ * РџРѕРІС‚РѕСЂРЅРѕРµ С‚РѕРЅРёСЂРѕРІР°РЅРёРµ СѓР¶Рµ С‚РѕРЅРёСЂРѕРІР°РЅРЅС‹С… РёРєРѕРЅРѕРє РІС‹Р·С‹РІР°РµС‚ РЅР°РєРѕРїРёС‚РµР»СЊРЅСѓСЋ РїРѕС‚РµСЂСЋ
+ * РєР°С‡РµСЃС‚РІР°. Р’СЃРµРіРґР° С‚РѕРЅРёСЂСѓСЏ РёР· baseline > С„РёРЅР°Р», РјС‹ РїРѕРґРґРµСЂР¶РёРІР°РµРј РєР°С‡РµСЃС‚РІРѕ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * himl - Image list to copy from / Список изображений для копирования
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * himl - Image list to copy from / РЎРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№ РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE on success, FALSE on failure
- * TRUE при успехе, FALSE при неудаче
+ * TRUE РїСЂРё СѓСЃРїРµС…Рµ, FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  ******************************************************************************/
 static BOOL BuildBaseline(HIMAGELIST himl)
 {
@@ -728,14 +728,14 @@ static BOOL BuildBaseline(HIMAGELIST himl)
     if (!himl) return FALSE;
     
     int n = ImageList_GetImageCount(himl); 
-    if (n<=0 || n>4096) return FALSE;  // Sanity check / Проверка разумности
+    if (n<=0 || n>4096) return FALSE;  // Sanity check / РџСЂРѕРІРµСЂРєР° СЂР°Р·СѓРјРЅРѕСЃС‚Рё
     
-    // Allocate icon array / Выделить массив иконок
+    // Allocate icon array / Р’С‹РґРµР»РёС‚СЊ РјР°СЃСЃРёРІ РёРєРѕРЅРѕРє
     g_origIcons = (HICON*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(HICON)*n); 
     if (!g_origIcons) return FALSE;
     g_origCount = n;
     
-    // Copy all icons / Копировать все иконки
+    // Copy all icons / РљРѕРїРёСЂРѕРІР°С‚СЊ РІСЃРµ РёРєРѕРЅРєРё
     for (int i=0; i<n; ++i) { 
         HICON h = ImageList_GetIcon(himl, i, ILD_NORMAL); 
         g_origIcons[i] = h ? CopyIcon(h) : NULL; 
@@ -747,29 +747,29 @@ static BOOL BuildBaseline(HIMAGELIST himl)
 
 /*******************************************************************************
  * ICON TINTING CORE ALGORITHM
- * ОСНОВНОЙ АЛГОРИТМ ТОНИРОВАНИЯ ИКОНОК
+ * РћРЎРќРћР’РќРћР™ РђР›Р“РћР РРўРњ РўРћРќРР РћР’РђРќРРЇ РРљРћРќРћРљ
  ******************************************************************************/
 
 /*******************************************************************************
  * TintIcon_BlendPlusColor
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Tints an icon by blending between background and text color based on pixel
  * luminance. This is the core tinting algorithm.
  * 
- * Тонирует иконку смешиванием между фоном и текстом на основе яркости пикселя.
- * Это основной алгоритм тонирования.
+ * РўРѕРЅРёСЂСѓРµС‚ РёРєРѕРЅРєСѓ СЃРјРµС€РёРІР°РЅРёРµРј РјРµР¶РґСѓ С„РѕРЅРѕРј Рё С‚РµРєСЃС‚РѕРј РЅР° РѕСЃРЅРѕРІРµ СЏСЂРєРѕСЃС‚Рё РїРёРєСЃРµР»СЏ.
+ * Р­С‚Рѕ РѕСЃРЅРѕРІРЅРѕР№ Р°Р»РіРѕСЂРёС‚Рј С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hIn - Input icon to tint / Входная иконка для тонирования
- * txt - Text color (target for bright pixels) / Цвет текста (цель для ярких пикселей)
- * bk  - Background color (target for dark pixels) / Цвет фона (цель для тёмных пикселей)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hIn - Input icon to tint / Р’С…РѕРґРЅР°СЏ РёРєРѕРЅРєР° РґР»СЏ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ
+ * txt - Text color (target for bright pixels) / Р¦РІРµС‚ С‚РµРєСЃС‚Р° (С†РµР»СЊ РґР»СЏ СЏСЂРєРёС… РїРёРєСЃРµР»РµР№)
+ * bk  - Background color (target for dark pixels) / Р¦РІРµС‚ С„РѕРЅР° (С†РµР»СЊ РґР»СЏ С‚С‘РјРЅС‹С… РїРёРєСЃРµР»РµР№)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Tinted icon handle or NULL on failure
- * Дескриптор тонированной иконки или NULL при неудаче
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ С‚РѕРЅРёСЂРѕРІР°РЅРЅРѕР№ РёРєРѕРЅРєРё РёР»Рё NULL РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Extract icon to 32bpp DIB
  * 2. For each pixel:
  *    - Calculate luminance: luma = 0.3R + 0.59G + 0.11B
@@ -777,26 +777,26 @@ static BOOL BuildBaseline(HIMAGELIST himl)
  *    - Interpolate: newColor = lerp(background, text, luma)
  * 3. Create new icon from tinted DIB
  * 
- * 1. Извлечь иконку в 32bpp DIB
- * 2. Для каждого пикселя:
- *    - Вычислить яркость: luma = 0.3R + 0.59G + 0.11B
- *    - Использовать luma как фактор смешивания (0-255)
- *    - Интерполировать: новыйЦвет = lerp(фон, текст, luma)
- * 3. Создать новую иконку из тонированного DIB
+ * 1. РР·РІР»РµС‡СЊ РёРєРѕРЅРєСѓ РІ 32bpp DIB
+ * 2. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РїРёРєСЃРµР»СЏ:
+ *    - Р’С‹С‡РёСЃР»РёС‚СЊ СЏСЂРєРѕСЃС‚СЊ: luma = 0.3R + 0.59G + 0.11B
+ *    - РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ luma РєР°Рє С„Р°РєС‚РѕСЂ СЃРјРµС€РёРІР°РЅРёСЏ (0-255)
+ *    - РРЅС‚РµСЂРїРѕР»РёСЂРѕРІР°С‚СЊ: РЅРѕРІС‹Р№Р¦РІРµС‚ = lerp(С„РѕРЅ, С‚РµРєСЃС‚, luma)
+ * 3. РЎРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ РёРєРѕРЅРєСѓ РёР· С‚РѕРЅРёСЂРѕРІР°РЅРЅРѕРіРѕ DIB
  * 
- * WHY LUMINANCE / ПОЧЕМУ ЯРКОСТЬ:
+ * WHY LUMINANCE / РџРћР§Р•РњРЈ РЇР РљРћРЎРўР¬:
  * Human eye is most sensitive to green, moderately to red, least to blue.
  * Standard formula: 0.30R + 0.59G + 0.11B approximates perceived brightness.
  * 
- * Человеческий глаз наиболее чувствителен к зелёному, умеренно к красному,
- * меньше всего к синему. Стандартная формула: 0.30R + 0.59G + 0.11B
- * аппроксимирует воспринимаемую яркость.
+ * Р§РµР»РѕРІРµС‡РµСЃРєРёР№ РіР»Р°Р· РЅР°РёР±РѕР»РµРµ С‡СѓРІСЃС‚РІРёС‚РµР»РµРЅ Рє Р·РµР»С‘РЅРѕРјСѓ, СѓРјРµСЂРµРЅРЅРѕ Рє РєСЂР°СЃРЅРѕРјСѓ,
+ * РјРµРЅСЊС€Рµ РІСЃРµРіРѕ Рє СЃРёРЅРµРјСѓ. РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ С„РѕСЂРјСѓР»Р°: 0.30R + 0.59G + 0.11B
+ * Р°РїРїСЂРѕРєСЃРёРјРёСЂСѓРµС‚ РІРѕСЃРїСЂРёРЅРёРјР°РµРјСѓСЋ СЏСЂРєРѕСЃС‚СЊ.
  ******************************************************************************/
 static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
 {
     if(!hIn) return NULL;
 
-    // Get icon info / Получить информацию об иконке
+    // Get icon info / РџРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РёРєРѕРЅРєРµ
     ICONINFO ii; 
     ZeroMemory(&ii, sizeof(ii));
     if(!GetIconInfo(hIn, &ii)) return NULL;
@@ -807,11 +807,11 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
     HBITMAP hMaskOut = NULL;
 
     if (ii.hbmColor) {
-        // Color icon: convert to 32bpp / Цветная иконка: преобразовать в 32bpp
+        // Color icon: convert to 32bpp / Р¦РІРµС‚РЅР°СЏ РёРєРѕРЅРєР°: РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ 32bpp
         hbm32 = CreateDIB32FromBitmap(ii.hbmColor, &W, &H, &pBits);
         hMaskOut = ii.hbmMask ? ii.hbmMask : NULL;
     } else {
-        // Monochrome icon: render to 32bpp / Монохромная иконка: отрисовать в 32bpp
+        // Monochrome icon: render to 32bpp / РњРѕРЅРѕС…СЂРѕРјРЅР°СЏ РёРєРѕРЅРєР°: РѕС‚СЂРёСЃРѕРІР°С‚СЊ РІ 32bpp
         BITMAP bm; 
         ZeroMemory(&bm, sizeof(bm));
         if (ii.hbmMask && GetObject(ii.hbmMask, sizeof(bm), &bm)) { 
@@ -837,7 +837,7 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
     }
 
     if(!hbm32 || !pBits) {
-        // Cleanup on failure / Очистка при неудаче
+        // Cleanup on failure / РћС‡РёСЃС‚РєР° РїСЂРё РЅРµСѓРґР°С‡Рµ
         if (ii.hbmColor) DeleteObject(ii.hbmColor);
         if (ii.hbmMask)  DeleteObject(ii.hbmMask);
         if (hMaskOut && hMaskOut!=ii.hbmMask) DeleteObject(hMaskOut);
@@ -845,7 +845,7 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
         return NULL;
     }
 
-    // Extract color channels / Извлечь цветовые каналы
+    // Extract color channels / РР·РІР»РµС‡СЊ С†РІРµС‚РѕРІС‹Рµ РєР°РЅР°Р»С‹
     int rTxt = (int)(txt & 0xFF);
     int gTxt = (int)((txt >> 8) & 0xFF);
     int bTxt = (int)((txt >> 16) & 0xFF);
@@ -854,7 +854,7 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
     int gBk  = (int)((bk  >> 8) & 0xFF);
     int bBk  = (int)((bk  >> 16) & 0xFF);
 
-    // Tint each pixel / Тонировать каждый пиксель
+    // Tint each pixel / РўРѕРЅРёСЂРѕРІР°С‚СЊ РєР°Р¶РґС‹Р№ РїРёРєСЃРµР»СЊ
     DWORD* px = (DWORD*)pBits; 
     const int N = W*H;
     
@@ -864,12 +864,12 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
         BYTE* pr = (BYTE*)&px[i] + 2; // R
 
         // Calculate luminance (perceived brightness)
-        // Вычислить яркость (воспринимаемую яркость)
+        // Р’С‹С‡РёСЃР»РёС‚СЊ СЏСЂРєРѕСЃС‚СЊ (РІРѕСЃРїСЂРёРЅРёРјР°РµРјСѓСЋ СЏСЂРєРѕСЃС‚СЊ)
         int luma = ( (int)(*pr)*30 + (int)(*pg)*59 + (int)(*pb)*11 ) / 100;
-        int t = luma;  // Blend factor 0-255 / Фактор смешивания 0-255
+        int t = luma;  // Blend factor 0-255 / Р¤Р°РєС‚РѕСЂ СЃРјРµС€РёРІР°РЅРёСЏ 0-255
 
         // Interpolate between background and text
-        // Интерполировать между фоном и текстом
+        // РРЅС‚РµСЂРїРѕР»РёСЂРѕРІР°С‚СЊ РјРµР¶РґСѓ С„РѕРЅРѕРј Рё С‚РµРєСЃС‚РѕРј
         int rr = Lerp8(rBk, rTxt, t);
         int gg = Lerp8(gBk, gTxt, t);
         int bb = Lerp8(bBk, bTxt, t);
@@ -879,7 +879,7 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
         *pb = (BYTE)bb;
     }
 
-    // Create new icon from tinted DIB / Создать новую иконку из тонированного DIB
+    // Create new icon from tinted DIB / РЎРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ РёРєРѕРЅРєСѓ РёР· С‚РѕРЅРёСЂРѕРІР°РЅРЅРѕРіРѕ DIB
     ICONINFO io; 
     ZeroMemory(&io, sizeof(io));
     io.fIcon = TRUE; 
@@ -887,7 +887,7 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
     io.hbmMask = hMaskOut ? hMaskOut : ii.hbmMask;
     HICON hOut = CreateIconIndirect(&io);
 
-    // Cleanup / Очистка
+    // Cleanup / РћС‡РёСЃС‚РєР°
     if (ii.hbmColor) DeleteObject(ii.hbmColor);
     if (ii.hbmMask)  DeleteObject(ii.hbmMask);
     if (hMaskOut && hMaskOut!=ii.hbmMask) DeleteObject(hMaskOut);
@@ -899,17 +899,17 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
 /*******************************************************************************
  * RetintImageList
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Re-tints all icons in an image list to match current TreeView colors.
  * 
- * Перетонирует все иконки в списке изображений под текущие цвета TreeView.
+ * РџРµСЂРµС‚РѕРЅРёСЂСѓРµС‚ РІСЃРµ РёРєРѕРЅРєРё РІ СЃРїРёСЃРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёР№ РїРѕРґ С‚РµРєСѓС‰РёРµ С†РІРµС‚Р° TreeView.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hTree - TreeView window / Окно TreeView
- * himl  - Image list to tint / Список изображений для тонирования
- * txt   - Text color / Цвет текста
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hTree - TreeView window / РћРєРЅРѕ TreeView
+ * himl  - Image list to tint / РЎРїРёСЃРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёР№ РґР»СЏ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ
+ * txt   - Text color / Р¦РІРµС‚ С‚РµРєСЃС‚Р°
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Sample background color (handles gradients/themes)
  * 2. Smart fallback if sampling fails
  * 3. Rebuild baseline if needed
@@ -917,43 +917,43 @@ static HICON TintIcon_BlendPlusColor(HICON hIn, COLORREF txt, COLORREF bk)
  * 5. Replace in image list
  * 6. Redraw TreeView
  * 
- * 1. Сэмплировать цвет фона (обрабатывает градиенты/темы)
- * 2. Умный резервный вариант при неудаче сэмплирования
- * 3. Перестроить baseline при необходимости
- * 4. Тонировать каждую иконку из baseline
- * 5. Заменить в списке изображений
- * 6. Перерисовать TreeView
+ * 1. РЎСЌРјРїР»РёСЂРѕРІР°С‚СЊ С†РІРµС‚ С„РѕРЅР° (РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РіСЂР°РґРёРµРЅС‚С‹/С‚РµРјС‹)
+ * 2. РЈРјРЅС‹Р№ СЂРµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚ РїСЂРё РЅРµСѓРґР°С‡Рµ СЃСЌРјРїР»РёСЂРѕРІР°РЅРёСЏ
+ * 3. РџРµСЂРµСЃС‚СЂРѕРёС‚СЊ baseline РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
+ * 4. РўРѕРЅРёСЂРѕРІР°С‚СЊ РєР°Р¶РґСѓСЋ РёРєРѕРЅРєСѓ РёР· baseline
+ * 5. Р—Р°РјРµРЅРёС‚СЊ РІ СЃРїРёСЃРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёР№
+ * 6. РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ TreeView
  * 
- * SMART FALLBACK / УМНЫЙ РЕЗЕРВНЫЙ ВАРИАНТ:
+ * SMART FALLBACK / РЈРњРќР«Р™ Р Р•Р—Р•Р Р’РќР«Р™ Р’РђР РРђРќРў:
  * If text is very bright (luma > 128), assume dark background.
  * If sampled background is white and text very bright, force black background.
  * 
- * Если текст очень яркий (luma > 128), предположить тёмный фон.
- * Если сэмплированный фон белый и текст очень яркий, принудительно чёрный фон.
+ * Р•СЃР»Рё С‚РµРєСЃС‚ РѕС‡РµРЅСЊ СЏСЂРєРёР№ (luma > 128), РїСЂРµРґРїРѕР»РѕР¶РёС‚СЊ С‚С‘РјРЅС‹Р№ С„РѕРЅ.
+ * Р•СЃР»Рё СЃСЌРјРїР»РёСЂРѕРІР°РЅРЅС‹Р№ С„РѕРЅ Р±РµР»С‹Р№ Рё С‚РµРєСЃС‚ РѕС‡РµРЅСЊ СЏСЂРєРёР№, РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ С‡С‘СЂРЅС‹Р№ С„РѕРЅ.
  ******************************************************************************/
 static void RetintImageList(HWND hTree, HIMAGELIST himl, COLORREF txt)
 {
     if(!hTree || !himl) return;
 
-    // Calculate text luminance / Вычислить яркость текста
+    // Calculate text luminance / Р’С‹С‡РёСЃР»РёС‚СЊ СЏСЂРєРѕСЃС‚СЊ С‚РµРєСЃС‚Р°
     int rT = (int)(txt & 0xFF);
     int gT = (int)((txt >> 8) & 0xFF);
     int bT = (int)((txt >> 16) & 0xFF);
     int txtLuma = (rT*30 + gT*59 + bT*11)/100;
 
-    // Smart fallback for dark themes / Умный резервный вариант для тёмных тем
+    // Smart fallback for dark themes / РЈРјРЅС‹Р№ СЂРµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚ РґР»СЏ С‚С‘РјРЅС‹С… С‚РµРј
     COLORREF smartFallback = (txtLuma > 128) ? RGB(0,0,0) : GetSysColor(COLOR_WINDOW);
 
-    // Get TreeView background / Получить фон TreeView
+    // Get TreeView background / РџРѕР»СѓС‡РёС‚СЊ С„РѕРЅ TreeView
     COLORREF bk = TreeView_GetBkColor(hTree);
     if (bk==(COLORREF)-1 || bk==CLR_NONE || bk==CLR_DEFAULT) {
         bk = smartFallback;
     }
 
-    // Sample actual rendered background / Сэмплировать фактический отрисованный фон
+    // Sample actual rendered background / РЎСЌРјРїР»РёСЂРѕРІР°С‚СЊ С„Р°РєС‚РёС‡РµСЃРєРёР№ РѕС‚СЂРёСЃРѕРІР°РЅРЅС‹Р№ С„РѕРЅ
     COLORREF sampled = SampleTreeBackground(hTree, bk);
     
-    // Override white background for very bright text / Переопределить белый фон для очень яркого текста
+    // Override white background for very bright text / РџРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ Р±РµР»С‹Р№ С„РѕРЅ РґР»СЏ РѕС‡РµРЅСЊ СЏСЂРєРѕРіРѕ С‚РµРєСЃС‚Р°
     if (sampled == GetSysColor(COLOR_WINDOW) && txtLuma > 160) {
          sampled = RGB(0,0,0);
     }
@@ -963,19 +963,19 @@ static void RetintImageList(HWND hTree, HIMAGELIST himl, COLORREF txt)
     __try {
         int count = ImageList_GetImageCount(himl);
         
-        // Rebuild baseline if needed / Перестроить baseline при необходимости
+        // Rebuild baseline if needed / РџРµСЂРµСЃС‚СЂРѕРёС‚СЊ baseline РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
         if (!g_origIcons || g_origCount != count) 
             BuildBaseline(himl);
 
-        g_inRetint = TRUE;  // Set recursion guard / Установить защиту от рекурсии
+        g_inRetint = TRUE;  // Set recursion guard / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ РѕС‚ СЂРµРєСѓСЂСЃРёРё
         
         int n = ImageList_GetImageCount(himl);
         for (int i=0; i<n; ++i) {
-            // Get baseline icon / Получить baseline иконку
+            // Get baseline icon / РџРѕР»СѓС‡РёС‚СЊ baseline РёРєРѕРЅРєСѓ
             HICON hSrc = (g_origIcons && i<g_origCount) ? g_origIcons[i] : NULL;
             BOOL tempSrc = FALSE;
             
-            // Fallback: extract from image list / Резерв: извлечь из списка изображений
+            // Fallback: extract from image list / Р РµР·РµСЂРІ: РёР·РІР»РµС‡СЊ РёР· СЃРїРёСЃРєР° РёР·РѕР±СЂР°Р¶РµРЅРёР№
             if (!hSrc) { 
                 HICON tmp = ImageList_GetIcon(himl, i, ILD_NORMAL); 
                 if (tmp) { 
@@ -985,7 +985,7 @@ static void RetintImageList(HWND hTree, HIMAGELIST himl, COLORREF txt)
             }
             if (!hSrc) continue;
 
-            // Tint icon / Тонировать иконку
+            // Tint icon / РўРѕРЅРёСЂРѕРІР°С‚СЊ РёРєРѕРЅРєСѓ
             HICON hTint = TintIcon_BlendPlusColor(hSrc, txt, bk);
             if (hTint) { 
                 ImageList_ReplaceIcon(himl, i, hTint); 
@@ -995,10 +995,10 @@ static void RetintImageList(HWND hTree, HIMAGELIST himl, COLORREF txt)
             if (tempSrc && hSrc) DestroyIcon(hSrc);
         }
         
-        // Redraw TreeView / Перерисовать TreeView
+        // Redraw TreeView / РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ TreeView
         RedrawWindow(hTree, NULL, NULL, RDW_INVALIDATE|RDW_ERASE|RDW_FRAME);
         
-        g_inRetint = FALSE;  // Clear recursion guard / Очистить защиту от рекурсии
+        g_inRetint = FALSE;  // Clear recursion guard / РћС‡РёСЃС‚РёС‚СЊ Р·Р°С‰РёС‚Сѓ РѕС‚ СЂРµРєСѓСЂСЃРёРё
     }
     __except(EXCEPTION_EXECUTE_HANDLER) {
         g_inRetint = FALSE;
@@ -1008,11 +1008,11 @@ static void RetintImageList(HWND hTree, HIMAGELIST himl, COLORREF txt)
 /*******************************************************************************
  * GetTreeColorEffective
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Gets effective text color for TreeView, handling defaults and forced colors.
  * 
- * Получает эффективный цвет текста для TreeView, обрабатывая значения по
- * умолчанию и принудительные цвета.
+ * РџРѕР»СѓС‡Р°РµС‚ СЌС„С„РµРєС‚РёРІРЅС‹Р№ С†РІРµС‚ С‚РµРєСЃС‚Р° РґР»СЏ TreeView, РѕР±СЂР°Р±Р°С‚С‹РІР°СЏ Р·РЅР°С‡РµРЅРёСЏ РїРѕ
+ * СѓРјРѕР»С‡Р°РЅРёСЋ Рё РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅС‹Рµ С†РІРµС‚Р°.
  ******************************************************************************/
 static COLORREF GetTreeColorEffective(HWND hTree)
 {
@@ -1020,7 +1020,7 @@ static COLORREF GetTreeColorEffective(HWND hTree)
     if (txt==(COLORREF)-1 || txt==CLR_DEFAULT) 
         txt = GetSysColor(COLOR_WINDOWTEXT);
     
-    // Force color override (one-time) / Принудительное переопределение цвета (одноразовое)
+    // Force color override (one-time) / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёРµ С†РІРµС‚Р° (РѕРґРЅРѕСЂР°Р·РѕРІРѕРµ)
     if (g_forceOnce) { 
         txt = g_forceClr; 
         g_forceOnce = FALSE; 
@@ -1031,16 +1031,16 @@ static COLORREF GetTreeColorEffective(HWND hTree)
 
 /*******************************************************************************
  * TREEVIEW SUBCLASS
- * СУБКЛАСС TREEVIEW
+ * РЎРЈР‘РљР›РђРЎРЎ TREEVIEW
  ******************************************************************************/
 
 /*******************************************************************************
  * CallPrev
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Calls previous window procedure.
  * 
- * Вызывает предыдущую процедуру окна.
+ * Р’С‹Р·С‹РІР°РµС‚ РїСЂРµРґС‹РґСѓС‰СѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ РѕРєРЅР°.
  ******************************************************************************/
 static LRESULT CallPrev(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -1052,30 +1052,30 @@ static LRESULT CallPrev(HWND h, UINT m, WPARAM w, LPARAM l)
 /*******************************************************************************
  * Tree_SubclassProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Subclassed TreeView window procedure. Intercepts messages that affect icon
  * appearance and triggers re-tinting.
  * 
- * Процедура субклассированного окна TreeView. Перехватывает сообщения, влияющие
- * на внешний вид иконок, и запускает повторное тонирование.
+ * РџСЂРѕС†РµРґСѓСЂР° СЃСѓР±РєР»Р°СЃСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ РѕРєРЅР° TreeView. РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёСЏ, РІР»РёСЏСЋС‰РёРµ
+ * РЅР° РІРЅРµС€РЅРёР№ РІРёРґ РёРєРѕРЅРѕРє, Рё Р·Р°РїСѓСЃРєР°РµС‚ РїРѕРІС‚РѕСЂРЅРѕРµ С‚РѕРЅРёСЂРѕРІР°РЅРёРµ.
  * 
- * INTERCEPTED MESSAGES / ПЕРЕХВАЧЕННЫЕ СООБЩЕНИЯ:
+ * INTERCEPTED MESSAGES / РџР•Р Р•РҐР’РђР§Р•РќРќР«Р• РЎРћРћР‘Р©Р•РќРРЇ:
  * 
  * TVM_SETIMAGELIST:
  *   Called when image list is changed. We rebuild baseline and re-tint.
- *   Вызывается при изменении списка изображений. Перестраиваем baseline и перетонируем.
+ *   Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёРё СЃРїРёСЃРєР° РёР·РѕР±СЂР°Р¶РµРЅРёР№. РџРµСЂРµСЃС‚СЂР°РёРІР°РµРј baseline Рё РїРµСЂРµС‚РѕРЅРёСЂСѓРµРј.
  * 
  * TVM_SETTEXTCOLOR:
  *   Called when text color changes. We re-tint with new color.
- *   Вызывается при изменении цвета текста. Перетонируем новым цветом.
+ *   Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёРё С†РІРµС‚Р° С‚РµРєСЃС‚Р°. РџРµСЂРµС‚РѕРЅРёСЂСѓРµРј РЅРѕРІС‹Рј С†РІРµС‚РѕРј.
  * 
  * WM_SYSCOLORCHANGE / WM_THEMECHANGED:
  *   System color scheme or theme changed. Re-sample background and re-tint.
- *   Изменилась цветовая схема системы или тема. Пересэмплировать фон и перетонировать.
+ *   РР·РјРµРЅРёР»Р°СЃСЊ С†РІРµС‚РѕРІР°СЏ СЃС…РµРјР° СЃРёСЃС‚РµРјС‹ РёР»Рё С‚РµРјР°. РџРµСЂРµСЃСЌРјРїР»РёСЂРѕРІР°С‚СЊ С„РѕРЅ Рё РїРµСЂРµС‚РѕРЅРёСЂРѕРІР°С‚СЊ.
  * 
  * WM_NCDESTROY:
  *   Window being destroyed. Cleanup and unsubclass.
- *   Окно уничтожается. Очистка и снятие субкласса.
+ *   РћРєРЅРѕ СѓРЅРёС‡С‚РѕР¶Р°РµС‚СЃСЏ. РћС‡РёСЃС‚РєР° Рё СЃРЅСЏС‚РёРµ СЃСѓР±РєР»Р°СЃСЃР°.
  ******************************************************************************/
 static LRESULT CALLBACK Tree_SubclassProc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -1131,7 +1131,7 @@ static LRESULT CALLBACK Tree_SubclassProc(HWND h, UINT m, WPARAM w, LPARAM l)
     }
     
     case WM_NCDESTROY: {
-        // Cleanup and unsubclass / Очистка и снятие субкласса
+        // Cleanup and unsubclass / РћС‡РёСЃС‚РєР° Рё СЃРЅСЏС‚РёРµ СЃСѓР±РєР»Р°СЃСЃР°
         WNDPROC old = g_oldTreeProc;
         SetWindowLongA(h, GWL_WNDPROC, (LONG)old);
         g_oldTreeProc = NULL; 
@@ -1147,37 +1147,37 @@ static LRESULT CALLBACK Tree_SubclassProc(HWND h, UINT m, WPARAM w, LPARAM l)
 
 /*******************************************************************************
  * INITIALIZATION
- * ИНИЦИАЛИЗАЦИЯ
+ * РРќРР¦РРђР›РР—РђР¦РРЇ
  ******************************************************************************/
 
 /*******************************************************************************
  * HookTreeOnce
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Finds and subclasses the Media Library TreeView (once).
  * 
- * Находит и субклассирует TreeView библиотеки (один раз).
+ * РќР°С…РѕРґРёС‚ Рё СЃСѓР±РєР»Р°СЃСЃРёСЂСѓРµС‚ TreeView Р±РёР±Р»РёРѕС‚РµРєРё (РѕРґРёРЅ СЂР°Р·).
  ******************************************************************************/
 static void HookTreeOnce()
 {
-    // Already hooked? / Уже захучен?
+    // Already hooked? / РЈР¶Рµ Р·Р°С…СѓС‡РµРЅ?
     if (g_hwndTree && IsWindow(g_hwndTree) && g_oldTreeProc) 
         return;
     
-    // Find TreeView / Найти TreeView
+    // Find TreeView / РќР°Р№С‚Рё TreeView
     HWND tree = FindMLTree(); 
     if (!tree) return;
     
-    // Verify it's a TreeView / Проверить, что это TreeView
+    // Verify it's a TreeView / РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ СЌС‚Рѕ TreeView
     char cls[64] = {0}; 
     GetClassNameA(tree, cls, ARRAYSIZE(cls)); 
     if (lstrcmpiA(cls, "SysTreeView32") != 0) return;
 
-    // Install subclass / Установить субкласс
+    // Install subclass / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃСѓР±РєР»Р°СЃСЃ
     g_hwndTree = tree;
     g_oldTreeProc = (WNDPROC)SetWindowLongA(g_hwndTree, GWL_WNDPROC, (LONG)Tree_SubclassProc);
 
-    // Initial tint / Начальное тонирование
+    // Initial tint / РќР°С‡Р°Р»СЊРЅРѕРµ С‚РѕРЅРёСЂРѕРІР°РЅРёРµ
     HIMAGELIST himl = TreeView_GetImageList(g_hwndTree, TVSIL_NORMAL);
     if (himl) { 
         g_himlLast = himl; 
@@ -1191,31 +1191,31 @@ static void HookTreeOnce()
 /*******************************************************************************
  * WorkerProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Worker thread that waits for Winamp to initialize, then hooks TreeView.
  * 
- * Рабочий поток, который ждёт инициализации Winamp, затем хукает TreeView.
+ * Р Р°Р±РѕС‡РёР№ РїРѕС‚РѕРє, РєРѕС‚РѕСЂС‹Р№ Р¶РґС‘С‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Winamp, Р·Р°С‚РµРј С…СѓРєР°РµС‚ TreeView.
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Wait for Winamp main window to appear and become visible (20s max)
  * 2. Wait for Media Library TreeView to appear (20s max)
  * 3. Hook TreeView when found
  * 
- * 1. Ждать появления и видимости главного окна Winamp (макс. 20с)
- * 2. Ждать появления TreeView библиотеки (макс. 20с)
- * 3. Захукать TreeView при обнаружении
+ * 1. Р–РґР°С‚СЊ РїРѕСЏРІР»РµРЅРёСЏ Рё РІРёРґРёРјРѕСЃС‚Рё РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp (РјР°РєСЃ. 20СЃ)
+ * 2. Р–РґР°С‚СЊ РїРѕСЏРІР»РµРЅРёСЏ TreeView Р±РёР±Р»РёРѕС‚РµРєРё (РјР°РєСЃ. 20СЃ)
+ * 3. Р—Р°С…СѓРєР°С‚СЊ TreeView РїСЂРё РѕР±РЅР°СЂСѓР¶РµРЅРёРё
  ******************************************************************************/
 static unsigned __stdcall WorkerProc(void*)
 {
     __try {
-        // Wait for Winamp window to be visible / Ждать видимости окна Winamp
+        // Wait for Winamp window to be visible / Р–РґР°С‚СЊ РІРёРґРёРјРѕСЃС‚Рё РѕРєРЅР° Winamp
         for (int i=0; i<200; ++i) { 
             HWND wa = FindWindowA(CLS_WINAMP_MAIN, NULL); 
             if (wa && IsWindowVisible(wa)) break; 
             Sleep(100); 
         }
         
-        // Wait for TreeView to appear / Ждать появления TreeView
+        // Wait for TreeView to appear / Р–РґР°С‚СЊ РїРѕСЏРІР»РµРЅРёСЏ TreeView
         for (int i=0; i<200; ++i) { 
             HookTreeOnce(); 
             if (g_hwndTree) break; 
@@ -1230,24 +1230,24 @@ static unsigned __stdcall WorkerProc(void*)
 
 /*******************************************************************************
  * EXPORTED PUBLIC API
- * ЭКСПОРТИРУЕМЫЙ ПУБЛИЧНЫЙ API
+ * Р­РљРЎРџРћР РўРР РЈР•РњР«Р™ РџРЈР‘Р›РР§РќР«Р™ API
  ******************************************************************************/
 
 /*******************************************************************************
  * ML_IconsTint_Start
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Starts the icon tinting module. Creates worker thread to find and hook TreeView.
  * 
- * Запускает модуль тонирования иконок. Создаёт рабочий поток для поиска и
- * хукания TreeView.
+ * Р—Р°РїСѓСЃРєР°РµС‚ РјРѕРґСѓР»СЊ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ РёРєРѕРЅРѕРє. РЎРѕР·РґР°С‘С‚ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє РґР»СЏ РїРѕРёСЃРєР° Рё
+ * С…СѓРєР°РЅРёСЏ TreeView.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hInst - Module instance (unused) / Экземпляр модуля (не используется)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hInst - Module instance (unused) / Р­РєР·РµРјРїР»СЏСЂ РјРѕРґСѓР»СЏ (РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE on success, FALSE on failure
- * TRUE при успехе, FALSE при неудаче
+ * TRUE РїСЂРё СѓСЃРїРµС…Рµ, FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  ******************************************************************************/
 extern "C" BOOL ML_IconsTint_Start(HINSTANCE /*hInst*/)
 {
@@ -1265,16 +1265,16 @@ extern "C" BOOL ML_IconsTint_Start(HINSTANCE /*hInst*/)
 /*******************************************************************************
  * ML_IconsTint_Stop
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Stops the icon tinting module. Waits for worker thread, unsubclasses TreeView,
  * and frees all resources.
  * 
- * Останавливает модуль тонирования иконок. Ждёт рабочий поток, снимает субкласс
- * TreeView и освобождает все ресурсы.
+ * РћСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РјРѕРґСѓР»СЊ С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ РёРєРѕРЅРѕРє. Р–РґС‘С‚ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє, СЃРЅРёРјР°РµС‚ СЃСѓР±РєР»Р°СЃСЃ
+ * TreeView Рё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ РІСЃРµ СЂРµСЃСѓСЂСЃС‹.
  ******************************************************************************/
 extern "C" void ML_IconsTint_Stop(void)
 {
-    // Signal thread to stop / Сигнализировать потоку остановиться
+    // Signal thread to stop / РЎРёРіРЅР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРѕС‚РѕРєСѓ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ
     LONG run = InterlockedExchange(&g_thrRun, 0);
     if (run && g_thr) 
         WaitForSingleObject(g_thr, 1000);
@@ -1284,7 +1284,7 @@ extern "C" void ML_IconsTint_Stop(void)
         g_thr = NULL; 
     }
     
-    // Unsubclass TreeView / Снять субкласс TreeView
+    // Unsubclass TreeView / РЎРЅСЏС‚СЊ СЃСѓР±РєР»Р°СЃСЃ TreeView
     if (g_hwndTree && g_oldTreeProc) 
         SetWindowLongA(g_hwndTree, GWL_WNDPROC, (LONG)g_oldTreeProc);
     
@@ -1299,16 +1299,16 @@ extern "C" void ML_IconsTint_Stop(void)
 /*******************************************************************************
  * ML_IconsTint_ForceOnce
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Forces a one-time color override for the next tint operation.
  * Useful for programmatic color changes.
  * 
- * Принудительно переопределяет цвет один раз для следующей операции тонирования.
- * Полезно для программных изменений цвета.
+ * РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµС‚ С†РІРµС‚ РѕРґРёРЅ СЂР°Р· РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ РѕРїРµСЂР°С†РёРё С‚РѕРЅРёСЂРѕРІР°РЅРёСЏ.
+ * РџРѕР»РµР·РЅРѕ РґР»СЏ РїСЂРѕРіСЂР°РјРјРЅС‹С… РёР·РјРµРЅРµРЅРёР№ С†РІРµС‚Р°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * forceColor - Color to use instead of TreeView text color
- *              Цвет для использования вместо цвета текста TreeView
+ *              Р¦РІРµС‚ РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІРјРµСЃС‚Рѕ С†РІРµС‚Р° С‚РµРєСЃС‚Р° TreeView
  ******************************************************************************/
 extern "C" void ML_IconsTint_ForceOnce(COLORREF forceColor) { 
     g_forceClr = forceColor; 
