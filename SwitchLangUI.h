@@ -5,7 +5,7 @@
 // 0 - English
 // 1 - Russian
 // ==========================================
-#define BUILD_LANG 1 
+#define BUILD_LANG 0 
 #define PLUG_VER "0.7"
 // ==========================================
 
