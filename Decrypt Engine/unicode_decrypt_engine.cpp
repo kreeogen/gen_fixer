@@ -1,10 +1,10 @@
-/*******************************************************************************
+/*******************************************************************************!
  * unicode_decrypt_engine.cpp
  * 
  * UNICODE DECRYPTION ENGINE FOR MP3 ID3 TAG ENCODING FIXES
- * ДВИЖОК РАСШИФРОВКИ UNICODE ДЛЯ ИСПРАВЛЕНИЯ КОДИРОВОК ID3-ТЕГОВ MP3
+ * Р”Р’РР–РћРљ Р РђРЎРЁРР¤Р РћР’РљР UNICODE Р”Р›РЇ РРЎРџР РђР’Р›Р•РќРРЇ РљРћР”РР РћР’РћРљ ID3-РўР•Р“РћР’ MP3
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module provides core functionality for detecting and fixing character
  * encoding issues (mojibake) in MP3 ID3 tags. It includes functions for:
  * - Converting between various encodings (UTF-8, Windows-1251, ACP)
@@ -12,147 +12,147 @@
  * - IAT (Import Address Table) patching for hooking
  * - Syncsafe integer conversion (ID3v2.4 format)
  * 
- * Этот модуль предоставляет основную функциональность для обнаружения и
- * исправления проблем кодировки символов (mojibake) в ID3-тегах MP3. Включает:
- * - Преобразование между различными кодировками (UTF-8, Windows-1251, ACP)
- * - Чтение и парсинг ID3v2 тегов (версии 2.2, 2.3, 2.4)
- * - IAT (таблица импорта адресов) патчинг для перехватов
- * - Преобразование syncsafe целых чисел (формат ID3v2.4)
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РѕСЃРЅРѕРІРЅСѓСЋ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ Рё
+ * РёСЃРїСЂР°РІР»РµРЅРёСЏ РїСЂРѕР±Р»РµРј РєРѕРґРёСЂРѕРІРєРё СЃРёРјРІРѕР»РѕРІ (mojibake) РІ ID3-С‚РµРіР°С… MP3. Р’РєР»СЋС‡Р°РµС‚:
+ * - РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РјРµР¶РґСѓ СЂР°Р·Р»РёС‡РЅС‹РјРё РєРѕРґРёСЂРѕРІРєР°РјРё (UTF-8, Windows-1251, ACP)
+ * - Р§С‚РµРЅРёРµ Рё РїР°СЂСЃРёРЅРі ID3v2 С‚РµРіРѕРІ (РІРµСЂСЃРёРё 2.2, 2.3, 2.4)
+ * - IAT (С‚Р°Р±Р»РёС†Р° РёРјРїРѕСЂС‚Р° Р°РґСЂРµСЃРѕРІ) РїР°С‚С‡РёРЅРі РґР»СЏ РїРµСЂРµС…РІР°С‚РѕРІ
+ * - РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ syncsafe С†РµР»С‹С… С‡РёСЃРµР» (С„РѕСЂРјР°С‚ ID3v2.4)
  * 
- * KEY CONCEPTS / КЛЮЧЕВЫЕ КОНЦЕПЦИИ:
+ * KEY CONCEPTS / РљР›Р®Р§Р•Р’Р«Р• РљРћРќР¦Р•РџР¦РР:
  * 
  * MOJIBAKE (????):
  * Character encoding corruption that occurs when text is decoded using the
  * wrong character encoding. Common in Russian ID3 tags where Windows-1251
  * text is incorrectly interpreted as UTF-8 or vice versa.
  * 
- * Искажение кодировки символов, возникающее когда текст декодируется с
- * использованием неправильной кодировки. Часто встречается в русских ID3-тегах,
- * где текст Windows-1251 неправильно интерпретируется как UTF-8 или наоборот.
+ * РСЃРєР°Р¶РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё СЃРёРјРІРѕР»РѕРІ, РІРѕР·РЅРёРєР°СЋС‰РµРµ РєРѕРіРґР° С‚РµРєСЃС‚ РґРµРєРѕРґРёСЂСѓРµС‚СЃСЏ СЃ
+ * РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РЅРµРїСЂР°РІРёР»СЊРЅРѕР№ РєРѕРґРёСЂРѕРІРєРё. Р§Р°СЃС‚Рѕ РІСЃС‚СЂРµС‡Р°РµС‚СЃСЏ РІ СЂСѓСЃСЃРєРёС… ID3-С‚РµРіР°С…,
+ * РіРґРµ С‚РµРєСЃС‚ Windows-1251 РЅРµРїСЂР°РІРёР»СЊРЅРѕ РёРЅС‚РµСЂРїСЂРµС‚РёСЂСѓРµС‚СЃСЏ РєР°Рє UTF-8 РёР»Рё РЅР°РѕР±РѕСЂРѕС‚.
  * 
  * SYNCSAFE INTEGERS:
  * Special integer format used in ID3v2.4 where the MSB of each byte is always
  * 0. This prevents the value from being confused with MP3 frame sync markers.
  * Example: 0x000000FF (normal) > 0x000001FF (syncsafe)
  * 
- * Специальный формат целых чисел в ID3v2.4, где MSB каждого байта всегда 0.
- * Это предотвращает путаницу значения с маркерами синхронизации MP3-кадров.
- * Пример: 0x000000FF (обычный) > 0x000001FF (syncsafe)
+ * РЎРїРµС†РёР°Р»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ С†РµР»С‹С… С‡РёСЃРµР» РІ ID3v2.4, РіРґРµ MSB РєР°Р¶РґРѕРіРѕ Р±Р°Р№С‚Р° РІСЃРµРіРґР° 0.
+ * Р­С‚Рѕ РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РїСѓС‚Р°РЅРёС†Сѓ Р·РЅР°С‡РµРЅРёСЏ СЃ РјР°СЂРєРµСЂР°РјРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё MP3-РєР°РґСЂРѕРІ.
+ * РџСЂРёРјРµСЂ: 0x000000FF (РѕР±С‹С‡РЅС‹Р№) > 0x000001FF (syncsafe)
  * 
  * IAT PATCHING:
  * Technique for intercepting Windows API calls by modifying the Import Address
  * Table of a loaded module. Used to hook file I/O functions in in_mp3.dll.
  * 
- * Техника перехвата вызовов Windows API путём модификации таблицы импорта
- * адресов загруженного модуля. Используется для перехвата функций файлового
- * ввода-вывода в in_mp3.dll.
+ * РўРµС…РЅРёРєР° РїРµСЂРµС…РІР°С‚Р° РІС‹Р·РѕРІРѕРІ Windows API РїСѓС‚С‘Рј РјРѕРґРёС„РёРєР°С†РёРё С‚Р°Р±Р»РёС†С‹ РёРјРїРѕСЂС‚Р°
+ * Р°РґСЂРµСЃРѕРІ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РјРѕРґСѓР»СЏ. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° С„СѓРЅРєС†РёР№ С„Р°Р№Р»РѕРІРѕРіРѕ
+ * РІРІРѕРґР°-РІС‹РІРѕРґР° РІ in_mp3.dll.
  * 
  ******************************************************************************/
 
 // Minimize Windows header inclusion
-// Минимизация включения заголовков Windows
+// РњРёРЅРёРјРёР·Р°С†РёСЏ РІРєР»СЋС‡РµРЅРёСЏ Р·Р°РіРѕР»РѕРІРєРѕРІ Windows
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <tlhelp32.h>    // For CreateToolhelp32Snapshot / Для CreateToolhelp32Snapshot
-#include <string.h>      // For string operations / Для строковых операций
+#include <tlhelp32.h>    // For CreateToolhelp32Snapshot / Р”Р»СЏ CreateToolhelp32Snapshot
+#include <string.h>      // For string operations / Р”Р»СЏ СЃС‚СЂРѕРєРѕРІС‹С… РѕРїРµСЂР°С†РёР№
 #include "unicode_decrypt_engine.h"
 
 // Link against kernel32.lib
-// Линковка с kernel32.lib
+// Р›РёРЅРєРѕРІРєР° СЃ kernel32.lib
 #pragma comment(lib, "kernel32.lib")
 
 /*******************************************************************************
- * CONSTANTS AND MACROS / КОНСТАНТЫ И МАКРОСЫ
+ * CONSTANTS AND MACROS / РљРћРќРЎРўРђРќРўР« Р РњРђРљР РћРЎР«
  ******************************************************************************/
 
 // Toolhelp32 flag for 32-bit modules on 64-bit systems
-// Флаг Toolhelp32 для 32-битных модулей на 64-битных системах
+// Р¤Р»Р°Рі Toolhelp32 РґР»СЏ 32-Р±РёС‚РЅС‹С… РјРѕРґСѓР»РµР№ РЅР° 64-Р±РёС‚РЅС‹С… СЃРёСЃС‚РµРјР°С…
 #ifndef TH32CS_SNAPMODULE32
 #define TH32CS_SNAPMODULE32 0x00000010
 #endif
 
 // Array size macro for compile-time calculations
-// Макрос размера массива для вычислений во время компиляции
+// РњР°РєСЂРѕСЃ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР° РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёР№ РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 #endif
 
 /*******************************************************************************
- * OPERATING SYSTEM DETECTION / ОПРЕДЕЛЕНИЕ ОПЕРАЦИОННОЙ СИСТЕМЫ
+ * OPERATING SYSTEM DETECTION / РћРџР Р•Р”Р•Р›Р•РќРР• РћРџР•Р РђР¦РРћРќРќРћР™ РЎРРЎРўР•РњР«
  ******************************************************************************/
 
 /*******************************************************************************
  * DECRYPT_IsWin9x - Check if Running on Windows 9x
- *                   Проверка работы на Windows 9x
+ *                   РџСЂРѕРІРµСЂРєР° СЂР°Р±РѕС‚С‹ РЅР° Windows 9x
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Detects if the code is running on Windows 95/98/ME (Windows 9x family).
  * This is important for compatibility as these systems have different
  * character encoding and API behavior.
  * 
- * Определяет, работает ли код на Windows 95/98/ME (семейство Windows 9x).
- * Это важно для совместимости, так как эти системы имеют другое поведение
- * кодировки символов и API.
+ * РћРїСЂРµРґРµР»СЏРµС‚, СЂР°Р±РѕС‚Р°РµС‚ Р»Рё РєРѕРґ РЅР° Windows 95/98/ME (СЃРµРјРµР№СЃС‚РІРѕ Windows 9x).
+ * Р­С‚Рѕ РІР°Р¶РЅРѕ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё, С‚Р°Рє РєР°Рє СЌС‚Рё СЃРёСЃС‚РµРјС‹ РёРјРµСЋС‚ РґСЂСѓРіРѕРµ РїРѕРІРµРґРµРЅРёРµ
+ * РєРѕРґРёСЂРѕРІРєРё СЃРёРјРІРѕР»РѕРІ Рё API.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE  - Running on Windows 9x / Работает на Windows 9x
- * FALSE - Running on Windows NT/2000/XP+ / Работает на Windows NT/2000/XP+
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE  - Running on Windows 9x / Р Р°Р±РѕС‚Р°РµС‚ РЅР° Windows 9x
+ * FALSE - Running on Windows NT/2000/XP+ / Р Р°Р±РѕС‚Р°РµС‚ РЅР° Windows NT/2000/XP+
  * 
- * TECHNICAL DETAILS / ТЕХНИЧЕСКИЕ ДЕТАЛИ:
+ * TECHNICAL DETAILS / РўР•РҐРќРР§Р•РЎРљРР• Р”Р•РўРђР›Р:
  * Uses GetVersionExA to query OS version. Windows 9x has platform ID
  * VER_PLATFORM_WIN32_WINDOWS, while NT-based systems use
  * VER_PLATFORM_WIN32_NT.
  * 
- * Использует GetVersionExA для запроса версии ОС. Windows 9x имеет ID
- * платформы VER_PLATFORM_WIN32_WINDOWS, в то время как NT-системы используют
+ * РСЃРїРѕР»СЊР·СѓРµС‚ GetVersionExA РґР»СЏ Р·Р°РїСЂРѕСЃР° РІРµСЂСЃРёРё РћРЎ. Windows 9x РёРјРµРµС‚ ID
+ * РїР»Р°С‚С„РѕСЂРјС‹ VER_PLATFORM_WIN32_WINDOWS, РІ С‚Рѕ РІСЂРµРјСЏ РєР°Рє NT-СЃРёСЃС‚РµРјС‹ РёСЃРїРѕР»СЊР·СѓСЋС‚
  * VER_PLATFORM_WIN32_NT.
  ******************************************************************************/
 extern "C" BOOL DECRYPT_IsWin9x(void) {
     OSVERSIONINFOA vi = { sizeof(OSVERSIONINFOA) };
-    if (!GetVersionExA(&vi)) return FALSE;  // Query failed / Запрос не удался
+    if (!GetVersionExA(&vi)) return FALSE;  // Query failed / Р—Р°РїСЂРѕСЃ РЅРµ СѓРґР°Р»СЃСЏ
     return (vi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 }
 
 /*******************************************************************************
  * SYNCSAFE INTEGER CONVERSION FUNCTIONS
- * ФУНКЦИИ ПРЕОБРАЗОВАНИЯ SYNCSAFE ЦЕЛЫХ ЧИСЕЛ
+ * Р¤РЈРќРљР¦РР РџР Р•РћР‘Р РђР—РћР’РђРќРРЇ SYNCSAFE Р¦Р•Р›Р«РҐ Р§РРЎР•Р›
  * 
- * BACKGROUND / ПРЕДЫСТОРИЯ:
+ * BACKGROUND / РџР Р•Р”Р«РЎРўРћР РРЇ:
  * ID3v2.4 uses "syncsafe integers" to avoid confusion with MP3 sync markers.
  * In syncsafe format, the MSB (bit 7) of each byte is always 0, effectively
  * storing a 28-bit value in 4 bytes instead of 32 bits.
  * 
- * ID3v2.4 использует "syncsafe целые числа" чтобы избежать путаницы с
- * маркерами синхронизации MP3. В syncsafe формате MSB (бит 7) каждого байта
- * всегда 0, фактически храня 28-битное значение в 4 байтах вместо 32 бит.
+ * ID3v2.4 РёСЃРїРѕР»СЊР·СѓРµС‚ "syncsafe С†РµР»С‹Рµ С‡РёСЃР»Р°" С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСѓС‚Р°РЅРёС†С‹ СЃ
+ * РјР°СЂРєРµСЂР°РјРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё MP3. Р’ syncsafe С„РѕСЂРјР°С‚Рµ MSB (Р±РёС‚ 7) РєР°Р¶РґРѕРіРѕ Р±Р°Р№С‚Р°
+ * РІСЃРµРіРґР° 0, С„Р°РєС‚РёС‡РµСЃРєРё С…СЂР°РЅСЏ 28-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ 4 Р±Р°Р№С‚Р°С… РІРјРµСЃС‚Рѕ 32 Р±РёС‚.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * Normal 32-bit:  0xFF 0xFF 0xFF 0xFF = 4,294,967,295
  * Syncsafe 28-bit: 0x7F 0x7F 0x7F 0x7F = 268,435,455
  ******************************************************************************/
 
 /*******************************************************************************
  * DECRYPT_SyncsafeToSize - Convert Syncsafe to Normal Integer
- *                           Преобразование Syncsafe в обычное целое
+ *                           РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Syncsafe РІ РѕР±С‹С‡РЅРѕРµ С†РµР»РѕРµ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts a 4-byte syncsafe integer (ID3v2.4) to a normal 32-bit integer.
- * Преобразует 4-байтовое syncsafe целое (ID3v2.4) в обычное 32-битное целое.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ 4-Р±Р°Р№С‚РѕРІРѕРµ syncsafe С†РµР»РѕРµ (ID3v2.4) РІ РѕР±С‹С‡РЅРѕРµ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * p - Pointer to 4-byte syncsafe integer (MSB first, big-endian)
- *     Указатель на 4-байтовое syncsafe целое (старший байт первым, big-endian)
+ *     РЈРєР°Р·Р°С‚РµР»СЊ РЅР° 4-Р±Р°Р№С‚РѕРІРѕРµ syncsafe С†РµР»РѕРµ (СЃС‚Р°СЂС€РёР№ Р±Р°Р№С‚ РїРµСЂРІС‹Рј, big-endian)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Normal 32-bit integer value / Обычное 32-битное целое значение
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Normal 32-bit integer value / РћР±С‹С‡РЅРѕРµ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ Р·РЅР°С‡РµРЅРёРµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * Each byte contributes 7 bits (bits 0-6), bit 7 is ignored:
  * result = (p[0] & 0x7F) << 21 | (p[1] & 0x7F) << 14 | 
  *          (p[2] & 0x7F) << 7  | (p[3] & 0x7F)
  * 
- * Каждый байт вносит 7 бит (биты 0-6), бит 7 игнорируется:
- * результат = (p[0] & 0x7F) << 21 | (p[1] & 0x7F) << 14 | 
+ * РљР°Р¶РґС‹Р№ Р±Р°Р№С‚ РІРЅРѕСЃРёС‚ 7 Р±РёС‚ (Р±РёС‚С‹ 0-6), Р±РёС‚ 7 РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ:
+ * СЂРµР·СѓР»СЊС‚Р°С‚ = (p[0] & 0x7F) << 21 | (p[1] & 0x7F) << 14 | 
  *             (p[2] & 0x7F) << 7  | (p[3] & 0x7F)
  ******************************************************************************/
 extern "C" DWORD DECRYPT_SyncsafeToSize(const BYTE* p) {
@@ -161,63 +161,63 @@ extern "C" DWORD DECRYPT_SyncsafeToSize(const BYTE* p) {
 
 /*******************************************************************************
  * DECRYPT_SizeToSyncsafe - Convert Normal Integer to Syncsafe
- *                           Преобразование обычного целого в Syncsafe
+ *                           РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РѕР±С‹С‡РЅРѕРіРѕ С†РµР»РѕРіРѕ РІ Syncsafe
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts a normal 32-bit integer to syncsafe format (ID3v2.4).
- * Преобразует обычное 32-битное целое в формат syncsafe (ID3v2.4).
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РѕР±С‹С‡РЅРѕРµ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ РІ С„РѕСЂРјР°С‚ syncsafe (ID3v2.4).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * v - Normal 32-bit integer value (max 0x0FFFFFFF for syncsafe)
- *     Обычное 32-битное целое значение (макс 0x0FFFFFFF для syncsafe)
+ *     РћР±С‹С‡РЅРѕРµ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ Р·РЅР°С‡РµРЅРёРµ (РјР°РєСЃ 0x0FFFFFFF РґР»СЏ syncsafe)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * 32-bit value with syncsafe encoding / 32-битное значение с syncsafe кодировкой
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * 32-bit value with syncsafe encoding / 32-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЃ syncsafe РєРѕРґРёСЂРѕРІРєРѕР№
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * Redistributes bits to leave MSB of each byte as 0:
  * - Bits 21-27 > byte 0 (bits 0-6)
  * - Bits 14-20 > byte 1 (bits 0-6)
  * - Bits  7-13 > byte 2 (bits 0-6)
  * - Bits  0-6  > byte 3 (bits 0-6)
  * 
- * Перераспределяет биты, оставляя MSB каждого байта как 0:
- * - Биты 21-27 > байт 0 (биты 0-6)
- * - Биты 14-20 > байт 1 (биты 0-6)
- * - Биты  7-13 > байт 2 (биты 0-6)
- * - Биты  0-6  > байт 3 (биты 0-6)
+ * РџРµСЂРµСЂР°СЃРїСЂРµРґРµР»СЏРµС‚ Р±РёС‚С‹, РѕСЃС‚Р°РІР»СЏСЏ MSB РєР°Р¶РґРѕРіРѕ Р±Р°Р№С‚Р° РєР°Рє 0:
+ * - Р‘РёС‚С‹ 21-27 > Р±Р°Р№С‚ 0 (Р±РёС‚С‹ 0-6)
+ * - Р‘РёС‚С‹ 14-20 > Р±Р°Р№С‚ 1 (Р±РёС‚С‹ 0-6)
+ * - Р‘РёС‚С‹  7-13 > Р±Р°Р№С‚ 2 (Р±РёС‚С‹ 0-6)
+ * - Р‘РёС‚С‹  0-6  > Р±Р°Р№С‚ 3 (Р±РёС‚С‹ 0-6)
  ******************************************************************************/
 extern "C" DWORD DECRYPT_SizeToSyncsafe(DWORD v) {
     return ((v&0xFE00000)<<3) | ((v&0x1FC000)<<2) | ((v&0x3F80)<<1) | (v&0x7F);
 }
 
 /*******************************************************************************
- * BIG-ENDIAN INTEGER FUNCTIONS / ФУНКЦИИ BIG-ENDIAN ЦЕЛЫХ ЧИСЕЛ
+ * BIG-ENDIAN INTEGER FUNCTIONS / Р¤РЈРќРљР¦РР BIG-ENDIAN Р¦Р•Р›Р«РҐ Р§РРЎР•Р›
  * 
- * BACKGROUND / ПРЕДЫСТОРИЯ:
+ * BACKGROUND / РџР Р•Р”Р«РЎРўРћР РРЇ:
  * ID3v2 tags use big-endian (network byte order) for multi-byte integers.
  * Intel x86/x64 uses little-endian, so conversion is necessary.
  * 
- * ID3v2 теги используют big-endian (сетевой порядок байтов) для многобайтовых
- * целых. Intel x86/x64 использует little-endian, поэтому необходимо преобразование.
+ * ID3v2 С‚РµРіРё РёСЃРїРѕР»СЊР·СѓСЋС‚ big-endian (СЃРµС‚РµРІРѕР№ РїРѕСЂСЏРґРѕРє Р±Р°Р№С‚РѕРІ) РґР»СЏ РјРЅРѕРіРѕР±Р°Р№С‚РѕРІС‹С…
+ * С†РµР»С‹С…. Intel x86/x64 РёСЃРїРѕР»СЊР·СѓРµС‚ little-endian, РїРѕСЌС‚РѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ.
  ******************************************************************************/
 
 /*******************************************************************************
  * DECRYPT_BE32Read - Read 32-bit Big-Endian Integer
- *                    Чтение 32-битного Big-Endian целого
+ *                    Р§С‚РµРЅРёРµ 32-Р±РёС‚РЅРѕРіРѕ Big-Endian С†РµР»РѕРіРѕ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Reads a 32-bit integer from memory in big-endian format.
- * Читает 32-битное целое из памяти в формате big-endian.
+ * Р§РёС‚Р°РµС‚ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ РёР· РїР°РјСЏС‚Рё РІ С„РѕСЂРјР°С‚Рµ big-endian.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * p - Pointer to 4 bytes in big-endian order
- *     Указатель на 4 байта в порядке big-endian
+ *     РЈРєР°Р·Р°С‚РµР»СЊ РЅР° 4 Р±Р°Р№С‚Р° РІ РїРѕСЂСЏРґРєРµ big-endian
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * 32-bit integer in host byte order / 32-битное целое в порядке байтов хоста
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * 32-bit integer in host byte order / 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ РІ РїРѕСЂСЏРґРєРµ Р±Р°Р№С‚РѕРІ С…РѕСЃС‚Р°
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * Bytes: [0x12, 0x34, 0x56, 0x78] > Result: 0x12345678
  ******************************************************************************/
 extern "C" DWORD DECRYPT_BE32Read(const BYTE* p) {
@@ -226,51 +226,51 @@ extern "C" DWORD DECRYPT_BE32Read(const BYTE* p) {
 
 /*******************************************************************************
  * DECRYPT_BE32Write - Write 32-bit Integer in Big-Endian Format
- *                     Запись 32-битного целого в формате Big-Endian
+ *                     Р—Р°РїРёСЃСЊ 32-Р±РёС‚РЅРѕРіРѕ С†РµР»РѕРіРѕ РІ С„РѕСЂРјР°С‚Рµ Big-Endian
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Writes a 32-bit integer to memory in big-endian format.
- * Записывает 32-битное целое в память в формате big-endian.
+ * Р—Р°РїРёСЃС‹РІР°РµС‚ 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ РІ РїР°РјСЏС‚СЊ РІ С„РѕСЂРјР°С‚Рµ big-endian.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * p - Pointer to 4-byte buffer / Указатель на 4-байтовый буфер
- * v - 32-bit integer value to write / 32-битное целое значение для записи
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * p - Pointer to 4-byte buffer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° 4-Р±Р°Р№С‚РѕРІС‹Р№ Р±СѓС„РµСЂ
+ * v - 32-bit integer value to write / 32-Р±РёС‚РЅРѕРµ С†РµР»РѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ Р·Р°РїРёСЃРё
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * Value: 0x12345678 > Bytes: [0x12, 0x34, 0x56, 0x78]
  ******************************************************************************/
 extern "C" void DECRYPT_BE32Write(BYTE* p, DWORD v) {
-    p[0] = (BYTE)(v>>24);  // Most significant byte / Старший байт
+    p[0] = (BYTE)(v>>24);  // Most significant byte / РЎС‚Р°СЂС€РёР№ Р±Р°Р№С‚
     p[1] = (BYTE)(v>>16);  
     p[2] = (BYTE)(v>>8);   
-    p[3] = (BYTE)v;        // Least significant byte / Младший байт
+    p[3] = (BYTE)v;        // Least significant byte / РњР»Р°РґС€РёР№ Р±Р°Р№С‚
 }
 
 /*******************************************************************************
- * STRING MANIPULATION FUNCTIONS / ФУНКЦИИ РАБОТЫ СО СТРОКАМИ
+ * STRING MANIPULATION FUNCTIONS / Р¤РЈРќРљР¦РР Р РђР‘РћРўР« РЎРћ РЎРўР РћРљРђРњР
  ******************************************************************************/
 
 /*******************************************************************************
  * towlower0 - Convert Wide Character to Lowercase
- *             Преобразование широкого символа в нижний регистр
+ *             РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С€РёСЂРѕРєРѕРіРѕ СЃРёРјРІРѕР»Р° РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Simple case conversion for ASCII range (A-Z > a-z). Used internally for
  * case-insensitive string comparisons.
  * 
- * Простое преобразование регистра для ASCII диапазона (A-Z > a-z). Используется
- * внутренне для сравнений строк без учёта регистра.
+ * РџСЂРѕСЃС‚РѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЂРµРіРёСЃС‚СЂР° РґР»СЏ ASCII РґРёР°РїР°Р·РѕРЅР° (A-Z > a-z). РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
+ * РІРЅСѓС‚СЂРµРЅРЅРµ РґР»СЏ СЃСЂР°РІРЅРµРЅРёР№ СЃС‚СЂРѕРє Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * ch - Wide character to convert / Широкий символ для преобразования
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * ch - Wide character to convert / РЁРёСЂРѕРєРёР№ СЃРёРјРІРѕР» РґР»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Lowercase version of ch if A-Z, otherwise unchanged
- * Версия ch в нижнем регистре если A-Z, иначе без изменений
+ * Р’РµСЂСЃРёСЏ ch РІ РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ РµСЃР»Рё A-Z, РёРЅР°С‡Рµ Р±РµР· РёР·РјРµРЅРµРЅРёР№
  * 
- * NOTE / ПРИМЕЧАНИЕ:
+ * NOTE / РџР РРњР•Р§РђРќРР•:
  * Only handles ASCII A-Z. Does not handle international characters or locale.
- * Обрабатывает только ASCII A-Z. Не обрабатывает международные символы или локаль.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ С‚РѕР»СЊРєРѕ ASCII A-Z. РќРµ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РјРµР¶РґСѓРЅР°СЂРѕРґРЅС‹Рµ СЃРёРјРІРѕР»С‹ РёР»Рё Р»РѕРєР°Р»СЊ.
  ******************************************************************************/
 static WCHAR towlower0(WCHAR ch) {
     return (ch >= L'A' && ch <= L'Z') ? (WCHAR)(ch + 32) : ch;
@@ -278,137 +278,137 @@ static WCHAR towlower0(WCHAR ch) {
 
 /*******************************************************************************
  * DECRYPT_WideStrContainsI - Case-Insensitive Substring Search
- *                             Поиск подстроки без учёта регистра
+ *                             РџРѕРёСЃРє РїРѕРґСЃС‚СЂРѕРєРё Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Searches for a substring within a wide string, ignoring case for ASCII chars.
- * Ищет подстроку в широкой строке, игнорируя регистр для ASCII символов.
+ * РС‰РµС‚ РїРѕРґСЃС‚СЂРѕРєСѓ РІ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРµ, РёРіРЅРѕСЂРёСЂСѓСЏ СЂРµРіРёСЃС‚СЂ РґР»СЏ ASCII СЃРёРјРІРѕР»РѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * str - String to search in / Строка для поиска
- * sub - Substring to find / Подстрока для поиска
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * str - String to search in / РЎС‚СЂРѕРєР° РґР»СЏ РїРѕРёСЃРєР°
+ * sub - Substring to find / РџРѕРґСЃС‚СЂРѕРєР° РґР»СЏ РїРѕРёСЃРєР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if substring found / TRUE если подстрока найдена
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if substring found / TRUE РµСЃР»Рё РїРѕРґСЃС‚СЂРѕРєР° РЅР°Р№РґРµРЅР°
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * Uses sliding window approach - tries to match substring starting at each
  * position in the main string.
  * 
- * Использует подход скользящего окна - пытается найти совпадение подстроки,
- * начиная с каждой позиции в основной строке.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ РїРѕРґС…РѕРґ СЃРєРѕР»СЊР·СЏС‰РµРіРѕ РѕРєРЅР° - РїС‹С‚Р°РµС‚СЃСЏ РЅР°Р№С‚Рё СЃРѕРІРїР°РґРµРЅРёРµ РїРѕРґСЃС‚СЂРѕРєРё,
+ * РЅР°С‡РёРЅР°СЏ СЃ РєР°Р¶РґРѕР№ РїРѕР·РёС†РёРё РІ РѕСЃРЅРѕРІРЅРѕР№ СЃС‚СЂРѕРєРµ.
  * 
- * COMPLEXITY / СЛОЖНОСТЬ:
+ * COMPLEXITY / РЎР›РћР–РќРћРЎРўР¬:
  * O(n*m) where n = length of str, m = length of sub
- * O(n*m) где n = длина str, m = длина sub
+ * O(n*m) РіРґРµ n = РґР»РёРЅР° str, m = РґР»РёРЅР° sub
  ******************************************************************************/
 extern "C" BOOL DECRYPT_WideStrContainsI(const WCHAR* str, const WCHAR* sub) {
-    if (!str || !sub || !*sub) return FALSE;  // Validate parameters / Проверка параметров
+    if (!str || !sub || !*sub) return FALSE;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
     
     while (*str) {
         const WCHAR *p1 = str, *p2 = sub;
         
         // Try to match substring starting at current position
-        // Попытка найти совпадение подстроки начиная с текущей позиции
+        // РџРѕРїС‹С‚РєР° РЅР°Р№С‚Рё СЃРѕРІРїР°РґРµРЅРёРµ РїРѕРґСЃС‚СЂРѕРєРё РЅР°С‡РёРЅР°СЏ СЃ С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё
         while (*p1 && *p2 && towlower0(*p1) == towlower0(*p2)) { 
             p1++; 
             p2++; 
         }
         
         // If we reached end of substring, we found a match
-        // Если достигли конца подстроки, нашли совпадение
+        // Р•СЃР»Рё РґРѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° РїРѕРґСЃС‚СЂРѕРєРё, РЅР°С€Р»Рё СЃРѕРІРїР°РґРµРЅРёРµ
         if (!*p2) return TRUE;
         
-        str++;  // Try next position / Попробовать следующую позицию
+        str++;  // Try next position / РџРѕРїСЂРѕР±РѕРІР°С‚СЊ СЃР»РµРґСѓСЋС‰СѓСЋ РїРѕР·РёС†РёСЋ
     }
     return FALSE;
 }
 
 /*******************************************************************************
  * DECRYPT_WideToACP - Convert Wide String to ANSI Code Page
- *                     Преобразование широкой строки в ANSI кодовую страницу
+ *                     РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё РІ ANSI РєРѕРґРѕРІСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts a Unicode (wide) string to the system's ANSI code page (CP_ACP).
  * This is used to convert decoded ID3 tags to the format Winamp expects.
  * 
- * Преобразует Unicode (широкую) строку в ANSI кодовую страницу системы (CP_ACP).
- * Используется для преобразования декодированных ID3-тегов в формат, ожидаемый Winamp.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ Unicode (С€РёСЂРѕРєСѓСЋ) СЃС‚СЂРѕРєСѓ РІ ANSI РєРѕРґРѕРІСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ СЃРёСЃС‚РµРјС‹ (CP_ACP).
+ * РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РґРµРєРѕРґРёСЂРѕРІР°РЅРЅС‹С… ID3-С‚РµРіРѕРІ РІ С„РѕСЂРјР°С‚, РѕР¶РёРґР°РµРјС‹Р№ Winamp.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * w      - Input wide string (null-terminated) / Входная широкая строка (с null-терминатором)
- * out    - Output ANSI buffer / Выходной ANSI буфер
- * outlen - Size of output buffer / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * w      - Input wide string (null-terminated) / Р’С…РѕРґРЅР°СЏ С€РёСЂРѕРєР°СЏ СЃС‚СЂРѕРєР° (СЃ null-С‚РµСЂРјРёРЅР°С‚РѕСЂРѕРј)
+ * out    - Output ANSI buffer / Р’С‹С…РѕРґРЅРѕР№ ANSI Р±СѓС„РµСЂ
+ * outlen - Size of output buffer / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Number of characters written (excluding null terminator)
- * Количество записанных символов (исключая null-терминатор)
- * 0 on failure / 0 при неудаче
+ * РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РїРёСЃР°РЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ (РёСЃРєР»СЋС‡Р°СЏ null-С‚РµСЂРјРёРЅР°С‚РѕСЂ)
+ * 0 on failure / 0 РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * IMPORTANT / ВАЖНО:
+ * IMPORTANT / Р’РђР–РќРћ:
  * Characters that cannot be represented in the ANSI code page may be replaced
  * with '?' or best-fit characters.
  * 
- * Символы, которые не могут быть представлены в ANSI кодовой странице, могут
- * быть заменены на '?' или наилучшим образом подходящие символы.
+ * РЎРёРјРІРѕР»С‹, РєРѕС‚РѕСЂС‹Рµ РЅРµ РјРѕРіСѓС‚ Р±С‹С‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅС‹ РІ ANSI РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†Рµ, РјРѕРіСѓС‚
+ * Р±С‹С‚СЊ Р·Р°РјРµРЅРµРЅС‹ РЅР° '?' РёР»Рё РЅР°РёР»СѓС‡С€РёРј РѕР±СЂР°Р·РѕРј РїРѕРґС…РѕРґСЏС‰РёРµ СЃРёРјРІРѕР»С‹.
  ******************************************************************************/
 extern "C" int DECRYPT_WideToACP(const WCHAR* w, char* out, int outlen) {
-    if (!w || !out || outlen <= 0) return 0;  // Validate parameters / Проверка параметров
+    if (!w || !out || outlen <= 0) return 0;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
     
-    // Convert using Windows API / Преобразование используя Windows API
+    // Convert using Windows API / РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РёСЃРїРѕР»СЊР·СѓСЏ Windows API
     int m = WideCharToMultiByte(CP_ACP, 0, w, -1, out, outlen, NULL, NULL);
     
     // Subtract 1 to exclude null terminator from count
-    // Вычесть 1 чтобы исключить null-терминатор из счёта
+    // Р’С‹С‡РµСЃС‚СЊ 1 С‡С‚РѕР±С‹ РёСЃРєР»СЋС‡РёС‚СЊ null-С‚РµСЂРјРёРЅР°С‚РѕСЂ РёР· СЃС‡С‘С‚Р°
     return m ? m - 1 : 0;
 }
 
 /*******************************************************************************
  * DECRYPT_Utf8ToWide - Convert UTF-8 String to Wide String
- *                      Преобразование UTF-8 строки в широкую строку
+ *                      РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ UTF-8 СЃС‚СЂРѕРєРё РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts a UTF-8 encoded string to Unicode (UTF-16LE) wide string. This
  * function first tries the Windows API, then falls back to manual decoding
  * if the API fails (for robustness with malformed UTF-8).
  * 
- * Преобразует UTF-8 кодированную строку в Unicode (UTF-16LE) широкую строку.
- * Эта функция сначала пробует Windows API, затем возвращается к ручному
- * декодированию если API не удаётся (для надёжности с искажённым UTF-8).
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ UTF-8 РєРѕРґРёСЂРѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ РІ Unicode (UTF-16LE) С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ СЃРЅР°С‡Р°Р»Р° РїСЂРѕР±СѓРµС‚ Windows API, Р·Р°С‚РµРј РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ Рє СЂСѓС‡РЅРѕРјСѓ
+ * РґРµРєРѕРґРёСЂРѕРІР°РЅРёСЋ РµСЃР»Рё API РЅРµ СѓРґР°С‘С‚СЃСЏ (РґР»СЏ РЅР°РґС‘Р¶РЅРѕСЃС‚Рё СЃ РёСЃРєР°Р¶С‘РЅРЅС‹Рј UTF-8).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * utf8   - Input UTF-8 string / Входная UTF-8 строка
- * out    - Output wide string buffer / Буфер выходной широкой строки
- * cchOut - Size of output buffer in wide characters / Размер выходного буфера в широких символах
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * utf8   - Input UTF-8 string / Р’С…РѕРґРЅР°СЏ UTF-8 СЃС‚СЂРѕРєР°
+ * out    - Output wide string buffer / Р‘СѓС„РµСЂ РІС‹С…РѕРґРЅРѕР№ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
+ * cchOut - Size of output buffer in wide characters / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР° РІ С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»Р°С…
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Number of wide characters written (excluding null terminator)
- * Количество записанных широких символов (исключая null-терминатор)
+ * РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РїРёСЃР°РЅРЅС‹С… С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ (РёСЃРєР»СЋС‡Р°СЏ null-С‚РµСЂРјРёРЅР°С‚РѕСЂ)
  * 
- * UTF-8 ENCODING SCHEME / СХЕМА КОДИРОВАНИЯ UTF-8:
+ * UTF-8 ENCODING SCHEME / РЎРҐР•РњРђ РљРћР”РР РћР’РђРќРРЇ UTF-8:
  * 1-byte: 0xxxxxxx                    (U+0000 to U+007F)
  * 2-byte: 110xxxxx 10xxxxxx           (U+0080 to U+07FF)
  * 3-byte: 1110xxxx 10xxxxxx 10xxxxxx  (U+0800 to U+FFFF)
  * 
- * FALLBACK DECODER / РЕЗЕРВНЫЙ ДЕКОДЕР:
+ * FALLBACK DECODER / Р Р•Р—Р•Р Р’РќР«Р™ Р”Р•РљРћР”Р•Р :
  * The manual decoder handles 1-3 byte sequences (covers Basic Multilingual
  * Plane, sufficient for most ID3 tags). 4-byte sequences (rare) are not supported.
  * 
- * Ручной декодер обрабатывает 1-3 байтовые последовательности (покрывает
- * базовую многоязычную плоскость, достаточно для большинства ID3-тегов).
- * 4-байтовые последовательности (редкие) не поддерживаются.
+ * Р СѓС‡РЅРѕР№ РґРµРєРѕРґРµСЂ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ 1-3 Р±Р°Р№С‚РѕРІС‹Рµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё (РїРѕРєСЂС‹РІР°РµС‚
+ * Р±Р°Р·РѕРІСѓСЋ РјРЅРѕРіРѕСЏР·С‹С‡РЅСѓСЋ РїР»РѕСЃРєРѕСЃС‚СЊ, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР»СЏ Р±РѕР»СЊС€РёРЅСЃС‚РІР° ID3-С‚РµРіРѕРІ).
+ * 4-Р±Р°Р№С‚РѕРІС‹Рµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё (СЂРµРґРєРёРµ) РЅРµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ.
  ******************************************************************************/
 extern "C" int DECRYPT_Utf8ToWide(const char* utf8, WCHAR* out, int cchOut) {
-    if (!utf8 || !out || cchOut <= 0) return 0;  // Validate parameters / Проверка параметров
+    if (!utf8 || !out || cchOut <= 0) return 0;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
 
     // Try Windows API first (codepage 65001 = UTF-8)
-    // Сначала попробовать Windows API (кодовая страница 65001 = UTF-8)
+    // РЎРЅР°С‡Р°Р»Р° РїРѕРїСЂРѕР±РѕРІР°С‚СЊ Windows API (РєРѕРґРѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р° 65001 = UTF-8)
     int wlen = MultiByteToWideChar(65001, 0, utf8, -1, out, cchOut);
-    if (wlen > 0) return wlen - 1;  // Success, return length / Успех, вернуть длину
+    if (wlen > 0) return wlen - 1;  // Success, return length / РЈСЃРїРµС…, РІРµСЂРЅСѓС‚СЊ РґР»РёРЅСѓ
 
     // Fallback: Manual UTF-8 decoding for robustness
-    // Резерв: Ручное декодирование UTF-8 для надёжности
+    // Р РµР·РµСЂРІ: Р СѓС‡РЅРѕРµ РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ UTF-8 РґР»СЏ РЅР°РґС‘Р¶РЅРѕСЃС‚Рё
     const unsigned char* p = (const unsigned char*)utf8;
     int n = 0;
     
@@ -416,137 +416,137 @@ extern "C" int DECRYPT_Utf8ToWide(const char* utf8, WCHAR* out, int cchOut) {
         unsigned c = *p++;
         
         if (c < 0x80) {
-            // 1-byte sequence (ASCII) / 1-байтовая последовательность (ASCII)
+            // 1-byte sequence (ASCII) / 1-Р±Р°Р№С‚РѕРІР°СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ (ASCII)
             out[n++] = (WCHAR)c;
         } 
         else if ((c & 0xE0) == 0xC0 && (p[0] & 0xC0) == 0x80) {
-            // 2-byte sequence / 2-байтовая последовательность
+            // 2-byte sequence / 2-Р±Р°Р№С‚РѕРІР°СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ
             // 110xxxxx 10xxxxxx
             out[n++] = (WCHAR)(((c & 0x1F) << 6) | (p[0] & 0x3F)); 
             p++;
         } 
         else if ((c & 0xF0) == 0xE0 && (p[0] & 0xC0) == 0x80 && (p[1] & 0xC0) == 0x80) {
-            // 3-byte sequence / 3-байтовая последовательность
+            // 3-byte sequence / 3-Р±Р°Р№С‚РѕРІР°СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ
             // 1110xxxx 10xxxxxx 10xxxxxx
             out[n++] = (WCHAR)(((c & 0x0F) << 12) | ((p[0] & 0x3F) << 6) | (p[1] & 0x3F)); 
             p += 2;
         } 
         else {
             // Invalid UTF-8 sequence, stop decoding
-            // Неверная UTF-8 последовательность, остановить декодирование
+            // РќРµРІРµСЂРЅР°СЏ UTF-8 РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ, РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ
             break; 
         }
     }
     
-    out[n] = 0;  // Null terminate / Null-терминатор
+    out[n] = 0;  // Null terminate / Null-С‚РµСЂРјРёРЅР°С‚РѕСЂ
     return n;
 }
 
 /*******************************************************************************
  * ENCODING DETECTION AND CORRECTION FUNCTIONS
- * ФУНКЦИИ ОБНАРУЖЕНИЯ И ИСПРАВЛЕНИЯ КОДИРОВКИ
+ * Р¤РЈРќРљР¦РР РћР‘РќРђР РЈР–Р•РќРРЇ Р РРЎРџР РђР’Р›Р•РќРРЇ РљРћР”РР РћР’РљР
  ******************************************************************************/
 
 /*******************************************************************************
  * mbcp_to_acp - Convert from Specific Codepage to ACP
- *               Преобразование из конкретной кодовой страницы в ACP
+ *               РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РёР· РєРѕРЅРєСЂРµС‚РЅРѕР№ РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ РІ ACP
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Converts a string from a specific code page (e.g., Windows-1251) to the
  * system's ANSI code page via Unicode intermediate representation.
  * 
- * Преобразует строку из конкретной кодовой страницы (например, Windows-1251)
- * в ANSI кодовую страницу системы через промежуточное представление Unicode.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ СЃС‚СЂРѕРєСѓ РёР· РєРѕРЅРєСЂРµС‚РЅРѕР№ РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ (РЅР°РїСЂРёРјРµСЂ, Windows-1251)
+ * РІ ANSI РєРѕРґРѕРІСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ СЃРёСЃС‚РµРјС‹ С‡РµСЂРµР· РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ Unicode.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * src    - Source string in specified codepage / Исходная строка в указанной кодовой странице
- * cp     - Source codepage (e.g., 1251 for Windows-1251) / Исходная кодовая страница (например, 1251 для Windows-1251)
- * out    - Output buffer / Выходной буфер
- * outlen - Output buffer size / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * src    - Source string in specified codepage / РСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР° РІ СѓРєР°Р·Р°РЅРЅРѕР№ РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†Рµ
+ * cp     - Source codepage (e.g., 1251 for Windows-1251) / РСЃС…РѕРґРЅР°СЏ РєРѕРґРѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р° (РЅР°РїСЂРёРјРµСЂ, 1251 РґР»СЏ Windows-1251)
+ * out    - Output buffer / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ
+ * outlen - Output buffer size / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Number of characters written / Количество записанных символов
- * 0 on failure / 0 при неудаче
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Number of characters written / РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РїРёСЃР°РЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ
+ * 0 on failure / 0 РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Convert from source codepage to Unicode (wide string)
- *    Преобразовать из исходной кодовой страницы в Unicode (широкую строку)
+ *    РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РёР· РёСЃС…РѕРґРЅРѕР№ РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ РІ Unicode (С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ)
  * 2. Convert from Unicode to system ACP
- *    Преобразовать из Unicode в системную ACP
+ *    РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РёР· Unicode РІ СЃРёСЃС‚РµРјРЅСѓСЋ ACP
  ******************************************************************************/
 static int mbcp_to_acp(const char* src, UINT cp, char* out, int outlen) {
     // Get required buffer size for wide string conversion
-    // Получить требуемый размер буфера для преобразования в широкую строку
+    // РџРѕР»СѓС‡РёС‚СЊ С‚СЂРµР±СѓРµРјС‹Р№ СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР° РґР»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ
     int wlen = MultiByteToWideChar(cp, 0, src, -1, NULL, 0);
-    if (!wlen) return 0;  // Conversion failed / Преобразование не удалось
+    if (!wlen) return 0;  // Conversion failed / РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ
     
     // Allocate temporary wide string buffer
-    // Выделить временный буфер широкой строки
+    // Р’С‹РґРµР»РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
     WCHAR* w = (WCHAR*)GlobalAlloc(GPTR, wlen * sizeof(WCHAR));
-    if (!w) return 0;  // Allocation failed / Выделение не удалось
+    if (!w) return 0;  // Allocation failed / Р’С‹РґРµР»РµРЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ
     
     // Convert to wide string
-    // Преобразовать в широкую строку
+    // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ
     MultiByteToWideChar(cp, 0, src, -1, w, wlen);
     
     // Convert wide string to ACP
-    // Преобразовать широкую строку в ACP
+    // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ РІ ACP
     int m = DECRYPT_WideToACP(w, out, outlen);
     
     // Free temporary buffer
-    // Освободить временный буфер
+    // РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ
     GlobalFree(w);
     return m;
 }
 
 /*******************************************************************************
  * DECRYPT_ToACP_Best - Intelligently Detect and Convert to ACP
- *                      Интеллектуальное обнаружение и преобразование в ACP
+ *                      РРЅС‚РµР»Р»РµРєС‚СѓР°Р»СЊРЅРѕРµ РѕР±РЅР°СЂСѓР¶РµРЅРёРµ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ ACP
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Attempts to detect the encoding of a string and convert it to ACP using
  * the best matching encoding. This is the core mojibake-fixing function.
  * 
- * Пытается обнаружить кодировку строки и преобразовать её в ACP, используя
- * наилучшую подходящую кодировку. Это основная функция исправления mojibake.
+ * РџС‹С‚Р°РµС‚СЃСЏ РѕР±РЅР°СЂСѓР¶РёС‚СЊ РєРѕРґРёСЂРѕРІРєСѓ СЃС‚СЂРѕРєРё Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РµС‘ РІ ACP, РёСЃРїРѕР»СЊР·СѓСЏ
+ * РЅР°РёР»СѓС‡С€СѓСЋ РїРѕРґС…РѕРґСЏС‰СѓСЋ РєРѕРґРёСЂРѕРІРєСѓ. Р­С‚Рѕ РѕСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РёСЃРїСЂР°РІР»РµРЅРёСЏ mojibake.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * src    - Source string (unknown encoding) / Исходная строка (неизвестная кодировка)
- * out    - Output buffer for ACP string / Выходной буфер для ACP строки
- * outlen - Output buffer size / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * src    - Source string (unknown encoding) / РСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР° (РЅРµРёР·РІРµСЃС‚РЅР°СЏ РєРѕРґРёСЂРѕРІРєР°)
+ * out    - Output buffer for ACP string / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ ACP СЃС‚СЂРѕРєРё
+ * outlen - Output buffer size / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Number of characters written / Количество записанных символов
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Number of characters written / РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РїРёСЃР°РЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ
  * 
- * DETECTION ALGORITHM / АЛГОРИТМ ОБНАРУЖЕНИЯ:
+ * DETECTION ALGORITHM / РђР›Р“РћР РРўРњ РћР‘РќРђР РЈР–Р•РќРРЇ:
  * 1. Check for UTF-8 markers (multi-byte sequences starting with 0xC2-0xF4)
- *    Проверить маркеры UTF-8 (многобайтовые последовательности начинающиеся с 0xC2-0xF4)
+ *    РџСЂРѕРІРµСЂРёС‚СЊ РјР°СЂРєРµСЂС‹ UTF-8 (РјРЅРѕРіРѕР±Р°Р№С‚РѕРІС‹Рµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ 0xC2-0xF4)
  * 2. If UTF-8 detected, convert UTF-8 > Wide > ACP
- *    Если UTF-8 обнаружен, преобразовать UTF-8 > Wide > ACP
+ *    Р•СЃР»Рё UTF-8 РѕР±РЅР°СЂСѓР¶РµРЅ, РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ UTF-8 > Wide > ACP
  * 3. If not UTF-8, try Windows-1251 (Cyrillic) > Wide > ACP
- *    Если не UTF-8, попробовать Windows-1251 (кириллица) > Wide > ACP
+ *    Р•СЃР»Рё РЅРµ UTF-8, РїРѕРїСЂРѕР±РѕРІР°С‚СЊ Windows-1251 (РєРёСЂРёР»Р»РёС†Р°) > Wide > ACP
  * 4. If all fails, copy as-is
- *    Если всё не удаётся, копировать как есть
+ *    Р•СЃР»Рё РІСЃС‘ РЅРµ СѓРґР°С‘С‚СЃСЏ, РєРѕРїРёСЂРѕРІР°С‚СЊ РєР°Рє РµСЃС‚СЊ
  * 
- * WHY WINDOWS-1251? / ПОЧЕМУ WINDOWS-1251?:
+ * WHY WINDOWS-1251? / РџРћР§Р•РњРЈ WINDOWS-1251?:
  * Windows-1251 is the most common encoding for Russian/Cyrillic text in old
  * ID3 tags, especially those created by Russian software in the 1990s-2000s.
  * 
- * Windows-1251 - самая распространённая кодировка для русского/кириллического
- * текста в старых ID3-тегах, особенно созданных русским ПО в 1990-2000-х.
+ * Windows-1251 - СЃР°РјР°СЏ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅС‘РЅРЅР°СЏ РєРѕРґРёСЂРѕРІРєР° РґР»СЏ СЂСѓСЃСЃРєРѕРіРѕ/РєРёСЂРёР»Р»РёС‡РµСЃРєРѕРіРѕ
+ * С‚РµРєСЃС‚Р° РІ СЃС‚Р°СЂС‹С… ID3-С‚РµРіР°С…, РѕСЃРѕР±РµРЅРЅРѕ СЃРѕР·РґР°РЅРЅС‹С… СЂСѓСЃСЃРєРёРј РџРћ РІ 1990-2000-С….
  ******************************************************************************/
 extern "C" int DECRYPT_ToACP_Best(const char* src, char* out, int outlen) {
-    if (!src || !out || outlen <= 0) return 0;  // Validate parameters / Проверка параметров
-    out[0] = 0;  // Initialize output / Инициализировать вывод
+    if (!src || !out || outlen <= 0) return 0;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
+    out[0] = 0;  // Initialize output / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РІС‹РІРѕРґ
     
     // Phase 1: Detect if string contains UTF-8 sequences
-    // Фаза 1: Обнаружить содержит ли строка UTF-8 последовательности
+    // Р¤Р°Р·Р° 1: РћР±РЅР°СЂСѓР¶РёС‚СЊ СЃРѕРґРµСЂР¶РёС‚ Р»Рё СЃС‚СЂРѕРєР° UTF-8 РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
     BOOL is_utf8 = FALSE;
     const unsigned char* p = (const unsigned char*)src;
     
     while(*p) {
         // Check for valid UTF-8 multi-byte sequence start
-        // Проверить начало валидной UTF-8 многобайтовой последовательности
+        // РџСЂРѕРІРµСЂРёС‚СЊ РЅР°С‡Р°Р»Рѕ РІР°Р»РёРґРЅРѕР№ UTF-8 РјРЅРѕРіРѕР±Р°Р№С‚РѕРІРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
         if (*p >= 0xC2 && *p < 0xF5 && (*(p+1) & 0xC0) == 0x80) { 
             is_utf8 = TRUE; 
             break; 
@@ -555,281 +555,281 @@ extern "C" int DECRYPT_ToACP_Best(const char* src, char* out, int outlen) {
     }
 
     // Phase 2: If UTF-8 detected, convert UTF-8 > Wide > ACP
-    // Фаза 2: Если UTF-8 обнаружен, преобразовать UTF-8 > Wide > ACP
+    // Р¤Р°Р·Р° 2: Р•СЃР»Рё UTF-8 РѕР±РЅР°СЂСѓР¶РµРЅ, РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ UTF-8 > Wide > ACP
     if (is_utf8) {
         // Allocate temporary wide string buffer
-        // Выделить временный буфер широкой строки
+        // Р’С‹РґРµР»РёС‚СЊ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
         WCHAR* wtmp = (WCHAR*)GlobalAlloc(GPTR, outlen * sizeof(WCHAR));
         if (wtmp) {
             // Convert UTF-8 to wide string
-            // Преобразовать UTF-8 в широкую строку
+            // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ UTF-8 РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ
             int wn = DECRYPT_Utf8ToWide(src, wtmp, outlen);
             if (wn > 0) {
                 // Convert wide string to ACP
-                // Преобразовать широкую строку в ACP
+                // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ РІ ACP
                 int res = DECRYPT_WideToACP(wtmp, out, outlen);
                 GlobalFree(wtmp);
-                return res;  // Success! / Успех!
+                return res;  // Success! / РЈСЃРїРµС…!
             }
             GlobalFree(wtmp);
         }
     }
 
     // Phase 3: Try Windows-1251 (Cyrillic) conversion
-    // Фаза 3: Попробовать преобразование Windows-1251 (кириллица)
+    // Р¤Р°Р·Р° 3: РџРѕРїСЂРѕР±РѕРІР°С‚СЊ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Windows-1251 (РєРёСЂРёР»Р»РёС†Р°)
     if (mbcp_to_acp(src, 1251, out, outlen)) 
         return lstrlenA(out);
     
     // Phase 4: Fallback - copy as-is
-    // Фаза 4: Резерв - копировать как есть
+    // Р¤Р°Р·Р° 4: Р РµР·РµСЂРІ - РєРѕРїРёСЂРѕРІР°С‚СЊ РєР°Рє РµСЃС‚СЊ
     lstrcpynA(out, src, outlen);
     return lstrlenA(out);
 }
 
 /*******************************************************************************
  * DECRYPT_FixTagA - Fix Tag Encoding In-Place
- *                   Исправление кодировки тега на месте
+ *                   РСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё С‚РµРіР° РЅР° РјРµСЃС‚Рµ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Convenience function that detects and fixes encoding of a tag buffer in-place.
- * Функция удобства, которая обнаруживает и исправляет кодировку буфера тега на месте.
+ * Р¤СѓРЅРєС†РёСЏ СѓРґРѕР±СЃС‚РІР°, РєРѕС‚РѕСЂР°СЏ РѕР±РЅР°СЂСѓР¶РёРІР°РµС‚ Рё РёСЃРїСЂР°РІР»СЏРµС‚ РєРѕРґРёСЂРѕРІРєСѓ Р±СѓС„РµСЂР° С‚РµРіР° РЅР° РјРµСЃС‚Рµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * (first parameter unused) / (первый параметр не используется)
- * buf    - Buffer containing tag (modified in-place) / Буфер содержащий тег (изменяется на месте)
- * buflen - Buffer size / Размер буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * (first parameter unused) / (РїРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ)
+ * buf    - Buffer containing tag (modified in-place) / Р‘СѓС„РµСЂ СЃРѕРґРµСЂР¶Р°С‰РёР№ С‚РµРі (РёР·РјРµРЅСЏРµС‚СЃСЏ РЅР° РјРµСЃС‚Рµ)
+ * buflen - Buffer size / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР°
  * 
- * NOTE / ПРИМЕЧАНИЕ:
+ * NOTE / РџР РРњР•Р§РђРќРР•:
  * This function modifies the buffer in-place. Ensure buffer is writable.
- * Эта функция изменяет буфер на месте. Убедитесь что буфер доступен для записи.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ РёР·РјРµРЅСЏРµС‚ Р±СѓС„РµСЂ РЅР° РјРµСЃС‚Рµ. РЈР±РµРґРёС‚РµСЃСЊ С‡С‚Рѕ Р±СѓС„РµСЂ РґРѕСЃС‚СѓРїРµРЅ РґР»СЏ Р·Р°РїРёСЃРё.
  ******************************************************************************/
 extern "C" void DECRYPT_FixTagA(const char*, char* buf, int buflen) {
-    if (!buf || buflen <= 0) return;  // Validate parameters / Проверка параметров
+    if (!buf || buflen <= 0) return;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
     
-    char tmp[2048];  // Temporary buffer / Временный буфер
+    char tmp[2048];  // Temporary buffer / Р’СЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ
     
     // Detect and convert encoding
-    // Обнаружить и преобразовать кодировку
+    // РћР±РЅР°СЂСѓР¶РёС‚СЊ Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РєРѕРґРёСЂРѕРІРєСѓ
     if (DECRYPT_ToACP_Best(buf, tmp, sizeof(tmp))) 
-        lstrcpynA(buf, tmp, buflen);  // Copy result back / Копировать результат обратно
+        lstrcpynA(buf, tmp, buflen);  // Copy result back / РљРѕРїРёСЂРѕРІР°С‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°С‚РЅРѕ
 }
 
 /*******************************************************************************
  * IAT (IMPORT ADDRESS TABLE) PATCHING FUNCTIONS
- * ФУНКЦИИ IAT (ТАБЛИЦА ИМПОРТА АДРЕСОВ) ПАТЧИНГА
+ * Р¤РЈРќРљР¦РР IAT (РўРђР‘Р›РР¦Рђ РРњРџРћР РўРђ РђР”Р Р•РЎРћР’) РџРђРўР§РРќР“Рђ
  * 
- * BACKGROUND / ПРЕДЫСТОРИЯ:
+ * BACKGROUND / РџР Р•Р”Р«РЎРўРћР РРЇ:
  * The Import Address Table (IAT) is a data structure in Windows PE files that
  * contains pointers to imported functions from DLLs. By modifying these
  * pointers, we can redirect API calls to our own hook functions.
  * 
- * Таблица импорта адресов (IAT) - это структура данных в Windows PE файлах,
- * которая содержит указатели на импортированные функции из DLL. Изменяя эти
- * указатели, мы можем перенаправить вызовы API на наши собственные функции-перехватчики.
+ * РўР°Р±Р»РёС†Р° РёРјРїРѕСЂС‚Р° Р°РґСЂРµСЃРѕРІ (IAT) - СЌС‚Рѕ СЃС‚СЂСѓРєС‚СѓСЂР° РґР°РЅРЅС‹С… РІ Windows PE С„Р°Р№Р»Р°С…,
+ * РєРѕС‚РѕСЂР°СЏ СЃРѕРґРµСЂР¶РёС‚ СѓРєР°Р·Р°С‚РµР»Рё РЅР° РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ С„СѓРЅРєС†РёРё РёР· DLL. РР·РјРµРЅСЏСЏ СЌС‚Рё
+ * СѓРєР°Р·Р°С‚РµР»Рё, РјС‹ РјРѕР¶РµРј РїРµСЂРµРЅР°РїСЂР°РІРёС‚СЊ РІС‹Р·РѕРІС‹ API РЅР° РЅР°С€Рё СЃРѕР±СЃС‚РІРµРЅРЅС‹Рµ С„СѓРЅРєС†РёРё-РїРµСЂРµС…РІР°С‚С‡РёРєРё.
  * 
- * USE CASE / СЛУЧАЙ ИСПОЛЬЗОВАНИЯ:
+ * USE CASE / РЎР›РЈР§РђР™ РРЎРџРћР›Р¬Р—РћР’РђРќРРЇ:
  * We use IAT patching to intercept file I/O functions (CreateFileA, ReadFile,
  * etc.) in in_mp3.dll, allowing us to implement virtual file overlay for
  * corrected ID3 tags without modifying actual files.
  * 
- * Мы используем IAT патчинг для перехвата функций файлового ввода-вывода
- * (CreateFileA, ReadFile, и т.д.) в in_mp3.dll, позволяя нам реализовать
- * виртуальное наложение файла для исправленных ID3-тегов без изменения реальных файлов.
+ * РњС‹ РёСЃРїРѕР»СЊР·СѓРµРј IAT РїР°С‚С‡РёРЅРі РґР»СЏ РїРµСЂРµС…РІР°С‚Р° С„СѓРЅРєС†РёР№ С„Р°Р№Р»РѕРІРѕРіРѕ РІРІРѕРґР°-РІС‹РІРѕРґР°
+ * (CreateFileA, ReadFile, Рё С‚.Рґ.) РІ in_mp3.dll, РїРѕР·РІРѕР»СЏСЏ РЅР°Рј СЂРµР°Р»РёР·РѕРІР°С‚СЊ
+ * РІРёСЂС‚СѓР°Р»СЊРЅРѕРµ РЅР°Р»РѕР¶РµРЅРёРµ С„Р°Р№Р»Р° РґР»СЏ РёСЃРїСЂР°РІР»РµРЅРЅС‹С… ID3-С‚РµРіРѕРІ Р±РµР· РёР·РјРµРЅРµРЅРёСЏ СЂРµР°Р»СЊРЅС‹С… С„Р°Р№Р»РѕРІ.
  ******************************************************************************/
 
 /*******************************************************************************
  * GetNtHeaders - Get PE NT Headers from Module
- *                Получение PE NT заголовков из модуля
+ *                РџРѕР»СѓС‡РµРЅРёРµ PE NT Р·Р°РіРѕР»РѕРІРєРѕРІ РёР· РјРѕРґСѓР»СЏ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Retrieves the IMAGE_NT_HEADERS structure from a loaded module. This structure
  * contains crucial metadata including the import directory location.
  * 
- * Извлекает структуру IMAGE_NT_HEADERS из загруженного модуля. Эта структура
- * содержит критически важные метаданные включая расположение директории импорта.
+ * РР·РІР»РµРєР°РµС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ IMAGE_NT_HEADERS РёР· Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РјРѕРґСѓР»СЏ. Р­С‚Р° СЃС‚СЂСѓРєС‚СѓСЂР°
+ * СЃРѕРґРµСЂР¶РёС‚ РєСЂРёС‚РёС‡РµСЃРєРё РІР°Р¶РЅС‹Рµ РјРµС‚Р°РґР°РЅРЅС‹Рµ РІРєР»СЋС‡Р°СЏ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ РґРёСЂРµРєС‚РѕСЂРёРё РёРјРїРѕСЂС‚Р°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * base - Base address of module (HMODULE cast to BYTE*)
- *        Базовый адрес модуля (HMODULE приведённый к BYTE*)
+ *        Р‘Р°Р·РѕРІС‹Р№ Р°РґСЂРµСЃ РјРѕРґСѓР»СЏ (HMODULE РїСЂРёРІРµРґС‘РЅРЅС‹Р№ Рє BYTE*)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Pointer to IMAGE_NT_HEADERS on success / Указатель на IMAGE_NT_HEADERS при успехе
- * NULL on failure (invalid PE format) / NULL при неудаче (неверный формат PE)
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Pointer to IMAGE_NT_HEADERS on success / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° IMAGE_NT_HEADERS РїСЂРё СѓСЃРїРµС…Рµ
+ * NULL on failure (invalid PE format) / NULL РїСЂРё РЅРµСѓРґР°С‡Рµ (РЅРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ PE)
  * 
- * PE FILE STRUCTURE / СТРУКТУРА PE ФАЙЛА:
+ * PE FILE STRUCTURE / РЎРўР РЈРљРўРЈР Рђ PE Р¤РђР™Р›Рђ:
  * DOS Header (e_magic = "MZ") > points to NT Headers via e_lfanew
- *   DOS заголовок (e_magic = "MZ") > указывает на NT заголовки через e_lfanew
+ *   DOS Р·Р°РіРѕР»РѕРІРѕРє (e_magic = "MZ") > СѓРєР°Р·С‹РІР°РµС‚ РЅР° NT Р·Р°РіРѕР»РѕРІРєРё С‡РµСЂРµР· e_lfanew
  * NT Headers (Signature = "PE\0\0") > contains Optional Header
- *   NT заголовки (Signature = "PE\0\0") > содержит Optional Header
+ *   NT Р·Р°РіРѕР»РѕРІРєРё (Signature = "PE\0\0") > СЃРѕРґРµСЂР¶РёС‚ Optional Header
  * Optional Header > contains Data Directories including Import Directory
- *   Optional Header > содержит Data Directories включая Import Directory
+ *   Optional Header > СЃРѕРґРµСЂР¶РёС‚ Data Directories РІРєР»СЋС‡Р°СЏ Import Directory
  ******************************************************************************/
 static IMAGE_NT_HEADERS* GetNtHeaders(BYTE* base) {
     // Get DOS header (first structure in PE file)
-    // Получить DOS заголовок (первая структура в PE файле)
+    // РџРѕР»СѓС‡РёС‚СЊ DOS Р·Р°РіРѕР»РѕРІРѕРє (РїРµСЂРІР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° РІ PE С„Р°Р№Р»Рµ)
     IMAGE_DOS_HEADER* dos = (IMAGE_DOS_HEADER*)base;
     
     // Validate DOS signature ("MZ")
-    // Проверить DOS сигнатуру ("MZ")
+    // РџСЂРѕРІРµСЂРёС‚СЊ DOS СЃРёРіРЅР°С‚СѓСЂСѓ ("MZ")
     if (dos->e_magic != IMAGE_DOS_SIGNATURE) return NULL;
     
     // Get NT headers using offset from DOS header
-    // Получить NT заголовки используя смещение из DOS заголовка
+    // РџРѕР»СѓС‡РёС‚СЊ NT Р·Р°РіРѕР»РѕРІРєРё РёСЃРїРѕР»СЊР·СѓСЏ СЃРјРµС‰РµРЅРёРµ РёР· DOS Р·Р°РіРѕР»РѕРІРєР°
     IMAGE_NT_HEADERS* nt = (IMAGE_NT_HEADERS*)(base + dos->e_lfanew);
     
     // Validate NT signature ("PE\0\0")
-    // Проверить NT сигнатуру ("PE\0\0")
+    // РџСЂРѕРІРµСЂРёС‚СЊ NT СЃРёРіРЅР°С‚СѓСЂСѓ ("PE\0\0")
     return (nt->Signature == IMAGE_NT_SIGNATURE) ? nt : NULL;
 }
 
 /*******************************************************************************
  * IAT_PatchByName - Patch IAT Entry by Function Name
- *                   Патчинг IAT записи по имени функции
+ *                   РџР°С‚С‡РёРЅРі IAT Р·Р°РїРёСЃРё РїРѕ РёРјРµРЅРё С„СѓРЅРєС†РёРё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches a specific function in a module's IAT by searching for it by name.
  * This is the primary hooking mechanism used by the module.
  * 
- * Патчит конкретную функцию в IAT модуля путём поиска по имени.
- * Это основной механизм перехвата, используемый модулем.
+ * РџР°С‚С‡РёС‚ РєРѕРЅРєСЂРµС‚РЅСѓСЋ С„СѓРЅРєС†РёСЋ РІ IAT РјРѕРґСѓР»СЏ РїСѓС‚С‘Рј РїРѕРёСЃРєР° РїРѕ РёРјРµРЅРё.
+ * Р­С‚Рѕ РѕСЃРЅРѕРІРЅРѕР№ РјРµС…Р°РЅРёР·Рј РїРµСЂРµС…РІР°С‚Р°, РёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РјРѕРґСѓР»РµРј.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMod  - Module to patch / Модуль для патчинга
- * dll   - DLL name (e.g., "KERNEL32.dll") / Имя DLL (например, "KERNEL32.dll")
- * func  - Function name (e.g., "CreateFileA") / Имя функции (например, "CreateFileA")
- * hook  - Pointer to hook function / Указатель на функцию-перехватчик
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMod  - Module to patch / РњРѕРґСѓР»СЊ РґР»СЏ РїР°С‚С‡РёРЅРіР°
+ * dll   - DLL name (e.g., "KERNEL32.dll") / РРјСЏ DLL (РЅР°РїСЂРёРјРµСЂ, "KERNEL32.dll")
+ * func  - Function name (e.g., "CreateFileA") / РРјСЏ С„СѓРЅРєС†РёРё (РЅР°РїСЂРёРјРµСЂ, "CreateFileA")
+ * hook  - Pointer to hook function / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ-РїРµСЂРµС…РІР°С‚С‡РёРє
  * pOrig - [out] Receives pointer to original function (optional)
- *         [out] Получает указатель на оригинальную функцию (опционально)
+ *         [out] РџРѕР»СѓС‡Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if patch successful / TRUE если патч успешен
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if patch successful / TRUE РµСЃР»Рё РїР°С‚С‡ СѓСЃРїРµС€РµРЅ
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get NT headers and locate Import Directory
- *    Получить NT заголовки и найти Import Directory
+ *    РџРѕР»СѓС‡РёС‚СЊ NT Р·Р°РіРѕР»РѕРІРєРё Рё РЅР°Р№С‚Рё Import Directory
  * 2. Iterate through Import Descriptors to find matching DLL
- *    Перебрать Import Descriptors для поиска подходящей DLL
+ *    РџРµСЂРµР±СЂР°С‚СЊ Import Descriptors РґР»СЏ РїРѕРёСЃРєР° РїРѕРґС…РѕРґСЏС‰РµР№ DLL
  * 3. Iterate through function thunks to find matching function name
- *    Перебрать function thunks для поиска подходящего имени функции
+ *    РџРµСЂРµР±СЂР°С‚СЊ function thunks РґР»СЏ РїРѕРёСЃРєР° РїРѕРґС…РѕРґСЏС‰РµРіРѕ РёРјРµРЅРё С„СѓРЅРєС†РёРё
  * 4. Change memory protection to PAGE_READWRITE
- *    Изменить защиту памяти на PAGE_READWRITE
+ *    РР·РјРµРЅРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё РЅР° PAGE_READWRITE
  * 5. Replace function pointer with hook
- *    Заменить указатель функции на перехватчик
+ *    Р—Р°РјРµРЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё РЅР° РїРµСЂРµС…РІР°С‚С‡РёРє
  * 6. Restore original memory protection
- *    Восстановить оригинальную защиту памяти
+ *    Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
  * 
- * THREAD SAFETY / ПОТОКОБЕЗОПАСНОСТЬ:
+ * THREAD SAFETY / РџРћРўРћРљРћР‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * This function is NOT thread-safe. The calling code should ensure proper
  * synchronization when patching from multiple threads.
  * 
- * Эта функция НЕ потокобезопасна. Вызывающий код должен обеспечить правильную
- * синхронизацию при патчинге из нескольких потоков.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ РќР• РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°. Р’С‹Р·С‹РІР°СЋС‰РёР№ РєРѕРґ РґРѕР»Р¶РµРЅ РѕР±РµСЃРїРµС‡РёС‚СЊ РїСЂР°РІРёР»СЊРЅСѓСЋ
+ * СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЋ РїСЂРё РїР°С‚С‡РёРЅРіРµ РёР· РЅРµСЃРєРѕР»СЊРєРёС… РїРѕС‚РѕРєРѕРІ.
  ******************************************************************************/extern "C" BOOL IAT_PatchByName(HMODULE hMod, const char* dll, const char* func, 
                                 void* hook, void** pOrig) {
-    if (!hMod || !dll || !func || !hook) return FALSE;  // Validate parameters / Проверка параметров
+    if (!hMod || !dll || !func || !hook) return FALSE;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
     
-    BYTE* base = (BYTE*)hMod;  // Module base address / Базовый адрес модуля
+    BYTE* base = (BYTE*)hMod;  // Module base address / Р‘Р°Р·РѕРІС‹Р№ Р°РґСЂРµСЃ РјРѕРґСѓР»СЏ
     IMAGE_NT_HEADERS* nt = GetNtHeaders(base);
-    if (!nt) return FALSE;  // Invalid PE format / Неверный формат PE
+    if (!nt) return FALSE;  // Invalid PE format / РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ PE
 
     // Get Import Directory from Data Directory
-    // Получить Import Directory из Data Directory
+    // РџРѕР»СѓС‡РёС‚СЊ Import Directory РёР· Data Directory
     IMAGE_DATA_DIRECTORY imp = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
-    if (!imp.VirtualAddress) return FALSE;  // No imports / Нет импортов
+    if (!imp.VirtualAddress) return FALSE;  // No imports / РќРµС‚ РёРјРїРѕСЂС‚РѕРІ
 
     // Iterate through Import Descriptors (one per imported DLL)
-    // Перебрать Import Descriptors (один на каждую импортированную DLL)
+    // РџРµСЂРµР±СЂР°С‚СЊ Import Descriptors (РѕРґРёРЅ РЅР° РєР°Р¶РґСѓСЋ РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅРЅСѓСЋ DLL)
     for (IMAGE_IMPORT_DESCRIPTOR* d = (IMAGE_IMPORT_DESCRIPTOR*)(base + imp.VirtualAddress); 
-         d->Name;  // Name == 0 marks end of array / Name == 0 отмечает конец массива
+         d->Name;  // Name == 0 marks end of array / Name == 0 РѕС‚РјРµС‡Р°РµС‚ РєРѕРЅРµС† РјР°СЃСЃРёРІР°
          ++d) {
         
         // Check if this descriptor is for the DLL we're looking for
-        // Проверить является ли этот дескриптор для DLL, которую мы ищем
+        // РџСЂРѕРІРµСЂРёС‚СЊ СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚РѕС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РґР»СЏ DLL, РєРѕС‚РѕСЂСѓСЋ РјС‹ РёС‰РµРј
         if (lstrcmpiA((char*)(base + d->Name), dll) != 0) 
-            continue;  // Not the DLL we want / Не та DLL которая нужна
+            continue;  // Not the DLL we want / РќРµ С‚Р° DLL РєРѕС‚РѕСЂР°СЏ РЅСѓР¶РЅР°
         
         // Get thunk arrays
-        // Получить массивы thunk
+        // РџРѕР»СѓС‡РёС‚СЊ РјР°СЃСЃРёРІС‹ thunk
         // OriginalFirstThunk - points to IMAGE_IMPORT_BY_NAME structures
-        // OriginalFirstThunk - указывает на структуры IMAGE_IMPORT_BY_NAME
+        // OriginalFirstThunk - СѓРєР°Р·С‹РІР°РµС‚ РЅР° СЃС‚СЂСѓРєС‚СѓСЂС‹ IMAGE_IMPORT_BY_NAME
         // FirstThunk - points to actual function pointers (IAT)
-        // FirstThunk - указывает на реальные указатели функций (IAT)
+        // FirstThunk - СѓРєР°Р·С‹РІР°РµС‚ РЅР° СЂРµР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№ (IAT)
         IMAGE_THUNK_DATA *oft = (IMAGE_THUNK_DATA*)(base + (d->OriginalFirstThunk ? d->OriginalFirstThunk : d->FirstThunk));
         IMAGE_THUNK_DATA *ft  = (IMAGE_THUNK_DATA*)(base + d->FirstThunk);
 
         // Iterate through functions in this DLL
-        // Перебрать функции в этой DLL
+        // РџРµСЂРµР±СЂР°С‚СЊ С„СѓРЅРєС†РёРё РІ СЌС‚РѕР№ DLL
         for (; oft->u1.AddressOfData; ++oft, ++ft) {
             // Skip ordinal imports (imported by number, not name)
-            // Пропустить импорты по ординалу (импортированные по номеру, не по имени)
+            // РџСЂРѕРїСѓСЃС‚РёС‚СЊ РёРјРїРѕСЂС‚С‹ РїРѕ РѕСЂРґРёРЅР°Р»Сѓ (РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РїРѕ РЅРѕРјРµСЂСѓ, РЅРµ РїРѕ РёРјРµРЅРё)
             if (oft->u1.Ordinal & IMAGE_ORDINAL_FLAG) 
                 continue;
             
             // Get function name structure
-            // Получить структуру имени функции
+            // РџРѕР»СѓС‡РёС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ РёРјРµРЅРё С„СѓРЅРєС†РёРё
             IMAGE_IMPORT_BY_NAME* ibn = (IMAGE_IMPORT_BY_NAME*)(base + oft->u1.AddressOfData);
             
             // Check if this is the function we're looking for
-            // Проверить является ли это функция, которую мы ищем
+            // РџСЂРѕРІРµСЂРёС‚СЊ СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂСѓСЋ РјС‹ РёС‰РµРј
             if (lstrcmpiA((char*)ibn->Name, func) == 0) {
                 // Save original function pointer if requested
-                // Сохранить оригинальный указатель функции если запрошено
+                // РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё РµСЃР»Рё Р·Р°РїСЂРѕС€РµРЅРѕ
                 if (pOrig && !*pOrig) 
                     *pOrig = (void*)ft->u1.Function;
                 
                 // Change memory protection to writable
-                // Изменить защиту памяти на доступную для записи
+                // РР·РјРµРЅРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё РЅР° РґРѕСЃС‚СѓРїРЅСѓСЋ РґР»СЏ Р·Р°РїРёСЃРё
                 DWORD old;
                 if (VirtualProtect(&ft->u1.Function, sizeof(void*), PAGE_READWRITE, &old)) {
                     // Replace function pointer with hook
-                    // Заменить указатель функции на перехватчик
+                    // Р—Р°РјРµРЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё РЅР° РїРµСЂРµС…РІР°С‚С‡РёРє
                     ft->u1.Function = (ULONG_PTR)hook;
                     
                     // Restore original protection
-                    // Восстановить оригинальную защиту
+                    // Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ
                     VirtualProtect(&ft->u1.Function, sizeof(void*), old, &old);
-                    return TRUE;  // Success! / Успех!
+                    return TRUE;  // Success! / РЈСЃРїРµС…!
                 }
             }
         }
     }
-    return FALSE;  // Function not found / Функция не найдена
+    return FALSE;  // Function not found / Р¤СѓРЅРєС†РёСЏ РЅРµ РЅР°Р№РґРµРЅР°
 }
 
 /*******************************************************************************
  * IAT_PatchByAddr - Patch IAT Entry by Function Address
- *                   Патчинг IAT записи по адресу функции
+ *                   РџР°С‚С‡РёРЅРі IAT Р·Р°РїРёСЃРё РїРѕ Р°РґСЂРµСЃСѓ С„СѓРЅРєС†РёРё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches a specific function in a module's IAT by searching for it by address.
  * This is a fallback method when patching by name fails.
  * 
- * Патчит конкретную функцию в IAT модуля путём поиска по адресу.
- * Это резервный метод когда патчинг по имени не удаётся.
+ * РџР°С‚С‡РёС‚ РєРѕРЅРєСЂРµС‚РЅСѓСЋ С„СѓРЅРєС†РёСЋ РІ IAT РјРѕРґСѓР»СЏ РїСѓС‚С‘Рј РїРѕРёСЃРєР° РїРѕ Р°РґСЂРµСЃСѓ.
+ * Р­С‚Рѕ СЂРµР·РµСЂРІРЅС‹Р№ РјРµС‚РѕРґ РєРѕРіРґР° РїР°С‚С‡РёРЅРі РїРѕ РёРјРµРЅРё РЅРµ СѓРґР°С‘С‚СЃСЏ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMod     - Module to patch / Модуль для патчинга
- * dll      - DLL name (e.g., "KERNEL32.dll") / Имя DLL (например, "KERNEL32.dll")
- * realAddr - Address of original function / Адрес оригинальной функции
- * hook     - Pointer to hook function / Указатель на функцию-перехватчик
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMod     - Module to patch / РњРѕРґСѓР»СЊ РґР»СЏ РїР°С‚С‡РёРЅРіР°
+ * dll      - DLL name (e.g., "KERNEL32.dll") / РРјСЏ DLL (РЅР°РїСЂРёРјРµСЂ, "KERNEL32.dll")
+ * realAddr - Address of original function / РђРґСЂРµСЃ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРё
+ * hook     - Pointer to hook function / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ-РїРµСЂРµС…РІР°С‚С‡РёРє
  * pOrig    - [out] Receives pointer to original function (optional)
- *            [out] Получает указатель на оригинальную функцию (опционально)
+ *            [out] РџРѕР»СѓС‡Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if patch successful / TRUE если патч успешен
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if patch successful / TRUE РµСЃР»Рё РїР°С‚С‡ СѓСЃРїРµС€РµРЅ
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  * 
- * USE CASE / СЛУЧАЙ ИСПОЛЬЗОВАНИЯ:
+ * USE CASE / РЎР›РЈР§РђР™ РРЎРџРћР›Р¬Р—РћР’РђРќРРЇ:
  * Some modules import functions by ordinal or the IAT may be already patched
  * by another module. In these cases, we need to search by address instead of name.
  * 
- * Некоторые модули импортируют функции по ординалу или IAT может быть уже
- * пропатчена другим модулем. В этих случаях нам нужно искать по адресу вместо имени.
+ * РќРµРєРѕС‚РѕСЂС‹Рµ РјРѕРґСѓР»Рё РёРјРїРѕСЂС‚РёСЂСѓСЋС‚ С„СѓРЅРєС†РёРё РїРѕ РѕСЂРґРёРЅР°Р»Сѓ РёР»Рё IAT РјРѕР¶РµС‚ Р±С‹С‚СЊ СѓР¶Рµ
+ * РїСЂРѕРїР°С‚С‡РµРЅР° РґСЂСѓРіРёРј РјРѕРґСѓР»РµРј. Р’ СЌС‚РёС… СЃР»СѓС‡Р°СЏС… РЅР°Рј РЅСѓР¶РЅРѕ РёСЃРєР°С‚СЊ РїРѕ Р°РґСЂРµСЃСѓ РІРјРµСЃС‚Рѕ РёРјРµРЅРё.
  ******************************************************************************/
 extern "C" BOOL IAT_PatchByAddr(HMODULE hMod, const char* dll, void* realAddr, 
                                 void* hook, void** pOrig) {
-    if (!hMod || !dll || !realAddr || !hook) return FALSE;  // Validate parameters / Проверка параметров
+    if (!hMod || !dll || !realAddr || !hook) return FALSE;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
     
     BYTE* base = (BYTE*)hMod;
     IMAGE_NT_HEADERS* nt = GetNtHeaders(base);
@@ -839,37 +839,37 @@ extern "C" BOOL IAT_PatchByAddr(HMODULE hMod, const char* dll, void* realAddr,
     if (!imp.VirtualAddress) return FALSE;
 
     // Iterate through Import Descriptors
-    // Перебрать Import Descriptors
+    // РџРµСЂРµР±СЂР°С‚СЊ Import Descriptors
     for (IMAGE_IMPORT_DESCRIPTOR* d = (IMAGE_IMPORT_DESCRIPTOR*)(base + imp.VirtualAddress); 
          d->Name; 
          ++d) {
         
         // Check if this is the DLL we want
-        // Проверить является ли это DLL которая нужна
+        // РџСЂРѕРІРµСЂРёС‚СЊ СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ DLL РєРѕС‚РѕСЂР°СЏ РЅСѓР¶РЅР°
         if (lstrcmpiA((char*)(base + d->Name), dll) != 0) 
             continue;
         
         // Get FirstThunk (IAT)
-        // Получить FirstThunk (IAT)
+        // РџРѕР»СѓС‡РёС‚СЊ FirstThunk (IAT)
         IMAGE_THUNK_DATA *ft = (IMAGE_THUNK_DATA*)(base + d->FirstThunk);
         
         // Iterate through function pointers
-        // Перебрать указатели функций
+        // РџРµСЂРµР±СЂР°С‚СЊ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№
         for (; ft->u1.Function; ++ft) {
             // Check if this pointer matches the address we're looking for
-            // Проверить совпадает ли этот указатель с адресом который мы ищем
+            // РџСЂРѕРІРµСЂРёС‚СЊ СЃРѕРІРїР°РґР°РµС‚ Р»Рё СЌС‚РѕС‚ СѓРєР°Р·Р°С‚РµР»СЊ СЃ Р°РґСЂРµСЃРѕРј РєРѕС‚РѕСЂС‹Р№ РјС‹ РёС‰РµРј
             if ((void*)ft->u1.Function == realAddr) {
-                // Change memory protection / Изменить защиту памяти
+                // Change memory protection / РР·РјРµРЅРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
                 DWORD old;
                 if (VirtualProtect(&ft->u1.Function, sizeof(void*), PAGE_READWRITE, &old)) {
-                    // Save original if requested / Сохранить оригинал если запрошено
+                    // Save original if requested / РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р» РµСЃР»Рё Р·Р°РїСЂРѕС€РµРЅРѕ
                     if (pOrig && !*pOrig) 
                         *pOrig = (void*)ft->u1.Function;
                     
-                    // Replace with hook / Заменить на перехватчик
+                    // Replace with hook / Р—Р°РјРµРЅРёС‚СЊ РЅР° РїРµСЂРµС…РІР°С‚С‡РёРє
                     ft->u1.Function = (ULONG_PTR)hook;
                     
-                    // Restore protection / Восстановить защиту
+                    // Restore protection / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ
                     VirtualProtect(&ft->u1.Function, sizeof(void*), old, &old);
                     return TRUE;
                 }
@@ -881,46 +881,46 @@ extern "C" BOOL IAT_PatchByAddr(HMODULE hMod, const char* dll, void* realAddr,
 
 /*******************************************************************************
  * IAT_PatchAllModules - Patch Function in All Loaded Modules
- *                       Патчинг функции во всех загруженных модулях
+ *                       РџР°С‚С‡РёРЅРі С„СѓРЅРєС†РёРё РІРѕ РІСЃРµС… Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»СЏС…
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches a Windows API function in all currently loaded modules (except
  * system DLLs). This ensures our hooks work even for dynamically loaded plugins.
  * 
- * Патчит функцию Windows API во всех текущо загруженных модулях (кроме
- * системных DLL). Это гарантирует что наши перехваты работают даже для
- * динамически загруженных плагинов.
+ * РџР°С‚С‡РёС‚ С„СѓРЅРєС†РёСЋ Windows API РІРѕ РІСЃРµС… С‚РµРєСѓС‰Рѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»СЏС… (РєСЂРѕРјРµ
+ * СЃРёСЃС‚РµРјРЅС‹С… DLL). Р­С‚Рѕ РіР°СЂР°РЅС‚РёСЂСѓРµС‚ С‡С‚Рѕ РЅР°С€Рё РїРµСЂРµС…РІР°С‚С‹ СЂР°Р±РѕС‚Р°СЋС‚ РґР°Р¶Рµ РґР»СЏ
+ * РґРёРЅР°РјРёС‡РµСЃРєРё Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РїР»Р°РіРёРЅРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * dll      - DLL name containing function / Имя DLL содержащей функцию
- * func     - Function name to patch / Имя функции для патчинга
- * hook     - Hook function pointer / Указатель функции-перехватчика
- * pOrig    - [out] Original function pointer / [out] Указатель оригинальной функции
- * realAddr - Fallback address for IAT_PatchByAddr / Резервный адрес для IAT_PatchByAddr
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * dll      - DLL name containing function / РРјСЏ DLL СЃРѕРґРµСЂР¶Р°С‰РµР№ С„СѓРЅРєС†РёСЋ
+ * func     - Function name to patch / РРјСЏ С„СѓРЅРєС†РёРё РґР»СЏ РїР°С‚С‡РёРЅРіР°
+ * hook     - Hook function pointer / РЈРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё-РїРµСЂРµС…РІР°С‚С‡РёРєР°
+ * pOrig    - [out] Original function pointer / [out] РЈРєР°Р·Р°С‚РµР»СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРё
+ * realAddr - Fallback address for IAT_PatchByAddr / Р РµР·РµСЂРІРЅС‹Р№ Р°РґСЂРµСЃ РґР»СЏ IAT_PatchByAddr
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Take snapshot of all loaded modules using CreateToolhelp32Snapshot
- *    Сделать снимок всех загруженных модулей используя CreateToolhelp32Snapshot
+ *    РЎРґРµР»Р°С‚СЊ СЃРЅРёРјРѕРє РІСЃРµС… Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№ РёСЃРїРѕР»СЊР·СѓСЏ CreateToolhelp32Snapshot
  * 2. Iterate through modules, skipping system DLLs and winamp.exe
- *    Перебрать модули, пропуская системные DLL и winamp.exe
+ *    РџРµСЂРµР±СЂР°С‚СЊ РјРѕРґСѓР»Рё, РїСЂРѕРїСѓСЃРєР°СЏ СЃРёСЃС‚РµРјРЅС‹Рµ DLL Рё winamp.exe
  * 3. Try patching by name first, then by address if name fails
- *    Попробовать патчинг по имени сначала, затем по адресу если имя не удаётся
+ *    РџРѕРїСЂРѕР±РѕРІР°С‚СЊ РїР°С‚С‡РёРЅРі РїРѕ РёРјРµРЅРё СЃРЅР°С‡Р°Р»Р°, Р·Р°С‚РµРј РїРѕ Р°РґСЂРµСЃСѓ РµСЃР»Рё РёРјСЏ РЅРµ СѓРґР°С‘С‚СЃСЏ
  * 
- * EXCLUSIONS / ИСКЛЮЧЕНИЯ:
+ * EXCLUSIONS / РРЎРљР›Р®Р§Р•РќРРЇ:
  * - kernel32.dll, user32.dll, gdi32.dll - core Windows DLLs
  * - winamp.exe - main executable (patching it could cause issues)
  * 
- * WHY EXCLUDE SYSTEM DLLS? / ПОЧЕМУ ИСКЛЮЧИТЬ СИСТЕМНЫЕ DLL?:
+ * WHY EXCLUDE SYSTEM DLLS? / РџРћР§Р•РњРЈ РРЎРљР›Р®Р§РРўР¬ РЎРРЎРўР•РњРќР«Р• DLL?:
  * Patching system DLLs is risky and unnecessary. They don't call into in_mp3.dll,
  * so hooking them provides no benefit and could destabilize the system.
  * 
- * Патчинг системных DLL рискован и не нужен. Они не вызывают in_mp3.dll,
- * поэтому их перехват не приносит пользы и может дестабилизировать систему.
+ * РџР°С‚С‡РёРЅРі СЃРёСЃС‚РµРјРЅС‹С… DLL СЂРёСЃРєРѕРІР°РЅ Рё РЅРµ РЅСѓР¶РµРЅ. РћРЅРё РЅРµ РІС‹Р·С‹РІР°СЋС‚ in_mp3.dll,
+ * РїРѕСЌС‚РѕРјСѓ РёС… РїРµСЂРµС…РІР°С‚ РЅРµ РїСЂРёРЅРѕСЃРёС‚ РїРѕР»СЊР·С‹ Рё РјРѕР¶РµС‚ РґРµСЃС‚Р°Р±РёР»РёР·РёСЂРѕРІР°С‚СЊ СЃРёСЃС‚РµРјСѓ.
  ******************************************************************************/
 extern "C" void IAT_PatchAllModules(const char* dll, const char* func, 
                                     void* hook, void** pOrig, void* realAddr) {
     // Take snapshot of all modules in current process
-    // Сделать снимок всех модулей в текущем процессе
+    // РЎРґРµР»Р°С‚СЊ СЃРЅРёРјРѕРє РІСЃРµС… РјРѕРґСѓР»РµР№ РІ С‚РµРєСѓС‰РµРј РїСЂРѕС†РµСЃСЃРµ
     HANDLE s = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE|TH32CS_SNAPMODULE32, 
                                        GetCurrentProcessId());
     if (s == INVALID_HANDLE_VALUE) return;
@@ -928,128 +928,128 @@ extern "C" void IAT_PatchAllModules(const char* dll, const char* func,
     MODULEENTRY32 me = {sizeof(me)};
     
     // Iterate through all modules
-    // Перебрать все модули
+    // РџРµСЂРµР±СЂР°С‚СЊ РІСЃРµ РјРѕРґСѓР»Рё
     if (Module32First(s, &me)) {
         do {
-            const char* n = me.szModule;  // Module name / Имя модуля
+            const char* n = me.szModule;  // Module name / РРјСЏ РјРѕРґСѓР»СЏ
             
-            // Skip system DLLs / Пропустить системные DLL
+            // Skip system DLLs / РџСЂРѕРїСѓСЃС‚РёС‚СЊ СЃРёСЃС‚РµРјРЅС‹Рµ DLL
             if (lstrcmpiA(n, "kernel32.dll") == 0 || 
                 lstrcmpiA(n, "user32.dll") == 0 || 
                 lstrcmpiA(n, "gdi32.dll") == 0) 
                 continue;
             
-            // Skip main executable / Пропустить главный исполняемый файл
+            // Skip main executable / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РіР»Р°РІРЅС‹Р№ РёСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р»
             if (lstrcmpiA(n, "winamp.exe") == 0) 
                 continue;
 
             // Try patching by name, fallback to address if needed
-            // Попробовать патчинг по имени, вернуться к адресу если нужно
+            // РџРѕРїСЂРѕР±РѕРІР°С‚СЊ РїР°С‚С‡РёРЅРі РїРѕ РёРјРµРЅРё, РІРµСЂРЅСѓС‚СЊСЃСЏ Рє Р°РґСЂРµСЃСѓ РµСЃР»Рё РЅСѓР¶РЅРѕ
             if (!IAT_PatchByName(me.hModule, dll, func, hook, pOrig) && realAddr)
                 IAT_PatchByAddr(me.hModule, dll, realAddr, hook, pOrig);
                 
         } while (Module32Next(s, &me));
     }
     
-    CloseHandle(s);  // Clean up snapshot handle / Очистить дескриптор снимка
+    CloseHandle(s);  // Clean up snapshot handle / РћС‡РёСЃС‚РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРЅРёРјРєР°
 }
 
 /*******************************************************************************
- * ID3 TAG DECODING FUNCTIONS / ФУНКЦИИ ДЕКОДИРОВАНИЯ ID3-ТЕГОВ
+ * ID3 TAG DECODING FUNCTIONS / Р¤РЈРќРљР¦РР Р”Р•РљРћР”РР РћР’РђРќРРЇ ID3-РўР•Р“РћР’
  * 
- * BACKGROUND / ПРЕДЫСТОРИЯ:
+ * BACKGROUND / РџР Р•Р”Р«РЎРўРћР РРЇ:
  * ID3v2 tags support multiple text encodings specified by an encoding byte:
  * 0 - ISO-8859-1 (Latin-1) or system ANSI codepage
  * 1 - UTF-16 with BOM (byte order mark)
  * 2 - UTF-16BE (big-endian, no BOM) - rare
  * 3 - UTF-8
  * 
- * ID3v2 теги поддерживают множественные текстовые кодировки, указанные байтом кодировки:
- * 0 - ISO-8859-1 (Latin-1) или системная ANSI кодовая страница
- * 1 - UTF-16 с BOM (маркером порядка байтов)
- * 2 - UTF-16BE (big-endian, без BOM) - редко
+ * ID3v2 С‚РµРіРё РїРѕРґРґРµСЂР¶РёРІР°СЋС‚ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ С‚РµРєСЃС‚РѕРІС‹Рµ РєРѕРґРёСЂРѕРІРєРё, СѓРєР°Р·Р°РЅРЅС‹Рµ Р±Р°Р№С‚РѕРј РєРѕРґРёСЂРѕРІРєРё:
+ * 0 - ISO-8859-1 (Latin-1) РёР»Рё СЃРёСЃС‚РµРјРЅР°СЏ ANSI РєРѕРґРѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р°
+ * 1 - UTF-16 СЃ BOM (РјР°СЂРєРµСЂРѕРј РїРѕСЂСЏРґРєР° Р±Р°Р№С‚РѕРІ)
+ * 2 - UTF-16BE (big-endian, Р±РµР· BOM) - СЂРµРґРєРѕ
  * 3 - UTF-8
  ******************************************************************************/
 
 /*******************************************************************************
  * DecodeText - Decode ID3 Text Field to Wide String
- *              Декодирование текстового поля ID3 в широкую строку
+ *              Р”РµРєРѕРґРёСЂРѕРІР°РЅРёРµ С‚РµРєСЃС‚РѕРІРѕРіРѕ РїРѕР»СЏ ID3 РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Decodes a text field from an ID3 tag into a wide string based on the
  * encoding byte. This is the core text decoding function used by all
  * ID3 frame parsers.
  * 
- * Декодирует текстовое поле из ID3-тега в широкую строку на основе
- * байта кодировки. Это основная функция декодирования текста, используемая
- * всеми парсерами ID3-фреймов.
+ * Р”РµРєРѕРґРёСЂСѓРµС‚ С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ РёР· ID3-С‚РµРіР° РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ РЅР° РѕСЃРЅРѕРІРµ
+ * Р±Р°Р№С‚Р° РєРѕРґРёСЂРѕРІРєРё. Р­С‚Рѕ РѕСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РґРµРєРѕРґРёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ
+ * РІСЃРµРјРё РїР°СЂСЃРµСЂР°РјРё ID3-С„СЂРµР№РјРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * enc - Encoding byte (0=ANSI, 1/2=UTF-16, 3=UTF-8)
- *       Байт кодировки (0=ANSI, 1/2=UTF-16, 3=UTF-8)
- * p   - Pointer to text data / Указатель на текстовые данные
- * n   - Length of text data in bytes / Длина текстовых данных в байтах
- * out - Output wide string buffer / Буфер выходной широкой строки
- * max - Maximum wide characters in output / Максимум широких символов в выводе
+ *       Р‘Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё (0=ANSI, 1/2=UTF-16, 3=UTF-8)
+ * p   - Pointer to text data / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С‚РµРєСЃС‚РѕРІС‹Рµ РґР°РЅРЅС‹Рµ
+ * n   - Length of text data in bytes / Р”Р»РёРЅР° С‚РµРєСЃС‚РѕРІС‹С… РґР°РЅРЅС‹С… РІ Р±Р°Р№С‚Р°С…
+ * out - Output wide string buffer / Р‘СѓС„РµСЂ РІС‹С…РѕРґРЅРѕР№ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
+ * max - Maximum wide characters in output / РњР°РєСЃРёРјСѓРј С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ РІ РІС‹РІРѕРґРµ
  * 
- * ENCODING HANDLING / ОБРАБОТКА КОДИРОВОК:
+ * ENCODING HANDLING / РћР‘Р РђР‘РћРўРљРђ РљРћР”РР РћР’РћРљ:
  * 
  * For enc==0 (ANSI/ISO-8859-1):
  *   Direct conversion using CP_ACP (system ANSI codepage)
- *   Прямое преобразование используя CP_ACP (системная ANSI кодовая страница)
+ *   РџСЂСЏРјРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РёСЃРїРѕР»СЊР·СѓСЏ CP_ACP (СЃРёСЃС‚РµРјРЅР°СЏ ANSI РєРѕРґРѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р°)
  * 
  * For enc==3 (UTF-8):
  *   Uses DECRYPT_Utf8ToWide for robust UTF-8 decoding
- *   Использует DECRYPT_Utf8ToWide для надёжного декодирования UTF-8
+ *   РСЃРїРѕР»СЊР·СѓРµС‚ DECRYPT_Utf8ToWide РґР»СЏ РЅР°РґС‘Р¶РЅРѕРіРѕ РґРµРєРѕРґРёСЂРѕРІР°РЅРёСЏ UTF-8
  * 
  * For enc==1/2 (UTF-16):
  *   Checks for BOM (0xFF 0xFE) and skips it if present
  *   Copies remaining bytes as wide characters (assuming little-endian)
- *   Проверяет BOM (0xFF 0xFE) и пропускает его если присутствует
- *   Копирует оставшиеся байты как широкие символы (предполагая little-endian)
+ *   РџСЂРѕРІРµСЂСЏРµС‚ BOM (0xFF 0xFE) Рё РїСЂРѕРїСѓСЃРєР°РµС‚ РµРіРѕ РµСЃР»Рё РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚
+ *   РљРѕРїРёСЂСѓРµС‚ РѕСЃС‚Р°РІС€РёРµСЃСЏ Р±Р°Р№С‚С‹ РєР°Рє С€РёСЂРѕРєРёРµ СЃРёРјРІРѕР»С‹ (РїСЂРµРґРїРѕР»Р°РіР°СЏ little-endian)
  ******************************************************************************/
 static void DecodeText(BYTE enc, const BYTE* p, int n, WCHAR* out, int max) {
-    if (!out || max <= 0) return;  // Validate output buffer / Проверка выходного буфера
-    out[0] = 0;  // Initialize to empty / Инициализировать пустой строкой
-    if (!p || n <= 0) return;  // Validate input / Проверка ввода
+    if (!out || max <= 0) return;  // Validate output buffer / РџСЂРѕРІРµСЂРєР° РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
+    out[0] = 0;  // Initialize to empty / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№
+    if (!p || n <= 0) return;  // Validate input / РџСЂРѕРІРµСЂРєР° РІРІРѕРґР°
 
     if (enc == 0 || enc == 3) {
-        // ANSI or UTF-8 encoding / Кодировка ANSI или UTF-8
-        char tmp[4096];  // Temporary ANSI buffer / Временный ANSI буфер
-        int c = (n < 4095) ? n : 4095;  // Limit to buffer size / Ограничить размером буфера
+        // ANSI or UTF-8 encoding / РљРѕРґРёСЂРѕРІРєР° ANSI РёР»Рё UTF-8
+        char tmp[4096];  // Temporary ANSI buffer / Р’СЂРµРјРµРЅРЅС‹Р№ ANSI Р±СѓС„РµСЂ
+        int c = (n < 4095) ? n : 4095;  // Limit to buffer size / РћРіСЂР°РЅРёС‡РёС‚СЊ СЂР°Р·РјРµСЂРѕРј Р±СѓС„РµСЂР°
         CopyMemory(tmp, p, c); 
-        tmp[c] = 0;  // Null terminate / Null-терминатор
+        tmp[c] = 0;  // Null terminate / Null-С‚РµСЂРјРёРЅР°С‚РѕСЂ
         
         if (enc == 0) 
-            // Convert from ANSI codepage / Преобразовать из ANSI кодовой страницы
+            // Convert from ANSI codepage / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РёР· ANSI РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹
             MultiByteToWideChar(CP_ACP, 0, tmp, -1, out, max);
         else 
-            // Convert from UTF-8 / Преобразовать из UTF-8
+            // Convert from UTF-8 / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РёР· UTF-8
             DECRYPT_Utf8ToWide(tmp, out, max);
     } else {
-        // UTF-16 encoding (enc == 1 or 2) / Кодировка UTF-16 (enc == 1 или 2)
+        // UTF-16 encoding (enc == 1 or 2) / РљРѕРґРёСЂРѕРІРєР° UTF-16 (enc == 1 РёР»Рё 2)
         
         // Check for and skip BOM (0xFF 0xFE = little-endian)
-        // Проверить и пропустить BOM (0xFF 0xFE = little-endian)
+        // РџСЂРѕРІРµСЂРёС‚СЊ Рё РїСЂРѕРїСѓСЃС‚РёС‚СЊ BOM (0xFF 0xFE = little-endian)
         int skip = (n >= 2 && p[0] == 0xFF && p[1] == 0xFE) ? 2 : 0;
         
         // Calculate number of wide characters
-        // Вычислить количество широких символов
+        // Р’С‹С‡РёСЃР»РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ
         int wc = (n - skip) / 2;
-        if (wc >= max) wc = max - 1;  // Limit to buffer / Ограничить буфером
+        if (wc >= max) wc = max - 1;  // Limit to buffer / РћРіСЂР°РЅРёС‡РёС‚СЊ Р±СѓС„РµСЂРѕРј
         
-        // Direct copy as wide characters / Прямое копирование как широкие символы
+        // Direct copy as wide characters / РџСЂСЏРјРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ РєР°Рє С€РёСЂРѕРєРёРµ СЃРёРјРІРѕР»С‹
         memcpy(out, p + skip, wc * 2);
-        out[wc] = 0;  // Null terminate / Null-терминатор
+        out[wc] = 0;  // Null terminate / Null-С‚РµСЂРјРёРЅР°С‚РѕСЂ
     }
 }
 
 /*******************************************************************************
  * ID3_DecodeTextToWide - Public Text Decoding Function
- *                        Публичная функция декодирования текста
+ *                        РџСѓР±Р»РёС‡РЅР°СЏ С„СѓРЅРєС†РёСЏ РґРµРєРѕРґРёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р°
  * 
  * Simple wrapper around DecodeText for external use.
- * Простая обёртка вокруг DecodeText для внешнего использования.
+ * РџСЂРѕСЃС‚Р°СЏ РѕР±С‘СЂС‚РєР° РІРѕРєСЂСѓРі DecodeText РґР»СЏ РІРЅРµС€РЅРµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ.
  ******************************************************************************/
 void ID3_DecodeTextToWide(BYTE enc, const BYTE* p, int cb, WCHAR* out, int cchOut) {
     DecodeText(enc, p, cb, out, cchOut);
@@ -1057,44 +1057,44 @@ void ID3_DecodeTextToWide(BYTE enc, const BYTE* p, int cb, WCHAR* out, int cchOu
 
 /*******************************************************************************
  * ID3_DecodeCOMM_PayloadToWide - Decode COMM Frame Comment Text
- *                                 Декодирование текста комментария фрейма COMM
+ *                                 Р”РµРєРѕРґРёСЂРѕРІР°РЅРёРµ С‚РµРєСЃС‚Р° РєРѕРјРјРµРЅС‚Р°СЂРёСЏ С„СЂРµР№РјР° COMM
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Decodes the comment text from a COMM (Comment) frame payload. COMM frames
  * have a special structure that includes encoding, language, description, and
  * the actual comment text.
  * 
- * Декодирует текст комментария из payload фрейма COMM (комментарий). COMM
- * фреймы имеют специальную структуру, которая включает кодировку, язык,
- * описание и собственно текст комментария.
+ * Р”РµРєРѕРґРёСЂСѓРµС‚ С‚РµРєСЃС‚ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ РёР· payload С„СЂРµР№РјР° COMM (РєРѕРјРјРµРЅС‚Р°СЂРёР№). COMM
+ * С„СЂРµР№РјС‹ РёРјРµСЋС‚ СЃРїРµС†РёР°Р»СЊРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ, РєРѕС‚РѕСЂР°СЏ РІРєР»СЋС‡Р°РµС‚ РєРѕРґРёСЂРѕРІРєСѓ, СЏР·С‹Рє,
+ * РѕРїРёСЃР°РЅРёРµ Рё СЃРѕР±СЃС‚РІРµРЅРЅРѕ С‚РµРєСЃС‚ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ.
  * 
- * COMM FRAME STRUCTURE / СТРУКТУРА ФРЕЙМА COMM:
- * Byte 0:     Text encoding (0/1/2/3) / Кодировка текста (0/1/2/3)
- * Bytes 1-3:  Language code (e.g., "eng", "rus") / Код языка (например, "eng", "rus")
- * Bytes 4+:   Content descriptor (null-terminated) / Дескриптор содержимого (с null-терминатором)
- * Remaining:  Actual comment text / Собственно текст комментария
+ * COMM FRAME STRUCTURE / РЎРўР РЈРљРўРЈР Рђ Р¤Р Р•Р™РњРђ COMM:
+ * Byte 0:     Text encoding (0/1/2/3) / РљРѕРґРёСЂРѕРІРєР° С‚РµРєСЃС‚Р° (0/1/2/3)
+ * Bytes 1-3:  Language code (e.g., "eng", "rus") / РљРѕРґ СЏР·С‹РєР° (РЅР°РїСЂРёРјРµСЂ, "eng", "rus")
+ * Bytes 4+:   Content descriptor (null-terminated) / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ (СЃ null-С‚РµСЂРјРёРЅР°С‚РѕСЂРѕРј)
+ * Remaining:  Actual comment text / РЎРѕР±СЃС‚РІРµРЅРЅРѕ С‚РµРєСЃС‚ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * pay    - Pointer to COMM frame payload / Указатель на payload фрейма COMM
- * sz     - Size of payload in bytes / Размер payload в байтах
- * out    - Output wide string buffer / Буфер выходной широкой строки
- * cchOut - Size of output buffer / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * pay    - Pointer to COMM frame payload / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° payload С„СЂРµР№РјР° COMM
+ * sz     - Size of payload in bytes / Р Р°Р·РјРµСЂ payload РІ Р±Р°Р№С‚Р°С…
+ * out    - Output wide string buffer / Р‘СѓС„РµСЂ РІС‹С…РѕРґРЅРѕР№ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
+ * cchOut - Size of output buffer / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Extract encoding byte (byte 0)
- *    Извлечь байт кодировки (байт 0)
+ *    РР·РІР»РµС‡СЊ Р±Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё (Р±Р°Р№С‚ 0)
  * 2. Skip encoding byte + 3 language bytes
- *    Пропустить байт кодировки + 3 байта языка
+ *    РџСЂРѕРїСѓСЃС‚РёС‚СЊ Р±Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё + 3 Р±Р°Р№С‚Р° СЏР·С‹РєР°
  * 3. Skip content descriptor (find null terminator)
- *    Пропустить дескриптор содержимого (найти null-терминатор)
+ *    РџСЂРѕРїСѓСЃС‚РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ (РЅР°Р№С‚Рё null-С‚РµСЂРјРёРЅР°С‚РѕСЂ)
  *    - For enc 0/3: skip single null byte
- *      Для enc 0/3: пропустить один null байт
+ *      Р”Р»СЏ enc 0/3: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РѕРґРёРЅ null Р±Р°Р№С‚
  *    - For enc 1/2: skip double null bytes (wide null)
- *      Для enc 1/2: пропустить двойные null байты (широкий null)
+ *      Р”Р»СЏ enc 1/2: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРІРѕР№РЅС‹Рµ null Р±Р°Р№С‚С‹ (С€РёСЂРѕРєРёР№ null)
  * 4. Decode remaining text using DecodeText
- *    Декодировать оставшийся текст используя DecodeText
+ *    Р”РµРєРѕРґРёСЂРѕРІР°С‚СЊ РѕСЃС‚Р°РІС€РёР№СЃСЏ С‚РµРєСЃС‚ РёСЃРїРѕР»СЊР·СѓСЏ DecodeText
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * Input bytes: [0x00, 'e','n','g', 0x00, 'M','y',' ','c','o','m','m','e','n','t']
  * Encoding: 0 (ANSI)
  * Language: "eng"
@@ -1102,217 +1102,217 @@ void ID3_DecodeTextToWide(BYTE enc, const BYTE* p, int cb, WCHAR* out, int cchOu
  * Comment: "My comment"
  ******************************************************************************/
 void ID3_DecodeCOMM_PayloadToWide(const BYTE* pay, int sz, WCHAR* out, int cchOut) {
-    if (!out || cchOut <= 0) return;  // Validate output / Проверка вывода
-    out[0] = 0;  // Initialize / Инициализировать
-    if (!pay || sz <= 4) return;  // Need at least encoding + language + 1 byte / Нужно минимум кодировка + язык + 1 байт
+    if (!out || cchOut <= 0) return;  // Validate output / РџСЂРѕРІРµСЂРєР° РІС‹РІРѕРґР°
+    out[0] = 0;  // Initialize / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ
+    if (!pay || sz <= 4) return;  // Need at least encoding + language + 1 byte / РќСѓР¶РЅРѕ РјРёРЅРёРјСѓРј РєРѕРґРёСЂРѕРІРєР° + СЏР·С‹Рє + 1 Р±Р°Р№С‚
 
-    BYTE enc = pay[0];  // Get encoding / Получить кодировку
-    int skip = 1 + 3;   // Skip encoding byte + 3 language bytes / Пропустить байт кодировки + 3 байта языка
+    BYTE enc = pay[0];  // Get encoding / РџРѕР»СѓС‡РёС‚СЊ РєРѕРґРёСЂРѕРІРєСѓ
+    int skip = 1 + 3;   // Skip encoding byte + 3 language bytes / РџСЂРѕРїСѓСЃС‚РёС‚СЊ Р±Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё + 3 Р±Р°Р№С‚Р° СЏР·С‹РєР°
 
     // Skip content descriptor (find null terminator)
-    // Пропустить дескриптор содержимого (найти null-терминатор)
+    // РџСЂРѕРїСѓСЃС‚РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ (РЅР°Р№С‚Рё null-С‚РµСЂРјРёРЅР°С‚РѕСЂ)
     if (enc == 0 || enc == 3) {
         // ANSI/UTF-8: skip until single null byte
-        // ANSI/UTF-8: пропустить до одного null байта
+        // ANSI/UTF-8: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРѕ РѕРґРЅРѕРіРѕ null Р±Р°Р№С‚Р°
         while (skip < sz && pay[skip]) skip++;
     } else {
         // UTF-16: skip until double null bytes
-        // UTF-16: пропустить до двойных null байтов
+        // UTF-16: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРѕ РґРІРѕР№РЅС‹С… null Р±Р°Р№С‚РѕРІ
         while (skip < sz - 1 && (pay[skip] || pay[skip + 1])) skip += 2;
     }
 
     // Skip the null terminator itself
-    // Пропустить сам null-терминатор
+    // РџСЂРѕРїСѓСЃС‚РёС‚СЊ СЃР°Рј null-С‚РµСЂРјРёРЅР°С‚РѕСЂ
     skip += (enc == 0 || enc == 3) ? 1 : 2;
     
-    // Sanity check / Проверка разумности
+    // Sanity check / РџСЂРѕРІРµСЂРєР° СЂР°Р·СѓРјРЅРѕСЃС‚Рё
     if (skip < 0) skip = 0;
     if (skip > sz) skip = sz;
 
     // Decode the remaining text as comment
-    // Декодировать оставшийся текст как комментарий
+    // Р”РµРєРѕРґРёСЂРѕРІР°С‚СЊ РѕСЃС‚Р°РІС€РёР№СЃСЏ С‚РµРєСЃС‚ РєР°Рє РєРѕРјРјРµРЅС‚Р°СЂРёР№
     DecodeText(enc, pay + skip, sz - skip, out, cchOut);
 }
 
 /*******************************************************************************
  * ExtractFrame - Extract and Decode Specific ID3 Frame
- *                Извлечение и декодирование конкретного ID3-фрейма
+ *                РР·РІР»РµС‡РµРЅРёРµ Рё РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ ID3-С„СЂРµР№РјР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Extracts and decodes a specific frame from an ID3 tag. Handles both ID3v2.2
  * (3-char IDs) and ID3v2.3/2.4 (4-char IDs).
  * 
- * Извлекает и декодирует конкретный фрейм из ID3-тега. Обрабатывает как ID3v2.2
- * (3-символьные ID), так и ID3v2.3/2.4 (4-символьные ID).
+ * РР·РІР»РµРєР°РµС‚ Рё РґРµРєРѕРґРёСЂСѓРµС‚ РєРѕРЅРєСЂРµС‚РЅС‹Р№ С„СЂРµР№Рј РёР· ID3-С‚РµРіР°. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РєР°Рє ID3v2.2
+ * (3-СЃРёРјРІРѕР»СЊРЅС‹Рµ ID), С‚Р°Рє Рё ID3v2.3/2.4 (4-СЃРёРјРІРѕР»СЊРЅС‹Рµ ID).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * p    - Pointer to frame start / Указатель на начало фрейма
- * ver  - ID3 version (2, 3, or 4) / Версия ID3 (2, 3 или 4)
- * id3  - 3-character frame ID (for ID3v2.2) / 3-символьный ID фрейма (для ID3v2.2)
- * id4  - 4-character frame ID (for ID3v2.3/2.4) / 4-символьный ID фрейма (для ID3v2.3/2.4)
- * out  - Output wide string buffer / Буфер выходной широкой строки
- * max  - Size of output buffer / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * p    - Pointer to frame start / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ С„СЂРµР№РјР°
+ * ver  - ID3 version (2, 3, or 4) / Р’РµСЂСЃРёСЏ ID3 (2, 3 РёР»Рё 4)
+ * id3  - 3-character frame ID (for ID3v2.2) / 3-СЃРёРјРІРѕР»СЊРЅС‹Р№ ID С„СЂРµР№РјР° (РґР»СЏ ID3v2.2)
+ * id4  - 4-character frame ID (for ID3v2.3/2.4) / 4-СЃРёРјРІРѕР»СЊРЅС‹Р№ ID С„СЂРµР№РјР° (РґР»СЏ ID3v2.3/2.4)
+ * out  - Output wide string buffer / Р‘СѓС„РµСЂ РІС‹С…РѕРґРЅРѕР№ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
+ * max  - Size of output buffer / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if frame found and decoded / TRUE если фрейм найден и декодирован
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if frame found and decoded / TRUE РµСЃР»Рё С„СЂРµР№Рј РЅР°Р№РґРµРЅ Рё РґРµРєРѕРґРёСЂРѕРІР°РЅ
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  * 
- * FRAME HEADER STRUCTURE / СТРУКТУРА ЗАГОЛОВКА ФРЕЙМА:
+ * FRAME HEADER STRUCTURE / РЎРўР РЈРљРўРЈР Рђ Р—РђР“РћР›РћР’РљРђ Р¤Р Р•Р™РњРђ:
  * 
  * ID3v2.2 (6 bytes):
- *   Bytes 0-2: Frame ID (e.g., "TT2" = Title) / ID фрейма (например, "TT2" = Название)
- *   Bytes 3-5: Frame size (24-bit big-endian) / Размер фрейма (24-бит big-endian)
+ *   Bytes 0-2: Frame ID (e.g., "TT2" = Title) / ID С„СЂРµР№РјР° (РЅР°РїСЂРёРјРµСЂ, "TT2" = РќР°Р·РІР°РЅРёРµ)
+ *   Bytes 3-5: Frame size (24-bit big-endian) / Р Р°Р·РјРµСЂ С„СЂРµР№РјР° (24-Р±РёС‚ big-endian)
  * 
  * ID3v2.3/2.4 (10 bytes):
- *   Bytes 0-3: Frame ID (e.g., "TIT2" = Title) / ID фрейма (например, "TIT2" = Название)
- *   Bytes 4-7: Frame size (32-bit, syncsafe in v2.4) / Размер фрейма (32-бит, syncsafe в v2.4)
- *   Bytes 8-9: Frame flags / Флаги фрейма
+ *   Bytes 0-3: Frame ID (e.g., "TIT2" = Title) / ID С„СЂРµР№РјР° (РЅР°РїСЂРёРјРµСЂ, "TIT2" = РќР°Р·РІР°РЅРёРµ)
+ *   Bytes 4-7: Frame size (32-bit, syncsafe in v2.4) / Р Р°Р·РјРµСЂ С„СЂРµР№РјР° (32-Р±РёС‚, syncsafe РІ v2.4)
+ *   Bytes 8-9: Frame flags / Р¤Р»Р°РіРё С„СЂРµР№РјР°
  * 
- * FRAME TYPES / ТИПЫ ФРЕЙМОВ:
+ * FRAME TYPES / РўРРџР« Р¤Р Р•Р™РњРћР’:
  * 
  * Text frames (T*): TIT2, TPE1, TALB, etc.
  *   Structure: [encoding byte] [text data]
- *   Структура: [байт кодировки] [текстовые данные]
+ *   РЎС‚СЂСѓРєС‚СѓСЂР°: [Р±Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё] [С‚РµРєСЃС‚РѕРІС‹Рµ РґР°РЅРЅС‹Рµ]
  * 
  * Comment frames (COMM):
  *   Structure: [encoding] [language] [descriptor] [text]
- *   Структура: [кодировка] [язык] [дескриптор] [текст]
- *   (handled by special decoder / обрабатывается специальным декодером)
+ *   РЎС‚СЂСѓРєС‚СѓСЂР°: [РєРѕРґРёСЂРѕРІРєР°] [СЏР·С‹Рє] [РґРµСЃРєСЂРёРїС‚РѕСЂ] [С‚РµРєСЃС‚]
+ *   (handled by special decoder / РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ СЃРїРµС†РёР°Р»СЊРЅС‹Рј РґРµРєРѕРґРµСЂРѕРј)
  ******************************************************************************/
 static BOOL ExtractFrame(BYTE* p, int ver, const char* id3, const char* id4, 
                         WCHAR* out, int max) {
-    // Calculate frame header dimensions / Вычислить размеры заголовка фрейма
-    int idLen = (ver == 2) ? 3 : 4;      // ID length / Длина ID
-    int szLen = (ver == 2) ? 3 : 4;      // Size field length / Длина поля размера
-    int headSz = idLen + szLen + (ver == 2 ? 0 : 2);  // Total header size / Общий размер заголовка
+    // Calculate frame header dimensions / Р’С‹С‡РёСЃР»РёС‚СЊ СЂР°Р·РјРµСЂС‹ Р·Р°РіРѕР»РѕРІРєР° С„СЂРµР№РјР°
+    int idLen = (ver == 2) ? 3 : 4;      // ID length / Р”Р»РёРЅР° ID
+    int szLen = (ver == 2) ? 3 : 4;      // Size field length / Р”Р»РёРЅР° РїРѕР»СЏ СЂР°Р·РјРµСЂР°
+    int headSz = idLen + szLen + (ver == 2 ? 0 : 2);  // Total header size / РћР±С‰РёР№ СЂР°Р·РјРµСЂ Р·Р°РіРѕР»РѕРІРєР°
     
-    // Check frame ID match / Проверить совпадение ID фрейма
+    // Check frame ID match / РџСЂРѕРІРµСЂРёС‚СЊ СЃРѕРІРїР°РґРµРЅРёРµ ID С„СЂРµР№РјР°
     if (ver == 2) { 
-        if (memcmp(p, id3, 3) != 0) return FALSE;  // Not our frame / Не наш фрейм
+        if (memcmp(p, id3, 3) != 0) return FALSE;  // Not our frame / РќРµ РЅР°С€ С„СЂРµР№Рј
     } else { 
-        if (memcmp(p, id4, 4) != 0) return FALSE;  // Not our frame / Не наш фрейм
+        if (memcmp(p, id4, 4) != 0) return FALSE;  // Not our frame / РќРµ РЅР°С€ С„СЂРµР№Рј
     }
 
-    // Extract frame size / Извлечь размер фрейма
+    // Extract frame size / РР·РІР»РµС‡СЊ СЂР°Р·РјРµСЂ С„СЂРµР№РјР°
     DWORD sz = 0;
     if (ver == 2) 
-        // ID3v2.2: 24-bit big-endian / ID3v2.2: 24-бит big-endian
+        // ID3v2.2: 24-bit big-endian / ID3v2.2: 24-Р±РёС‚ big-endian
         sz = (p[3]<<16) | (p[4]<<8) | p[5];
     else if (ver == 4) 
-        // ID3v2.4: 32-bit syncsafe / ID3v2.4: 32-бит syncsafe
+        // ID3v2.4: 32-bit syncsafe / ID3v2.4: 32-Р±РёС‚ syncsafe
         sz = DECRYPT_SyncsafeToSize(p + 4);
     else 
-        // ID3v2.3: 32-bit big-endian / ID3v2.3: 32-бит big-endian
+        // ID3v2.3: 32-bit big-endian / ID3v2.3: 32-Р±РёС‚ big-endian
         sz = DECRYPT_BE32Read(p + 4);
 
-    if (sz == 0) return FALSE;  // Empty frame / Пустой фрейм
+    if (sz == 0) return FALSE;  // Empty frame / РџСѓСЃС‚РѕР№ С„СЂРµР№Рј
     
-    BYTE* pay = p + headSz;  // Point to frame payload / Указать на payload фрейма
+    BYTE* pay = p + headSz;  // Point to frame payload / РЈРєР°Р·Р°С‚СЊ РЅР° payload С„СЂРµР№РјР°
     
-    // Decode based on frame type / Декодировать на основе типа фрейма
+    // Decode based on frame type / Р”РµРєРѕРґРёСЂРѕРІР°С‚СЊ РЅР° РѕСЃРЅРѕРІРµ С‚РёРїР° С„СЂРµР№РјР°
     if (id4[0] == 'C') {
         // Comment frame (COMM) - special handling
-        // Фрейм комментария (COMM) - специальная обработка
-        BYTE enc = pay[0];  // Encoding byte / Байт кодировки
-        int skip = 4;  // Skip encoding + 3 language bytes / Пропустить кодировку + 3 байта языка
+        // Р¤СЂРµР№Рј РєРѕРјРјРµРЅС‚Р°СЂРёСЏ (COMM) - СЃРїРµС†РёР°Р»СЊРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР°
+        BYTE enc = pay[0];  // Encoding byte / Р‘Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё
+        int skip = 4;  // Skip encoding + 3 language bytes / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РєРѕРґРёСЂРѕРІРєСѓ + 3 Р±Р°Р№С‚Р° СЏР·С‹РєР°
         
-        // Skip content descriptor / Пропустить дескриптор содержимого
+        // Skip content descriptor / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ
         if (enc == 0 || enc == 3) 
-            // ANSI/UTF-8: skip to null / ANSI/UTF-8: пропустить до null
+            // ANSI/UTF-8: skip to null / ANSI/UTF-8: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРѕ null
             while (skip < (int)sz && pay[skip]) skip++;
         else 
-            // UTF-16: skip to double null / UTF-16: пропустить до двойного null
+            // UTF-16: skip to double null / UTF-16: РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРѕ РґРІРѕР№РЅРѕРіРѕ null
             while (skip < (int)sz - 1 && (pay[skip] || pay[skip+1])) skip += 2;
         
-        skip += (enc == 0 || enc == 3) ? 1 : 2;  // Skip null terminator / Пропустить null-терминатор
-        DecodeText(enc, pay + skip, sz - skip, out, max);  // Decode comment / Декодировать комментарий
+        skip += (enc == 0 || enc == 3) ? 1 : 2;  // Skip null terminator / РџСЂРѕРїСѓСЃС‚РёС‚СЊ null-С‚РµСЂРјРёРЅР°С‚РѕСЂ
+        DecodeText(enc, pay + skip, sz - skip, out, max);  // Decode comment / Р”РµРєРѕРґРёСЂРѕРІР°С‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№
     } 
     else if (id4[0] == 'T') {
         // Text frame (T*) - encoding byte + text
-        // Текстовый фрейм (T*) - байт кодировки + текст
+        // РўРµРєСЃС‚РѕРІС‹Р№ С„СЂРµР№Рј (T*) - Р±Р°Р№С‚ РєРѕРґРёСЂРѕРІРєРё + С‚РµРєСЃС‚
         DecodeText(pay[0], pay + 1, sz - 1, out, max);
     }
     
-    return TRUE;  // Successfully extracted / Успешно извлечено
+    return TRUE;  // Successfully extracted / РЈСЃРїРµС€РЅРѕ РёР·РІР»РµС‡РµРЅРѕ
 }
 
 /*******************************************************************************
  * ID3_ReadAllFieldsW - Read All ID3 Tag Fields
- *                      Чтение всех полей ID3-тега
+ *                      Р§С‚РµРЅРёРµ РІСЃРµС… РїРѕР»РµР№ ID3-С‚РµРіР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Reads all major text fields from an ID3v2 tag into wide string buffers.
  * This is the main function for extracting tag information from MP3 files.
  * 
- * Читает все основные текстовые поля из ID3v2 тега в буферы широких строк.
- * Это основная функция для извлечения информации о тегах из MP3-файлов.
+ * Р§РёС‚Р°РµС‚ РІСЃРµ РѕСЃРЅРѕРІРЅС‹Рµ С‚РµРєСЃС‚РѕРІС‹Рµ РїРѕР»СЏ РёР· ID3v2 С‚РµРіР° РІ Р±СѓС„РµСЂС‹ С€РёСЂРѕРєРёС… СЃС‚СЂРѕРє.
+ * Р­С‚Рѕ РѕСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ РёР·РІР»РµС‡РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ С‚РµРіР°С… РёР· MP3-С„Р°Р№Р»РѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hf           - File handle (positioned at start) / Дескриптор файла (в начале)
- * wArtist      - Output buffer for artist / Выходной буфер для исполнителя
- * cchA         - Size of artist buffer / Размер буфера исполнителя
- * wTitle       - Output buffer for title / Выходной буфер для названия
- * cchT         - Size of title buffer / Размер буфера названия
- * wAlbum       - Output buffer for album / Выходной буфер для альбома
- * cchAlb       - Size of album buffer / Размер буфера альбома
- * wYear        - Output buffer for year / Выходной буфер для года
- * cchY         - Size of year buffer / Размер буфера года
- * wGenre       - Output buffer for genre / Выходной буфер для жанра
- * cchG         - Size of genre buffer / Размер буфера жанра
- * wTrack       - Output buffer for track number / Выходной буфер для номера трека
- * cchTrk       - Size of track buffer / Размер буфера трека
- * wComposer    - Output buffer for composer / Выходной буфер для композитора
- * cchC         - Size of composer buffer / Размер буфера композитора
- * wComment     - Output buffer for comment / Выходной буфер для комментария
- * cchM         - Size of comment buffer / Размер буфера комментария
- * wO           - Output buffer for original artist / Выходной буфер для оригинального исполнителя
- * cchO         - Size of original artist buffer / Размер буфера оригинального исполнителя
- * wP           - Output buffer for copyright / Выходной буфер для авторских прав
- * cchP         - Size of copyright buffer / Размер буфера авторских прав
- * wU           - Unused parameter / Неиспользуемый параметр
- * cchU         - Unused parameter / Неиспользуемый параметр
- * wE           - Output buffer for encoded by / Выходной буфер для закодировано
- * cchE         - Size of encoded by buffer / Размер буфера закодировано
- * pOldTagSize  - [out] Receives size of ID3 tag (optional) / [out] Получает размер ID3-тега (опционально)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hf           - File handle (positioned at start) / Р”РµСЃРєСЂРёРїС‚РѕСЂ С„Р°Р№Р»Р° (РІ РЅР°С‡Р°Р»Рµ)
+ * wArtist      - Output buffer for artist / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+ * cchA         - Size of artist buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+ * wTitle       - Output buffer for title / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РЅР°Р·РІР°РЅРёСЏ
+ * cchT         - Size of title buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РЅР°Р·РІР°РЅРёСЏ
+ * wAlbum       - Output buffer for album / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ Р°Р»СЊР±РѕРјР°
+ * cchAlb       - Size of album buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° Р°Р»СЊР±РѕРјР°
+ * wYear        - Output buffer for year / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РіРѕРґР°
+ * cchY         - Size of year buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РіРѕРґР°
+ * wGenre       - Output buffer for genre / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ Р¶Р°РЅСЂР°
+ * cchG         - Size of genre buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° Р¶Р°РЅСЂР°
+ * wTrack       - Output buffer for track number / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РЅРѕРјРµСЂР° С‚СЂРµРєР°
+ * cchTrk       - Size of track buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° С‚СЂРµРєР°
+ * wComposer    - Output buffer for composer / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РєРѕРјРїРѕР·РёС‚РѕСЂР°
+ * cchC         - Size of composer buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РєРѕРјРїРѕР·РёС‚РѕСЂР°
+ * wComment     - Output buffer for comment / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ
+ * cchM         - Size of comment buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РєРѕРјРјРµРЅС‚Р°СЂРёСЏ
+ * wO           - Output buffer for original artist / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+ * cchO         - Size of original artist buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+ * wP           - Output buffer for copyright / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ Р°РІС‚РѕСЂСЃРєРёС… РїСЂР°РІ
+ * cchP         - Size of copyright buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° Р°РІС‚РѕСЂСЃРєРёС… РїСЂР°РІ
+ * wU           - Unused parameter / РќРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ
+ * cchU         - Unused parameter / РќРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ
+ * wE           - Output buffer for encoded by / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ РґР»СЏ Р·Р°РєРѕРґРёСЂРѕРІР°РЅРѕ
+ * cchE         - Size of encoded by buffer / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР° Р·Р°РєРѕРґРёСЂРѕРІР°РЅРѕ
+ * pOldTagSize  - [out] Receives size of ID3 tag (optional) / [out] РџРѕР»СѓС‡Р°РµС‚ СЂР°Р·РјРµСЂ ID3-С‚РµРіР° (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if tag found and read successfully / TRUE если тег найден и прочитан успешно
- * FALSE if no ID3v2 tag present / FALSE если ID3v2 тег отсутствует
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if tag found and read successfully / TRUE РµСЃР»Рё С‚РµРі РЅР°Р№РґРµРЅ Рё РїСЂРѕС‡РёС‚Р°РЅ СѓСЃРїРµС€РЅРѕ
+ * FALSE if no ID3v2 tag present / FALSE РµСЃР»Рё ID3v2 С‚РµРі РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
  * 
- * FIELD MAPPING / ОТОБРАЖЕНИЕ ПОЛЕЙ:
+ * FIELD MAPPING / РћРўРћР‘Р РђР–Р•РќРР• РџРћР›Р•Р™:
  * ID3v2.2 > ID3v2.3/2.4:
- * TT2 > TIT2 (Title / Название)
- * TP1 > TPE1 (Artist / Исполнитель)
- * TAL > TALB (Album / Альбом)
- * TYE > TYER (Year / Год)
- * TCO > TCON (Genre / Жанр)
- * TRK > TRCK (Track / Трек)
- * TCM > TCOM (Composer / Композитор)
- * COM > COMM (Comment / Комментарий)
- * TOA > TOPE (Original artist / Оригинальный исполнитель)
- * TCR > TCOP (Copyright / Авторские права)
- * TEN > TENC (Encoded by / Закодировано)
+ * TT2 > TIT2 (Title / РќР°Р·РІР°РЅРёРµ)
+ * TP1 > TPE1 (Artist / РСЃРїРѕР»РЅРёС‚РµР»СЊ)
+ * TAL > TALB (Album / РђР»СЊР±РѕРј)
+ * TYE > TYER (Year / Р“РѕРґ)
+ * TCO > TCON (Genre / Р–Р°РЅСЂ)
+ * TRK > TRCK (Track / РўСЂРµРє)
+ * TCM > TCOM (Composer / РљРѕРјРїРѕР·РёС‚РѕСЂ)
+ * COM > COMM (Comment / РљРѕРјРјРµРЅС‚Р°СЂРёР№)
+ * TOA > TOPE (Original artist / РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ РёСЃРїРѕР»РЅРёС‚РµР»СЊ)
+ * TCR > TCOP (Copyright / РђРІС‚РѕСЂСЃРєРёРµ РїСЂР°РІР°)
+ * TEN > TENC (Encoded by / Р—Р°РєРѕРґРёСЂРѕРІР°РЅРѕ)
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Read and validate 10-byte ID3v2 header ("ID3" signature)
- *    Прочитать и проверить 10-байтовый заголовок ID3v2 (сигнатура "ID3")
+ *    РџСЂРѕС‡РёС‚Р°С‚СЊ Рё РїСЂРѕРІРµСЂРёС‚СЊ 10-Р±Р°Р№С‚РѕРІС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє ID3v2 (СЃРёРіРЅР°С‚СѓСЂР° "ID3")
  * 2. Extract version and tag size from header
- *    Извлечь версию и размер тега из заголовка
+ *    РР·РІР»РµС‡СЊ РІРµСЂСЃРёСЋ Рё СЂР°Р·РјРµСЂ С‚РµРіР° РёР· Р·Р°РіРѕР»РѕРІРєР°
  * 3. Allocate buffer and read entire tag into memory
- *    Выделить буфер и прочитать весь тег в память
+ *    Р’С‹РґРµР»РёС‚СЊ Р±СѓС„РµСЂ Рё РїСЂРѕС‡РёС‚Р°С‚СЊ РІРµСЃСЊ С‚РµРі РІ РїР°РјСЏС‚СЊ
  * 4. Skip extended header if present (v2.3/2.4)
- *    Пропустить расширенный заголовок если присутствует (v2.3/2.4)
+ *    РџСЂРѕРїСѓСЃС‚РёС‚СЊ СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє РµСЃР»Рё РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ (v2.3/2.4)
  * 5. Iterate through frames, extracting matching fields
- *    Перебрать фреймы, извлекая совпадающие поля
+ *    РџРµСЂРµР±СЂР°С‚СЊ С„СЂРµР№РјС‹, РёР·РІР»РµРєР°СЏ СЃРѕРІРїР°РґР°СЋС‰РёРµ РїРѕР»СЏ
  * 6. Free buffer and return success
- *    Освободить буфер и вернуть успех
+ *    РћСЃРІРѕР±РѕРґРёС‚СЊ Р±СѓС„РµСЂ Рё РІРµСЂРЅСѓС‚СЊ СѓСЃРїРµС…
  * 
- * EXTENDED HEADER HANDLING / ОБРАБОТКА РАСШИРЕННОГО ЗАГОЛОВКА:
+ * EXTENDED HEADER HANDLING / РћР‘Р РђР‘РћРўРљРђ Р РђРЎРЁРР Р•РќРќРћР“Рћ Р—РђР“РћР›РћР’РљРђ:
  * ID3v2.3 and v2.4 support optional extended headers (flag 0x40).
  * These contain additional metadata and must be skipped when parsing frames.
  * 
- * ID3v2.3 и v2.4 поддерживают опциональные расширенные заголовки (флаг 0x40).
- * Они содержат дополнительные метаданные и должны быть пропущены при парсинге фреймов.
+ * ID3v2.3 Рё v2.4 РїРѕРґРґРµСЂР¶РёРІР°СЋС‚ РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Рµ СЂР°СЃС€РёСЂРµРЅРЅС‹Рµ Р·Р°РіРѕР»РѕРІРєРё (С„Р»Р°Рі 0x40).
+ * РћРЅРё СЃРѕРґРµСЂР¶Р°С‚ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РјРµС‚Р°РґР°РЅРЅС‹Рµ Рё РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РїСЂРѕРїСѓС‰РµРЅС‹ РїСЂРё РїР°СЂСЃРёРЅРіРµ С„СЂРµР№РјРѕРІ.
  ******************************************************************************/
 extern "C" BOOL ID3_ReadAllFieldsW(HANDLE hf,
     WCHAR* wArtist, int cchA, WCHAR* wTitle, int cchT, WCHAR* wAlbum, int cchAlb,
@@ -1321,165 +1321,165 @@ extern "C" BOOL ID3_ReadAllFieldsW(HANDLE hf,
     WCHAR* wP, int cchP, WCHAR* wU, int cchU, WCHAR* wE, int cchE,
     DWORD* pOldTagSize)
 {
-    if (pOldTagSize) *pOldTagSize = 0;  // Initialize output / Инициализировать вывод
+    if (pOldTagSize) *pOldTagSize = 0;  // Initialize output / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РІС‹РІРѕРґ
     
-    // Read 10-byte ID3v2 header / Прочитать 10-байтовый заголовок ID3v2
+    // Read 10-byte ID3v2 header / РџСЂРѕС‡РёС‚Р°С‚СЊ 10-Р±Р°Р№С‚РѕРІС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє ID3v2
     BYTE hdr[10]; 
     DWORD rd;
-    SetFilePointer(hf, 0, 0, FILE_BEGIN);  // Seek to start / Перейти к началу
+    SetFilePointer(hf, 0, 0, FILE_BEGIN);  // Seek to start / РџРµСЂРµР№С‚Рё Рє РЅР°С‡Р°Р»Сѓ
     
     // Validate header: must be exactly 10 bytes and start with "ID3"
-    // Проверить заголовок: должен быть ровно 10 байт и начинаться с "ID3"
+    // РџСЂРѕРІРµСЂРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє: РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЂРѕРІРЅРѕ 10 Р±Р°Р№С‚ Рё РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃ "ID3"
     if (!ReadFile(hf, hdr, 10, &rd, 0) || rd != 10 || memcmp(hdr, "ID3", 3)) 
-        return FALSE;  // Not a valid ID3v2 tag / Не валидный ID3v2 тег
+        return FALSE;  // Not a valid ID3v2 tag / РќРµ РІР°Р»РёРґРЅС‹Р№ ID3v2 С‚РµРі
 
-    int ver = hdr[3];  // Version number (2, 3, or 4) / Номер версии (2, 3 или 4)
-    DWORD tagSz = DECRYPT_SyncsafeToSize(hdr + 6);  // Tag size (excluding header) / Размер тега (исключая заголовок)
-    if (pOldTagSize) *pOldTagSize = tagSz + 10;  // Total size with header / Общий размер с заголовком
+    int ver = hdr[3];  // Version number (2, 3, or 4) / РќРѕРјРµСЂ РІРµСЂСЃРёРё (2, 3 РёР»Рё 4)
+    DWORD tagSz = DECRYPT_SyncsafeToSize(hdr + 6);  // Tag size (excluding header) / Р Р°Р·РјРµСЂ С‚РµРіР° (РёСЃРєР»СЋС‡Р°СЏ Р·Р°РіРѕР»РѕРІРѕРє)
+    if (pOldTagSize) *pOldTagSize = tagSz + 10;  // Total size with header / РћР±С‰РёР№ СЂР°Р·РјРµСЂ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
 
-    // Allocate buffer for entire tag / Выделить буфер для всего тега
+    // Allocate buffer for entire tag / Р’С‹РґРµР»РёС‚СЊ Р±СѓС„РµСЂ РґР»СЏ РІСЃРµРіРѕ С‚РµРіР°
     BYTE* buf = (BYTE*)HeapAlloc(GetProcessHeap(), 0, tagSz);
-    if (!buf) return FALSE;  // Allocation failed / Выделение не удалось
+    if (!buf) return FALSE;  // Allocation failed / Р’С‹РґРµР»РµРЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ
     
-    // Read entire tag into memory / Прочитать весь тег в память
+    // Read entire tag into memory / РџСЂРѕС‡РёС‚Р°С‚СЊ РІРµСЃСЊ С‚РµРі РІ РїР°РјСЏС‚СЊ
     if (ReadFile(hf, buf, tagSz, &rd, 0) && rd == tagSz) {
-        BYTE* p = buf;  // Current position in tag / Текущая позиция в теге
-        int rem = tagSz;  // Remaining bytes / Оставшиеся байты
+        BYTE* p = buf;  // Current position in tag / РўРµРєСѓС‰Р°СЏ РїРѕР·РёС†РёСЏ РІ С‚РµРіРµ
+        int rem = tagSz;  // Remaining bytes / РћСЃС‚Р°РІС€РёРµСЃСЏ Р±Р°Р№С‚С‹
         
         // Skip extended header if present (ID3v2.3/2.4 only)
-        // Пропустить расширенный заголовок если присутствует (только ID3v2.3/2.4)
+        // РџСЂРѕРїСѓСЃС‚РёС‚СЊ СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє РµСЃР»Рё РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ (С‚РѕР»СЊРєРѕ ID3v2.3/2.4)
         if (ver >= 3 && (hdr[5] & 0x40)) {
-            // Extended header flag is set / Установлен флаг расширенного заголовка
+            // Extended header flag is set / РЈСЃС‚Р°РЅРѕРІР»РµРЅ С„Р»Р°Рі СЂР°СЃС€РёСЂРµРЅРЅРѕРіРѕ Р·Р°РіРѕР»РѕРІРєР°
             DWORD extSz = (ver == 3) ? DECRYPT_BE32Read(p) : DECRYPT_SyncsafeToSize(p);
-            p += extSz + (ver == 3 ? 4 : 0);  // Skip header / Пропустить заголовок
+            p += extSz + (ver == 3 ? 4 : 0);  // Skip header / РџСЂРѕРїСѓСЃС‚РёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє
             rem -= extSz + (ver == 3 ? 4 : 0);
         }
 
-        // Frame mapping table / Таблица отображения фреймов
+        // Frame mapping table / РўР°Р±Р»РёС†Р° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С„СЂРµР№РјРѕРІ
         // Maps output buffers to ID3v2.2 and ID3v2.3/2.4 frame IDs
-        // Отображает выходные буферы на ID3v2.2 и ID3v2.3/2.4 ID фреймов
+        // РћС‚РѕР±СЂР°Р¶Р°РµС‚ РІС‹С…РѕРґРЅС‹Рµ Р±СѓС„РµСЂС‹ РЅР° ID3v2.2 Рё ID3v2.3/2.4 ID С„СЂРµР№РјРѕРІ
         while (rem > 10) {
-            if (p[0] == 0) break;  // Padding or end of tag / Заполнение или конец тега
+            if (p[0] == 0) break;  // Padding or end of tag / Р—Р°РїРѕР»РЅРµРЅРёРµ РёР»Рё РєРѕРЅРµС† С‚РµРіР°
             
             struct { 
-                WCHAR* buf;      // Output buffer / Выходной буфер
-                int sz;          // Buffer size / Размер буфера
-                const char* i3;  // ID3v2.2 frame ID (3 chars) / ID фрейма ID3v2.2 (3 символа)
-                const char* i4;  // ID3v2.3/2.4 frame ID (4 chars) / ID фрейма ID3v2.3/2.4 (4 символа)
+                WCHAR* buf;      // Output buffer / Р’С‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ
+                int sz;          // Buffer size / Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР°
+                const char* i3;  // ID3v2.2 frame ID (3 chars) / ID С„СЂРµР№РјР° ID3v2.2 (3 СЃРёРјРІРѕР»Р°)
+                const char* i4;  // ID3v2.3/2.4 frame ID (4 chars) / ID С„СЂРµР№РјР° ID3v2.3/2.4 (4 СЃРёРјРІРѕР»Р°)
             } map[] = {
-                {wTitle, cchT, "TT2", "TIT2"},       // Title / Название
-                {wArtist, cchA, "TP1", "TPE1"},      // Artist / Исполнитель
-                {wAlbum, cchAlb, "TAL", "TALB"},     // Album / Альбом
-                {wYear, cchY, "TYE", "TYER"},        // Year / Год
-                {wGenre, cchG, "TCO", "TCON"},       // Genre / Жанр
-                {wTrack, cchTrk, "TRK", "TRCK"},     // Track / Трек
-                {wComment, cchM, "COM", "COMM"},     // Comment / Комментарий
-                {wComposer, cchC, "TCM", "TCOM"},    // Composer / Композитор
-                {wO, cchO, "TOA", "TOPE"},           // Original artist / Оригинальный исполнитель
-                {wP, cchP, "TCR", "TCOP"},           // Copyright / Авторские права
-                {wE, cchE, "TEN", "TENC"}            // Encoded by / Закодировано
+                {wTitle, cchT, "TT2", "TIT2"},       // Title / РќР°Р·РІР°РЅРёРµ
+                {wArtist, cchA, "TP1", "TPE1"},      // Artist / РСЃРїРѕР»РЅРёС‚РµР»СЊ
+                {wAlbum, cchAlb, "TAL", "TALB"},     // Album / РђР»СЊР±РѕРј
+                {wYear, cchY, "TYE", "TYER"},        // Year / Р“РѕРґ
+                {wGenre, cchG, "TCO", "TCON"},       // Genre / Р–Р°РЅСЂ
+                {wTrack, cchTrk, "TRK", "TRCK"},     // Track / РўСЂРµРє
+                {wComment, cchM, "COM", "COMM"},     // Comment / РљРѕРјРјРµРЅС‚Р°СЂРёР№
+                {wComposer, cchC, "TCM", "TCOM"},    // Composer / РљРѕРјРїРѕР·РёС‚РѕСЂ
+                {wO, cchO, "TOA", "TOPE"},           // Original artist / РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ РёСЃРїРѕР»РЅРёС‚РµР»СЊ
+                {wP, cchP, "TCR", "TCOP"},           // Copyright / РђРІС‚РѕСЂСЃРєРёРµ РїСЂР°РІР°
+                {wE, cchE, "TEN", "TENC"}            // Encoded by / Р—Р°РєРѕРґРёСЂРѕРІР°РЅРѕ
             };
             
             // Try to extract each mapped field if not already filled
-            // Попытаться извлечь каждое отображённое поле если ещё не заполнено
+            // РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РёР·РІР»РµС‡СЊ РєР°Р¶РґРѕРµ РѕС‚РѕР±СЂР°Р¶С‘РЅРЅРѕРµ РїРѕР»Рµ РµСЃР»Рё РµС‰С‘ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ
             for (int i = 0; i < ARRAYSIZE(map); i++) {
-                if (map[i].buf && map[i].buf[0] == 0)  // Buffer exists and empty / Буфер существует и пуст
+                if (map[i].buf && map[i].buf[0] == 0)  // Buffer exists and empty / Р‘СѓС„РµСЂ СЃСѓС‰РµСЃС‚РІСѓРµС‚ Рё РїСѓСЃС‚
                     ExtractFrame(p, ver, map[i].i3, map[i].i4, map[i].buf, map[i].sz);
             }
             
             // Calculate frame size and skip to next frame
-            // Вычислить размер фрейма и перейти к следующему фрейму
+            // Р’С‹С‡РёСЃР»РёС‚СЊ СЂР°Р·РјРµСЂ С„СЂРµР№РјР° Рё РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ С„СЂРµР№РјСѓ
             int fsz = 0;
             if (ver == 2) 
-                fsz = (p[3]<<16) | (p[4]<<8) | p[5];  // 24-bit size / 24-бит размер
+                fsz = (p[3]<<16) | (p[4]<<8) | p[5];  // 24-bit size / 24-Р±РёС‚ СЂР°Р·РјРµСЂ
             else if (ver == 4) 
-                fsz = DECRYPT_SyncsafeToSize(p+4);    // Syncsafe size / Syncsafe размер
+                fsz = DECRYPT_SyncsafeToSize(p+4);    // Syncsafe size / Syncsafe СЂР°Р·РјРµСЂ
             else 
-                fsz = DECRYPT_BE32Read(p+4);          // 32-bit size / 32-бит размер
+                fsz = DECRYPT_BE32Read(p+4);          // 32-bit size / 32-Р±РёС‚ СЂР°Р·РјРµСЂ
             
-            int inc = fsz + (ver == 2 ? 6 : 10);  // Frame size + header / Размер фрейма + заголовок
-            p += inc;    // Move to next frame / Перейти к следующему фрейму
-            rem -= inc;  // Update remaining bytes / Обновить оставшиеся байты
+            int inc = fsz + (ver == 2 ? 6 : 10);  // Frame size + header / Р Р°Р·РјРµСЂ С„СЂРµР№РјР° + Р·Р°РіРѕР»РѕРІРѕРє
+            p += inc;    // Move to next frame / РџРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ С„СЂРµР№РјСѓ
+            rem -= inc;  // Update remaining bytes / РћР±РЅРѕРІРёС‚СЊ РѕСЃС‚Р°РІС€РёРµСЃСЏ Р±Р°Р№С‚С‹
         }
     }
     
-    HeapFree(GetProcessHeap(), 0, buf);  // Free tag buffer / Освободить буфер тега
-    return TRUE;  // Success! / Успех!
+    HeapFree(GetProcessHeap(), 0, buf);  // Free tag buffer / РћСЃРІРѕР±РѕРґРёС‚СЊ Р±СѓС„РµСЂ С‚РµРіР°
+    return TRUE;  // Success! / РЈСЃРїРµС…!
 }
 
 /*******************************************************************************
  * ID3_ReadFieldA - Read Single ID3 Field to ANSI String
- *                  Чтение одного поля ID3 в ANSI строку
+ *                  Р§С‚РµРЅРёРµ РѕРґРЅРѕРіРѕ РїРѕР»СЏ ID3 РІ ANSI СЃС‚СЂРѕРєСѓ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Convenience function to read a single ID3 field by name and convert it to
  * ANSI string. Useful for simple tag reading without needing multiple buffers.
  * 
- * Функция удобства для чтения одного поля ID3 по имени и преобразования его
- * в ANSI строку. Полезна для простого чтения тегов без необходимости
- * множественных буферов.
+ * Р¤СѓРЅРєС†РёСЏ СѓРґРѕР±СЃС‚РІР° РґР»СЏ С‡С‚РµРЅРёСЏ РѕРґРЅРѕРіРѕ РїРѕР»СЏ ID3 РїРѕ РёРјРµРЅРё Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РµРіРѕ
+ * РІ ANSI СЃС‚СЂРѕРєСѓ. РџРѕР»РµР·РЅР° РґР»СЏ РїСЂРѕСЃС‚РѕРіРѕ С‡С‚РµРЅРёСЏ С‚РµРіРѕРІ Р±РµР· РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
+ * РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹С… Р±СѓС„РµСЂРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * file   - Path to MP3 file / Путь к MP3-файлу
- * key    - Field name ("title", "artist", etc.) / Имя поля ("title", "artist", и т.д.)
- * out    - Output ANSI buffer / Выходной ANSI буфер
- * outlen - Size of output buffer / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * file   - Path to MP3 file / РџСѓС‚СЊ Рє MP3-С„Р°Р№Р»Сѓ
+ * key    - Field name ("title", "artist", etc.) / РРјСЏ РїРѕР»СЏ ("title", "artist", Рё С‚.Рґ.)
+ * out    - Output ANSI buffer / Р’С‹С…РѕРґРЅРѕР№ ANSI Р±СѓС„РµСЂ
+ * outlen - Size of output buffer / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Number of characters written to output buffer
- * Количество символов записанных в выходной буфер
- * 0 on failure / 0 при неудаче
+ * РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ Р·Р°РїРёСЃР°РЅРЅС‹С… РІ РІС‹С…РѕРґРЅРѕР№ Р±СѓС„РµСЂ
+ * 0 on failure / 0 РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * SUPPORTED FIELDS / ПОДДЕРЖИВАЕМЫЕ ПОЛЯ:
- * - "title"  - Song title / Название песни
- * - "artist" - Artist name / Имя исполнителя
+ * SUPPORTED FIELDS / РџРћР”Р”Р•Р Р–РР’РђР•РњР«Р• РџРћР›РЇ:
+ * - "title"  - Song title / РќР°Р·РІР°РЅРёРµ РїРµСЃРЅРё
+ * - "artist" - Artist name / РРјСЏ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
  * 
- * PROCESS / ПРОЦЕСС:
- * 1. Open file for reading / Открыть файл для чтения
- * 2. Call ID3_ReadAllFieldsW with wide buffer / Вызвать ID3_ReadAllFieldsW с широким буфером
- * 3. Convert wide string to ANSI / Преобразовать широкую строку в ANSI
- * 4. Close file and return result / Закрыть файл и вернуть результат
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
+ * 1. Open file for reading / РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ С‡С‚РµРЅРёСЏ
+ * 2. Call ID3_ReadAllFieldsW with wide buffer / Р’С‹Р·РІР°С‚СЊ ID3_ReadAllFieldsW СЃ С€РёСЂРѕРєРёРј Р±СѓС„РµСЂРѕРј
+ * 3. Convert wide string to ANSI / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ РІ ANSI
+ * 4. Close file and return result / Р—Р°РєСЂС‹С‚СЊ С„Р°Р№Р» Рё РІРµСЂРЅСѓС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚
  * 
- * LIMITATIONS / ОГРАНИЧЕНИЯ:
+ * LIMITATIONS / РћР“Р РђРќРР§Р•РќРРЇ:
  * - Only supports title and artist fields (easily extendable)
- *   Поддерживает только поля title и artist (легко расширяемо)
+ *   РџРѕРґРґРµСЂР¶РёРІР°РµС‚ С‚РѕР»СЊРєРѕ РїРѕР»СЏ title Рё artist (Р»РµРіРєРѕ СЂР°СЃС€РёСЂСЏРµРјРѕ)
  * - Opens file each time (inefficient for multiple fields)
- *   Открывает файл каждый раз (неэффективно для множественных полей)
+ *   РћС‚РєСЂС‹РІР°РµС‚ С„Р°Р№Р» РєР°Р¶РґС‹Р№ СЂР°Р· (РЅРµСЌС„С„РµРєС‚РёРІРЅРѕ РґР»СЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹С… РїРѕР»РµР№)
  * 
- * NOTE / ПРИМЕЧАНИЕ:
+ * NOTE / РџР РРњР•Р§РђРќРР•:
  * For reading multiple fields, use ID3_ReadAllFieldsW directly for better
  * performance (single file open, single tag parse).
  * 
- * Для чтения множественных полей используйте ID3_ReadAllFieldsW напрямую
- * для лучшей производительности (одно открытие файла, один парсинг тега).
+ * Р”Р»СЏ С‡С‚РµРЅРёСЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹С… РїРѕР»РµР№ РёСЃРїРѕР»СЊР·СѓР№С‚Рµ ID3_ReadAllFieldsW РЅР°РїСЂСЏРјСѓСЋ
+ * РґР»СЏ Р»СѓС‡С€РµР№ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё (РѕРґРЅРѕ РѕС‚РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°, РѕРґРёРЅ РїР°СЂСЃРёРЅРі С‚РµРіР°).
  ******************************************************************************/
 extern "C" int ID3_ReadFieldA(const char* file, const char* key, char* out, int outlen) {
-    if (!file || !key || !out) return 0;  // Validate parameters / Проверка параметров
-    out[0] = 0;  // Initialize output / Инициализировать вывод
+    if (!file || !key || !out) return 0;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
+    out[0] = 0;  // Initialize output / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РІС‹РІРѕРґ
     
-    // Open file with shared access / Открыть файл с общим доступом
+    // Open file with shared access / РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р» СЃ РѕР±С‰РёРј РґРѕСЃС‚СѓРїРѕРј
     HANDLE h = CreateFileA(file, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, 
                           0, OPEN_EXISTING, 0, 0);
-    if (h == INVALID_HANDLE_VALUE) return 0;  // Failed to open / Не удалось открыть
+    if (h == INVALID_HANDLE_VALUE) return 0;  // Failed to open / РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ
 
-    WCHAR wBuf[1024] = {0};  // Wide string buffer / Буфер широкой строки
+    WCHAR wBuf[1024] = {0};  // Wide string buffer / Р‘СѓС„РµСЂ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
     int wLen = 1024;
     BOOL found = FALSE;
 
-    // Read specific field based on key / Прочитать конкретное поле на основе ключа
+    // Read specific field based on key / РџСЂРѕС‡РёС‚Р°С‚СЊ РєРѕРЅРєСЂРµС‚РЅРѕРµ РїРѕР»Рµ РЅР° РѕСЃРЅРѕРІРµ РєР»СЋС‡Р°
     if (lstrcmpiA(key, "title") == 0)
-        // Read title field / Прочитать поле названия
+        // Read title field / РџСЂРѕС‡РёС‚Р°С‚СЊ РїРѕР»Рµ РЅР°Р·РІР°РЅРёСЏ
         found = ID3_ReadAllFieldsW(h, 0,0, wBuf, wLen, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, NULL);
     else if (lstrcmpiA(key, "artist") == 0)
-        // Read artist field / Прочитать поле исполнителя
+        // Read artist field / РџСЂРѕС‡РёС‚Р°С‚СЊ РїРѕР»Рµ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
         found = ID3_ReadAllFieldsW(h, wBuf, wLen, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, NULL);
     
-    CloseHandle(h);  // Always close handle / Всегда закрывать дескриптор
+    CloseHandle(h);  // Always close handle / Р’СЃРµРіРґР° Р·Р°РєСЂС‹РІР°С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ
     
     // Convert wide string to ANSI if found
-    // Преобразовать широкую строку в ANSI если найдено
+    // РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ РІ ANSI РµСЃР»Рё РЅР°Р№РґРµРЅРѕ
     if (found && wBuf[0]) 
         return DECRYPT_WideToACP(wBuf, out, outlen);
     
-    return 0;  // Field not found / Поле не найдено
+    return 0;  // Field not found / РџРѕР»Рµ РЅРµ РЅР°Р№РґРµРЅРѕ
 }
