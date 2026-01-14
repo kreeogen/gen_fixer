@@ -19,8 +19,6 @@
 #ifndef _WA_IPC_H_
 #define _WA_IPC_H_
 
-#include "wa_msgids.h"
-
 /*
 ** This is the modern replacement for the classic 'frontend.h'. Most of these 
 ** updates are designed for in-process use, i.e. from a plugin.
