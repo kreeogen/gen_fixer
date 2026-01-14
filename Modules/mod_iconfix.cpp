@@ -2,29 +2,29 @@
  * mod_iconfix.cpp
  * 
  * WINAMP SETTINGS ICON FIX MODULE
- * Модуль исправления иконки в заголовке окна Настройки
+ * РњРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РёРєРѕРЅРєРё РІ Р·Р°РіРѕР»РѕРІРєРµ РѕРєРЅР° РќР°СЃС‚СЂРѕР№РєРё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module ensures that all windows created by Winamp display the correct
  * application icons (both big and small). It addresses the common issue where
  * child windows or dialogs may not inherit the proper icons from the main
  * application window.
  * 
- * Этот модуль гарантирует, что все окна, создаваемые Winamp, отображают
- * правильные иконки приложения (большую и маленькую). Он решает распространённую
- * проблему, когда дочерние окна или диалоги могут не наследовать правильные
- * иконки от главного окна приложения.
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ РіР°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ РІСЃРµ РѕРєРЅР°, СЃРѕР·РґР°РІР°РµРјС‹Рµ Winamp, РѕС‚РѕР±СЂР°Р¶Р°СЋС‚
+ * РїСЂР°РІРёР»СЊРЅС‹Рµ РёРєРѕРЅРєРё РїСЂРёР»РѕР¶РµРЅРёСЏ (Р±РѕР»СЊС€СѓСЋ Рё РјР°Р»РµРЅСЊРєСѓСЋ). РћРЅ СЂРµС€Р°РµС‚ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅС‘РЅРЅСѓСЋ
+ * РїСЂРѕР±Р»РµРјСѓ, РєРѕРіРґР° РґРѕС‡РµСЂРЅРёРµ РѕРєРЅР° РёР»Рё РґРёР°Р»РѕРіРё РјРѕРіСѓС‚ РЅРµ РЅР°СЃР»РµРґРѕРІР°С‚СЊ РїСЂР°РІРёР»СЊРЅС‹Рµ
+ * РёРєРѕРЅРєРё РѕС‚ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° РїСЂРёР»РѕР¶РµРЅРёСЏ.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 1. Captures the main window's icons (big and small)
  * 2. Installs a CBT (Computer-Based Training) hook to monitor window creation
  * 3. Automatically applies the captured icons to any newly created windows
  * 4. Processes all existing windows in the thread
  * 
- * 1. Захватывает иконки главного окна (большую и маленькую)
- * 2. Устанавливает CBT-хук для отслеживания создания окон
- * 3. Автоматически применяет захваченные иконки ко всем вновь создаваемым окнам
- * 4. Обрабатывает все существующие окна в потоке
+ * 1. Р—Р°С…РІР°С‚С‹РІР°РµС‚ РёРєРѕРЅРєРё РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° (Р±РѕР»СЊС€СѓСЋ Рё РјР°Р»РµРЅСЊРєСѓСЋ)
+ * 2. РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ CBT-С…СѓРє РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ СЃРѕР·РґР°РЅРёСЏ РѕРєРѕРЅ
+ * 3. РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРёРјРµРЅСЏРµС‚ Р·Р°С…РІР°С‡РµРЅРЅС‹Рµ РёРєРѕРЅРєРё РєРѕ РІСЃРµРј РІРЅРѕРІСЊ СЃРѕР·РґР°РІР°РµРјС‹Рј РѕРєРЅР°Рј
+ * 4. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РІСЃРµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ РѕРєРЅР° РІ РїРѕС‚РѕРєРµ
  * 
  ******************************************************************************/
 
@@ -32,70 +32,70 @@
 #include <windows.h>
 
 // Compatibility macro for older Windows SDK versions
-// Макрос совместимости для старых версий Windows SDK
+// РњР°РєСЂРѕСЃ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё РґР»СЏ СЃС‚Р°СЂС‹С… РІРµСЂСЃРёР№ Windows SDK
 #ifndef GetClassLongPtrA
 #define GetClassLongPtrA GetClassLongA
 #endif
 
 /*******************************************************************************
- * GLOBAL VARIABLES / ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+ * GLOBAL VARIABLES / Р“Р›РћР‘РђР›Р¬РќР«Р• РџР•Р Р•РњР•РќРќР«Р•
  ******************************************************************************/
 
 // Handle to the CBT hook that intercepts window creation events
-// Дескриптор CBT-хука, который перехватывает события создания окон
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ CBT-С…СѓРєР°, РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕР±С‹С‚РёСЏ СЃРѕР·РґР°РЅРёСЏ РѕРєРѕРЅ
 static HHOOK g_cbtHook    = NULL;
 
 // Handle to the large (32x32) icon retrieved from the main Winamp window
-// Дескриптор большой иконки (32x32), полученной из главного окна Winamp
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ Р±РѕР»СЊС€РѕР№ РёРєРѕРЅРєРё (32x32), РїРѕР»СѓС‡РµРЅРЅРѕР№ РёР· РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp
 static HICON g_hBigIcon   = NULL;
 
 // Handle to the small (16x16) icon retrieved from the main Winamp window
-// Дескриптор маленькой иконки (16x16), полученной из главного окна Winamp
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ РјР°Р»РµРЅСЊРєРѕР№ РёРєРѕРЅРєРё (16x16), РїРѕР»СѓС‡РµРЅРЅРѕР№ РёР· РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp
 static HICON g_hSmallIcon = NULL;
 
 // Thread ID of the Winamp UI thread, used to limit hook scope
-// Идентификатор потока пользовательского интерфейса Winamp, используется для ограничения области действия хука
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‚РѕРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР° Winamp, РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РѕР±Р»Р°СЃС‚Рё РґРµР№СЃС‚РІРёСЏ С…СѓРєР°
 static DWORD g_uiThreadId = 0;
 
 /*******************************************************************************
  * GrabMainIcons
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Retrieves the big and small icons from the main Winamp window using multiple
  * fallback strategies to ensure icons are always obtained.
  * 
- * Получает большую и маленькую иконки из главного окна Winamp, используя
- * несколько резервных стратегий для гарантии получения иконок.
+ * РџРѕР»СѓС‡Р°РµС‚ Р±РѕР»СЊС€СѓСЋ Рё РјР°Р»РµРЅСЊРєСѓСЋ РёРєРѕРЅРєРё РёР· РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp, РёСЃРїРѕР»СЊР·СѓСЏ
+ * РЅРµСЃРєРѕР»СЊРєРѕ СЂРµР·РµСЂРІРЅС‹С… СЃС‚СЂР°С‚РµРіРёР№ РґР»СЏ РіР°СЂР°РЅС‚РёРё РїРѕР»СѓС‡РµРЅРёСЏ РёРєРѕРЅРѕРє.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * hwndWinamp - Handle to the main Winamp window
- *              Дескриптор главного окна Winamp
+ *              Р”РµСЃРєСЂРёРїС‚РѕСЂ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp
  * 
- * STRATEGY / СТРАТЕГИЯ:
+ * STRATEGY / РЎРўР РђРўР•Р“РРЇ:
  * 1. Try to get icons via WM_GETICON message (preferred method)
  * 2. Fall back to GetClassLongPtr if WM_GETICON returns NULL
  * 3. Use default application icon as last resort
  * 
- * 1. Попытка получить иконки через сообщение WM_GETICON (предпочтительный метод)
- * 2. Использование GetClassLongPtr, если WM_GETICON возвращает NULL
- * 3. Использование стандартной иконки приложения в крайнем случае
+ * 1. РџРѕРїС‹С‚РєР° РїРѕР»СѓС‡РёС‚СЊ РёРєРѕРЅРєРё С‡РµСЂРµР· СЃРѕРѕР±С‰РµРЅРёРµ WM_GETICON (РїСЂРµРґРїРѕС‡С‚РёС‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ)
+ * 2. РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ GetClassLongPtr, РµСЃР»Рё WM_GETICON РІРѕР·РІСЂР°С‰Р°РµС‚ NULL
+ * 3. РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ РёРєРѕРЅРєРё РїСЂРёР»РѕР¶РµРЅРёСЏ РІ РєСЂР°Р№РЅРµРј СЃР»СѓС‡Р°Рµ
  ******************************************************************************/
 static void GrabMainIcons(HWND hwndWinamp)
 {
     // First attempt: Get icons via WM_GETICON message
-    // Первая попытка: получить иконки через сообщение WM_GETICON
+    // РџРµСЂРІР°СЏ РїРѕРїС‹С‚РєР°: РїРѕР»СѓС‡РёС‚СЊ РёРєРѕРЅРєРё С‡РµСЂРµР· СЃРѕРѕР±С‰РµРЅРёРµ WM_GETICON
     g_hBigIcon   = (HICON)SendMessageA(hwndWinamp, WM_GETICON, ICON_BIG, 0);
     g_hSmallIcon = (HICON)SendMessageA(hwndWinamp, WM_GETICON, ICON_SMALL, 0);
     
     // Second attempt: Get icons from window class if WM_GETICON failed
-    // Вторая попытка: получить иконки из класса окна, если WM_GETICON не сработал
+    // Р’С‚РѕСЂР°СЏ РїРѕРїС‹С‚РєР°: РїРѕР»СѓС‡РёС‚СЊ РёРєРѕРЅРєРё РёР· РєР»Р°СЃСЃР° РѕРєРЅР°, РµСЃР»Рё WM_GETICON РЅРµ СЃСЂР°Р±РѕС‚Р°Р»
     if (!g_hBigIcon)
         g_hBigIcon = (HICON)(UINT_PTR)GetClassLongPtrA(hwndWinamp, GCL_HICON);
     if (!g_hSmallIcon)
         g_hSmallIcon = (HICON)(UINT_PTR)GetClassLongPtrA(hwndWinamp, GCL_HICONSM);
     
     // Last resort: Use default Windows application icon
-    // Последнее средство: использовать стандартную иконку приложения Windows
+    // РџРѕСЃР»РµРґРЅРµРµ СЃСЂРµРґСЃС‚РІРѕ: РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ РёРєРѕРЅРєСѓ РїСЂРёР»РѕР¶РµРЅРёСЏ Windows
     if (!g_hBigIcon)   g_hBigIcon   = LoadIcon(NULL, IDI_APPLICATION);
     if (!g_hSmallIcon) g_hSmallIcon = LoadIcon(NULL, IDI_APPLICATION);
 }
@@ -103,47 +103,47 @@ static void GrabMainIcons(HWND hwndWinamp)
 /*******************************************************************************
  * ForceIcons
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Applies the captured icons to a specific window if it doesn't already have
  * icons set. Only processes top-level windows (not child windows).
  * 
- * Применяет захваченные иконки к конкретному окну, если у него ещё не
- * установлены иконки. Обрабатывает только окна верхнего уровня (не дочерние).
+ * РџСЂРёРјРµРЅСЏРµС‚ Р·Р°С…РІР°С‡РµРЅРЅС‹Рµ РёРєРѕРЅРєРё Рє РєРѕРЅРєСЂРµС‚РЅРѕРјСѓ РѕРєРЅСѓ, РµСЃР»Рё Сѓ РЅРµРіРѕ РµС‰С‘ РЅРµ
+ * СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹ РёРєРѕРЅРєРё. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ С‚РѕР»СЊРєРѕ РѕРєРЅР° РІРµСЂС…РЅРµРіРѕ СѓСЂРѕРІРЅСЏ (РЅРµ РґРѕС‡РµСЂРЅРёРµ).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * hwnd - Handle to the window to apply icons to
- *        Дескриптор окна, к которому применяются иконки
+ *        Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР°, Рє РєРѕС‚РѕСЂРѕРјСѓ РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ РёРєРѕРЅРєРё
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * - Skips invalid window handles
  * - Ignores child windows (WS_CHILD style)
  * - Only sets icons if the window doesn't already have them
  * 
- * - Пропускает недействительные дескрипторы окон
- * - Игнорирует дочерние окна (стиль WS_CHILD)
- * - Устанавливает иконки только если у окна их ещё нет
+ * - РџСЂРѕРїСѓСЃРєР°РµС‚ РЅРµРґРµР№СЃС‚РІРёС‚РµР»СЊРЅС‹Рµ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РѕРєРѕРЅ
+ * - РРіРЅРѕСЂРёСЂСѓРµС‚ РґРѕС‡РµСЂРЅРёРµ РѕРєРЅР° (СЃС‚РёР»СЊ WS_CHILD)
+ * - РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РёРєРѕРЅРєРё С‚РѕР»СЊРєРѕ РµСЃР»Рё Сѓ РѕРєРЅР° РёС… РµС‰С‘ РЅРµС‚
  ******************************************************************************/
 static void ForceIcons(HWND hwnd)
 {
     // Validate window handle
-    // Проверка дескриптора окна
+    // РџСЂРѕРІРµСЂРєР° РґРµСЃРєСЂРёРїС‚РѕСЂР° РѕРєРЅР°
     if (!IsWindow(hwnd)) return;
     
     // Get window style to check if it's a child window
-    // Получение стиля окна для проверки, является ли оно дочерним
+    // РџРѕР»СѓС‡РµРЅРёРµ СЃС‚РёР»СЏ РѕРєРЅР° РґР»СЏ РїСЂРѕРІРµСЂРєРё, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕРЅРѕ РґРѕС‡РµСЂРЅРёРј
     LONG style = GetWindowLongA(hwnd, GWL_STYLE);
     
     // Skip child windows - they typically shouldn't have their own icons
-    // Пропуск дочерних окон - у них обычно не должно быть собственных иконок
+    // РџСЂРѕРїСѓСЃРє РґРѕС‡РµСЂРЅРёС… РѕРєРѕРЅ - Сѓ РЅРёС… РѕР±С‹С‡РЅРѕ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СЃРѕР±СЃС‚РІРµРЅРЅС‹С… РёРєРѕРЅРѕРє
     if (style & WS_CHILD) return; 
     
     // Set big icon only if the window doesn't already have one
-    // Установка большой иконки только если у окна её ещё нет
+    // РЈСЃС‚Р°РЅРѕРІРєР° Р±РѕР»СЊС€РѕР№ РёРєРѕРЅРєРё С‚РѕР»СЊРєРѕ РµСЃР»Рё Сѓ РѕРєРЅР° РµС‘ РµС‰С‘ РЅРµС‚
     if (!SendMessageA(hwnd, WM_GETICON, ICON_BIG, 0))
         SendMessageA(hwnd, WM_SETICON, ICON_BIG,   (LPARAM)g_hBigIcon);
     
     // Set small icon only if the window doesn't already have one
-    // Установка маленькой иконки только если у окна её ещё нет
+    // РЈСЃС‚Р°РЅРѕРІРєР° РјР°Р»РµРЅСЊРєРѕР№ РёРєРѕРЅРєРё С‚РѕР»СЊРєРѕ РµСЃР»Рё Сѓ РѕРєРЅР° РµС‘ РµС‰С‘ РЅРµС‚
     if (!SendMessageA(hwnd, WM_GETICON, ICON_SMALL, 0))
         SendMessageA(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)g_hSmallIcon);
 }
@@ -151,151 +151,151 @@ static void ForceIcons(HWND hwnd)
 /*******************************************************************************
  * CbtHookProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * CBT (Computer-Based Training) hook callback function that intercepts window
  * events. Specifically handles HCBT_CREATEWND to apply icons to newly created
  * windows.
  * 
- * Функция обратного вызова CBT-хука, которая перехватывает события окон.
- * Специально обрабатывает HCBT_CREATEWND для применения иконок к вновь
- * создаваемым окнам.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° CBT-С…СѓРєР°, РєРѕС‚РѕСЂР°СЏ РїРµСЂРµС…РІР°С‚С‹РІР°РµС‚ СЃРѕР±С‹С‚РёСЏ РѕРєРѕРЅ.
+ * РЎРїРµС†РёР°Р»СЊРЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ HCBT_CREATEWND РґР»СЏ РїСЂРёРјРµРЅРµРЅРёСЏ РёРєРѕРЅРѕРє Рє РІРЅРѕРІСЊ
+ * СЃРѕР·РґР°РІР°РµРјС‹Рј РѕРєРЅР°Рј.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * nCode  - Hook code that determines how to process the message
- *          Код хука, определяющий способ обработки сообщения
+ *          РљРѕРґ С…СѓРєР°, РѕРїСЂРµРґРµР»СЏСЋС‰РёР№ СЃРїРѕСЃРѕР± РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёСЏ
  * wParam - For HCBT_CREATEWND, contains the handle to the new window
- *          Для HCBT_CREATEWND содержит дескриптор нового окна
+ *          Р”Р»СЏ HCBT_CREATEWND СЃРѕРґРµСЂР¶РёС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РЅРѕРІРѕРіРѕ РѕРєРЅР°
  * lParam - Additional information about the hooked event
- *          Дополнительная информация о перехваченном событии
+ *          Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїРµСЂРµС…РІР°С‡РµРЅРЅРѕРј СЃРѕР±С‹С‚РёРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Result from CallNextHookEx, allowing the hook chain to continue
- * Результат от CallNextHookEx, позволяющий продолжить цепочку хуков
+ * Р РµР·СѓР»СЊС‚Р°С‚ РѕС‚ CallNextHookEx, РїРѕР·РІРѕР»СЏСЋС‰РёР№ РїСЂРѕРґРѕР»Р¶РёС‚СЊ С†РµРїРѕС‡РєСѓ С…СѓРєРѕРІ
  ******************************************************************************/
 static LRESULT CALLBACK CbtHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     // Check if a new window is being created
-    // Проверка, создаётся ли новое окно
+    // РџСЂРѕРІРµСЂРєР°, СЃРѕР·РґР°С‘С‚СЃСЏ Р»Рё РЅРѕРІРѕРµ РѕРєРЅРѕ
     if (nCode == HCBT_CREATEWND)
         ForceIcons((HWND)wParam);
     
     // Pass the hook information to the next hook in the chain
-    // Передача информации о хуке следующему хуку в цепочке
+    // РџРµСЂРµРґР°С‡Р° РёРЅС„РѕСЂРјР°С†РёРё Рѕ С…СѓРєРµ СЃР»РµРґСѓСЋС‰РµРјСѓ С…СѓРєСѓ РІ С†РµРїРѕС‡РєРµ
     return CallNextHookEx(g_cbtHook, nCode, wParam, lParam);
 }
 
 /*******************************************************************************
  * EnumThreadWndProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Callback function for EnumThreadWindows. Applies icons to each window
  * enumerated in the Winamp thread.
  * 
- * Функция обратного вызова для EnumThreadWindows. Применяет иконки к каждому
- * окну, перечисленному в потоке Winamp.
+ * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° РґР»СЏ EnumThreadWindows. РџСЂРёРјРµРЅСЏРµС‚ РёРєРѕРЅРєРё Рє РєР°Р¶РґРѕРјСѓ
+ * РѕРєРЅСѓ, РїРµСЂРµС‡РёСЃР»РµРЅРЅРѕРјСѓ РІ РїРѕС‚РѕРєРµ Winamp.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * h - Handle to the enumerated window
- *     Дескриптор перечисляемого окна
+ *     Р”РµСЃРєСЂРёРїС‚РѕСЂ РїРµСЂРµС‡РёСЃР»СЏРµРјРѕРіРѕ РѕРєРЅР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE to continue enumeration
- * TRUE для продолжения перечисления
+ * TRUE РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ
  ******************************************************************************/
 static BOOL CALLBACK EnumThreadWndProc(HWND h, LPARAM)
 {
     ForceIcons(h);
-    return TRUE; // Continue enumeration / Продолжить перечисление
+    return TRUE; // Continue enumeration / РџСЂРѕРґРѕР»Р¶РёС‚СЊ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
 }
 
 /*******************************************************************************
  * IconFix_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the icon fix module. This is the main entry point that should
  * be called when the module is loaded.
  * 
- * Инициализирует модуль исправления иконок. Это главная точка входа, которая
- * должна вызываться при загрузке модуля.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РёРєРѕРЅРѕРє. Р­С‚Рѕ РіР»Р°РІРЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР°, РєРѕС‚РѕСЂР°СЏ
+ * РґРѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ РјРѕРґСѓР»СЏ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * hwndWinamp - Handle to the main Winamp window
- *              Дескриптор главного окна Winamp
+ *              Р”РµСЃРєСЂРёРїС‚РѕСЂ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Validates the Winamp window handle
  * 2. Retrieves and stores the main window's icons
  * 3. Gets the thread ID for the Winamp UI thread
  * 4. Installs a CBT hook to monitor future window creation
  * 5. Applies icons to all existing windows in the thread
  * 
- * 1. Проверяет дескриптор окна Winamp
- * 2. Получает и сохраняет иконки главного окна
- * 3. Получает идентификатор потока пользовательского интерфейса Winamp
- * 4. Устанавливает CBT-хук для отслеживания будущего создания окон
- * 5. Применяет иконки ко всем существующим окнам в потоке
+ * 1. РџСЂРѕРІРµСЂСЏРµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° Winamp
+ * 2. РџРѕР»СѓС‡Р°РµС‚ Рё СЃРѕС…СЂР°РЅСЏРµС‚ РёРєРѕРЅРєРё РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°
+ * 3. РџРѕР»СѓС‡Р°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‚РѕРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР° Winamp
+ * 4. РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ CBT-С…СѓРє РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ Р±СѓРґСѓС‰РµРіРѕ СЃРѕР·РґР°РЅРёСЏ РѕРєРѕРЅ
+ * 5. РџСЂРёРјРµРЅСЏРµС‚ РёРєРѕРЅРєРё РєРѕ РІСЃРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРј РѕРєРЅР°Рј РІ РїРѕС‚РѕРєРµ
  ******************************************************************************/
 void IconFix_Init(HWND hwndWinamp)
 {
     // Validate that the window handle is valid
-    // Проверка, что дескриптор окна действителен
+    // РџСЂРѕРІРµСЂРєР°, С‡С‚Рѕ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° РґРµР№СЃС‚РІРёС‚РµР»РµРЅ
     if (!IsWindow(hwndWinamp)) return;
     
     // Capture the icons from the main Winamp window
-    // Захват иконок из главного окна Winamp
+    // Р—Р°С…РІР°С‚ РёРєРѕРЅРѕРє РёР· РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp
     GrabMainIcons(hwndWinamp);
     
     // Get the thread ID that owns the Winamp window
-    // Получение идентификатора потока, владеющего окном Winamp
+    // РџРѕР»СѓС‡РµРЅРёРµ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° РїРѕС‚РѕРєР°, РІР»Р°РґРµСЋС‰РµРіРѕ РѕРєРЅРѕРј Winamp
     g_uiThreadId = GetWindowThreadProcessId(hwndWinamp, NULL);
     
     // Install CBT hook if not already installed (thread-specific hook)
-    // Установка CBT-хука, если он ещё не установлен (хук для конкретного потока)
+    // РЈСЃС‚Р°РЅРѕРІРєР° CBT-С…СѓРєР°, РµСЃР»Рё РѕРЅ РµС‰С‘ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ (С…СѓРє РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїРѕС‚РѕРєР°)
     if (!g_cbtHook)
         g_cbtHook = SetWindowsHookExA(WH_CBT, CbtHookProc, NULL, g_uiThreadId);
     
     // Apply icons to all windows that already exist in the thread
-    // Применение иконок ко всем окнам, которые уже существуют в потоке
+    // РџСЂРёРјРµРЅРµРЅРёРµ РёРєРѕРЅРѕРє РєРѕ РІСЃРµРј РѕРєРЅР°Рј, РєРѕС‚РѕСЂС‹Рµ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‚ РІ РїРѕС‚РѕРєРµ
     EnumThreadWindows(g_uiThreadId, EnumThreadWndProc, 0);
 }
 
 /*******************************************************************************
  * IconFix_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the icon fix module. Should be called when the module is unloaded
  * or when Winamp is shutting down.
  * 
- * Очищает модуль исправления иконок. Должна вызываться при выгрузке модуля
- * или при завершении работы Winamp.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РёРєРѕРЅРѕРє. Р”РѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё РІС‹РіСЂСѓР·РєРµ РјРѕРґСѓР»СЏ
+ * РёР»Рё РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё СЂР°Р±РѕС‚С‹ Winamp.
  * 
- * CLEANUP PROCESS / ПРОЦЕСС ОЧИСТКИ:
+ * CLEANUP PROCESS / РџР РћР¦Р•РЎРЎ РћР§РРЎРўРљР:
  * 1. Removes the CBT hook if it was installed
  * 2. Clears stored icon handles
  * 3. Resets the thread ID
  * 
- * 1. Удаляет CBT-хук, если он был установлен
- * 2. Очищает сохранённые дескрипторы иконок
- * 3. Сбрасывает идентификатор потока
+ * 1. РЈРґР°Р»СЏРµС‚ CBT-С…СѓРє, РµСЃР»Рё РѕРЅ Р±С‹Р» СѓСЃС‚Р°РЅРѕРІР»РµРЅ
+ * 2. РћС‡РёС‰Р°РµС‚ СЃРѕС…СЂР°РЅС‘РЅРЅС‹Рµ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРєРѕРЅРѕРє
+ * 3. РЎР±СЂР°СЃС‹РІР°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‚РѕРєР°
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This function does not destroy the icon handles because they belong to
  * the system or the main window, not to this module.
  * 
- * Эта функция не уничтожает дескрипторы иконок, потому что они принадлежат
- * системе или главному окну, а не этому модулю.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ РЅРµ СѓРЅРёС‡С‚РѕР¶Р°РµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРєРѕРЅРѕРє, РїРѕС‚РѕРјСѓ С‡С‚Рѕ РѕРЅРё РїСЂРёРЅР°РґР»РµР¶Р°С‚
+ * СЃРёСЃС‚РµРјРµ РёР»Рё РіР»Р°РІРЅРѕРјСѓ РѕРєРЅСѓ, Р° РЅРµ СЌС‚РѕРјСѓ РјРѕРґСѓР»СЋ.
  ******************************************************************************/
 void IconFix_Quit(void)
 {
     // Remove the CBT hook if it was installed
-    // Удаление CBT-хука, если он был установлен
+    // РЈРґР°Р»РµРЅРёРµ CBT-С…СѓРєР°, РµСЃР»Рё РѕРЅ Р±С‹Р» СѓСЃС‚Р°РЅРѕРІР»РµРЅ
     if (g_cbtHook) { UnhookWindowsHookEx(g_cbtHook); g_cbtHook = NULL; }
     
     // Clear icon handles (but don't destroy them - they're not owned by this module)
-    // Очистка дескрипторов иконок (но не их уничтожение - они не принадлежат этому модулю)
+    // РћС‡РёСЃС‚РєР° РґРµСЃРєСЂРёРїС‚РѕСЂРѕРІ РёРєРѕРЅРѕРє (РЅРѕ РЅРµ РёС… СѓРЅРёС‡С‚РѕР¶РµРЅРёРµ - РѕРЅРё РЅРµ РїСЂРёРЅР°РґР»РµР¶Р°С‚ СЌС‚РѕРјСѓ РјРѕРґСѓР»СЋ)
     g_hBigIcon = g_hSmallIcon = NULL;
     
     // Reset thread ID
-    // Сброс идентификатора потока
+    // РЎР±СЂРѕСЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° РїРѕС‚РѕРєР°
     g_uiThreadId = 0;
 }
