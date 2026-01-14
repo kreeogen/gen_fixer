@@ -2,21 +2,21 @@
  * mod_videofontfix.cpp
  * 
  * WINAMP VIDEO WINDOW FONT FIX MODULE (You don't need that module if you are using English Winamp version)
- * Модуль исправления шрифтов для окна видео Winamp
+ * РњРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ РґР»СЏ РѕРєРЅР° РІРёРґРµРѕ Winamp
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module fixes font rendering issues in Winamp's video input plugins
  * (particularly in_dshow.dll and in_nsv.dll) by intercepting font creation
  * API calls and forcing a specific font face and character set. This solves
  * problems with incorrect character display in non-English locales.
  * 
- * Этот модуль исправляет проблемы отображения шрифтов в видео-плагинах Winamp
- * (особенно в in_dshow.dll и in_nsv.dll), перехватывая вызовы API создания
- * шрифтов и принудительно устанавливая определённое начертание шрифта и набор
- * символов. Это решает проблемы с неправильным отображением символов в
- * нелатинских локалях.
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С€СЂРёС„С‚РѕРІ РІ РІРёРґРµРѕ-РїР»Р°РіРёРЅР°С… Winamp
+ * (РѕСЃРѕР±РµРЅРЅРѕ РІ in_dshow.dll Рё in_nsv.dll), РїРµСЂРµС…РІР°С‚С‹РІР°СЏ РІС‹Р·РѕРІС‹ API СЃРѕР·РґР°РЅРёСЏ
+ * С€СЂРёС„С‚РѕРІ Рё РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ СѓСЃС‚Р°РЅР°РІР»РёРІР°СЏ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРµ РЅР°С‡РµСЂС‚Р°РЅРёРµ С€СЂРёС„С‚Р° Рё РЅР°Р±РѕСЂ
+ * СЃРёРјРІРѕР»РѕРІ. Р­С‚Рѕ СЂРµС€Р°РµС‚ РїСЂРѕР±Р»РµРјС‹ СЃ РЅРµРїСЂР°РІРёР»СЊРЅС‹Рј РѕС‚РѕР±СЂР°Р¶РµРЅРёРµРј СЃРёРјРІРѕР»РѕРІ РІ
+ * РЅРµР»Р°С‚РёРЅСЃРєРёС… Р»РѕРєР°Р»СЏС….
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 1. Patches the Import Address Table (IAT) of target video plugin DLLs
  * 2. Redirects CreateFontA and CreateFontIndirectA calls to custom functions
  * 3. Custom functions modify LOGFONT structure to use Tahoma font with
@@ -25,34 +25,34 @@
  *    are left unchanged to preserve UI elements like checkboxes and icons
  * 5. Uses a worker thread to patch plugins as they load (asynchronous)
  * 
- * 1. Патчит таблицу адресов импорта (IAT) целевых DLL видео-плагинов
- * 2. Перенаправляет вызовы CreateFontA и CreateFontIndirectA на пользовательские функции
- * 3. Пользовательские функции изменяют структуру LOGFONT для использования
- *    шрифта Tahoma с кириллической кодировкой (204) перед созданием шрифта
- * 4. Специальная обработка символьных шрифтов (Marlett, Wingdings и т.д.) -
- *    они остаются неизменными для сохранения элементов интерфейса, таких как
- *    флажки и значки
- * 5. Использует рабочий поток для патчинга плагинов по мере их загрузки (асинхронно)
+ * 1. РџР°С‚С‡РёС‚ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT) С†РµР»РµРІС‹С… DLL РІРёРґРµРѕ-РїР»Р°РіРёРЅРѕРІ
+ * 2. РџРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ РІС‹Р·РѕРІС‹ CreateFontA Рё CreateFontIndirectA РЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ С„СѓРЅРєС†РёРё
+ * 3. РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ С„СѓРЅРєС†РёРё РёР·РјРµРЅСЏСЋС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
+ *    С€СЂРёС„С‚Р° Tahoma СЃ РєРёСЂРёР»Р»РёС‡РµСЃРєРѕР№ РєРѕРґРёСЂРѕРІРєРѕР№ (204) РїРµСЂРµРґ СЃРѕР·РґР°РЅРёРµРј С€СЂРёС„С‚Р°
+ * 4. РЎРїРµС†РёР°Р»СЊРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° СЃРёРјРІРѕР»СЊРЅС‹С… С€СЂРёС„С‚РѕРІ (Marlett, Wingdings Рё С‚.Рґ.) -
+ *    РѕРЅРё РѕСЃС‚Р°СЋС‚СЃСЏ РЅРµРёР·РјРµРЅРЅС‹РјРё РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ РёРЅС‚РµСЂС„РµР№СЃР°, С‚Р°РєРёС… РєР°Рє
+ *    С„Р»Р°Р¶РєРё Рё Р·РЅР°С‡РєРё
+ * 5. РСЃРїРѕР»СЊР·СѓРµС‚ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє РґР»СЏ РїР°С‚С‡РёРЅРіР° РїР»Р°РіРёРЅРѕРІ РїРѕ РјРµСЂРµ РёС… Р·Р°РіСЂСѓР·РєРё (Р°СЃРёРЅС…СЂРѕРЅРЅРѕ)
  * 
- * TECHNICAL DETAILS / ТЕХНИЧЕСКИЕ ДЕТАЛИ:
+ * TECHNICAL DETAILS / РўР•РҐРќРР§Р•РЎРљРР• Р”Р•РўРђР›Р:
  * - Uses IAT (Import Address Table) patching technique
  * - Non-invasive: only modifies function pointers, not code
  * - Thread-safe: uses atomic operations for thread control
  * - Preserves original function pointers for calling real implementations
  * - Targets specific problematic plugins (in_dshow.dll, in_nsv.dll)
  * 
- * - Использует технику патчинга IAT (таблицы адресов импорта)
- * - Неинвазивно: изменяет только указатели функций, а не код
- * - Потокобезопасно: использует атомарные операции для управления потоком
- * - Сохраняет оригинальные указатели функций для вызова реальных реализаций
- * - Нацелено на конкретные проблемные плагины (in_dshow.dll, in_nsv.dll)
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ С‚РµС…РЅРёРєСѓ РїР°С‚С‡РёРЅРіР° IAT (С‚Р°Р±Р»РёС†С‹ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р°)
+ * - РќРµРёРЅРІР°Р·РёРІРЅРѕ: РёР·РјРµРЅСЏРµС‚ С‚РѕР»СЊРєРѕ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№, Р° РЅРµ РєРѕРґ
+ * - РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕ: РёСЃРїРѕР»СЊР·СѓРµС‚ Р°С‚РѕРјР°СЂРЅС‹Рµ РѕРїРµСЂР°С†РёРё РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РїРѕС‚РѕРєРѕРј
+ * - РЎРѕС…СЂР°РЅСЏРµС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№ РґР»СЏ РІС‹Р·РѕРІР° СЂРµР°Р»СЊРЅС‹С… СЂРµР°Р»РёР·Р°С†РёР№
+ * - РќР°С†РµР»РµРЅРѕ РЅР° РєРѕРЅРєСЂРµС‚РЅС‹Рµ РїСЂРѕР±Р»РµРјРЅС‹Рµ РїР»Р°РіРёРЅС‹ (in_dshow.dll, in_nsv.dll)
  * 
- * CONFIGURATION / КОНФИГУРАЦИЯ:
+ * CONFIGURATION / РљРћРќР¤РР“РЈР РђР¦РРЇ:
  * Character set: 204 (Cyrillic) - can be changed for other locales
  * Font face: Tahoma - widely available, good Unicode support
  * 
- * Набор символов: 204 (кириллица) - может быть изменён для других локалей
- * Начертание шрифта: Tahoma - широко доступен, хорошая поддержка Unicode
+ * РќР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ: 204 (РєРёСЂРёР»Р»РёС†Р°) - РјРѕР¶РµС‚ Р±С‹С‚СЊ РёР·РјРµРЅС‘РЅ РґР»СЏ РґСЂСѓРіРёС… Р»РѕРєР°Р»РµР№
+ * РќР°С‡РµСЂС‚Р°РЅРёРµ С€СЂРёС„С‚Р°: Tahoma - С€РёСЂРѕРєРѕ РґРѕСЃС‚СѓРїРµРЅ, С…РѕСЂРѕС€Р°СЏ РїРѕРґРґРµСЂР¶РєР° Unicode
  * 
  ******************************************************************************/
 
@@ -66,14 +66,14 @@
 #pragma comment(lib, "user32.lib") 
 
 // Array size macro for compile-time array length calculation
-// Макрос размера массива для вычисления длины массива во время компиляции
+// РњР°РєСЂРѕСЃ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР° РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РґР»РёРЅС‹ РјР°СЃСЃРёРІР° РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 #endif
 
 /*******************************************************************************
  * CONFIGURATION CONSTANTS
- * КОНСТАНТЫ КОНФИГУРАЦИИ
+ * РљРћРќРЎРўРђРќРўР« РљРћРќР¤РР“РЈР РђР¦РР
  ******************************************************************************/
 
 // Character set to force for all non-symbol fonts
@@ -91,8 +91,8 @@
 // - 222 = THAI_CHARSET
 // - 238 = EASTEUROPE_CHARSET (Central European)
 //
-// Набор символов для принудительной установки для всех не-символьных шрифтов
-// 204 = RUSSIAN_CHARSET (кириллица), может быть изменён для других локалей
+// РќР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ РґР»СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё РґР»СЏ РІСЃРµС… РЅРµ-СЃРёРјРІРѕР»СЊРЅС‹С… С€СЂРёС„С‚РѕРІ
+// 204 = RUSSIAN_CHARSET (РєРёСЂРёР»Р»РёС†Р°), РјРѕР¶РµС‚ Р±С‹С‚СЊ РёР·РјРµРЅС‘РЅ РґР»СЏ РґСЂСѓРіРёС… Р»РѕРєР°Р»РµР№
 static const BYTE kForceCharset = 204;
 
 // Font face name to force for all non-symbol fonts
@@ -102,83 +102,83 @@ static const BYTE kForceCharset = 204;
 // - Clean, readable appearance
 // - Similar metrics to many default fonts
 //
-// Имя начертания шрифта для принудительной установки для всех не-символьных шрифтов
-// Tahoma выбран из-за:
-// - Широкой доступности на всех версиях Windows
-// - Хорошего покрытия Unicode
-// - Чистого, читаемого вида
-// - Схожих метрик со многими шрифтами по умолчанию
+// РРјСЏ РЅР°С‡РµСЂС‚Р°РЅРёСЏ С€СЂРёС„С‚Р° РґР»СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё РґР»СЏ РІСЃРµС… РЅРµ-СЃРёРјРІРѕР»СЊРЅС‹С… С€СЂРёС„С‚РѕРІ
+// Tahoma РІС‹Р±СЂР°РЅ РёР·-Р·Р°:
+// - РЁРёСЂРѕРєРѕР№ РґРѕСЃС‚СѓРїРЅРѕСЃС‚Рё РЅР° РІСЃРµС… РІРµСЂСЃРёСЏС… Windows
+// - РҐРѕСЂРѕС€РµРіРѕ РїРѕРєСЂС‹С‚РёСЏ Unicode
+// - Р§РёСЃС‚РѕРіРѕ, С‡РёС‚Р°РµРјРѕРіРѕ РІРёРґР°
+// - РЎС…РѕР¶РёС… РјРµС‚СЂРёРє СЃРѕ РјРЅРѕРіРёРјРё С€СЂРёС„С‚Р°РјРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 static const char kForceFace[]  = "Tahoma";
 
 /*******************************************************************************
  * REAL API FUNCTION POINTERS
- * УКАЗАТЕЛИ НА РЕАЛЬНЫЕ ФУНКЦИИ API
+ * РЈРљРђР—РђРўР•Р›Р РќРђ Р Р•РђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР API
  ******************************************************************************/
 
 // Function pointer types for the GDI font creation functions we intercept
-// Типы указателей на функции для функций создания шрифтов GDI, которые мы перехватываем
+// РўРёРїС‹ СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° С„СѓРЅРєС†РёРё РґР»СЏ С„СѓРЅРєС†РёР№ СЃРѕР·РґР°РЅРёСЏ С€СЂРёС„С‚РѕРІ GDI, РєРѕС‚РѕСЂС‹Рµ РјС‹ РїРµСЂРµС…РІР°С‚С‹РІР°РµРј
 
 // CreateFontIndirectA: Creates a font from a LOGFONT structure
-// CreateFontIndirectA: создаёт шрифт из структуры LOGFONT
+// CreateFontIndirectA: СЃРѕР·РґР°С‘С‚ С€СЂРёС„С‚ РёР· СЃС‚СЂСѓРєС‚СѓСЂС‹ LOGFONT
 typedef HFONT (WINAPI *PFN_CreateFontIndirectA)(const LOGFONTA*);
 
 // CreateFontA: Creates a font from individual parameters
-// CreateFontA: создаёт шрифт из отдельных параметров
+// CreateFontA: СЃРѕР·РґР°С‘С‚ С€СЂРёС„С‚ РёР· РѕС‚РґРµР»СЊРЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
 typedef HFONT (WINAPI *PFN_CreateFontA)(int, int, int, int, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPCSTR);
 
 // Pointers to the real (original) GDI functions
 // These are obtained before patching and used to call the actual implementation
-// Указатели на реальные (оригинальные) функции GDI
-// Они получаются до патчинга и используются для вызова фактической реализации
+// РЈРєР°Р·Р°С‚РµР»Рё РЅР° СЂРµР°Р»СЊРЅС‹Рµ (РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ) С„СѓРЅРєС†РёРё GDI
+// РћРЅРё РїРѕР»СѓС‡Р°СЋС‚СЃСЏ РґРѕ РїР°С‚С‡РёРЅРіР° Рё РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РґР»СЏ РІС‹Р·РѕРІР° С„Р°РєС‚РёС‡РµСЃРєРѕР№ СЂРµР°Р»РёР·Р°С†РёРё
 static PFN_CreateFontIndirectA s_real_CreateFontIndirectA = NULL;
 static PFN_CreateFontA         s_real_CreateFontA         = NULL;
 
 /*******************************************************************************
  * MODULE STATE VARIABLES
- * ПЕРЕМЕННЫЕ СОСТОЯНИЯ МОДУЛЯ
+ * РџР•Р Р•РњР•РќРќР«Р• РЎРћРЎРўРћРЇРќРРЇ РњРћР”РЈР›РЇ
  ******************************************************************************/
 
 // Handle to the worker thread that performs IAT patching
-// Дескриптор рабочего потока, который выполняет патчинг IAT
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ СЂР°Р±РѕС‡РµРіРѕ РїРѕС‚РѕРєР°, РєРѕС‚РѕСЂС‹Р№ РІС‹РїРѕР»РЅСЏРµС‚ РїР°С‚С‡РёРЅРі IAT
 static HANDLE s_hThread = NULL;
 
 // Atomic flag to signal worker thread to stop
 // Uses InterlockedExchange for thread-safe access
 // 0 = continue running, 1 = stop requested
-// Атомарный флаг для сигнала рабочему потоку остановиться
-// Использует InterlockedExchange для потокобезопасного доступа
-// 0 = продолжать работу, 1 = запрошена остановка
+// РђС‚РѕРјР°СЂРЅС‹Р№ С„Р»Р°Рі РґР»СЏ СЃРёРіРЅР°Р»Р° СЂР°Р±РѕС‡РµРјСѓ РїРѕС‚РѕРєСѓ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ
+// РСЃРїРѕР»СЊР·СѓРµС‚ InterlockedExchange РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕРіРѕ РґРѕСЃС‚СѓРїР°
+// 0 = РїСЂРѕРґРѕР»Р¶Р°С‚СЊ СЂР°Р±РѕС‚Сѓ, 1 = Р·Р°РїСЂРѕС€РµРЅР° РѕСЃС‚Р°РЅРѕРІРєР°
 static volatile LONG s_stopThread = 0;
 
 /*******************************************************************************
  * HELPER FUNCTIONS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 /*******************************************************************************
  * IsSymbolFont
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Determines if a LOGFONT structure describes a symbol font (non-alphabetic
  * fonts used for UI elements, icons, checkboxes, etc.). Symbol fonts should
  * not be modified as changing their charset or face would break UI rendering.
  * 
- * Определяет, описывает ли структура LOGFONT символьный шрифт (неалфавитные
- * шрифты, используемые для элементов интерфейса, значков, флажков и т.д.).
- * Символьные шрифты не должны изменяться, так как изменение их набора символов
- * или начертания нарушит отрисовку интерфейса.
+ * РћРїСЂРµРґРµР»СЏРµС‚, РѕРїРёСЃС‹РІР°РµС‚ Р»Рё СЃС‚СЂСѓРєС‚СѓСЂР° LOGFONT СЃРёРјРІРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚ (РЅРµР°Р»С„Р°РІРёС‚РЅС‹Рµ
+ * С€СЂРёС„С‚С‹, РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РґР»СЏ СЌР»РµРјРµРЅС‚РѕРІ РёРЅС‚РµСЂС„РµР№СЃР°, Р·РЅР°С‡РєРѕРІ, С„Р»Р°Р¶РєРѕРІ Рё С‚.Рґ.).
+ * РЎРёРјРІРѕР»СЊРЅС‹Рµ С€СЂРёС„С‚С‹ РЅРµ РґРѕР»Р¶РЅС‹ РёР·РјРµРЅСЏС‚СЊСЃСЏ, С‚Р°Рє РєР°Рє РёР·РјРµРЅРµРЅРёРµ РёС… РЅР°Р±РѕСЂР° СЃРёРјРІРѕР»РѕРІ
+ * РёР»Рё РЅР°С‡РµСЂС‚Р°РЅРёСЏ РЅР°СЂСѓС€РёС‚ РѕС‚СЂРёСЃРѕРІРєСѓ РёРЅС‚РµСЂС„РµР№СЃР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * lf - Pointer to LOGFONT structure to check
- *      Указатель на структуру LOGFONT для проверки
+ *      РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT РґР»СЏ РїСЂРѕРІРµСЂРєРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * BOOL - TRUE if this is a symbol font (should not be modified)
  *        FALSE if this is a regular font (can be modified)
- *        TRUE если это символьный шрифт (не должен изменяться)
- *        FALSE если это обычный шрифт (может быть изменён)
+ *        TRUE РµСЃР»Рё СЌС‚Рѕ СЃРёРјРІРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚ (РЅРµ РґРѕР»Р¶РµРЅ РёР·РјРµРЅСЏС‚СЊСЃСЏ)
+ *        FALSE РµСЃР»Рё СЌС‚Рѕ РѕР±С‹С‡РЅС‹Р№ С€СЂРёС„С‚ (РјРѕР¶РµС‚ Р±С‹С‚СЊ РёР·РјРµРЅС‘РЅ)
  * 
- * DETECTION CRITERIA / КРИТЕРИИ ОБНАРУЖЕНИЯ:
+ * DETECTION CRITERIA / РљР РРўР•Р РР РћР‘РќРђР РЈР–Р•РќРРЇ:
  * 1. lfCharSet == SYMBOL_CHARSET (explicit symbol charset)
  * 2. Face name matches known symbol fonts:
  *    - Marlett (UI elements: checkboxes, radio buttons, arrows)
@@ -186,71 +186,71 @@ static volatile LONG s_stopThread = 0;
  *    - Wingdings, Wingdings 2, Wingdings 3 (various symbols)
  *    - Symbol (mathematical and Greek symbols)
  * 
- * 1. lfCharSet == SYMBOL_CHARSET (явный символьный набор)
- * 2. Имя начертания соответствует известным символьным шрифтам:
- *    - Marlett (элементы интерфейса: флажки, радиокнопки, стрелки)
- *    - Webdings (веб-иконки и символы)
- *    - Wingdings, Wingdings 2, Wingdings 3 (различные символы)
- *    - Symbol (математические и греческие символы)
+ * 1. lfCharSet == SYMBOL_CHARSET (СЏРІРЅС‹Р№ СЃРёРјРІРѕР»СЊРЅС‹Р№ РЅР°Р±РѕСЂ)
+ * 2. РРјСЏ РЅР°С‡РµСЂС‚Р°РЅРёСЏ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РёР·РІРµСЃС‚РЅС‹Рј СЃРёРјРІРѕР»СЊРЅС‹Рј С€СЂРёС„С‚Р°Рј:
+ *    - Marlett (СЌР»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР°: С„Р»Р°Р¶РєРё, СЂР°РґРёРѕРєРЅРѕРїРєРё, СЃС‚СЂРµР»РєРё)
+ *    - Webdings (РІРµР±-РёРєРѕРЅРєРё Рё СЃРёРјРІРѕР»С‹)
+ *    - Wingdings, Wingdings 2, Wingdings 3 (СЂР°Р·Р»РёС‡РЅС‹Рµ СЃРёРјРІРѕР»С‹)
+ *    - Symbol (РјР°С‚РµРјР°С‚РёС‡РµСЃРєРёРµ Рё РіСЂРµС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹)
  ******************************************************************************/
 static BOOL IsSymbolFont(const LOGFONTA* lf)
 {
-    // Validate pointer / Проверить указатель
+    // Validate pointer / РџСЂРѕРІРµСЂРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ
     if (!lf) return FALSE;
 
     // Check if charset is explicitly marked as symbol font
-    // Проверить, явно ли набор символов отмечен как символьный шрифт
+    // РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІРЅРѕ Р»Рё РЅР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ РѕС‚РјРµС‡РµРЅ РєР°Рє СЃРёРјРІРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚
     if (lf->lfCharSet == SYMBOL_CHARSET) return TRUE;
 
     // Check face name against known symbol fonts
-    // Проверить имя начертания на соответствие известным символьным шрифтам
+    // РџСЂРѕРІРµСЂРёС‚СЊ РёРјСЏ РЅР°С‡РµСЂС‚Р°РЅРёСЏ РЅР° СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ РёР·РІРµСЃС‚РЅС‹Рј СЃРёРјРІРѕР»СЊРЅС‹Рј С€СЂРёС„С‚Р°Рј
     const char* face = lf->lfFaceName;
-    if (!face || !*face) return FALSE;  // No face name / Нет имени начертания
+    if (!face || !*face) return FALSE;  // No face name / РќРµС‚ РёРјРµРЅРё РЅР°С‡РµСЂС‚Р°РЅРёСЏ
 
     // UI elements font (checkboxes, scrollbars, etc.)
-    // Шрифт элементов интерфейса (флажки, полосы прокрутки и т.д.)
+    // РЁСЂРёС„С‚ СЌР»РµРјРµРЅС‚РѕРІ РёРЅС‚РµСЂС„РµР№СЃР° (С„Р»Р°Р¶РєРё, РїРѕР»РѕСЃС‹ РїСЂРѕРєСЂСѓС‚РєРё Рё С‚.Рґ.)
     if (lstrcmpiA(face, "Marlett") == 0) return TRUE;
     
-    // Web symbols and icons / Веб-символы и иконки
+    // Web symbols and icons / Р’РµР±-СЃРёРјРІРѕР»С‹ Рё РёРєРѕРЅРєРё
     if (lstrcmpiA(face, "Webdings") == 0) return TRUE;
     
-    // Various symbol sets / Различные наборы символов
+    // Various symbol sets / Р Р°Р·Р»РёС‡РЅС‹Рµ РЅР°Р±РѕСЂС‹ СЃРёРјРІРѕР»РѕРІ
     if (lstrcmpiA(face, "Wingdings") == 0) return TRUE;
     if (lstrcmpiA(face, "Wingdings 2") == 0) return TRUE;
     if (lstrcmpiA(face, "Wingdings 3") == 0) return TRUE;
     
-    // Mathematical and Greek symbols / Математические и греческие символы
+    // Mathematical and Greek symbols / РњР°С‚РµРјР°С‚РёС‡РµСЃРєРёРµ Рё РіСЂРµС‡РµСЃРєРёРµ СЃРёРјРІРѕР»С‹
     if (lstrcmpiA(face, "Symbol") == 0) return TRUE;
 
-    return FALSE;  // Not a symbol font / Не символьный шрифт
+    return FALSE;  // Not a symbol font / РќРµ СЃРёРјРІРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚
 }
 
 /*******************************************************************************
  * HOOK FUNCTIONS (INTERCEPT FUNCTIONS)
- * ФУНКЦИИ-ПЕРЕХВАТЧИКИ
+ * Р¤РЈРќРљР¦РР-РџР•Р Р•РҐР’РђРўР§РРљР
  ******************************************************************************/
 
 /*******************************************************************************
  * My_CreateFontIndirectA
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Replacement function for CreateFontIndirectA that forces specific font
  * face and charset for non-symbol fonts. This function is installed in the
  * IAT (Import Address Table) of target plugins.
  * 
- * Функция-замена для CreateFontIndirectA, которая принудительно устанавливает
- * определённое начертание шрифта и набор символов для не-символьных шрифтов.
- * Эта функция устанавливается в IAT (таблицу адресов импорта) целевых плагинов.
+ * Р¤СѓРЅРєС†РёСЏ-Р·Р°РјРµРЅР° РґР»СЏ CreateFontIndirectA, РєРѕС‚РѕСЂР°СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚
+ * РѕРїСЂРµРґРµР»С‘РЅРЅРѕРµ РЅР°С‡РµСЂС‚Р°РЅРёРµ С€СЂРёС„С‚Р° Рё РЅР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ РґР»СЏ РЅРµ-СЃРёРјРІРѕР»СЊРЅС‹С… С€СЂРёС„С‚РѕРІ.
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РІ IAT (С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р°) С†РµР»РµРІС‹С… РїР»Р°РіРёРЅРѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * plf - Pointer to LOGFONT structure describing the desired font
- *       Указатель на структуру LOGFONT, описывающую желаемый шрифт
+ *       РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT, РѕРїРёСЃС‹РІР°СЋС‰СѓСЋ Р¶РµР»Р°РµРјС‹Р№ С€СЂРёС„С‚
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * HFONT - Handle to the created font, or NULL on failure
- *         Дескриптор созданного шрифта или NULL при ошибке
+ *         Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕР·РґР°РЅРЅРѕРіРѕ С€СЂРёС„С‚Р° РёР»Рё NULL РїСЂРё РѕС€РёР±РєРµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Copy input LOGFONT structure (or create empty one if NULL)
  * 2. Check if font is a symbol font
  * 3. If NOT a symbol font:
@@ -258,98 +258,98 @@ static BOOL IsSymbolFont(const LOGFONTA* lf)
  *    - Replace lfFaceName with kForceFace ("Tahoma")
  * 4. Call real CreateFontIndirectA with modified structure
  * 
- * 1. Копировать входную структуру LOGFONT (или создать пустую, если NULL)
- * 2. Проверить, является ли шрифт символьным
- * 3. Если НЕ символьный шрифт:
- *    - Заменить lfCharSet на kForceCharset (204 = кириллица)
- *    - Заменить lfFaceName на kForceFace ("Tahoma")
- * 4. Вызвать реальную CreateFontIndirectA с изменённой структурой
+ * 1. РљРѕРїРёСЂРѕРІР°С‚СЊ РІС…РѕРґРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT (РёР»Рё СЃРѕР·РґР°С‚СЊ РїСѓСЃС‚СѓСЋ, РµСЃР»Рё NULL)
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё С€СЂРёС„С‚ СЃРёРјРІРѕР»СЊРЅС‹Рј
+ * 3. Р•СЃР»Рё РќР• СЃРёРјРІРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚:
+ *    - Р—Р°РјРµРЅРёС‚СЊ lfCharSet РЅР° kForceCharset (204 = РєРёСЂРёР»Р»РёС†Р°)
+ *    - Р—Р°РјРµРЅРёС‚СЊ lfFaceName РЅР° kForceFace ("Tahoma")
+ * 4. Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅСѓСЋ CreateFontIndirectA СЃ РёР·РјРµРЅС‘РЅРЅРѕР№ СЃС‚СЂСѓРєС‚СѓСЂРѕР№
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Symbol fonts are left unchanged to preserve UI elements. All other font
  * properties (size, weight, italic, etc.) are preserved from the original.
  * 
- * Символьные шрифты остаются неизменными для сохранения элементов интерфейса.
- * Все остальные свойства шрифта (размер, вес, курсив и т.д.) сохраняются из оригинала.
+ * РЎРёРјРІРѕР»СЊРЅС‹Рµ С€СЂРёС„С‚С‹ РѕСЃС‚Р°СЋС‚СЃСЏ РЅРµРёР·РјРµРЅРЅС‹РјРё РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ РёРЅС‚РµСЂС„РµР№СЃР°.
+ * Р’СЃРµ РѕСЃС‚Р°Р»СЊРЅС‹Рµ СЃРІРѕР№СЃС‚РІР° С€СЂРёС„С‚Р° (СЂР°Р·РјРµСЂ, РІРµСЃ, РєСѓСЂСЃРёРІ Рё С‚.Рґ.) СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ РёР· РѕСЂРёРіРёРЅР°Р»Р°.
  ******************************************************************************/
 static HFONT WINAPI My_CreateFontIndirectA(const LOGFONTA* plf)
 {
     LOGFONTA lf;
     
     // Copy input LOGFONT or create empty structure
-    // Копировать входную LOGFONT или создать пустую структуру
+    // РљРѕРїРёСЂРѕРІР°С‚СЊ РІС…РѕРґРЅСѓСЋ LOGFONT РёР»Рё СЃРѕР·РґР°С‚СЊ РїСѓСЃС‚СѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ
     if (plf) lf = *plf;
     else ZeroMemory(&lf, sizeof(lf));
 
     // Modify font properties only for non-symbol fonts
-    // Изменять свойства шрифта только для не-символьных шрифтов
+    // РР·РјРµРЅСЏС‚СЊ СЃРІРѕР№СЃС‚РІР° С€СЂРёС„С‚Р° С‚РѕР»СЊРєРѕ РґР»СЏ РЅРµ-СЃРёРјРІРѕР»СЊРЅС‹С… С€СЂРёС„С‚РѕРІ
     if (!IsSymbolFont(&lf)) {
         // Force specific charset (Cyrillic in this case)
-        // Принудительно установить определённый набор символов (кириллицу в данном случае)
+        // РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РѕРїСЂРµРґРµР»С‘РЅРЅС‹Р№ РЅР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ (РєРёСЂРёР»Р»РёС†Сѓ РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ)
         lf.lfCharSet = kForceCharset;
         
         // Force specific font face (Tahoma)
-        // Принудительно установить определённое начертание шрифта (Tahoma)
+        // РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРµ РЅР°С‡РµСЂС‚Р°РЅРёРµ С€СЂРёС„С‚Р° (Tahoma)
         lstrcpynA(lf.lfFaceName, kForceFace, LF_FACESIZE);
     }
 
     // Call real CreateFontIndirectA function
-    // Вызвать реальную функцию CreateFontIndirectA
+    // Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ CreateFontIndirectA
     if (s_real_CreateFontIndirectA)
         return s_real_CreateFontIndirectA(&lf);
     
     // Fallback if real function pointer not available (should never happen)
-    // Резервный вариант, если указатель на реальную функцию недоступен (не должно произойти)
+    // Р РµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚, РµСЃР»Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ РЅРµРґРѕСЃС‚СѓРїРµРЅ (РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРѕРёР·РѕР№С‚Рё)
     return CreateFontIndirectA(&lf);
 }
 
 /*******************************************************************************
  * My_CreateFontA
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Replacement function for CreateFontA that converts individual font parameters
  * to a LOGFONT structure and delegates to My_CreateFontIndirectA for processing.
  * This ensures consistent font modification logic for both font creation APIs.
  * 
- * Функция-замена для CreateFontA, которая преобразует отдельные параметры
- * шрифта в структуру LOGFONT и делегирует обработку My_CreateFontIndirectA.
- * Это обеспечивает согласованную логику изменения шрифта для обоих API создания шрифтов.
+ * Р¤СѓРЅРєС†РёСЏ-Р·Р°РјРµРЅР° РґР»СЏ CreateFontA, РєРѕС‚РѕСЂР°СЏ РїСЂРµРѕР±СЂР°Р·СѓРµС‚ РѕС‚РґРµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹
+ * С€СЂРёС„С‚Р° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT Рё РґРµР»РµРіРёСЂСѓРµС‚ РѕР±СЂР°Р±РѕС‚РєСѓ My_CreateFontIndirectA.
+ * Р­С‚Рѕ РѕР±РµСЃРїРµС‡РёРІР°РµС‚ СЃРѕРіР»Р°СЃРѕРІР°РЅРЅСѓСЋ Р»РѕРіРёРєСѓ РёР·РјРµРЅРµРЅРёСЏ С€СЂРёС„С‚Р° РґР»СЏ РѕР±РѕРёС… API СЃРѕР·РґР°РЅРёСЏ С€СЂРёС„С‚РѕРІ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ (standard CreateFontA parameters):
- * h    - Height of font / Высота шрифта
- * w    - Width of font / Ширина шрифта
- * esc  - Escapement angle / Угол наклона
- * ori  - Orientation angle / Угол ориентации
- * wt   - Font weight (bold, normal, etc.) / Вес шрифта (жирный, обычный и т.д.)
- * it   - Italic flag / Флаг курсива
- * ul   - Underline flag / Флаг подчёркивания
- * so   - Strikeout flag / Флаг зачёркивания
- * cs   - Character set / Набор символов
- * outp - Output precision / Точность вывода
- * clp  - Clipping precision / Точность обрезки
- * qual - Output quality / Качество вывода
- * pf   - Pitch and family / Шаг и семейство
- * face - Font face name / Имя начертания шрифта
+ * PARAMETERS / РџРђР РђРњР•РўР Р« (standard CreateFontA parameters):
+ * h    - Height of font / Р’С‹СЃРѕС‚Р° С€СЂРёС„С‚Р°
+ * w    - Width of font / РЁРёСЂРёРЅР° С€СЂРёС„С‚Р°
+ * esc  - Escapement angle / РЈРіРѕР» РЅР°РєР»РѕРЅР°
+ * ori  - Orientation angle / РЈРіРѕР» РѕСЂРёРµРЅС‚Р°С†РёРё
+ * wt   - Font weight (bold, normal, etc.) / Р’РµСЃ С€СЂРёС„С‚Р° (Р¶РёСЂРЅС‹Р№, РѕР±С‹С‡РЅС‹Р№ Рё С‚.Рґ.)
+ * it   - Italic flag / Р¤Р»Р°Рі РєСѓСЂСЃРёРІР°
+ * ul   - Underline flag / Р¤Р»Р°Рі РїРѕРґС‡С‘СЂРєРёРІР°РЅРёСЏ
+ * so   - Strikeout flag / Р¤Р»Р°Рі Р·Р°С‡С‘СЂРєРёРІР°РЅРёСЏ
+ * cs   - Character set / РќР°Р±РѕСЂ СЃРёРјРІРѕР»РѕРІ
+ * outp - Output precision / РўРѕС‡РЅРѕСЃС‚СЊ РІС‹РІРѕРґР°
+ * clp  - Clipping precision / РўРѕС‡РЅРѕСЃС‚СЊ РѕР±СЂРµР·РєРё
+ * qual - Output quality / РљР°С‡РµСЃС‚РІРѕ РІС‹РІРѕРґР°
+ * pf   - Pitch and family / РЁР°Рі Рё СЃРµРјРµР№СЃС‚РІРѕ
+ * face - Font face name / РРјСЏ РЅР°С‡РµСЂС‚Р°РЅРёСЏ С€СЂРёС„С‚Р°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * HFONT - Handle to the created font, or NULL on failure
- *         Дескриптор созданного шрифта или NULL при ошибке
+ *         Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕР·РґР°РЅРЅРѕРіРѕ С€СЂРёС„С‚Р° РёР»Рё NULL РїСЂРё РѕС€РёР±РєРµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Convert individual parameters to LOGFONT structure
  * 2. Call My_CreateFontIndirectA which applies font modifications
  * 3. Return resulting font handle
  * 
- * 1. Преобразовать отдельные параметры в структуру LOGFONT
- * 2. Вызвать My_CreateFontIndirectA, которая применяет изменения шрифта
- * 3. Вернуть результирующий дескриптор шрифта
+ * 1. РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РѕС‚РґРµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT
+ * 2. Р’С‹Р·РІР°С‚СЊ My_CreateFontIndirectA, РєРѕС‚РѕСЂР°СЏ РїСЂРёРјРµРЅСЏРµС‚ РёР·РјРµРЅРµРЅРёСЏ С€СЂРёС„С‚Р°
+ * 3. Р’РµСЂРЅСѓС‚СЊ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РёР№ РґРµСЃРєСЂРёРїС‚РѕСЂ С€СЂРёС„С‚Р°
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This approach centralizes all font modification logic in one place
  * (My_CreateFontIndirectA), making the code more maintainable.
  * 
- * Этот подход централизует всю логику изменения шрифта в одном месте
- * (My_CreateFontIndirectA), делая код более поддерживаемым.
+ * Р­С‚РѕС‚ РїРѕРґС…РѕРґ С†РµРЅС‚СЂР°Р»РёР·СѓРµС‚ РІСЃСЋ Р»РѕРіРёРєСѓ РёР·РјРµРЅРµРЅРёСЏ С€СЂРёС„С‚Р° РІ РѕРґРЅРѕРј РјРµСЃС‚Рµ
+ * (My_CreateFontIndirectA), РґРµР»Р°СЏ РєРѕРґ Р±РѕР»РµРµ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Рј.
  ******************************************************************************/
 static HFONT WINAPI My_CreateFontA(
     int h, int w, int esc, int ori, int wt,
@@ -358,7 +358,7 @@ static HFONT WINAPI My_CreateFontA(
     LPCSTR face)
 {
     // Build LOGFONT structure from individual parameters
-    // Построить структуру LOGFONT из отдельных параметров
+    // РџРѕСЃС‚СЂРѕРёС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ LOGFONT РёР· РѕС‚РґРµР»СЊРЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
     LOGFONTA lf = {0};
     lf.lfHeight = h;
     lf.lfWidth = w;
@@ -374,68 +374,68 @@ static HFONT WINAPI My_CreateFontA(
     lf.lfQuality = (BYTE)qual;
     lf.lfPitchAndFamily = (BYTE)pf;
     
-    // Copy font face name if provided / Копировать имя начертания, если предоставлено
+    // Copy font face name if provided / РљРѕРїРёСЂРѕРІР°С‚СЊ РёРјСЏ РЅР°С‡РµСЂС‚Р°РЅРёСЏ, РµСЃР»Рё РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅРѕ
     if (face) lstrcpynA(lf.lfFaceName, face, LF_FACESIZE);
 
     // Delegate to My_CreateFontIndirectA for consistent processing
-    // Делегировать My_CreateFontIndirectA для согласованной обработки
+    // Р”РµР»РµРіРёСЂРѕРІР°С‚СЊ My_CreateFontIndirectA РґР»СЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё
     return My_CreateFontIndirectA(&lf);
 }
 
 /*******************************************************************************
  * WORKER THREAD FUNCTIONS
- * ФУНКЦИИ РАБОЧЕГО ПОТОКА
+ * Р¤РЈРќРљР¦РР Р РђР‘РћР§Р•Р“Рћ РџРћРўРћРљРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * TryPatchModule
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Attempts to patch the Import Address Table (IAT) of a specific module
  * (DLL) to redirect font creation functions to our replacement functions.
  * 
- * Пытается пропатчить таблицу адресов импорта (IAT) конкретного модуля
- * (DLL) для перенаправления функций создания шрифтов на наши функции-замены.
+ * РџС‹С‚Р°РµС‚СЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT) РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РјРѕРґСѓР»СЏ
+ * (DLL) РґР»СЏ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ С„СѓРЅРєС†РёР№ СЃРѕР·РґР°РЅРёСЏ С€СЂРёС„С‚РѕРІ РЅР° РЅР°С€Рё С„СѓРЅРєС†РёРё-Р·Р°РјРµРЅС‹.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * modName - Name of the module/DLL to patch (e.g., "in_dshow.dll")
- *           Имя модуля/DLL для патчинга (например, "in_dshow.dll")
+ *           РРјСЏ РјРѕРґСѓР»СЏ/DLL РґР»СЏ РїР°С‚С‡РёРЅРіР° (РЅР°РїСЂРёРјРµСЂ, "in_dshow.dll")
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Get module handle (checks if module is loaded)
  * 2. If loaded, patch CreateFontIndirectA in its IAT
  * 3. Patch CreateFontA in its IAT
  * 4. Store original function pointers for later use
  * 
- * 1. Получить дескриптор модуля (проверить, загружен ли модуль)
- * 2. Если загружен, пропатчить CreateFontIndirectA в его IAT
- * 3. Пропатчить CreateFontA в его IAT
- * 4. Сохранить оригинальные указатели функций для последующего использования
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ (РїСЂРѕРІРµСЂРёС‚СЊ, Р·Р°РіСЂСѓР¶РµРЅ Р»Рё РјРѕРґСѓР»СЊ)
+ * 2. Р•СЃР»Рё Р·Р°РіСЂСѓР¶РµРЅ, РїСЂРѕРїР°С‚С‡РёС‚СЊ CreateFontIndirectA РІ РµРіРѕ IAT
+ * 3. РџСЂРѕРїР°С‚С‡РёС‚СЊ CreateFontA РІ РµРіРѕ IAT
+ * 4. РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№ РґР»СЏ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * - Safe to call multiple times (IAT_PatchByName handles this)
  * - Only patches if module is currently loaded
  * - Does not load modules that aren't already loaded
  * 
- * - Безопасно вызывать несколько раз (IAT_PatchByName обрабатывает это)
- * - Патчит только если модуль уже загружен
- * - Не загружает модули, которые ещё не загружены
+ * - Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЂР°Р· (IAT_PatchByName РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЌС‚Рѕ)
+ * - РџР°С‚С‡РёС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РјРѕРґСѓР»СЊ СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅ
+ * - РќРµ Р·Р°РіСЂСѓР¶Р°РµС‚ РјРѕРґСѓР»Рё, РєРѕС‚РѕСЂС‹Рµ РµС‰С‘ РЅРµ Р·Р°РіСЂСѓР¶РµРЅС‹
  ******************************************************************************/
 static void TryPatchModule(const char* modName)
 {
-    // Check if module is loaded / Проверить, загружен ли модуль
+    // Check if module is loaded / РџСЂРѕРІРµСЂРёС‚СЊ, Р·Р°РіСЂСѓР¶РµРЅ Р»Рё РјРѕРґСѓР»СЊ
     HMODULE hMod = GetModuleHandleA(modName);
-    if (!hMod) return;  // Module not loaded, nothing to patch / Модуль не загружен, нечего патчить
+    if (!hMod) return;  // Module not loaded, nothing to patch / РњРѕРґСѓР»СЊ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ, РЅРµС‡РµРіРѕ РїР°С‚С‡РёС‚СЊ
 
     // Patch CreateFontIndirectA in this module's IAT
-    // Пропатчить CreateFontIndirectA в IAT этого модуля
+    // РџСЂРѕРїР°С‚С‡РёС‚СЊ CreateFontIndirectA РІ IAT СЌС‚РѕРіРѕ РјРѕРґСѓР»СЏ
     // Parameters: module handle, DLL name, function name, new function, pointer to store original
-    // Параметры: дескриптор модуля, имя DLL, имя функции, новая функция, указатель для сохранения оригинала
+    // РџР°СЂР°РјРµС‚СЂС‹: РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ, РёРјСЏ DLL, РёРјСЏ С„СѓРЅРєС†РёРё, РЅРѕРІР°СЏ С„СѓРЅРєС†РёСЏ, СѓРєР°Р·Р°С‚РµР»СЊ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РѕСЂРёРіРёРЅР°Р»Р°
     IAT_PatchByName(hMod, "GDI32.DLL", "CreateFontIndirectA", 
                    (void*)My_CreateFontIndirectA, (void**)&s_real_CreateFontIndirectA);
 
     // Patch CreateFontA in this module's IAT
-    // Пропатчить CreateFontA в IAT этого модуля
+    // РџСЂРѕРїР°С‚С‡РёС‚СЊ CreateFontA РІ IAT СЌС‚РѕРіРѕ РјРѕРґСѓР»СЏ
     IAT_PatchByName(hMod, "GDI32.DLL", "CreateFontA", 
                    (void*)My_CreateFontA, (void**)&s_real_CreateFontA);
 }
@@ -443,24 +443,24 @@ static void TryPatchModule(const char* modName)
 /*******************************************************************************
  * WorkerProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Worker thread procedure that initializes real function pointers and
  * repeatedly attempts to patch target video plugins. Uses polling approach
  * because plugins may load asynchronously after Winamp starts.
  * 
- * Процедура рабочего потока, которая инициализирует указатели на реальные
- * функции и повторно пытается пропатчить целевые видео-плагины. Использует
- * подход опроса, потому что плагины могут загружаться асинхронно после запуска Winamp.
+ * РџСЂРѕС†РµРґСѓСЂР° СЂР°Р±РѕС‡РµРіРѕ РїРѕС‚РѕРєР°, РєРѕС‚РѕСЂР°СЏ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ СѓРєР°Р·Р°С‚РµР»Рё РЅР° СЂРµР°Р»СЊРЅС‹Рµ
+ * С„СѓРЅРєС†РёРё Рё РїРѕРІС‚РѕСЂРЅРѕ РїС‹С‚Р°РµС‚СЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ С†РµР»РµРІС‹Рµ РІРёРґРµРѕ-РїР»Р°РіРёРЅС‹. РСЃРїРѕР»СЊР·СѓРµС‚
+ * РїРѕРґС…РѕРґ РѕРїСЂРѕСЃР°, РїРѕС‚РѕРјСѓ С‡С‚Рѕ РїР»Р°РіРёРЅС‹ РјРѕРіСѓС‚ Р·Р°РіСЂСѓР¶Р°С‚СЊСЃСЏ Р°СЃРёРЅС…СЂРѕРЅРЅРѕ РїРѕСЃР»Рµ Р·Р°РїСѓСЃРєР° Winamp.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * Standard thread procedure parameter (unused)
- * Стандартный параметр процедуры потока (не используется)
+ * РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїР°СЂР°РјРµС‚СЂ РїСЂРѕС†РµРґСѓСЂС‹ РїРѕС‚РѕРєР° (РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * DWORD - Thread exit code (always 0)
- *         Код выхода потока (всегда 0)
+ *         РљРѕРґ РІС‹С…РѕРґР° РїРѕС‚РѕРєР° (РІСЃРµРіРґР° 0)
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get GDI32.DLL module handle
  * 2. Obtain real function pointers from GDI32.DLL
  * 3. Loop up to 50 times (5 seconds total):
@@ -470,58 +470,58 @@ static void TryPatchModule(const char* modName)
  *    d. Sleep 100ms
  * 4. Exit thread
  * 
- * 1. Получить дескриптор модуля GDI32.DLL
- * 2. Получить указатели на реальные функции из GDI32.DLL
- * 3. Цикл до 50 раз (5 секунд всего):
- *    a. Проверить флаг остановки
- *    b. Попытаться пропатчить in_dshow.dll
- *    c. Попытаться пропатчить in_nsv.dll
- *    d. Спать 100мс
- * 4. Выйти из потока
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ GDI32.DLL
+ * 2. РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»Рё РЅР° СЂРµР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё РёР· GDI32.DLL
+ * 3. Р¦РёРєР» РґРѕ 50 СЂР°Р· (5 СЃРµРєСѓРЅРґ РІСЃРµРіРѕ):
+ *    a. РџСЂРѕРІРµСЂРёС‚СЊ С„Р»Р°Рі РѕСЃС‚Р°РЅРѕРІРєРё
+ *    b. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ in_dshow.dll
+ *    c. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ in_nsv.dll
+ *    d. РЎРїР°С‚СЊ 100РјСЃ
+ * 4. Р’С‹Р№С‚Рё РёР· РїРѕС‚РѕРєР°
  * 
- * WHY POLLING / ПОЧЕМУ ОПРОС:
+ * WHY POLLING / РџРћР§Р•РњРЈ РћРџР РћРЎ:
  * Plugins may be loaded on-demand (e.g., when user opens a video file).
  * Polling for 5 seconds catches most delayed plugin loads while limiting
  * resource usage.
  * 
- * Плагины могут загружаться по требованию (например, когда пользователь
- * открывает видео-файл). Опрос в течение 5 секунд ловит большинство
- * отложенных загрузок плагинов, ограничивая использование ресурсов.
+ * РџР»Р°РіРёРЅС‹ РјРѕРіСѓС‚ Р·Р°РіСЂСѓР¶Р°С‚СЊСЃСЏ РїРѕ С‚СЂРµР±РѕРІР°РЅРёСЋ (РЅР°РїСЂРёРјРµСЂ, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ
+ * РѕС‚РєСЂС‹РІР°РµС‚ РІРёРґРµРѕ-С„Р°Р№Р»). РћРїСЂРѕСЃ РІ С‚РµС‡РµРЅРёРµ 5 СЃРµРєСѓРЅРґ Р»РѕРІРёС‚ Р±РѕР»СЊС€РёРЅСЃС‚РІРѕ
+ * РѕС‚Р»РѕР¶РµРЅРЅС‹С… Р·Р°РіСЂСѓР·РѕРє РїР»Р°РіРёРЅРѕРІ, РѕРіСЂР°РЅРёС‡РёРІР°СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЂРµСЃСѓСЂСЃРѕРІ.
  ******************************************************************************/
 static DWORD WINAPI WorkerProc(LPVOID)
 {
     // Get GDI32.DLL module handle to obtain real function pointers
-    // Получить дескриптор модуля GDI32.DLL для получения указателей на реальные функции
+    // РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ GDI32.DLL РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° СЂРµР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
     HMODULE hGDI = GetModuleHandleA("GDI32.DLL");
     if (hGDI) {
         // Get real CreateFontIndirectA function pointer if not already obtained
-        // Получить указатель на реальную функцию CreateFontIndirectA, если ещё не получен
+        // РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ CreateFontIndirectA, РµСЃР»Рё РµС‰С‘ РЅРµ РїРѕР»СѓС‡РµРЅ
         if (!s_real_CreateFontIndirectA)
             s_real_CreateFontIndirectA = (PFN_CreateFontIndirectA)GetProcAddress(hGDI, "CreateFontIndirectA");
         
         // Get real CreateFontA function pointer if not already obtained
-        // Получить указатель на реальную функцию CreateFontA, если ещё не получен
+        // РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ CreateFontA, РµСЃР»Рё РµС‰С‘ РЅРµ РїРѕР»СѓС‡РµРЅ
         if (!s_real_CreateFontA)
             s_real_CreateFontA = (PFN_CreateFontA)GetProcAddress(hGDI, "CreateFontA");
     }
 
     // Poll for plugins to patch (50 iterations * 100ms = 5 seconds)
-    // Опрашивать плагины для патчинга (50 итераций * 100мс = 5 секунд)
+    // РћРїСЂР°С€РёРІР°С‚СЊ РїР»Р°РіРёРЅС‹ РґР»СЏ РїР°С‚С‡РёРЅРіР° (50 РёС‚РµСЂР°С†РёР№ * 100РјСЃ = 5 СЃРµРєСѓРЅРґ)
     for (int i = 0; i < 50; ++i) {
         // Check if stop requested (thread-safe check)
-        // Проверить, запрошена ли остановка (потокобезопасная проверка)
+        // РџСЂРѕРІРµСЂРёС‚СЊ, Р·Р°РїСЂРѕС€РµРЅР° Р»Рё РѕСЃС‚Р°РЅРѕРІРєР° (РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РїСЂРѕРІРµСЂРєР°)
         if (s_stopThread) break;
 
         // Try to patch DirectShow input plugin
-        // Попытаться пропатчить плагин ввода DirectShow
+        // РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ РїР»Р°РіРёРЅ РІРІРѕРґР° DirectShow
         TryPatchModule("in_dshow.dll");
         
         // Try to patch NSV (Nullsoft Streaming Video) input plugin
-        // Попытаться пропатчить плагин ввода NSV (Nullsoft Streaming Video)
+        // РџРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ РїР»Р°РіРёРЅ РІРІРѕРґР° NSV (Nullsoft Streaming Video)
         TryPatchModule("in_nsv.dll");
 
         // Sleep to avoid excessive CPU usage
-        // Спать, чтобы избежать чрезмерного использования процессора
+        // РЎРїР°С‚СЊ, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ С‡СЂРµР·РјРµСЂРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РїСЂРѕС†РµСЃСЃРѕСЂР°
         Sleep(100);
     }
     
@@ -530,44 +530,44 @@ static DWORD WINAPI WorkerProc(LPVOID)
 
 /*******************************************************************************
  * PUBLIC API FUNCTIONS
- * ФУНКЦИИ ПУБЛИЧНОГО API
+ * Р¤РЈРќРљР¦РР РџРЈР‘Р›РР§РќРћР“Рћ API
  ******************************************************************************/
 
 /*******************************************************************************
  * VideoFontFix_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the video font fix module by starting the worker thread that
  * will patch target plugins. This is the main entry point for the module.
  * 
- * Инициализирует модуль исправления шрифтов видео, запуская рабочий поток,
- * который будет патчить целевые плагины. Это главная точка входа для модуля.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ РІРёРґРµРѕ, Р·Р°РїСѓСЃРєР°СЏ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє,
+ * РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РїР°С‚С‡РёС‚СЊ С†РµР»РµРІС‹Рµ РїР»Р°РіРёРЅС‹. Р­С‚Рѕ РіР»Р°РІРЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР° РґР»СЏ РјРѕРґСѓР»СЏ.
  * 
- * WHEN TO CALL / КОГДА ВЫЗЫВАТЬ:
+ * WHEN TO CALL / РљРћР“Р”Рђ Р’Р«Р—Р«Р’РђРўР¬:
  * Should be called during Winamp initialization, before video plugins are
  * likely to be loaded. Safe to call multiple times (creates thread only once).
  * 
- * Должна вызываться во время инициализации Winamp, до вероятной загрузки
- * видео-плагинов. Безопасно вызывать несколько раз (создаёт поток только один раз).
+ * Р”РѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Winamp, РґРѕ РІРµСЂРѕСЏС‚РЅРѕР№ Р·Р°РіСЂСѓР·РєРё
+ * РІРёРґРµРѕ-РїР»Р°РіРёРЅРѕРІ. Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЂР°Р· (СЃРѕР·РґР°С‘С‚ РїРѕС‚РѕРє С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·).
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * - Creates a worker thread that will run for up to 5 seconds
  * - Worker thread patches plugins as they load
  * - No-op if thread is already running
  * 
- * - Создаёт рабочий поток, который будет работать до 5 секунд
- * - Рабочий поток патчит плагины по мере их загрузки
- * - Ничего не делает, если поток уже работает
+ * - РЎРѕР·РґР°С‘С‚ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РґРѕ 5 СЃРµРєСѓРЅРґ
+ * - Р Р°Р±РѕС‡РёР№ РїРѕС‚РѕРє РїР°С‚С‡РёС‚ РїР»Р°РіРёРЅС‹ РїРѕ РјРµСЂРµ РёС… Р·Р°РіСЂСѓР·РєРё
+ * - РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµС‚, РµСЃР»Рё РїРѕС‚РѕРє СѓР¶Рµ СЂР°Р±РѕС‚Р°РµС‚
  ******************************************************************************/
 extern "C" void VideoFontFix_Init(void)
 {
     // Create worker thread only if not already created
-    // Создать рабочий поток только если ещё не создан
+    // РЎРѕР·РґР°С‚СЊ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє С‚РѕР»СЊРєРѕ РµСЃР»Рё РµС‰С‘ РЅРµ СЃРѕР·РґР°РЅ
     if (!s_hThread) {
         DWORD tid;  // Thread ID (not used, but required by CreateThread)
-                    // Идентификатор потока (не используется, но требуется CreateThread)
+                    // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‚РѕРєР° (РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, РЅРѕ С‚СЂРµР±СѓРµС‚СЃСЏ CreateThread)
         
-        // Create worker thread / Создать рабочий поток
+        // Create worker thread / РЎРѕР·РґР°С‚СЊ СЂР°Р±РѕС‡РёР№ РїРѕС‚РѕРє
         s_hThread = CreateThread(NULL, 0, WorkerProc, NULL, 0, &tid);
     }
 }
@@ -575,53 +575,53 @@ extern "C" void VideoFontFix_Init(void)
 /*******************************************************************************
  * VideoFontFix_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the video font fix module by signaling the worker thread to stop
  * and waiting for it to terminate. Should be called during Winamp shutdown.
  * 
- * Очищает модуль исправления шрифтов видео, сигнализируя рабочему потоку
- * остановиться и ожидая его завершения. Должна вызываться при завершении Winamp.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ РІРёРґРµРѕ, СЃРёРіРЅР°Р»РёР·РёСЂСѓСЏ СЂР°Р±РѕС‡РµРјСѓ РїРѕС‚РѕРєСѓ
+ * РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ Рё РѕР¶РёРґР°СЏ РµРіРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ. Р”РѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё Winamp.
  * 
- * CLEANUP PROCESS / ПРОЦЕСС ОЧИСТКИ:
+ * CLEANUP PROCESS / РџР РћР¦Р•РЎРЎ РћР§РРЎРўРљР:
  * 1. Set stop flag using atomic operation (thread-safe)
  * 2. Wait for thread to terminate (up to 500ms timeout)
  * 3. Close thread handle
  * 4. Clear thread handle variable
  * 
- * 1. Установить флаг остановки с использованием атомарной операции (потокобезопасно)
- * 2. Ждать завершения потока (до 500мс тайм-аут)
- * 3. Закрыть дескриптор потока
- * 4. Очистить переменную дескриптора потока
+ * 1. РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С„Р»Р°Рі РѕСЃС‚Р°РЅРѕРІРєРё СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј Р°С‚РѕРјР°СЂРЅРѕР№ РѕРїРµСЂР°С†РёРё (РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕ)
+ * 2. Р–РґР°С‚СЊ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕС‚РѕРєР° (РґРѕ 500РјСЃ С‚Р°Р№Рј-Р°СѓС‚)
+ * 3. Р—Р°РєСЂС‹С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РїРѕС‚РѕРєР°
+ * 4. РћС‡РёСЃС‚РёС‚СЊ РїРµСЂРµРјРµРЅРЅСѓСЋ РґРµСЃРєСЂРёРїС‚РѕСЂР° РїРѕС‚РѕРєР°
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * - Uses InterlockedExchange for thread-safe flag setting
  * - Waits up to 500ms for graceful thread termination
  * - If thread doesn't terminate, handle is still closed (thread terminates on its own)
  * - Safe to call even if thread is not running
  * 
- * - Использует InterlockedExchange для потокобезопасной установки флага
- * - Ждёт до 500мс для корректного завершения потока
- * - Если поток не завершается, дескриптор всё равно закрывается (поток завершится сам)
- * - Безопасно вызывать, даже если поток не работает
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ InterlockedExchange РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё С„Р»Р°РіР°
+ * - Р–РґС‘С‚ РґРѕ 500РјСЃ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕС‚РѕРєР°
+ * - Р•СЃР»Рё РїРѕС‚РѕРє РЅРµ Р·Р°РІРµСЂС€Р°РµС‚СЃСЏ, РґРµСЃРєСЂРёРїС‚РѕСЂ РІСЃС‘ СЂР°РІРЅРѕ Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ (РїРѕС‚РѕРє Р·Р°РІРµСЂС€РёС‚СЃСЏ СЃР°Рј)
+ * - Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ, РґР°Р¶Рµ РµСЃР»Рё РїРѕС‚РѕРє РЅРµ СЂР°Р±РѕС‚Р°РµС‚
  ******************************************************************************/
 extern "C" void VideoFontFix_Quit(void)
 {
     // Signal worker thread to stop (atomic operation, thread-safe)
-    // Сигнализировать рабочему потоку остановиться (атомарная операция, потокобезопасно)
+    // РЎРёРіРЅР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЂР°Р±РѕС‡РµРјСѓ РїРѕС‚РѕРєСѓ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ (Р°С‚РѕРјР°СЂРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕ)
     InterlockedExchange(&s_stopThread, 1);
     
     // Wait for thread to terminate and cleanup
-    // Ждать завершения потока и очистить
+    // Р–РґР°С‚СЊ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕС‚РѕРєР° Рё РѕС‡РёСЃС‚РёС‚СЊ
     if (s_hThread) {
         // Wait up to 500ms for thread to terminate gracefully
-        // Ждать до 500мс для корректного завершения потока
+        // Р–РґР°С‚СЊ РґРѕ 500РјСЃ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕС‚РѕРєР°
         WaitForSingleObject(s_hThread, 500);
         
         // Close thread handle to free system resources
-        // Закрыть дескриптор потока для освобождения системных ресурсов
+        // Р—Р°РєСЂС‹С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РїРѕС‚РѕРєР° РґР»СЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ СЃРёСЃС‚РµРјРЅС‹С… СЂРµСЃСѓСЂСЃРѕРІ
         CloseHandle(s_hThread);
         
-        // Clear handle variable / Очистить переменную дескриптора
+        // Clear handle variable / РћС‡РёСЃС‚РёС‚СЊ РїРµСЂРµРјРµРЅРЅСѓСЋ РґРµСЃРєСЂРёРїС‚РѕСЂР°
         s_hThread = NULL;
     }
 }

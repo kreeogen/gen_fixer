@@ -2,138 +2,138 @@
  * mod_unicode_tags_fix.cpp
  * 
  * WINAMP MP3 ID3 TAGS UNICODE/MOJIBAKE FIX MODULE WITH VIRTUAL FILE OVERLAY
- * МОДУЛЬ ИСПРАВЛЕНИЯ Unicode/mojibake В ID3-ТЕГАХ MP3 С ВИРТУАЛЬНЫМ НАЛОЖЕНИЕМ
+ * РњРћР”РЈР›Р¬ РРЎРџР РђР’Р›Р•РќРРЇ Unicode/mojibake Р’ ID3-РўР•Р“РђРҐ MP3 РЎ Р’РР РўРЈРђР›Р¬РќР«Рњ РќРђР›РћР–Р•РќРР•Рњ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module fixes character encoding issues (mojibake) in MP3 ID3 tags by
  * creating a virtual overlay of the file with corrected tags. When Winamp's
  * in_mp3.dll plugin reads an MP3 file, it sees a modified version with fixed
  * encoding without actually modifying the file on disk until tags are saved.
  * 
- * Данный модуль исправляет проблемы кодировки символов (mojibake) в ID3-тегах
- * MP3, создавая виртуальное наложение файла с исправленными тегами. Когда
- * плагин in_mp3.dll Winamp читает MP3-файл, он видит модифицированную версию
- * с исправленной кодировкой без фактической модификации файла на диске до
- * сохранения тегов.
+ * Р”Р°РЅРЅС‹Р№ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ РєРѕРґРёСЂРѕРІРєРё СЃРёРјРІРѕР»РѕРІ (mojibake) РІ ID3-С‚РµРіР°С…
+ * MP3, СЃРѕР·РґР°РІР°СЏ РІРёСЂС‚СѓР°Р»СЊРЅРѕРµ РЅР°Р»РѕР¶РµРЅРёРµ С„Р°Р№Р»Р° СЃ РёСЃРїСЂР°РІР»РµРЅРЅС‹РјРё С‚РµРіР°РјРё. РљРѕРіРґР°
+ * РїР»Р°РіРёРЅ in_mp3.dll Winamp С‡РёС‚Р°РµС‚ MP3-С„Р°Р№Р», РѕРЅ РІРёРґРёС‚ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРЅСѓСЋ РІРµСЂСЃРёСЋ
+ * СЃ РёСЃРїСЂР°РІР»РµРЅРЅРѕР№ РєРѕРґРёСЂРѕРІРєРѕР№ Р±РµР· С„Р°РєС‚РёС‡РµСЃРєРѕР№ РјРѕРґРёС„РёРєР°С†РёРё С„Р°Р№Р»Р° РЅР° РґРёСЃРєРµ РґРѕ
+ * СЃРѕС…СЂР°РЅРµРЅРёСЏ С‚РµРіРѕРІ.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 
- * PHASE 1 - FILE OPEN / ФАЗА 1 - ОТКРЫТИЕ ФАЙЛА:
+ * PHASE 1 - FILE OPEN / Р¤РђР—Рђ 1 - РћРўРљР Р«РўРР• Р¤РђР™Р›Рђ:
  * When in_mp3.dll opens an MP3 file, we intercept CreateFileA, read the
  * original ID3 tag, build a corrected version in memory, and create a virtual
  * overlay context.
  * 
- * Когда in_mp3.dll открывает MP3-файл, мы перехватываем CreateFileA, читаем
- * оригинальный ID3-тег, строим исправленную версию в памяти и создаём контекст
- * виртуального наложения.
+ * РљРѕРіРґР° in_mp3.dll РѕС‚РєСЂС‹РІР°РµС‚ MP3-С„Р°Р№Р», РјС‹ РїРµСЂРµС…РІР°С‚С‹РІР°РµРј CreateFileA, С‡РёС‚Р°РµРј
+ * РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ ID3-С‚РµРі, СЃС‚СЂРѕРёРј РёСЃРїСЂР°РІР»РµРЅРЅСѓСЋ РІРµСЂСЃРёСЋ РІ РїР°РјСЏС‚Рё Рё СЃРѕР·РґР°С‘Рј РєРѕРЅС‚РµРєСЃС‚
+ * РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ РЅР°Р»РѕР¶РµРЅРёСЏ.
  * 
- * PHASE 2 - FILE READ / ФАЗА 2 - ЧТЕНИЕ ФАЙЛА:
+ * PHASE 2 - FILE READ / Р¤РђР—Рђ 2 - Р§РўР•РќРР• Р¤РђР™Р›Рђ:
  * When in_mp3.dll reads from the file, we serve the corrected tag from memory
  * for tag area reads, and real audio data for audio area reads.
  * 
- * Когда in_mp3.dll читает из файла, мы возвращаем исправленный тег из памяти
- * для чтения области тега и реальные аудио данные для чтения области аудио.
+ * РљРѕРіРґР° in_mp3.dll С‡РёС‚Р°РµС‚ РёР· С„Р°Р№Р»Р°, РјС‹ РІРѕР·РІСЂР°С‰Р°РµРј РёСЃРїСЂР°РІР»РµРЅРЅС‹Р№ С‚РµРі РёР· РїР°РјСЏС‚Рё
+ * РґР»СЏ С‡С‚РµРЅРёСЏ РѕР±Р»Р°СЃС‚Рё С‚РµРіР° Рё СЂРµР°Р»СЊРЅС‹Рµ Р°СѓРґРёРѕ РґР°РЅРЅС‹Рµ РґР»СЏ С‡С‚РµРЅРёСЏ РѕР±Р»Р°СЃС‚Рё Р°СѓРґРёРѕ.
  * 
- * PHASE 3 - TAG SAVE / ФАЗА 3 - СОХРАНЕНИЕ ТЕГОВ:
+ * PHASE 3 - TAG SAVE / Р¤РђР—Рђ 3 - РЎРћРҐР РђРќР•РќРР• РўР•Р“РћР’:
  * When user edits tags, we intercept the file move operation, combine edited
  * fields from temp file with preserved frames from original, and write the
  * final MP3.
  * 
- * Когда пользователь редактирует теги, мы перехватываем операцию перемещения,
- * объединяем отредактированные поля из временного файла с сохранёнными фреймами
- * из оригинала и записываем финальный MP3.
+ * РљРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЂРµРґР°РєС‚РёСЂСѓРµС‚ С‚РµРіРё, РјС‹ РїРµСЂРµС…РІР°С‚С‹РІР°РµРј РѕРїРµСЂР°С†РёСЋ РїРµСЂРµРјРµС‰РµРЅРёСЏ,
+ * РѕР±СЉРµРґРёРЅСЏРµРј РѕС‚СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРЅС‹Рµ РїРѕР»СЏ РёР· РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р° СЃ СЃРѕС…СЂР°РЅС‘РЅРЅС‹РјРё С„СЂРµР№РјР°РјРё
+ * РёР· РѕСЂРёРіРёРЅР°Р»Р° Рё Р·Р°РїРёСЃС‹РІР°РµРј С„РёРЅР°Р»СЊРЅС‹Р№ MP3.
  * 
  ******************************************************************************/
 
 // Minimize Windows header inclusion for faster compilation
-// Минимизируем включение заголовков Windows для быстрой компиляции
+// РњРёРЅРёРјРёР·РёСЂСѓРµРј РІРєР»СЋС‡РµРЅРёРµ Р·Р°РіРѕР»РѕРІРєРѕРІ Windows РґР»СЏ Р±С‹СЃС‚СЂРѕР№ РєРѕРјРїРёР»СЏС†РёРё
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <process.h>    // For _beginthreadex / Для _beginthreadex
-#include <stdio.h>      // For sprintf / Для sprintf
-#include <stdarg.h>     // For variadic functions / Для вариативных функций
-#include <string.h>     // For string operations / Для строковых операций
+#include <process.h>    // For _beginthreadex / Р”Р»СЏ _beginthreadex
+#include <stdio.h>      // For sprintf / Р”Р»СЏ sprintf
+#include <stdarg.h>     // For variadic functions / Р”Р»СЏ РІР°СЂРёР°С‚РёРІРЅС‹С… С„СѓРЅРєС†РёР№
+#include <string.h>     // For string operations / Р”Р»СЏ СЃС‚СЂРѕРєРѕРІС‹С… РѕРїРµСЂР°С†РёР№
 
 // Custom unicode decryption engine - contains encoding fix algorithms
-// Собственный движок расшифровки unicode - содержит алгоритмы исправления кодировки
+// РЎРѕР±СЃС‚РІРµРЅРЅС‹Р№ РґРІРёР¶РѕРє СЂР°СЃС€РёС„СЂРѕРІРєРё unicode - СЃРѕРґРµСЂР¶РёС‚ Р°Р»РіРѕСЂРёС‚РјС‹ РёСЃРїСЂР°РІР»РµРЅРёСЏ РєРѕРґРёСЂРѕРІРєРё
 #include "..\\Decrypt Engine\\unicode_decrypt_engine.h"
 #include "mod_unicode_tags_fix.h"
 
 /*******************************************************************************
- * CONFIGURATION CONSTANTS / КОНСТАНТЫ КОНФИГУРАЦИИ
+ * CONFIGURATION CONSTANTS / РљРћРќРЎРўРђРќРўР« РљРћРќР¤РР“РЈР РђР¦РР
  ******************************************************************************/
 
 // Maximum number of simultaneously open MP3 files we can track
-// Максимальное количество одновременно открытых MP3-файлов, которые мы можем отслеживать
+// РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ РѕС‚РєСЂС‹С‚С‹С… MP3-С„Р°Р№Р»РѕРІ, РєРѕС‚РѕСЂС‹Рµ РјС‹ РјРѕР¶РµРј РѕС‚СЃР»РµР¶РёРІР°С‚СЊ
 #define MAX_OPEN_MP3S 32
 
 // Sanity limit for tag size to prevent memory exhaustion (50MB)
-// Ограничение размера тега для предотвращения истощения памяти (50МБ)
+// РћРіСЂР°РЅРёС‡РµРЅРёРµ СЂР°Р·РјРµСЂР° С‚РµРіР° РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РёСЃС‚РѕС‰РµРЅРёСЏ РїР°РјСЏС‚Рё (50РњР‘)
 #define TAG_SANITY_LIMIT (50*1024*1024)
 
 // Buffer sizes for wide character and ANSI strings
-// Размеры буферов для широких символов и ANSI-строк
+// Р Р°Р·РјРµСЂС‹ Р±СѓС„РµСЂРѕРІ РґР»СЏ С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ Рё ANSI-СЃС‚СЂРѕРє
 #define WBUF_MAX 2048
 #define ABUF_MAX 2048
 
 // Array size macro for compile-time array length calculation
-// Макрос размера массива для вычисления длины массива во время компиляции
+// РњР°РєСЂРѕСЃ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР° РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РґР»РёРЅС‹ РјР°СЃСЃРёРІР° РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 #endif
 
 /*******************************************************************************
- * DYNAMIC BUFFER UTILITIES / УТИЛИТЫ ДИНАМИЧЕСКИХ БУФЕРОВ
+ * DYNAMIC BUFFER UTILITIES / РЈРўРР›РРўР« Р”РРќРђРњРР§Р•РЎРљРРҐ Р‘РЈР¤Р•Р РћР’
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Provides growable byte buffers for building ID3 tags dynamically.
- * Предоставляет расширяемые байтовые буферы для динамического построения ID3-тегов.
+ * РџСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ СЂР°СЃС€РёСЂСЏРµРјС‹Рµ Р±Р°Р№С‚РѕРІС‹Рµ Р±СѓС„РµСЂС‹ РґР»СЏ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ РїРѕСЃС‚СЂРѕРµРЅРёСЏ ID3-С‚РµРіРѕРІ.
  ******************************************************************************/
 
 /*******************************************************************************
- * DynBuf - Dynamic Buffer Structure / Структура динамического буфера
+ * DynBuf - Dynamic Buffer Structure / РЎС‚СЂСѓРєС‚СѓСЂР° РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * FIELDS / ПОЛЯ:
- * data     - Pointer to buffer memory / Указатель на память буфера
- * size     - Current used size in bytes / Текущий использованный размер в байтах
- * capacity - Total allocated capacity / Общая выделенная ёмкость
+ * FIELDS / РџРћР›РЇ:
+ * data     - Pointer to buffer memory / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РїР°РјСЏС‚СЊ Р±СѓС„РµСЂР°
+ * size     - Current used size in bytes / РўРµРєСѓС‰РёР№ РёСЃРїРѕР»СЊР·РѕРІР°РЅРЅС‹Р№ СЂР°Р·РјРµСЂ РІ Р±Р°Р№С‚Р°С…
+ * capacity - Total allocated capacity / РћР±С‰Р°СЏ РІС‹РґРµР»РµРЅРЅР°СЏ С‘РјРєРѕСЃС‚СЊ
  ******************************************************************************/
 typedef struct { 
-    BYTE* data;      // Buffer memory / Память буфера
-    DWORD size;      // Used bytes / Использованные байты
-    DWORD capacity;  // Allocated bytes / Выделенные байты
+    BYTE* data;      // Buffer memory / РџР°РјСЏС‚СЊ Р±СѓС„РµСЂР°
+    DWORD size;      // Used bytes / РСЃРїРѕР»СЊР·РѕРІР°РЅРЅС‹Рµ Р±Р°Р№С‚С‹
+    DWORD capacity;  // Allocated bytes / Р’С‹РґРµР»РµРЅРЅС‹Рµ Р±Р°Р№С‚С‹
 } DynBuf;
 
 /*******************************************************************************
- * DB_Init - Initialize Dynamic Buffer / Инициализация динамического буфера
+ * DB_Init - Initialize Dynamic Buffer / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes a dynamic buffer with specified initial capacity.
- * Инициализирует динамический буфер с указанной начальной ёмкостью.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РґРёРЅР°РјРёС‡РµСЃРєРёР№ Р±СѓС„РµСЂ СЃ СѓРєР°Р·Р°РЅРЅРѕР№ РЅР°С‡Р°Р»СЊРЅРѕР№ С‘РјРєРѕСЃС‚СЊСЋ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * d       - Pointer to DynBuf structure / Указатель на структуру DynBuf
- * initCap - Initial capacity (0 = default 256) / Начальная ёмкость (0 = по умолчанию 256)
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * d       - Pointer to DynBuf structure / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ DynBuf
+ * initCap - Initial capacity (0 = default 256) / РќР°С‡Р°Р»СЊРЅР°СЏ С‘РјРєРѕСЃС‚СЊ (0 = РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 256)
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE on success / TRUE при успехе
- * FALSE on failure / FALSE при неудаче
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE on success / TRUE РїСЂРё СѓСЃРїРµС…Рµ
+ * FALSE on failure / FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  ******************************************************************************/
 static BOOL DB_Init(DynBuf* d, DWORD initCap) {
-    if (!d) return FALSE;  // Validate parameter / Проверка параметра
+    if (!d) return FALSE;  // Validate parameter / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂР°
     
-    // Initialize structure / Инициализация структуры
+    // Initialize structure / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹
     d->data = NULL; 
     d->size = 0; 
     d->capacity = 0;
     
-    // Set default capacity if not specified / Установка ёмкости по умолчанию, если не указана
+    // Set default capacity if not specified / РЈСЃС‚Р°РЅРѕРІРєР° С‘РјРєРѕСЃС‚Рё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РµСЃР»Рё РЅРµ СѓРєР°Р·Р°РЅР°
     if (initCap == 0) initCap = 256;
     
-    // Sanity check / Проверка разумности
+    // Sanity check / РџСЂРѕРІРµСЂРєР° СЂР°Р·СѓРјРЅРѕСЃС‚Рё
     if (initCap > TAG_SANITY_LIMIT) return FALSE;
     
-    // Allocate initial buffer / Выделение начального буфера
+    // Allocate initial buffer / Р’С‹РґРµР»РµРЅРёРµ РЅР°С‡Р°Р»СЊРЅРѕРіРѕ Р±СѓС„РµСЂР°
     d->data = (BYTE*)HeapAlloc(GetProcessHeap(), 0, initCap);
     if (!d->data) return FALSE;
     
@@ -142,75 +142,75 @@ static BOOL DB_Init(DynBuf* d, DWORD initCap) {
 }
 
 /*******************************************************************************
- * DB_Free - Free Dynamic Buffer / Освобождение динамического буфера
+ * DB_Free - Free Dynamic Buffer / РћСЃРІРѕР±РѕР¶РґРµРЅРёРµ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Frees a dynamic buffer and resets its state.
- * Освобождает динамический буфер и сбрасывает его состояние.
+ * РћСЃРІРѕР±РѕР¶РґР°РµС‚ РґРёРЅР°РјРёС‡РµСЃРєРёР№ Р±СѓС„РµСЂ Рё СЃР±СЂР°СЃС‹РІР°РµС‚ РµРіРѕ СЃРѕСЃС‚РѕСЏРЅРёРµ.
  ******************************************************************************/
 static void DB_Free(DynBuf* d) {
-    // Free allocated memory / Освобождение выделенной памяти
+    // Free allocated memory / РћСЃРІРѕР±РѕР¶РґРµРЅРёРµ РІС‹РґРµР»РµРЅРЅРѕР№ РїР°РјСЏС‚Рё
     if (d->data) 
         HeapFree(GetProcessHeap(), 0, d->data);
     
-    // Reset structure / Сброс структуры
+    // Reset structure / РЎР±СЂРѕСЃ СЃС‚СЂСѓРєС‚СѓСЂС‹
     d->data = NULL; 
     d->size = 0; 
     d->capacity = 0;
 }
 
 /*******************************************************************************
- * DB_Append - Append Data to Dynamic Buffer / Добавление данных в динамический буфер
+ * DB_Append - Append Data to Dynamic Buffer / Р”РѕР±Р°РІР»РµРЅРёРµ РґР°РЅРЅС‹С… РІ РґРёРЅР°РјРёС‡РµСЃРєРёР№ Р±СѓС„РµСЂ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Appends data to buffer, growing it if necessary.
- * Добавляет данные в буфер, расширяя его при необходимости.
+ * Р”РѕР±Р°РІР»СЏРµС‚ РґР°РЅРЅС‹Рµ РІ Р±СѓС„РµСЂ, СЂР°СЃС€РёСЂСЏСЏ РµРіРѕ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * d   - Dynamic buffer / Динамический буфер
- * src - Source data / Исходные данные
- * len - Length in bytes / Длина в байтах
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * d   - Dynamic buffer / Р”РёРЅР°РјРёС‡РµСЃРєРёР№ Р±СѓС„РµСЂ
+ * src - Source data / РСЃС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+ * len - Length in bytes / Р”Р»РёРЅР° РІ Р±Р°Р№С‚Р°С…
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE on success / TRUE при успехе
- * FALSE on failure / FALSE при неудаче
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE on success / TRUE РїСЂРё СѓСЃРїРµС…Рµ
+ * FALSE on failure / FALSE РїСЂРё РЅРµСѓРґР°С‡Рµ
  * 
- * GROWTH STRATEGY / СТРАТЕГИЯ РОСТА:
+ * GROWTH STRATEGY / РЎРўР РђРўР•Р“РРЇ Р РћРЎРўРђ:
  * Doubles capacity until reaching required size.
- * Удваивает ёмкость до достижения требуемого размера.
+ * РЈРґРІР°РёРІР°РµС‚ С‘РјРєРѕСЃС‚СЊ РґРѕ РґРѕСЃС‚РёР¶РµРЅРёСЏ С‚СЂРµР±СѓРµРјРѕРіРѕ СЂР°Р·РјРµСЂР°.
  ******************************************************************************/
 static BOOL DB_Append(DynBuf* d, const void* src, DWORD len) {
-    if (!d || !d->data) return FALSE;  // Validate parameters / Проверка параметров
-    if (len == 0) return TRUE;  // Nothing to append / Нечего добавлять
+    if (!d || !d->data) return FALSE;  // Validate parameters / РџСЂРѕРІРµСЂРєР° РїР°СЂР°РјРµС‚СЂРѕРІ
+    if (len == 0) return TRUE;  // Nothing to append / РќРµС‡РµРіРѕ РґРѕР±Р°РІР»СЏС‚СЊ
 
     // Prevent overflow and unbounded growth
-    // Предотвращение переполнения и неограниченного роста
+    // РџСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёРµ РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ Рё РЅРµРѕРіСЂР°РЅРёС‡РµРЅРЅРѕРіРѕ СЂРѕСЃС‚Р°
     if (d->size > TAG_SANITY_LIMIT) return FALSE;
     if (len > TAG_SANITY_LIMIT - d->size) return FALSE; 
     
-    DWORD need = d->size + len;  // Calculate required size / Вычисление требуемого размера
+    DWORD need = d->size + len;  // Calculate required size / Р’С‹С‡РёСЃР»РµРЅРёРµ С‚СЂРµР±СѓРµРјРѕРіРѕ СЂР°Р·РјРµСЂР°
 
-    // Grow buffer if needed / Расширение буфера при необходимости
+    // Grow buffer if needed / Р Р°СЃС€РёСЂРµРЅРёРµ Р±СѓС„РµСЂР° РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
     if (need > d->capacity) {
-        // Start with current capacity or 256 / Начать с текущей ёмкости или 256
+        // Start with current capacity or 256 / РќР°С‡Р°С‚СЊ СЃ С‚РµРєСѓС‰РµР№ С‘РјРєРѕСЃС‚Рё РёР»Рё 256
         DWORD newCap = d->capacity ? d->capacity : 256;
         
         // Double capacity until we reach needed size
-        // Удваивать ёмкость до достижения нужного размера
+        // РЈРґРІР°РёРІР°С‚СЊ С‘РјРєРѕСЃС‚СЊ РґРѕ РґРѕСЃС‚РёР¶РµРЅРёСЏ РЅСѓР¶РЅРѕРіРѕ СЂР°Р·РјРµСЂР°
         while (newCap < need) {
-            DWORD next = newCap << 1;  // Double / Удвоить
-            if (next <= newCap) {      // Overflow check / Проверка переполнения
+            DWORD next = newCap << 1;  // Double / РЈРґРІРѕРёС‚СЊ
+            if (next <= newCap) {      // Overflow check / РџСЂРѕРІРµСЂРєР° РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
                 newCap = need; 
                 break; 
             }
             newCap = next;
         }
         
-        // Apply sanity limit / Применение ограничения
+        // Apply sanity limit / РџСЂРёРјРµРЅРµРЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ
         if (newCap > TAG_SANITY_LIMIT) newCap = need;
         if (newCap > TAG_SANITY_LIMIT) return FALSE;
 
-        // Reallocate buffer / Перевыделение буфера
+        // Reallocate buffer / РџРµСЂРµРІС‹РґРµР»РµРЅРёРµ Р±СѓС„РµСЂР°
         BYTE* newData = (BYTE*)HeapReAlloc(GetProcessHeap(), 0, d->data, newCap);
         if (!newData) return FALSE;
         
@@ -218,135 +218,135 @@ static BOOL DB_Append(DynBuf* d, const void* src, DWORD len) {
         d->capacity = newCap;
     }
 
-    // Copy data and update size / Копирование данных и обновление размера
+    // Copy data and update size / РљРѕРїРёСЂРѕРІР°РЅРёРµ РґР°РЅРЅС‹С… Рё РѕР±РЅРѕРІР»РµРЅРёРµ СЂР°Р·РјРµСЂР°
     memcpy(d->data + d->size, src, len);
     d->size = need;
     return TRUE;
 }
 
 /*******************************************************************************
- * DB_AppendChar - Append Single Character / Добавление одного символа
+ * DB_AppendChar - Append Single Character / Р”РѕР±Р°РІР»РµРЅРёРµ РѕРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°
  * 
  * Convenience function to append a single character.
- * Удобная функция для добавления одного символа.
+ * РЈРґРѕР±РЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ РѕРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°.
  ******************************************************************************/
 static BOOL DB_AppendChar(DynBuf* d, char c) { 
     return DB_Append(d, &c, 1); 
 }
 
 /*******************************************************************************
- * CORE DATA STRUCTURES / ОСНОВНЫЕ СТРУКТУРЫ ДАННЫХ
+ * CORE DATA STRUCTURES / РћРЎРќРћР’РќР«Р• РЎРўР РЈРљРўРЈР Р« Р”РђРќРќР«РҐ
  ******************************************************************************/
 
 /*******************************************************************************
- * OverlayCtx - Virtual Overlay Context / Контекст виртуального наложения
+ * OverlayCtx - Virtual Overlay Context / РљРѕРЅС‚РµРєСЃС‚ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ РЅР°Р»РѕР¶РµРЅРёСЏ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Represents a virtual overlay context for an open MP3 file. Associates a
  * file handle with a corrected in-memory ID3 tag.
  * 
- * Представляет контекст виртуального наложения для открытого MP3-файла.
- * Ассоциирует файловый дескриптор с исправленным ID3-тегом в памяти.
+ * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ РєРѕРЅС‚РµРєСЃС‚ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ РЅР°Р»РѕР¶РµРЅРёСЏ РґР»СЏ РѕС‚РєСЂС‹С‚РѕРіРѕ MP3-С„Р°Р№Р»Р°.
+ * РђСЃСЃРѕС†РёРёСЂСѓРµС‚ С„Р°Р№Р»РѕРІС‹Р№ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃ РёСЃРїСЂР°РІР»РµРЅРЅС‹Рј ID3-С‚РµРіРѕРј РІ РїР°РјСЏС‚Рё.
  * 
- * FIELDS / ПОЛЯ:
- * hReal      - File handle seen by in_mp3.dll / Дескриптор, видимый in_mp3.dll
- * hKeep      - Duplicate handle for physical I/O / Дублирующий дескриптор для физического I/O
- * refs       - Reference count (for thread safety) / Счётчик ссылок (для потокобезопасности)
- * closing    - Closing flag / Флаг закрытия
- * newTag     - Corrected ID3v2 tag in memory / Исправленный ID3v2 тег в памяти
- * newTagSz   - Size of corrected tag / Размер исправленного тега
- * oldTagSz   - Size of original tag / Размер оригинального тега
- * virtSz     - Virtual file size / Виртуальный размер файла
- * logicalPos - Current logical read position / Текущая логическая позиция чтения
- * pathA      - File path / Путь к файлу
- * inUse      - Active flag / Флаг активности
+ * FIELDS / РџРћР›РЇ:
+ * hReal      - File handle seen by in_mp3.dll / Р”РµСЃРєСЂРёРїС‚РѕСЂ, РІРёРґРёРјС‹Р№ in_mp3.dll
+ * hKeep      - Duplicate handle for physical I/O / Р”СѓР±Р»РёСЂСѓСЋС‰РёР№ РґРµСЃРєСЂРёРїС‚РѕСЂ РґР»СЏ С„РёР·РёС‡РµСЃРєРѕРіРѕ I/O
+ * refs       - Reference count (for thread safety) / РЎС‡С‘С‚С‡РёРє СЃСЃС‹Р»РѕРє (РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё)
+ * closing    - Closing flag / Р¤Р»Р°Рі Р·Р°РєСЂС‹С‚РёСЏ
+ * newTag     - Corrected ID3v2 tag in memory / РСЃРїСЂР°РІР»РµРЅРЅС‹Р№ ID3v2 С‚РµРі РІ РїР°РјСЏС‚Рё
+ * newTagSz   - Size of corrected tag / Р Р°Р·РјРµСЂ РёСЃРїСЂР°РІР»РµРЅРЅРѕРіРѕ С‚РµРіР°
+ * oldTagSz   - Size of original tag / Р Р°Р·РјРµСЂ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С‚РµРіР°
+ * virtSz     - Virtual file size / Р’РёСЂС‚СѓР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
+ * logicalPos - Current logical read position / РўРµРєСѓС‰Р°СЏ Р»РѕРіРёС‡РµСЃРєР°СЏ РїРѕР·РёС†РёСЏ С‡С‚РµРЅРёСЏ
+ * pathA      - File path / РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+ * inUse      - Active flag / Р¤Р»Р°Рі Р°РєС‚РёРІРЅРѕСЃС‚Рё
  ******************************************************************************/
 typedef struct OverlayCtx {
-    HANDLE hReal;           // File handle returned to in_mp3.dll / Дескриптор, возвращённый in_mp3.dll
-    HANDLE hKeep;           // Duplicate handle for actual I/O / Дублирующий дескриптор для реального I/O
-    volatile LONG refs;     // Reference count for thread safety / Счётчик ссылок для потокобезопасности
-    BOOL closing;           // Closing flag for deferred cleanup / Флаг закрытия для отложенной очистки
-    BYTE* newTag;           // Corrected tag buffer / Буфер исправленного тега
-    DWORD newTagSz;         // Corrected tag size / Размер исправленного тега
-    DWORD oldTagSz;         // Original tag size / Размер оригинального тега
-    DWORD virtSz;           // Virtual file size / Виртуальный размер файла
-    DWORD logicalPos;       // Current logical position / Текущая логическая позиция
-    char pathA[MAX_PATH];   // File path / Путь к файлу
-    BOOL inUse;             // Active flag / Флаг активности
+    HANDLE hReal;           // File handle returned to in_mp3.dll / Р”РµСЃРєСЂРёРїС‚РѕСЂ, РІРѕР·РІСЂР°С‰С‘РЅРЅС‹Р№ in_mp3.dll
+    HANDLE hKeep;           // Duplicate handle for actual I/O / Р”СѓР±Р»РёСЂСѓСЋС‰РёР№ РґРµСЃРєСЂРёРїС‚РѕСЂ РґР»СЏ СЂРµР°Р»СЊРЅРѕРіРѕ I/O
+    volatile LONG refs;     // Reference count for thread safety / РЎС‡С‘С‚С‡РёРє СЃСЃС‹Р»РѕРє РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё
+    BOOL closing;           // Closing flag for deferred cleanup / Р¤Р»Р°Рі Р·Р°РєСЂС‹С‚РёСЏ РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕР№ РѕС‡РёСЃС‚РєРё
+    BYTE* newTag;           // Corrected tag buffer / Р‘СѓС„РµСЂ РёСЃРїСЂР°РІР»РµРЅРЅРѕРіРѕ С‚РµРіР°
+    DWORD newTagSz;         // Corrected tag size / Р Р°Р·РјРµСЂ РёСЃРїСЂР°РІР»РµРЅРЅРѕРіРѕ С‚РµРіР°
+    DWORD oldTagSz;         // Original tag size / Р Р°Р·РјРµСЂ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ С‚РµРіР°
+    DWORD virtSz;           // Virtual file size / Р’РёСЂС‚СѓР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
+    DWORD logicalPos;       // Current logical position / РўРµРєСѓС‰Р°СЏ Р»РѕРіРёС‡РµСЃРєР°СЏ РїРѕР·РёС†РёСЏ
+    char pathA[MAX_PATH];   // File path / РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+    BOOL inUse;             // Active flag / Р¤Р»Р°Рі Р°РєС‚РёРІРЅРѕСЃС‚Рё
 } OverlayCtx;
 
 /*******************************************************************************
- * BackupMap - Backup File Mapping / Отображение резервного файла
+ * BackupMap - Backup File Mapping / РћС‚РѕР±СЂР°Р¶РµРЅРёРµ СЂРµР·РµСЂРІРЅРѕРіРѕ С„Р°Р№Р»Р°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Maps original MP3 file paths to their backup paths. When in_mp3.dll creates
  * a backup before editing, we track it here.
  * 
- * Отображает пути оригинальных MP3-файлов на пути их резервных копий.
- * Когда in_mp3.dll создаёт резервную копию перед редактированием, мы
- * отслеживаем это здесь.
+ * РћС‚РѕР±СЂР°Р¶Р°РµС‚ РїСѓС‚Рё РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… MP3-С„Р°Р№Р»РѕРІ РЅР° РїСѓС‚Рё РёС… СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№.
+ * РљРѕРіРґР° in_mp3.dll СЃРѕР·РґР°С‘С‚ СЂРµР·РµСЂРІРЅСѓСЋ РєРѕРїРёСЋ РїРµСЂРµРґ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµРј, РјС‹
+ * РѕС‚СЃР»РµР¶РёРІР°РµРј СЌС‚Рѕ Р·РґРµСЃСЊ.
  * 
- * FIELDS / ПОЛЯ:
- * orig  - Original MP3 path / Путь оригинального MP3
- * bak   - Backup path / Путь резервной копии
- * tick  - Creation timestamp (for expiration) / Временная метка создания (для истечения)
- * inUse - Active flag / Флаг активности
+ * FIELDS / РџРћР›РЇ:
+ * orig  - Original MP3 path / РџСѓС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ MP3
+ * bak   - Backup path / РџСѓС‚СЊ СЂРµР·РµСЂРІРЅРѕР№ РєРѕРїРёРё
+ * tick  - Creation timestamp (for expiration) / Р’СЂРµРјРµРЅРЅР°СЏ РјРµС‚РєР° СЃРѕР·РґР°РЅРёСЏ (РґР»СЏ РёСЃС‚РµС‡РµРЅРёСЏ)
+ * inUse - Active flag / Р¤Р»Р°Рі Р°РєС‚РёРІРЅРѕСЃС‚Рё
  ******************************************************************************/
 typedef struct BackupMap {
-    char orig[MAX_PATH];  // Original MP3 path / Путь оригинального MP3
-    char bak[MAX_PATH];   // Backup path / Путь резервной копии
-    DWORD tick;           // Creation timestamp / Временная метка создания
-    BOOL inUse;           // Active flag / Флаг активности
+    char orig[MAX_PATH];  // Original MP3 path / РџСѓС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ MP3
+    char bak[MAX_PATH];   // Backup path / РџСѓС‚СЊ СЂРµР·РµСЂРІРЅРѕР№ РєРѕРїРёРё
+    DWORD tick;           // Creation timestamp / Р’СЂРµРјРµРЅРЅР°СЏ РјРµС‚РєР° СЃРѕР·РґР°РЅРёСЏ
+    BOOL inUse;           // Active flag / Р¤Р»Р°Рі Р°РєС‚РёРІРЅРѕСЃС‚Рё
 } BackupMap;
 
 /*******************************************************************************
- * GLOBAL STATE VARIABLES / ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ СОСТОЯНИЯ
+ * GLOBAL STATE VARIABLES / Р“Р›РћР‘РђР›Р¬РќР«Р• РџР•Р Р•РњР•РќРќР«Р• РЎРћРЎРўРћРЇРќРРЇ
  ******************************************************************************/
 
 // Pool of overlay contexts - fixed size array for efficiency
-// Пул контекстов наложения - массив фиксированного размера для эффективности
+// РџСѓР» РєРѕРЅС‚РµРєСЃС‚РѕРІ РЅР°Р»РѕР¶РµРЅРёСЏ - РјР°СЃСЃРёРІ С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР° РґР»СЏ СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё
 static OverlayCtx g_ctxPool[MAX_OPEN_MP3S];
 
 // Pool of backup mappings - matches overlay pool size
-// Пул отображений резервных копий - соответствует размеру пула наложений
+// РџСѓР» РѕС‚РѕР±СЂР°Р¶РµРЅРёР№ СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№ - СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ СЂР°Р·РјРµСЂСѓ РїСѓР»Р° РЅР°Р»РѕР¶РµРЅРёР№
 static BackupMap  g_bakMap[MAX_OPEN_MP3S];
 
 // Critical section for thread-safe access to pools
-// Критическая секция для потокобезопасного доступа к пулам
+// РљСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕРіРѕ РґРѕСЃС‚СѓРїР° Рє РїСѓР»Р°Рј
 static CRITICAL_SECTION g_cs;
 
 // Initialization state flags (atomic access only)
-// Флаги состояния инициализации (только атомарный доступ)
+// Р¤Р»Р°РіРё СЃРѕСЃС‚РѕСЏРЅРёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё (С‚РѕР»СЊРєРѕ Р°С‚РѕРјР°СЂРЅС‹Р№ РґРѕСЃС‚СѓРї)
 static volatile LONG g_csInited = 0;    // 0=not inited, 1=initing, 2=ready
 static volatile LONG g_hooksReady = 0;  // 0=not ready, 1=ready
 
 // Handle to in_mp3.dll module (set by HookThread)
-// Дескриптор модуля in_mp3.dll (устанавливается HookThread)
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ in_mp3.dll (СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ HookThread)
 static HMODULE g_hInMp3 = NULL;
 
 /*******************************************************************************
- * FUNCTION POINTER TYPEDEFS / ТИПЫ УКАЗАТЕЛЕЙ НА ФУНКЦИИ
+ * FUNCTION POINTER TYPEDEFS / РўРРџР« РЈРљРђР—РђРўР•Р›Р•Р™ РќРђ Р¤РЈРќРљР¦РР
  * 
  * These define the signatures of Windows API functions we will intercept.
- * Они определяют сигнатуры функций Windows API, которые мы будем перехватывать.
+ * РћРЅРё РѕРїСЂРµРґРµР»СЏСЋС‚ СЃРёРіРЅР°С‚СѓСЂС‹ С„СѓРЅРєС†РёР№ Windows API, РєРѕС‚РѕСЂС‹Рµ РјС‹ Р±СѓРґРµРј РїРµСЂРµС…РІР°С‚С‹РІР°С‚СЊ.
  ******************************************************************************/
 
-// File I/O functions / Функции файлового ввода-вывода
+// File I/O functions / Р¤СѓРЅРєС†РёРё С„Р°Р№Р»РѕРІРѕРіРѕ РІРІРѕРґР°-РІС‹РІРѕРґР°
 typedef HANDLE (WINAPI *PFN_CreateFileA)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE);
 typedef BOOL   (WINAPI *PFN_ReadFile)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef DWORD  (WINAPI *PFN_SetFilePointer)(HANDLE, LONG, PLONG, DWORD);
 typedef DWORD  (WINAPI *PFN_GetFileSize)(HANDLE, LPDWORD);
 typedef BOOL   (WINAPI *PFN_CloseHandle)(HANDLE);
 
-// File operation functions / Функции файловых операций
+// File operation functions / Р¤СѓРЅРєС†РёРё С„Р°Р№Р»РѕРІС‹С… РѕРїРµСЂР°С†РёР№
 typedef BOOL   (WINAPI *PFN_MoveFileA)(LPCSTR, LPCSTR);
 typedef BOOL   (WINAPI *PFN_MoveFileExA)(LPCSTR, LPCSTR, DWORD);
 
 /*******************************************************************************
- * ORIGINAL FUNCTION POINTERS / УКАЗАТЕЛИ НА ОРИГИНАЛЬНЫЕ ФУНКЦИИ
+ * ORIGINAL FUNCTION POINTERS / РЈРљРђР—РђРўР•Р›Р РќРђ РћР РР“РРќРђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР
  * 
  * These point to the original Windows API functions in KERNEL32.dll.
- * Они указывают на оригинальные функции Windows API в KERNEL32.dll.
+ * РћРЅРё СѓРєР°Р·С‹РІР°СЋС‚ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё Windows API РІ KERNEL32.dll.
  ******************************************************************************/
 
 static PFN_CreateFileA    Orig_CreateFileA = NULL;
@@ -358,10 +358,10 @@ static PFN_MoveFileA      Orig_MoveFileA = NULL;
 static PFN_MoveFileExA    Orig_MoveFileExA = NULL;
 
 /*******************************************************************************
- * REAL FUNCTION POINTERS / УКАЗАТЕЛИ НА РЕАЛЬНЫЕ ФУНКЦИИ
+ * REAL FUNCTION POINTERS / РЈРљРђР—РђРўР•Р›Р РќРђ Р Р•РђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР
  * 
  * These are updated by IAT patching to point back to originals after our hooks.
- * Они обновляются IAT-патчингом для указания обратно на оригиналы после наших перехватов.
+ * РћРЅРё РѕР±РЅРѕРІР»СЏСЋС‚СЃСЏ IAT-РїР°С‚С‡РёРЅРіРѕРј РґР»СЏ СѓРєР°Р·Р°РЅРёСЏ РѕР±СЂР°С‚РЅРѕ РЅР° РѕСЂРёРіРёРЅР°Р»С‹ РїРѕСЃР»Рµ РЅР°С€РёС… РїРµСЂРµС…РІР°С‚РѕРІ.
  ******************************************************************************/
 
 static PFN_CreateFileA    Real_CreateFileA = NULL;
@@ -373,7 +373,7 @@ static PFN_MoveFileA      Real_MoveFileA = NULL;
 static PFN_MoveFileExA    Real_MoveFileExA = NULL;
 
 /*******************************************************************************
- * FORWARD DECLARATIONS / ОПЕРЕЖАЮЩИЕ ОБЪЯВЛЕНИЯ
+ * FORWARD DECLARATIONS / РћРџР•Р Р•Р–РђР®Р©РР• РћР‘РЄРЇР’Р›Р•РќРРЇ
  ******************************************************************************/static void BakMap_Set_NoLock(const char* orig, const char* bak);
 static BOOL BakMap_Peek_NoLock(const char* orig, char* outBak, int cchOut);
 static BOOL HandleTagSave_MoveTempIntoMp3_(const char* tempPath, const char* finalMp3Path);
@@ -384,46 +384,46 @@ static void Ctx_Lock(void);
 static void Ctx_Unlock(void);
 
 /*******************************************************************************
- * HELPER FUNCTIONS / ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+ * HELPER FUNCTIONS / Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР
  ******************************************************************************/
 
 /*******************************************************************************
  * HasExtI_A - Case-Insensitive Extension Check
- *             Проверка расширения без учёта регистра
+ *             РџСЂРѕРІРµСЂРєР° СЂР°СЃС€РёСЂРµРЅРёСЏ Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if a file path has a specific extension (case-insensitive).
- * Проверяет, имеет ли путь к файлу определённое расширение (без учёта регистра).
+ * РџСЂРѕРІРµСЂСЏРµС‚, РёРјРµРµС‚ Р»Рё РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * path        - File path / Путь к файлу
- * extLowerDot - Extension with dot, lowercase / Расширение с точкой, строчное
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * path        - File path / РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+ * extLowerDot - Extension with dot, lowercase / Р Р°СЃС€РёСЂРµРЅРёРµ СЃ С‚РѕС‡РєРѕР№, СЃС‚СЂРѕС‡РЅРѕРµ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if extension matches / TRUE если расширение совпадает
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if extension matches / TRUE РµСЃР»Рё СЂР°СЃС€РёСЂРµРЅРёРµ СЃРѕРІРїР°РґР°РµС‚
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  ******************************************************************************/
 static BOOL HasExtI_A(const char* path, const char* extLowerDot) {
     if (!path || !extLowerDot) return FALSE;
     
-    // Find last dot in path / Найти последнюю точку в пути
+    // Find last dot in path / РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅСЋСЋ С‚РѕС‡РєСѓ РІ РїСѓС‚Рё
     const char* p = strrchr(path, '.');
     if (!p) return FALSE;
     
-    // Compare extension (case-insensitive) / Сравнить расширение (без учёта регистра)
+    // Compare extension (case-insensitive) / РЎСЂР°РІРЅРёС‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°)
     return (lstrcmpiA(p, extLowerDot) == 0);
 }
 
 /*******************************************************************************
- * FileExistsA_ - Check File Existence / Проверка существования файла
+ * FileExistsA_ - Check File Existence / РџСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ С„Р°Р№Р»Р°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if a file exists and is not a directory.
- * Проверяет, существует ли файл и не является ли он директорией.
+ * РџСЂРѕРІРµСЂСЏРµС‚, СЃСѓС‰РµСЃС‚РІСѓРµС‚ Р»Рё С„Р°Р№Р» Рё РЅРµ СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕРЅ РґРёСЂРµРєС‚РѕСЂРёРµР№.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if file exists / TRUE если файл существует
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if file exists / TRUE РµСЃР»Рё С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  ******************************************************************************/
 static BOOL FileExistsA_(const char* path) {
     DWORD a = GetFileAttributesA(path);
@@ -431,18 +431,18 @@ static BOOL FileExistsA_(const char* path) {
 }
 
 /*******************************************************************************
- * PathGetDirA_ - Extract Directory from Path / Извлечение директории из пути
+ * PathGetDirA_ - Extract Directory from Path / РР·РІР»РµС‡РµРЅРёРµ РґРёСЂРµРєС‚РѕСЂРёРё РёР· РїСѓС‚Рё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Extracts the directory portion from a full file path.
- * Извлекает часть директории из полного пути к файлу.
+ * РР·РІР»РµРєР°РµС‚ С‡Р°СЃС‚СЊ РґРёСЂРµРєС‚РѕСЂРёРё РёР· РїРѕР»РЅРѕРіРѕ РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * path   - Input file path / Входной путь к файлу
- * outDir - Output directory path buffer / Буфер для выходного пути директории
- * cchOut - Size of output buffer / Размер выходного буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * path   - Input file path / Р’С…РѕРґРЅРѕР№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+ * outDir - Output directory path buffer / Р‘СѓС„РµСЂ РґР»СЏ РІС‹С…РѕРґРЅРѕРіРѕ РїСѓС‚Рё РґРёСЂРµРєС‚РѕСЂРёРё
+ * cchOut - Size of output buffer / Р Р°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * Input: "C:\Music\song.mp3" > Output: "C:\Music\"
  ******************************************************************************/
 static void PathGetDirA_(const char* path, char* outDir, int cchOut) {
@@ -450,30 +450,30 @@ static void PathGetDirA_(const char* path, char* outDir, int cchOut) {
     outDir[0] = 0; 
     if (!path) return;
     
-    // Copy path to output / Копировать путь в вывод
+    // Copy path to output / РљРѕРїРёСЂРѕРІР°С‚СЊ РїСѓС‚СЊ РІ РІС‹РІРѕРґ
     lstrcpynA(outDir, path, cchOut);
     
-    // Find last slash or backslash / Найти последнюю косую черту или обратную косую
+    // Find last slash or backslash / РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅСЋСЋ РєРѕСЃСѓСЋ С‡РµСЂС‚Сѓ РёР»Рё РѕР±СЂР°С‚РЅСѓСЋ РєРѕСЃСѓСЋ
     char* s1 = strrchr(outDir, '\\'); 
     char* s2 = strrchr(outDir, '/');
     char* s = (s1 > s2) ? s1 : s2; 
     
     if (s) 
-        *(s+1) = 0;  // Keep trailing slash / Сохранить косую черту в конце
+        *(s+1) = 0;  // Keep trailing slash / РЎРѕС…СЂР°РЅРёС‚СЊ РєРѕСЃСѓСЋ С‡РµСЂС‚Сѓ РІ РєРѕРЅС†Рµ
     else 
         outDir[0] = 0;
 }
 
 /*******************************************************************************
- * LooksLikeID3v2FileA_ - Quick ID3v2 Check / Быстрая проверка ID3v2
+ * LooksLikeID3v2FileA_ - Quick ID3v2 Check / Р‘С‹СЃС‚СЂР°СЏ РїСЂРѕРІРµСЂРєР° ID3v2
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Quickly checks if a file starts with "ID3" signature (ID3v2 tag).
- * Быстро проверяет, начинается ли файл с сигнатуры "ID3" (тег ID3v2).
+ * Р‘С‹СЃС‚СЂРѕ РїСЂРѕРІРµСЂСЏРµС‚, РЅР°С‡РёРЅР°РµС‚СЃСЏ Р»Рё С„Р°Р№Р» СЃ СЃРёРіРЅР°С‚СѓСЂС‹ "ID3" (С‚РµРі ID3v2).
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * TRUE if file has ID3v2 tag / TRUE если файл имеет тег ID3v2
- * FALSE otherwise / FALSE в противном случае
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * TRUE if file has ID3v2 tag / TRUE РµСЃР»Рё С„Р°Р№Р» РёРјРµРµС‚ С‚РµРі ID3v2
+ * FALSE otherwise / FALSE РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ
  ******************************************************************************/static BOOL LooksLikeID3v2FileA_(const char* path) {
     if (!path) return FALSE;
     
@@ -534,90 +534,90 @@ static void PatchID3v1CommentFromWide_(BYTE v1[128], const WCHAR* wComment) {
 }
 
 /*******************************************************************************
- * CRITICAL SECTION MANAGEMENT / УПРАВЛЕНИЕ КРИТИЧЕСКОЙ СЕКЦИЕЙ
+ * CRITICAL SECTION MANAGEMENT / РЈРџР РђР’Р›Р•РќРР• РљР РРўРР§Р•РЎРљРћР™ РЎР•РљР¦РР•Р™
  ******************************************************************************/
 
 /*******************************************************************************
- * CS_Init - Initialize Critical Section / Инициализация критической секции
+ * CS_Init - Initialize Critical Section / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-safe initialization of critical section using atomic operations.
- * Потокобезопасная инициализация критической секции с использованием атомарных операций.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј Р°С‚РѕРјР°СЂРЅС‹С… РѕРїРµСЂР°С†РёР№.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Try to atomically claim initialization (0 -> 1)
- *    Попытаться атомарно захватить инициализацию (0 -> 1)
+ *    РџРѕРїС‹С‚Р°С‚СЊСЃСЏ Р°С‚РѕРјР°СЂРЅРѕ Р·Р°С…РІР°С‚РёС‚СЊ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ (0 -> 1)
  * 2. If successful, initialize critical section with exception handling
- *    Если успешно, инициализировать критическую секцию с обработкой исключений
+ *    Р•СЃР»Рё СѓСЃРїРµС€РЅРѕ, РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ СЃ РѕР±СЂР°Р±РѕС‚РєРѕР№ РёСЃРєР»СЋС‡РµРЅРёР№
  * 3. Mark as ready (2) when complete
- *    Отметить как готово (2) при завершении
+ *    РћС‚РјРµС‚РёС‚СЊ РєР°Рє РіРѕС‚РѕРІРѕ (2) РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё
  * 4. If another thread is initializing, wait for completion
- *    Если другой поток инициализирует, подождать завершения
+ *    Р•СЃР»Рё РґСЂСѓРіРѕР№ РїРѕС‚РѕРє РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚, РїРѕРґРѕР¶РґР°С‚СЊ Р·Р°РІРµСЂС€РµРЅРёСЏ
  ******************************************************************************/
 static void CS_Init(void) {
-    // Try to claim initialization / Попытка захватить инициализацию
+    // Try to claim initialization / РџРѕРїС‹С‚РєР° Р·Р°С…РІР°С‚РёС‚СЊ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ
     LONG s = InterlockedCompareExchange(&g_csInited, 1, 0);
     if (s == 0) {
-        // We won - initialize / Мы победили - инициализируем
+        // We won - initialize / РњС‹ РїРѕР±РµРґРёР»Рё - РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј
         __try {
             InitializeCriticalSection(&g_cs);
-            InterlockedExchange(&g_csInited, 2);  // Mark as ready / Отметить как готово
+            InterlockedExchange(&g_csInited, 2);  // Mark as ready / РћС‚РјРµС‚РёС‚СЊ РєР°Рє РіРѕС‚РѕРІРѕ
         } __except(EXCEPTION_EXECUTE_HANDLER) {
-            // Initialization failed / Инициализация провалилась
+            // Initialization failed / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСЂРѕРІР°Р»РёР»Р°СЃСЊ
             InterlockedExchange(&g_csInited, 0);
         }
         return;
     }
     
-    // Already ready / Уже готово
+    // Already ready / РЈР¶Рµ РіРѕС‚РѕРІРѕ
     if (s == 2) return;
 
     // Wait for initializer thread (with 2 second timeout)
-    // Ждать поток-инициализатор (с тайм-аутом 2 секунды)
+    // Р–РґР°С‚СЊ РїРѕС‚РѕРє-РёРЅРёС†РёР°Р»РёР·Р°С‚РѕСЂ (СЃ С‚Р°Р№Рј-Р°СѓС‚РѕРј 2 СЃРµРєСѓРЅРґС‹)
     DWORD start = GetTickCount();
     while (InterlockedCompareExchange(&g_csInited, 2, 2) != 2) {
-        Sleep(0);  // Yield to other threads / Передать управление другим потокам
+        Sleep(0);  // Yield to other threads / РџРµСЂРµРґР°С‚СЊ СѓРїСЂР°РІР»РµРЅРёРµ РґСЂСѓРіРёРј РїРѕС‚РѕРєР°Рј
         
         // Timeout after 2 seconds to prevent deadlock
-        // Тайм-аут через 2 секунды для предотвращения взаимной блокировки
+        // РўР°Р№Рј-Р°СѓС‚ С‡РµСЂРµР· 2 СЃРµРєСѓРЅРґС‹ РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РІР·Р°РёРјРЅРѕР№ Р±Р»РѕРєРёСЂРѕРІРєРё
         if ((DWORD)(GetTickCount() - start) > 2000) {
-            return;  // Give up / Сдаться
+            return;  // Give up / РЎРґР°С‚СЊСЃСЏ
         }
     }
 }
 
 /*******************************************************************************
- * CS_Done - Cleanup Critical Section / Очистка критической секции
+ * CS_Done - Cleanup Critical Section / РћС‡РёСЃС‚РєР° РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-safe cleanup of critical section.
- * Потокобезопасная очистка критической секции.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РѕС‡РёСЃС‚РєР° РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё.
  ******************************************************************************/
 static void CS_Done(void) { 
     // Atomically transition from ready (2) to not initialized (0)
-    // Атомарный переход из готово (2) в неинициализировано (0)
+    // РђС‚РѕРјР°СЂРЅС‹Р№ РїРµСЂРµС…РѕРґ РёР· РіРѕС‚РѕРІРѕ (2) РІ РЅРµРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРѕ (0)
     if (InterlockedCompareExchange(&g_csInited, 0, 2) == 2) 
         DeleteCriticalSection(&g_cs); 
 }
 
 /*******************************************************************************
  * Ctx_Lock / Ctx_Unlock - Context Locking Wrappers
- *                          Обёртки блокировки контекста
+ *                          РћР±С‘СЂС‚РєРё Р±Р»РѕРєРёСЂРѕРІРєРё РєРѕРЅС‚РµРєСЃС‚Р°
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Wrapper functions for entering/leaving critical section with init check.
- * Функции-обёртки для входа/выхода из критической секции с проверкой инициализации.
+ * Р¤СѓРЅРєС†РёРё-РѕР±С‘СЂС‚РєРё РґР»СЏ РІС…РѕРґР°/РІС‹С…РѕРґР° РёР· РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё СЃ РїСЂРѕРІРµСЂРєРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё.
  * 
- * USAGE / ИСПОЛЬЗОВАНИЕ:
+ * USAGE / РРЎРџРћР›Р¬Р—РћР’РђРќРР•:
  * Always use in pairs:
- * Всегда использовать парами:
+ * Р’СЃРµРіРґР° РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїР°СЂР°РјРё:
  * 
  * Ctx_Lock();
- * // ... access shared data ... / ... доступ к общим данным ...
+ * // ... access shared data ... / ... РґРѕСЃС‚СѓРї Рє РѕР±С‰РёРј РґР°РЅРЅС‹Рј ...
  * Ctx_Unlock();
  ******************************************************************************/
 static void Ctx_Lock(void) { 
-    if (g_csInited != 2) CS_Init();  // Initialize if needed / Инициализировать если нужно
+    if (g_csInited != 2) CS_Init();  // Initialize if needed / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РµСЃР»Рё РЅСѓР¶РЅРѕ
     if (g_csInited == 2) EnterCriticalSection(&g_cs); 
 }
 
@@ -1710,45 +1710,45 @@ static BOOL WINAPI Hook_MoveFileExA(LPCSTR src, LPCSTR dst, DWORD flags) {
 }
 
 /*******************************************************************************
- * INITIALIZATION AND CLEANUP / ИНИЦИАЛИЗАЦИЯ И ОЧИСТКА
+ * INITIALIZATION AND CLEANUP / РРќРР¦РРђР›РР—РђР¦РРЇ Р РћР§РРЎРўРљРђ
  ******************************************************************************/
 
 /*******************************************************************************
  * HookThread - Background Hook Installation Thread
- *              Фоновый поток установки перехватов
+ *              Р¤РѕРЅРѕРІС‹Р№ РїРѕС‚РѕРє СѓСЃС‚Р°РЅРѕРІРєРё РїРµСЂРµС…РІР°С‚РѕРІ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Worker thread that waits for in_mp3.dll to load, then installs IAT hooks.
- * Рабочий поток, который ждёт загрузки in_mp3.dll, затем устанавливает IAT-перехваты.
+ * Р Р°Р±РѕС‡РёР№ РїРѕС‚РѕРє, РєРѕС‚РѕСЂС‹Р№ Р¶РґС‘С‚ Р·Р°РіСЂСѓР·РєРё in_mp3.dll, Р·Р°С‚РµРј СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ IAT-РїРµСЂРµС…РІР°С‚С‹.
  * 
- * PROCESS / ПРОЦЕСС:
- * 1. Initialize critical section / Инициализировать критическую секцию
- * 2. Wait for in_mp3.dll to load / Ждать загрузки in_mp3.dll
- * 3. Wait 500ms for plugin initialization / Ждать 500мс для инициализации плагина
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
+ * 1. Initialize critical section / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
+ * 2. Wait for in_mp3.dll to load / Р–РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё in_mp3.dll
+ * 3. Wait 500ms for plugin initialization / Р–РґР°С‚СЊ 500РјСЃ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°
  * 4. Get original function pointers from KERNEL32.dll
- *    Получить указатели на оригинальные функции из KERNEL32.dll
- * 5. Patch in_mp3.dll's IAT / Пропатчить IAT in_mp3.dll
- * 6. Mark hooks as ready / Отметить перехваты как готовые
+ *    РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»Рё РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё РёР· KERNEL32.dll
+ * 5. Patch in_mp3.dll's IAT / РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT in_mp3.dll
+ * 6. Mark hooks as ready / РћС‚РјРµС‚РёС‚СЊ РїРµСЂРµС…РІР°С‚С‹ РєР°Рє РіРѕС‚РѕРІС‹Рµ
  ******************************************************************************/
 static unsigned __stdcall HookThread(void*) {
-    // Initialize critical section / Инициализация критической секции
+    // Initialize critical section / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё
     CS_Init();
     
-    // Wait for in_mp3.dll to load / Ждать загрузки in_mp3.dll
+    // Wait for in_mp3.dll to load / Р–РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё in_mp3.dll
     for (;;) { 
         g_hInMp3 = GetModuleHandleA("in_mp3.dll"); 
         if (g_hInMp3) break; 
-        Sleep(200);  // Check every 200ms / Проверять каждые 200мс
+        Sleep(200);  // Check every 200ms / РџСЂРѕРІРµСЂСЏС‚СЊ РєР°Р¶РґС‹Рµ 200РјСЃ
     }
     
-    // Wait for plugin to initialize / Ждать инициализации плагина
+    // Wait for plugin to initialize / Р–РґР°С‚СЊ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°
     Sleep(500);
     
-    // Get KERNEL32.dll module / Получить модуль KERNEL32.dll
+    // Get KERNEL32.dll module / РџРѕР»СѓС‡РёС‚СЊ РјРѕРґСѓР»СЊ KERNEL32.dll
     HMODULE hK32 = GetModuleHandleA("KERNEL32.dll");
     if (!hK32) return 0;
     
-    // Get original function pointers / Получить указатели на оригинальные функции
+    // Get original function pointers / РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»Рё РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
     Orig_CreateFileA = (PFN_CreateFileA)GetProcAddress(hK32, "CreateFileA"); 
     Orig_ReadFile = (PFN_ReadFile)GetProcAddress(hK32, "ReadFile"); 
     Orig_SetFilePointer = (PFN_SetFilePointer)GetProcAddress(hK32, "SetFilePointer"); 
@@ -1757,12 +1757,12 @@ static unsigned __stdcall HookThread(void*) {
     Orig_MoveFileA = (PFN_MoveFileA)GetProcAddress(hK32, "MoveFileA"); 
     Orig_MoveFileExA = (PFN_MoveFileExA)GetProcAddress(hK32, "MoveFileExA");
     
-    // Validate required functions / Проверить необходимые функции
+    // Validate required functions / РџСЂРѕРІРµСЂРёС‚СЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ С„СѓРЅРєС†РёРё
     if (!Orig_CreateFileA || !Orig_ReadFile || !Orig_SetFilePointer || 
         !Orig_CloseHandle || !Orig_MoveFileA) 
         return 0;
     
-    // Initialize Real pointers / Инициализировать Real указатели
+    // Initialize Real pointers / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ Real СѓРєР°Р·Р°С‚РµР»Рё
     Real_CreateFileA = Orig_CreateFileA; 
     Real_ReadFile = Orig_ReadFile; 
     Real_SetFilePointer = Orig_SetFilePointer; 
@@ -1771,7 +1771,7 @@ static unsigned __stdcall HookThread(void*) {
     Real_MoveFileA = Orig_MoveFileA; 
     Real_MoveFileExA = Orig_MoveFileExA;
     
-    // Patch in_mp3.dll's IAT / Пропатчить IAT in_mp3.dll
+    // Patch in_mp3.dll's IAT / РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT in_mp3.dll
     IAT_PatchByName(g_hInMp3, "KERNEL32.dll", "CreateFileA", 
                    (void*)Hook_CreateFileA, (void**)&Real_CreateFileA);
     IAT_PatchByName(g_hInMp3, "KERNEL32.dll", "ReadFile", 
@@ -1789,55 +1789,55 @@ static unsigned __stdcall HookThread(void*) {
         IAT_PatchByName(g_hInMp3, "KERNEL32.dll", "MoveFileExA", 
                        (void*)Hook_MoveFileExA, (void**)&Real_MoveFileExA);
     
-    // Mark hooks as ready / Отметить перехваты как готовые
+    // Mark hooks as ready / РћС‚РјРµС‚РёС‚СЊ РїРµСЂРµС…РІР°С‚С‹ РєР°Рє РіРѕС‚РѕРІС‹Рµ
     InterlockedExchange(&g_hooksReady, 1);
     return 0;
 }
 
 /*******************************************************************************
- * EXPORTED PUBLIC API FUNCTIONS / ЭКСПОРТИРУЕМЫЕ ПУБЛИЧНЫЕ ФУНКЦИИ API
+ * EXPORTED PUBLIC API FUNCTIONS / Р­РљРЎРџРћР РўРР РЈР•РњР«Р• РџРЈР‘Р›РР§РќР«Р• Р¤РЈРќРљР¦РР API
  ******************************************************************************/
 
 /*******************************************************************************
- * MP3_TagsFix_Init - Initialize Module / Инициализация модуля
+ * MP3_TagsFix_Init - Initialize Module / РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРѕРґСѓР»СЏ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the MP3 tags fix module. Creates a background thread that
  * waits for in_mp3.dll to load and installs hooks.
  * 
- * Инициализирует модуль исправления MP3-тегов. Создаёт фоновый поток,
- * который ждёт загрузки in_mp3.dll и устанавливает перехваты.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ MP3-С‚РµРіРѕРІ. РЎРѕР·РґР°С‘С‚ С„РѕРЅРѕРІС‹Р№ РїРѕС‚РѕРє,
+ * РєРѕС‚РѕСЂС‹Р№ Р¶РґС‘С‚ Р·Р°РіСЂСѓР·РєРё in_mp3.dll Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїРµСЂРµС…РІР°С‚С‹.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Safe to call multiple times (only installs once).
- * Безопасно вызывать несколько раз (устанавливается только один раз).
+ * Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЂР°Р· (СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·).
  ******************************************************************************/
 extern "C" __declspec(dllexport) void MP3_TagsFix_Init(void) { 
-    static BOOL installed = FALSE;  // Installation flag / Флаг установки
+    static BOOL installed = FALSE;  // Installation flag / Р¤Р»Р°Рі СѓСЃС‚Р°РЅРѕРІРєРё
     if (!installed) { 
         installed = TRUE; 
         unsigned tid = 0; 
-        // Create background hook thread / Создать фоновый поток перехвата
+        // Create background hook thread / РЎРѕР·РґР°С‚СЊ С„РѕРЅРѕРІС‹Р№ РїРѕС‚РѕРє РїРµСЂРµС…РІР°С‚Р°
         _beginthreadex(NULL, 0, HookThread, NULL, 0, &tid); 
     } 
 }
 
 /*******************************************************************************
- * MP3_TagsFix_Quit - Cleanup Module / Очистка модуля
+ * MP3_TagsFix_Quit - Cleanup Module / РћС‡РёСЃС‚РєР° РјРѕРґСѓР»СЏ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the MP3 tags fix module. Disables hooks and frees all contexts.
- * Очищает модуль исправления MP3-тегов. Отключает перехваты и освобождает все контексты.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ MP3-С‚РµРіРѕРІ. РћС‚РєР»СЋС‡Р°РµС‚ РїРµСЂРµС…РІР°С‚С‹ Рё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ РІСЃРµ РєРѕРЅС‚РµРєСЃС‚С‹.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must free all overlay contexts and their associated resources.
- * Должен освободить все контексты наложения и связанные с ними ресурсы.
+ * Р”РѕР»Р¶РµРЅ РѕСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РєРѕРЅС‚РµРєСЃС‚С‹ РЅР°Р»РѕР¶РµРЅРёСЏ Рё СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ РЅРёРјРё СЂРµСЃСѓСЂСЃС‹.
  ******************************************************************************/
 extern "C" __declspec(dllexport) void MP3_TagsFix_Quit(void) { 
-    // Disable hooks / Отключить перехваты
+    // Disable hooks / РћС‚РєР»СЋС‡РёС‚СЊ РїРµСЂРµС…РІР°С‚С‹
     InterlockedExchange(&g_hooksReady, 0); 
     
-    // Free all contexts / Освободить все контексты
+    // Free all contexts / РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РєРѕРЅС‚РµРєСЃС‚С‹
     Ctx_Lock(); 
     for (int i = 0; i < MAX_OPEN_MP3S; i++) { 
         if (g_ctxPool[i].inUse) 
@@ -1846,23 +1846,23 @@ extern "C" __declspec(dllexport) void MP3_TagsFix_Quit(void) {
     } 
     Ctx_Unlock(); 
     
-    // Cleanup critical section / Очистить критическую секцию
+    // Cleanup critical section / РћС‡РёСЃС‚РёС‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
     CS_Done(); 
 }
 
 /*******************************************************************************
- * ALTERNATIVE ENTRY POINTS / АЛЬТЕРНАТИВНЫЕ ТОЧКИ ВХОДА
+ * ALTERNATIVE ENTRY POINTS / РђР›Р¬РўР•Р РќРђРўРР’РќР«Р• РўРћР§РљР Р’РҐРћР”Рђ
  * 
  * These are aliases provided for compatibility with different calling conventions.
- * Это псевдонимы, предоставленные для совместимости с различными соглашениями о вызовах.
+ * Р­С‚Рѕ РїСЃРµРІРґРѕРЅРёРјС‹, РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅРЅС‹Рµ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ СЂР°Р·Р»РёС‡РЅС‹РјРё СЃРѕРіР»Р°С€РµРЅРёСЏРјРё Рѕ РІС‹Р·РѕРІР°С….
  ******************************************************************************/
 
-// Entry point with HWND parameter (unused) / Точка входа с параметром HWND (неиспользуемым)
+// Entry point with HWND parameter (unused) / РўРѕС‡РєР° РІС…РѕРґР° СЃ РїР°СЂР°РјРµС‚СЂРѕРј HWND (РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Рј)
 extern "C" __declspec(dllexport) void MP3_TagsFix_Init_C(HWND) { 
     MP3_TagsFix_Init(); 
 }
 
-// Alternative naming for Extended File Info hook / Альтернативное именование для перехвата Extended File Info
+// Alternative naming for Extended File Info hook / РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅРѕРµ РёРјРµРЅРѕРІР°РЅРёРµ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° Extended File Info
 extern "C" __declspec(dllexport) void EFIHook_Init(void) { 
     MP3_TagsFix_Init(); 
 }

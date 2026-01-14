@@ -2,33 +2,33 @@
  * mod_unicode_stream_fix.cpp (v3.1 Stable & Fixed)
  * 
  * SHOUTCAST/ICECAST STREAM METADATA UNICODE/MOJIBAKE FIX MODULE
- * Модуль исправления Unicode/mojibake для метаданных потоков SHOUTcast/Icecast
+ * РњРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ Unicode/mojibake РґР»СЏ РјРµС‚Р°РґР°РЅРЅС‹С… РїРѕС‚РѕРєРѕРІ SHOUTcast/Icecast
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * This module fixes character encoding issues (mojibake) in streaming audio
  * metadata from SHOUTcast and Icecast servers. It intercepts Winsock API calls
  * to process HTTP response headers and ICY metadata in real-time, correcting
  * encoding issues before the data reaches Winamp's audio plugins.
  * 
- * Этот модуль исправляет проблемы с кодировкой символов (mojibake) в метаданных
- * потокового аудио с серверов SHOUTcast и Icecast. Он перехватывает вызовы
- * API Winsock для обработки HTTP-заголовков ответов и ICY-метаданных в реальном
- * времени, исправляя проблемы кодировки до того, как данные попадут в аудио-плагины Winamp.
+ * Р­С‚РѕС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ СЃ РєРѕРґРёСЂРѕРІРєРѕР№ СЃРёРјРІРѕР»РѕРІ (mojibake) РІ РјРµС‚Р°РґР°РЅРЅС‹С…
+ * РїРѕС‚РѕРєРѕРІРѕРіРѕ Р°СѓРґРёРѕ СЃ СЃРµСЂРІРµСЂРѕРІ SHOUTcast Рё Icecast. РћРЅ РїРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹
+ * API Winsock РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё HTTP-Р·Р°РіРѕР»РѕРІРєРѕРІ РѕС‚РІРµС‚РѕРІ Рё ICY-РјРµС‚Р°РґР°РЅРЅС‹С… РІ СЂРµР°Р»СЊРЅРѕРј
+ * РІСЂРµРјРµРЅРё, РёСЃРїСЂР°РІР»СЏСЏ РїСЂРѕР±Р»РµРјС‹ РєРѕРґРёСЂРѕРІРєРё РґРѕ С‚РѕРіРѕ, РєР°Рє РґР°РЅРЅС‹Рµ РїРѕРїР°РґСѓС‚ РІ Р°СѓРґРёРѕ-РїР»Р°РіРёРЅС‹ Winamp.
  * 
- * FEATURES / ВОЗМОЖНОСТИ:
+ * FEATURES / Р’РћР—РњРћР–РќРћРЎРўР:
  * 1. Correct typedef order (fixes build errors on older compilers)
  * 2. Aggressive socket tracking (fixes "missing metadata" and mojibake issues)
  * 3. Full WSARecv support (handles both recv and WSARecv API calls)
  * 4. Thread-safe implementation with critical sections
  * 5. Compatible with Visual Studio 2003 and Win9x/NT/2000/XP/Vista/7+
  * 
- * 1. Правильный порядок typedef (исправляет ошибки сборки на старых компиляторах)
- * 2. Агрессивное отслеживание сокетов (исправляет проблемы "отсутствующих метаданных" и mojibake)
- * 3. Полная поддержка WSARecv (обрабатывает как recv, так и WSARecv API)
- * 4. Потокобезопасная реализация с критическими секциями
- * 5. Совместимо с Visual Studio 2003 и Win9x/NT/2000/XP/Vista/7+
+ * 1. РџСЂР°РІРёР»СЊРЅС‹Р№ РїРѕСЂСЏРґРѕРє typedef (РёСЃРїСЂР°РІР»СЏРµС‚ РѕС€РёР±РєРё СЃР±РѕСЂРєРё РЅР° СЃС‚Р°СЂС‹С… РєРѕРјРїРёР»СЏС‚РѕСЂР°С…)
+ * 2. РђРіСЂРµСЃСЃРёРІРЅРѕРµ РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ СЃРѕРєРµС‚РѕРІ (РёСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ "РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‰РёС… РјРµС‚Р°РґР°РЅРЅС‹С…" Рё mojibake)
+ * 3. РџРѕР»РЅР°СЏ РїРѕРґРґРµСЂР¶РєР° WSARecv (РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РєР°Рє recv, С‚Р°Рє Рё WSARecv API)
+ * 4. РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ СЃ РєСЂРёС‚РёС‡РµСЃРєРёРјРё СЃРµРєС†РёСЏРјРё
+ * 5. РЎРѕРІРјРµСЃС‚РёРјРѕ СЃ Visual Studio 2003 Рё Win9x/NT/2000/XP/Vista/7+
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 1. Patches Import Address Table (IAT) of Winsock DLLs (WSOCK32.dll, WS2_32.dll)
  * 2. Redirects socket functions (send, recv, WSASend, WSARecv, closesocket)
  * 3. Tracks active streaming sockets in a context pool
@@ -37,34 +37,34 @@
  * 6. Applies encoding fixes to both HTTP headers and ICY metadata
  * 7. Returns corrected data to Winamp
  * 
- * 1. Патчит таблицу адресов импорта (IAT) DLL Winsock (WSOCK32.dll, WS2_32.dll)
- * 2. Перенаправляет функции сокетов (send, recv, WSASend, WSARecv, closesocket)
- * 3. Отслеживает активные потоковые сокеты в пуле контекстов
- * 4. Для каждого сокета парсит HTTP-заголовки для поиска значения icy-metaint
- * 5. Использует metaint для разделения аудиоданных и блоков метаданных
- * 6. Применяет исправления кодировки как к HTTP-заголовкам, так и к ICY-метаданным
- * 7. Возвращает исправленные данные в Winamp
+ * 1. РџР°С‚С‡РёС‚ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT) DLL Winsock (WSOCK32.dll, WS2_32.dll)
+ * 2. РџРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ С„СѓРЅРєС†РёРё СЃРѕРєРµС‚РѕРІ (send, recv, WSASend, WSARecv, closesocket)
+ * 3. РћС‚СЃР»РµР¶РёРІР°РµС‚ Р°РєС‚РёРІРЅС‹Рµ РїРѕС‚РѕРєРѕРІС‹Рµ СЃРѕРєРµС‚С‹ РІ РїСѓР»Рµ РєРѕРЅС‚РµРєСЃС‚РѕРІ
+ * 4. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ СЃРѕРєРµС‚Р° РїР°СЂСЃРёС‚ HTTP-Р·Р°РіРѕР»РѕРІРєРё РґР»СЏ РїРѕРёСЃРєР° Р·РЅР°С‡РµРЅРёСЏ icy-metaint
+ * 5. РСЃРїРѕР»СЊР·СѓРµС‚ metaint РґР»СЏ СЂР°Р·РґРµР»РµРЅРёСЏ Р°СѓРґРёРѕРґР°РЅРЅС‹С… Рё Р±Р»РѕРєРѕРІ РјРµС‚Р°РґР°РЅРЅС‹С…
+ * 6. РџСЂРёРјРµРЅСЏРµС‚ РёСЃРїСЂР°РІР»РµРЅРёСЏ РєРѕРґРёСЂРѕРІРєРё РєР°Рє Рє HTTP-Р·Р°РіРѕР»РѕРІРєР°Рј, С‚Р°Рє Рё Рє ICY-РјРµС‚Р°РґР°РЅРЅС‹Рј
+ * 7. Р’РѕР·РІСЂР°С‰Р°РµС‚ РёСЃРїСЂР°РІР»РµРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ РІ Winamp
  * 
- * PROTOCOL DETAILS / ДЕТАЛИ ПРОТОКОЛА:
+ * PROTOCOL DETAILS / Р”Р•РўРђР›Р РџР РћРўРћРљРћР›Рђ:
  * SHOUTcast/Icecast use a modified HTTP protocol with inline metadata:
  * - Client sends: Icy-MetaData: 1 header
  * - Server responds with: icy-metaint: N header (N = bytes between metadata)
  * - Stream format: [N bytes audio][1 byte length][length*16 bytes metadata][repeat]
  * - Metadata format: key='value';key='value'; (e.g., StreamTitle='Song - Artist';)
  * 
- * SHOUTcast/Icecast использует модифицированный HTTP-протокол со встроенными метаданными:
- * - Клиент отправляет: заголовок Icy-MetaData: 1
- * - Сервер отвечает: заголовок icy-metaint: N (N = байты между метаданными)
- * - Формат потока: [N байт аудио][1 байт длины][длина*16 байт метаданных][повтор]
- * - Формат метаданных: key='value';key='value'; (например, StreamTitle='Song - Artist';)
+ * SHOUTcast/Icecast РёСЃРїРѕР»СЊР·СѓРµС‚ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРЅС‹Р№ HTTP-РїСЂРѕС‚РѕРєРѕР» СЃРѕ РІСЃС‚СЂРѕРµРЅРЅС‹РјРё РјРµС‚Р°РґР°РЅРЅС‹РјРё:
+ * - РљР»РёРµРЅС‚ РѕС‚РїСЂР°РІР»СЏРµС‚: Р·Р°РіРѕР»РѕРІРѕРє Icy-MetaData: 1
+ * - РЎРµСЂРІРµСЂ РѕС‚РІРµС‡Р°РµС‚: Р·Р°РіРѕР»РѕРІРѕРє icy-metaint: N (N = Р±Р°Р№С‚С‹ РјРµР¶РґСѓ РјРµС‚Р°РґР°РЅРЅС‹РјРё)
+ * - Р¤РѕСЂРјР°С‚ РїРѕС‚РѕРєР°: [N Р±Р°Р№С‚ Р°СѓРґРёРѕ][1 Р±Р°Р№С‚ РґР»РёРЅС‹][РґР»РёРЅР°*16 Р±Р°Р№С‚ РјРµС‚Р°РґР°РЅРЅС‹С…][РїРѕРІС‚РѕСЂ]
+ * - Р¤РѕСЂРјР°С‚ РјРµС‚Р°РґР°РЅРЅС‹С…: key='value';key='value'; (РЅР°РїСЂРёРјРµСЂ, StreamTitle='Song - Artist';)
  * 
- * SUPPORTED HEADERS / ПОДДЕРЖИВАЕМЫЕ ЗАГОЛОВКИ:
+ * SUPPORTED HEADERS / РџРћР”Р”Р•Р Р–РР’РђР•РњР«Р• Р—РђР“РћР›РћР’РљР:
  * - icy-name, ice-name, x-audiocast-name (station name)
  * - icy-genre, ice-genre, x-audiocast-genre (genre)
  * - icy-url, ice-url, x-audiocast-url (station URL)
  * - icy-metaint (metadata interval)
  * 
- * SUPPORTED METADATA / ПОДДЕРЖИВАЕМЫЕ МЕТАДАННЫЕ:
+ * SUPPORTED METADATA / РџРћР”Р”Р•Р Р–РР’РђР•РњР«Р• РњР•РўРђР”РђРќРќР«Р•:
  * - StreamTitle (current song/show title)
  * - StreamUrl (optional URL)
  * 
@@ -72,15 +72,15 @@
 
 // SHOUTcast/Icecast fixer: icy-* / ICY- (StreamTitle/StreamUrl)
 // Features:
-// Особенности:
+// РћСЃРѕР±РµРЅРЅРѕСЃС‚Рё:
 // 1. Correct typedef order (Fixes build errors).
-//    Правильный порядок typedef (исправляет ошибки сборки).
+//    РџСЂР°РІРёР»СЊРЅС‹Р№ РїРѕСЂСЏРґРѕРє typedef (РёСЃРїСЂР°РІР»СЏРµС‚ РѕС€РёР±РєРё СЃР±РѕСЂРєРё).
 // 2. Aggressive socket tracking (Fixes "missing metadata" / mojibake).
-//    Агрессивное отслеживание сокетов (исправляет "отсутствующие метаданные" / mojibake).
+//    РђРіСЂРµСЃСЃРёРІРЅРѕРµ РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ СЃРѕРєРµС‚РѕРІ (РёСЃРїСЂР°РІР»СЏРµС‚ "РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‰РёРµ РјРµС‚Р°РґР°РЅРЅС‹Рµ" / mojibake).
 // 3. Full WSARecv support.
-//    Полная поддержка WSARecv.
+//    РџРѕР»РЅР°СЏ РїРѕРґРґРµСЂР¶РєР° WSARecv.
 // 4. Thread-safe & VS2003 compatible.
-//    Потокобезопасно и совместимо с VS2003.
+//    РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕ Рё СЃРѕРІРјРµСЃС‚РёРјРѕ СЃ VS2003.
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -90,170 +90,170 @@
 #include "..\Decrypt Engine\unicode_decrypt_engine.h"
 
 // Array size macro for compile-time array length calculation
-// Макрос размера массива для вычисления длины массива во время компиляции
+// РњР°РєСЂРѕСЃ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР° РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РґР»РёРЅС‹ РјР°СЃСЃРёРІР° РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 #endif
 
 /*******************************************************************************
  * CONFIGURATION CONSTANTS
- * КОНСТАНТЫ КОНФИГУРАЦИИ
+ * РљРћРќРЎРўРђРќРўР« РљРћРќР¤РР“РЈР РђР¦РР
  ******************************************************************************/
 
 // Maximum size for temporary buffers (4KB)
-// Максимальный размер для временных буферов (4КБ)
+// РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РґР»СЏ РІСЂРµРјРµРЅРЅС‹С… Р±СѓС„РµСЂРѕРІ (4РљР‘)
 #define ABUF_MAX      4096
 
 // Maximum size for HTTP header scanning (16KB - enough for most headers)
-// Максимальный размер для сканирования HTTP-заголовков (16КБ - достаточно для большинства заголовков)
+// РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РґР»СЏ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ HTTP-Р·Р°РіРѕР»РѕРІРєРѕРІ (16РљР‘ - РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР»СЏ Р±РѕР»СЊС€РёРЅСЃС‚РІР° Р·Р°РіРѕР»РѕРІРєРѕРІ)
 #define HDR_SCAN_MAX  16384
 
 // Maximum number of simultaneous streaming sockets to track
 // Increased pool size for safety (typical usage: 1-2 streams)
-// Максимальное количество одновременных потоковых сокетов для отслеживания
-// Увеличенный размер пула для безопасности (типичное использование: 1-2 потока)
+// РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕРґРЅРѕРІСЂРµРјРµРЅРЅС‹С… РїРѕС‚РѕРєРѕРІС‹С… СЃРѕРєРµС‚РѕРІ РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ
+// РЈРІРµР»РёС‡РµРЅРЅС‹Р№ СЂР°Р·РјРµСЂ РїСѓР»Р° РґР»СЏ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё (С‚РёРїРёС‡РЅРѕРµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ: 1-2 РїРѕС‚РѕРєР°)
 #define MAX_STREAMS   8
 
 /*******************************************************************************
  * WINSOCK TYPE DEFINITIONS
- * ОПРЕДЕЛЕНИЯ ТИПОВ WINSOCK
+ * РћРџР Р•Р”Р•Р›Р•РќРРЇ РўРРџРћР’ WINSOCK
  * 
- * IMPORTANT / ВАЖНО:
+ * IMPORTANT / Р’РђР–РќРћ:
  * These type definitions are placed at the top of the file to fix build
  * errors on older compilers (VS2003). The order matters - function pointer
  * typedefs must come after the basic type definitions they reference.
  * 
- * Эти определения типов размещены в начале файла для исправления ошибок
- * сборки на старых компиляторах (VS2003). Порядок важен - typedef указателей
- * на функции должен идти после определений базовых типов, на которые они ссылаются.
+ * Р­С‚Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РёРїРѕРІ СЂР°Р·РјРµС‰РµРЅС‹ РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р»Р° РґР»СЏ РёСЃРїСЂР°РІР»РµРЅРёСЏ РѕС€РёР±РѕРє
+ * СЃР±РѕСЂРєРё РЅР° СЃС‚Р°СЂС‹С… РєРѕРјРїРёР»СЏС‚РѕСЂР°С… (VS2003). РџРѕСЂСЏРґРѕРє РІР°Р¶РµРЅ - typedef СѓРєР°Р·Р°С‚РµР»РµР№
+ * РЅР° С„СѓРЅРєС†РёРё РґРѕР»Р¶РµРЅ РёРґС‚Рё РїРѕСЃР»Рµ РѕРїСЂРµРґРµР»РµРЅРёР№ Р±Р°Р·РѕРІС‹С… С‚РёРїРѕРІ, РЅР° РєРѕС‚РѕСЂС‹Рµ РѕРЅРё СЃСЃС‹Р»Р°СЋС‚СЃСЏ.
  ******************************************************************************/
 
 // Socket handle type (UINT_PTR for 32/64-bit compatibility)
-// Тип дескриптора сокета (UINT_PTR для совместимости 32/64-бит)
+// РўРёРї РґРµСЃРєСЂРёРїС‚РѕСЂР° СЃРѕРєРµС‚Р° (UINT_PTR РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё 32/64-Р±РёС‚)
 typedef UINT_PTR SOCKET;
 
 // FAR pointer modifier (legacy from 16-bit Windows, now empty)
-// Модификатор указателя FAR (наследие от 16-битной Windows, теперь пустой)
+// РњРѕРґРёС„РёРєР°С‚РѕСЂ СѓРєР°Р·Р°С‚РµР»СЏ FAR (РЅР°СЃР»РµРґРёРµ РѕС‚ 16-Р±РёС‚РЅРѕР№ Windows, С‚РµРїРµСЂСЊ РїСѓСЃС‚РѕР№)
 #ifndef FAR
 #define FAR
 #endif
 
 // Unsigned long type (4 bytes)
-// Тип unsigned long (4 байта)
+// РўРёРї unsigned long (4 Р±Р°Р№С‚Р°)
 typedef unsigned long u_long;
 
 // Winsock scatter-gather buffer structure
 // Used for WSASend/WSARecv to send/receive data in multiple buffers
-// Структура буфера scatter-gather для Winsock
-// Используется для WSASend/WSARecv для отправки/получения данных в нескольких буферах
+// РЎС‚СЂСѓРєС‚СѓСЂР° Р±СѓС„РµСЂР° scatter-gather РґР»СЏ Winsock
+// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ WSASend/WSARecv РґР»СЏ РѕС‚РїСЂР°РІРєРё/РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… РІ РЅРµСЃРєРѕР»СЊРєРёС… Р±СѓС„РµСЂР°С…
 typedef struct _WSABUF { 
-    u_long len;      // Length of buffer / Длина буфера
-    char FAR* buf;   // Pointer to buffer / Указатель на буфер
+    u_long len;      // Length of buffer / Р”Р»РёРЅР° Р±СѓС„РµСЂР°
+    char FAR* buf;   // Pointer to buffer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ
 } WSABUF, *LPWSABUF;
 
 // Overlapped I/O structure (opaque pointer)
 // Used for asynchronous socket operations
-// Структура перекрывающегося ввода-вывода (непрозрачный указатель)
-// Используется для асинхронных операций сокетов
+// РЎС‚СЂСѓРєС‚СѓСЂР° РїРµСЂРµРєСЂС‹РІР°СЋС‰РµРіРѕСЃСЏ РІРІРѕРґР°-РІС‹РІРѕРґР° (РЅРµРїСЂРѕР·СЂР°С‡РЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ)
+// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ Р°СЃРёРЅС…СЂРѕРЅРЅС‹С… РѕРїРµСЂР°С†РёР№ СЃРѕРєРµС‚РѕРІ
 typedef void* LPWSAOVERLAPPED;
 
 // Completion routine callback type for asynchronous operations
-// Тип функции обратного вызова для завершения асинхронных операций
+// РўРёРї С„СѓРЅРєС†РёРё РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° РґР»СЏ Р·Р°РІРµСЂС€РµРЅРёСЏ Р°СЃРёРЅС…СЂРѕРЅРЅС‹С… РѕРїРµСЂР°С†РёР№
 typedef void (CALLBACK *LPWSAOVERLAPPED_COMPLETION_ROUTINE)(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
 
 // Function pointer types for Winsock API functions we will intercept
-// Типы указателей на функции для функций Winsock API, которые мы будем перехватывать
+// РўРёРїС‹ СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° С„СѓРЅРєС†РёРё РґР»СЏ С„СѓРЅРєС†РёР№ Winsock API, РєРѕС‚РѕСЂС‹Рµ РјС‹ Р±СѓРґРµРј РїРµСЂРµС…РІР°С‚С‹РІР°С‚СЊ
 
-// send: Synchronous data send / Синхронная отправка данных
+// send: Synchronous data send / РЎРёРЅС…СЂРѕРЅРЅР°СЏ РѕС‚РїСЂР°РІРєР° РґР°РЅРЅС‹С…
 typedef int (WINAPI *PFN_send)(SOCKET, const char*, int, int);
 
-// WSASend: Asynchronous/scatter-gather send / Асинхронная/scatter-gather отправка
+// WSASend: Asynchronous/scatter-gather send / РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ/scatter-gather РѕС‚РїСЂР°РІРєР°
 typedef int (WINAPI *PFN_WSASend)(SOCKET, LPWSABUF, DWORD, LPDWORD, DWORD, LPWSAOVERLAPPED, LPWSAOVERLAPPED_COMPLETION_ROUTINE);
 
-// recv: Synchronous data receive / Синхронное получение данных
+// recv: Synchronous data receive / РЎРёРЅС…СЂРѕРЅРЅРѕРµ РїРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С…
 typedef int (WINAPI *PFN_recv)(SOCKET, char*, int, int);
 
-// WSARecv: Asynchronous/scatter-gather receive / Асинхронное/scatter-gather получение
+// WSARecv: Asynchronous/scatter-gather receive / РђСЃРёРЅС…СЂРѕРЅРЅРѕРµ/scatter-gather РїРѕР»СѓС‡РµРЅРёРµ
 typedef int (WINAPI *PFN_WSARecv)(SOCKET, LPWSABUF, DWORD, LPDWORD, LPDWORD, LPWSAOVERLAPPED, LPWSAOVERLAPPED_COMPLETION_ROUTINE);
 
-// closesocket: Close socket / Закрыть сокет
+// closesocket: Close socket / Р—Р°РєСЂС‹С‚СЊ СЃРѕРєРµС‚
 typedef int (WINAPI *PFN_closesocket)(SOCKET);
 
 /*******************************************************************************
  * SOCKET CONTEXT STRUCTURE AND POOL
- * СТРУКТУРА КОНТЕКСТА СОКЕТА И ПУЛ
+ * РЎРўР РЈРљРўРЈР Рђ РљРћРќРўР•РљРЎРўРђ РЎРћРљР•РўРђ Р РџРЈР›
  ******************************************************************************/
 
 /*******************************************************************************
  * SockCtx Structure
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Maintains state for a single streaming socket. Tracks HTTP header parsing,
  * icy-metaint value, and current position in the audio/metadata stream.
  * 
- * Поддерживает состояние для одного потокового сокета. Отслеживает парсинг
- * HTTP-заголовков, значение icy-metaint и текущую позицию в потоке аудио/метаданных.
+ * РџРѕРґРґРµСЂР¶РёРІР°РµС‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РґР»СЏ РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєРѕРІРѕРіРѕ СЃРѕРєРµС‚Р°. РћС‚СЃР»РµР¶РёРІР°РµС‚ РїР°СЂСЃРёРЅРі
+ * HTTP-Р·Р°РіРѕР»РѕРІРєРѕРІ, Р·РЅР°С‡РµРЅРёРµ icy-metaint Рё С‚РµРєСѓС‰СѓСЋ РїРѕР·РёС†РёСЋ РІ РїРѕС‚РѕРєРµ Р°СѓРґРёРѕ/РјРµС‚Р°РґР°РЅРЅС‹С….
  * 
- * FIELDS / ПОЛЯ:
- * s           - Socket handle / Дескриптор сокета
- * inUse       - TRUE if this context is active / TRUE если этот контекст активен
+ * FIELDS / РџРћР›РЇ:
+ * s           - Socket handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р°
+ * inUse       - TRUE if this context is active / TRUE РµСЃР»Рё СЌС‚РѕС‚ РєРѕРЅС‚РµРєСЃС‚ Р°РєС‚РёРІРµРЅ
  * headerDone  - TRUE when HTTP header fully received and parsed
- *               TRUE когда HTTP-заголовок полностью получен и разобран
+ *               TRUE РєРѕРіРґР° HTTP-Р·Р°РіРѕР»РѕРІРѕРє РїРѕР»РЅРѕСЃС‚СЊСЋ РїРѕР»СѓС‡РµРЅ Рё СЂР°Р·РѕР±СЂР°РЅ
  * hdrLen      - Current length of accumulated header data
- *               Текущая длина накопленных данных заголовка
+ *               РўРµРєСѓС‰Р°СЏ РґР»РёРЅР° РЅР°РєРѕРїР»РµРЅРЅС‹С… РґР°РЅРЅС‹С… Р·Р°РіРѕР»РѕРІРєР°
  * hdrBuf      - Buffer for accumulating header data across multiple recv calls
- *               Буфер для накопления данных заголовка через несколько вызовов recv
+ *               Р‘СѓС„РµСЂ РґР»СЏ РЅР°РєРѕРїР»РµРЅРёСЏ РґР°РЅРЅС‹С… Р·Р°РіРѕР»РѕРІРєР° С‡РµСЂРµР· РЅРµСЃРєРѕР»СЊРєРѕ РІС‹Р·РѕРІРѕРІ recv
  * metaInt     - icy-metaint value: bytes of audio between metadata chunks
- *               значение icy-metaint: байты аудио между блоками метаданных
+ *               Р·РЅР°С‡РµРЅРёРµ icy-metaint: Р±Р°Р№С‚С‹ Р°СѓРґРёРѕ РјРµР¶РґСѓ Р±Р»РѕРєР°РјРё РјРµС‚Р°РґР°РЅРЅС‹С…
  * leftAudio   - Bytes remaining in current audio chunk before next metadata
- *               Байты, оставшиеся в текущем блоке аудио перед следующими метаданными
+ *               Р‘Р°Р№С‚С‹, РѕСЃС‚Р°РІС€РёРµСЃСЏ РІ С‚РµРєСѓС‰РµРј Р±Р»РѕРєРµ Р°СѓРґРёРѕ РїРµСЂРµРґ СЃР»РµРґСѓСЋС‰РёРјРё РјРµС‚Р°РґР°РЅРЅС‹РјРё
  * needLenByte - TRUE if next byte should be metadata length byte
- *               TRUE если следующий байт должен быть байтом длины метаданных
+ *               TRUE РµСЃР»Рё СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р±Р°Р№С‚РѕРј РґР»РёРЅС‹ РјРµС‚Р°РґР°РЅРЅС‹С…
  * metaLeft    - Bytes remaining in current metadata chunk
- *               Байты, оставшиеся в текущем блоке метаданных
+ *               Р‘Р°Р№С‚С‹, РѕСЃС‚Р°РІС€РёРµСЃСЏ РІ С‚РµРєСѓС‰РµРј Р±Р»РѕРєРµ РјРµС‚Р°РґР°РЅРЅС‹С…
  ******************************************************************************/
 typedef struct SockCtx {
-    SOCKET s;                      // Socket handle / Дескриптор сокета
-    BOOL   inUse;                  // Context active flag / Флаг активности контекста
-    int    headerDone;             // Header parsing complete / Парсинг заголовка завершён
-    int    hdrLen;                 // Accumulated header length / Накопленная длина заголовка
-    char   hdrBuf[HDR_SCAN_MAX];   // Header accumulation buffer / Буфер накопления заголовка
-    DWORD  metaInt;                // Metadata interval (icy-metaint) / Интервал метаданных (icy-metaint)
-    DWORD  leftAudio;              // Remaining audio bytes / Оставшиеся байты аудио
-    int    needLenByte;            // Expecting metadata length byte / Ожидание байта длины метаданных
-    DWORD  metaLeft;               // Remaining metadata bytes / Оставшиеся байты метаданных
+    SOCKET s;                      // Socket handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р°
+    BOOL   inUse;                  // Context active flag / Р¤Р»Р°Рі Р°РєС‚РёРІРЅРѕСЃС‚Рё РєРѕРЅС‚РµРєСЃС‚Р°
+    int    headerDone;             // Header parsing complete / РџР°СЂСЃРёРЅРі Р·Р°РіРѕР»РѕРІРєР° Р·Р°РІРµСЂС€С‘РЅ
+    int    hdrLen;                 // Accumulated header length / РќР°РєРѕРїР»РµРЅРЅР°СЏ РґР»РёРЅР° Р·Р°РіРѕР»РѕРІРєР°
+    char   hdrBuf[HDR_SCAN_MAX];   // Header accumulation buffer / Р‘СѓС„РµСЂ РЅР°РєРѕРїР»РµРЅРёСЏ Р·Р°РіРѕР»РѕРІРєР°
+    DWORD  metaInt;                // Metadata interval (icy-metaint) / РРЅС‚РµСЂРІР°Р» РјРµС‚Р°РґР°РЅРЅС‹С… (icy-metaint)
+    DWORD  leftAudio;              // Remaining audio bytes / РћСЃС‚Р°РІС€РёРµСЃСЏ Р±Р°Р№С‚С‹ Р°СѓРґРёРѕ
+    int    needLenByte;            // Expecting metadata length byte / РћР¶РёРґР°РЅРёРµ Р±Р°Р№С‚Р° РґР»РёРЅС‹ РјРµС‚Р°РґР°РЅРЅС‹С…
+    DWORD  metaLeft;               // Remaining metadata bytes / РћСЃС‚Р°РІС€РёРµСЃСЏ Р±Р°Р№С‚С‹ РјРµС‚Р°РґР°РЅРЅС‹С…
 } SockCtx;
 
 // Pool of socket contexts (zero-initialized by default in .bss section)
-// Пул контекстов сокетов (инициализирован нулями по умолчанию в секции .bss)
+// РџСѓР» РєРѕРЅС‚РµРєСЃС‚РѕРІ СЃРѕРєРµС‚РѕРІ (РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РЅСѓР»СЏРјРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РІ СЃРµРєС†РёРё .bss)
 static SockCtx g_ctxPool[MAX_STREAMS];
 
 // Critical section for thread-safe access to context pool
-// Критическая секция для потокобезопасного доступа к пулу контекстов
+// РљСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕРіРѕ РґРѕСЃС‚СѓРїР° Рє РїСѓР»Сѓ РєРѕРЅС‚РµРєСЃС‚РѕРІ
 static CRITICAL_SECTION g_cs;
 
 // Initialization state of critical section (0=not inited, 1=initing, 2=ready)
 // Uses atomic operations for thread-safe initialization
-// Состояние инициализации критической секции (0=не инициализирована, 1=инициализируется, 2=готова)
-// Использует атомарные операции для потокобезопасной инициализации
+// РЎРѕСЃС‚РѕСЏРЅРёРµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё (0=РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°, 1=РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚СЃСЏ, 2=РіРѕС‚РѕРІР°)
+// РСЃРїРѕР»СЊР·СѓРµС‚ Р°С‚РѕРјР°СЂРЅС‹Рµ РѕРїРµСЂР°С†РёРё РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
 static volatile LONG g_csInited = 0;
 
 /*******************************************************************************
  * CRITICAL SECTION MANAGEMENT
- * УПРАВЛЕНИЕ КРИТИЧЕСКОЙ СЕКЦИЕЙ
+ * РЈРџР РђР’Р›Р•РќРР• РљР РРўРР§Р•РЎРљРћР™ РЎР•РљР¦РР•Р™
  ******************************************************************************/
 
 /*******************************************************************************
  * CS_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-safe initialization of the critical section using double-checked
  * locking pattern with atomic operations.
  * 
- * Потокобезопасная инициализация критической секции с использованием паттерна
- * двойной проверки блокировки с атомарными операциями.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РїР°С‚С‚РµСЂРЅР°
+ * РґРІРѕР№РЅРѕР№ РїСЂРѕРІРµСЂРєРё Р±Р»РѕРєРёСЂРѕРІРєРё СЃ Р°С‚РѕРјР°СЂРЅС‹РјРё РѕРїРµСЂР°С†РёСЏРјРё.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Try to atomically change state from 0 (not inited) to 1 (initing)
  * 2. If successful (we're first thread):
  *    - Initialize the critical section
@@ -261,45 +261,45 @@ static volatile LONG g_csInited = 0;
  * 3. If not successful (another thread is initing):
  *    - Spin-wait until state becomes 2 (ready)
  * 
- * 1. Попытаться атомарно изменить состояние с 0 (не инициализирована) на 1 (инициализируется)
- * 2. Если успешно (мы первый поток):
- *    - Инициализировать критическую секцию
- *    - Изменить состояние на 2 (готова)
- * 3. Если не успешно (другой поток инициализирует):
- *    - Крутиться в ожидании, пока состояние не станет 2 (готова)
+ * 1. РџРѕРїС‹С‚Р°С‚СЊСЃСЏ Р°С‚РѕРјР°СЂРЅРѕ РёР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СЃ 0 (РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°) РЅР° 1 (РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚СЃСЏ)
+ * 2. Р•СЃР»Рё СѓСЃРїРµС€РЅРѕ (РјС‹ РїРµСЂРІС‹Р№ РїРѕС‚РѕРє):
+ *    - РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
+ *    - РР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РЅР° 2 (РіРѕС‚РѕРІР°)
+ * 3. Р•СЃР»Рё РЅРµ СѓСЃРїРµС€РЅРѕ (РґСЂСѓРіРѕР№ РїРѕС‚РѕРє РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚):
+ *    - РљСЂСѓС‚РёС‚СЊСЃСЏ РІ РѕР¶РёРґР°РЅРёРё, РїРѕРєР° СЃРѕСЃС‚РѕСЏРЅРёРµ РЅРµ СЃС‚Р°РЅРµС‚ 2 (РіРѕС‚РѕРІР°)
  ******************************************************************************/
 static void CS_Init(void) {
     // Try to claim initialization (atomic compare-and-swap: if 0, set to 1)
-    // Попытаться захватить инициализацию (атомарное сравнение и замена: если 0, установить в 1)
+    // РџРѕРїС‹С‚Р°С‚СЊСЃСЏ Р·Р°С…РІР°С‚РёС‚СЊ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ (Р°С‚РѕРјР°СЂРЅРѕРµ СЃСЂР°РІРЅРµРЅРёРµ Рё Р·Р°РјРµРЅР°: РµСЃР»Рё 0, СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ 1)
     if (InterlockedCompareExchange(&g_csInited, 1, 0) == 0) {
         // We won the race - initialize the critical section
-        // Мы выиграли гонку - инициализировать критическую секцию
+        // РњС‹ РІС‹РёРіСЂР°Р»Рё РіРѕРЅРєСѓ - РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
         InitializeCriticalSection(&g_cs);
         
         // Mark as ready (atomic set to 2)
-        // Отметить как готовую (атомарная установка в 2)
+        // РћС‚РјРµС‚РёС‚СЊ РєР°Рє РіРѕС‚РѕРІСѓСЋ (Р°С‚РѕРјР°СЂРЅР°СЏ СѓСЃС‚Р°РЅРѕРІРєР° РІ 2)
         InterlockedExchange(&g_csInited, 2);
     } else {
         // Another thread is initializing - wait until ready
-        // Другой поток инициализирует - ждать до готовности
+        // Р”СЂСѓРіРѕР№ РїРѕС‚РѕРє РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ - Р¶РґР°С‚СЊ РґРѕ РіРѕС‚РѕРІРЅРѕСЃС‚Рё
         while (InterlockedCompareExchange(&g_csInited, 2, 2) != 2) 
-            Sleep(1);  // Brief sleep to avoid busy-waiting / Короткий сон для избежания активного ожидания
+            Sleep(1);  // Brief sleep to avoid busy-waiting / РљРѕСЂРѕС‚РєРёР№ СЃРѕРЅ РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ Р°РєС‚РёРІРЅРѕРіРѕ РѕР¶РёРґР°РЅРёСЏ
     }
 }
 
 /*******************************************************************************
  * CS_Done
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Thread-safe cleanup of the critical section. Only deletes if currently
  * in ready state.
  * 
- * Потокобезопасная очистка критической секции. Удаляет только если в данный
- * момент в готовом состоянии.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°СЏ РѕС‡РёСЃС‚РєР° РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё. РЈРґР°Р»СЏРµС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РІ РґР°РЅРЅС‹Р№
+ * РјРѕРјРµРЅС‚ РІ РіРѕС‚РѕРІРѕРј СЃРѕСЃС‚РѕСЏРЅРёРё.
  ******************************************************************************/
 static void CS_Done(void) {
     // Atomically change from 2 (ready) to 0 (not inited) and delete if successful
-    // Атомарно изменить с 2 (готова) на 0 (не инициализирована) и удалить, если успешно
+    // РђС‚РѕРјР°СЂРЅРѕ РёР·РјРµРЅРёС‚СЊ СЃ 2 (РіРѕС‚РѕРІР°) РЅР° 0 (РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°) Рё СѓРґР°Р»РёС‚СЊ, РµСЃР»Рё СѓСЃРїРµС€РЅРѕ
     if (InterlockedCompareExchange(&g_csInited, 0, 2) == 2)
         DeleteCriticalSection(&g_cs);
 }
@@ -307,12 +307,12 @@ static void CS_Done(void) {
 /*******************************************************************************
  * Lock / Unlock
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Wrapper functions for entering/leaving critical section with safety check.
  * Only attempts to lock if critical section is ready (state == 2).
  * 
- * Функции-обёртки для входа/выхода из критической секции с проверкой безопасности.
- * Пытается заблокировать только если критическая секция готова (состояние == 2).
+ * Р¤СѓРЅРєС†РёРё-РѕР±С‘СЂС‚РєРё РґР»СЏ РІС…РѕРґР°/РІС‹С…РѕРґР° РёР· РєСЂРёС‚РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё СЃ РїСЂРѕРІРµСЂРєРѕР№ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё.
+ * РџС‹С‚Р°РµС‚СЃСЏ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РµСЃР»Рё РєСЂРёС‚РёС‡РµСЃРєР°СЏ СЃРµРєС†РёСЏ РіРѕС‚РѕРІР° (СЃРѕСЃС‚РѕСЏРЅРёРµ == 2).
  ******************************************************************************/
 static void Lock(void)   { 
     if (g_csInited == 2) 
@@ -326,77 +326,77 @@ static void Unlock(void) {
 
 /*******************************************************************************
  * SOCKET CONTEXT POOL MANAGEMENT
- * УПРАВЛЕНИЕ ПУЛОМ КОНТЕКСТОВ СОКЕТОВ
+ * РЈРџР РђР’Р›Р•РќРР• РџРЈР›РћРњ РљРћРќРўР•РљРЎРўРћР’ РЎРћРљР•РўРћР’
  ******************************************************************************/
 
 /*******************************************************************************
  * Sock_Find
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Searches the context pool for a context associated with the given socket.
  * 
- * Ищет в пуле контекстов контекст, связанный с данным сокетом.
+ * РС‰РµС‚ РІ РїСѓР»Рµ РєРѕРЅС‚РµРєСЃС‚РѕРІ РєРѕРЅС‚РµРєСЃС‚, СЃРІСЏР·Р°РЅРЅС‹Р№ СЃ РґР°РЅРЅС‹Рј СЃРѕРєРµС‚РѕРј.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - Socket handle to search for / Дескриптор сокета для поиска
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - Socket handle to search for / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р° РґР»СЏ РїРѕРёСЃРєР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Pointer to SockCtx if found, NULL if not found
- * Указатель на SockCtx если найден, NULL если не найден
+ * РЈРєР°Р·Р°С‚РµР»СЊ РЅР° SockCtx РµСЃР»Рё РЅР°Р№РґРµРЅ, NULL РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅ
  * 
- * THREAD SAFETY / ПОТОКОБЕЗОПАСНОСТЬ:
+ * THREAD SAFETY / РџРћРўРћРљРћР‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * Caller must hold Lock() before calling this function!
- * Вызывающая сторона должна удерживать Lock() перед вызовом этой функции!
+ * Р’С‹Р·С‹РІР°СЋС‰Р°СЏ СЃС‚РѕСЂРѕРЅР° РґРѕР»Р¶РЅР° СѓРґРµСЂР¶РёРІР°С‚СЊ Lock() РїРµСЂРµРґ РІС‹Р·РѕРІРѕРј СЌС‚РѕР№ С„СѓРЅРєС†РёРё!
  ******************************************************************************/
 static SockCtx* Sock_Find(SOCKET s) {
     // Note: Caller must hold Lock!
-    // Примечание: вызывающая сторона должна удерживать Lock!
+    // РџСЂРёРјРµС‡Р°РЅРёРµ: РІС‹Р·С‹РІР°СЋС‰Р°СЏ СЃС‚РѕСЂРѕРЅР° РґРѕР»Р¶РЅР° СѓРґРµСЂР¶РёРІР°С‚СЊ Lock!
     
-    // Linear search through pool / Линейный поиск по пулу
+    // Linear search through pool / Р›РёРЅРµР№РЅС‹Р№ РїРѕРёСЃРє РїРѕ РїСѓР»Сѓ
     for (int i = 0; i < MAX_STREAMS; ++i) {
         if (g_ctxPool[i].inUse && g_ctxPool[i].s == s) 
             return &g_ctxPool[i];
     }
-    return NULL;  // Not found / Не найден
+    return NULL;  // Not found / РќРµ РЅР°Р№РґРµРЅ
 }
 
 /*******************************************************************************
  * Sock_Add
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Adds a new socket to the context pool, or returns existing context if
  * socket is already tracked. Creates and initializes a new context if needed.
  * 
- * Добавляет новый сокет в пул контекстов или возвращает существующий контекст,
- * если сокет уже отслеживается. Создаёт и инициализирует новый контекст при необходимости.
+ * Р”РѕР±Р°РІР»СЏРµС‚ РЅРѕРІС‹Р№ СЃРѕРєРµС‚ РІ РїСѓР» РєРѕРЅС‚РµРєСЃС‚РѕРІ РёР»Рё РІРѕР·РІСЂР°С‰Р°РµС‚ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРЅС‚РµРєСЃС‚,
+ * РµСЃР»Рё СЃРѕРєРµС‚ СѓР¶Рµ РѕС‚СЃР»РµР¶РёРІР°РµС‚СЃСЏ. РЎРѕР·РґР°С‘С‚ Рё РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РЅРѕРІС‹Р№ РєРѕРЅС‚РµРєСЃС‚ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - Socket handle to add / Дескриптор сокета для добавления
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - Socket handle to add / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р° РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Pointer to SockCtx (new or existing), or NULL if pool is full
- * Указатель на SockCtx (новый или существующий), или NULL если пул заполнен
+ * РЈРєР°Р·Р°С‚РµР»СЊ РЅР° SockCtx (РЅРѕРІС‹Р№ РёР»Рё СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№), РёР»Рё NULL РµСЃР»Рё РїСѓР» Р·Р°РїРѕР»РЅРµРЅ
  * 
- * THREAD SAFETY / ПОТОКОБЕЗОПАСНОСТЬ:
+ * THREAD SAFETY / РџРћРўРћРљРћР‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * Handles its own locking internally.
- * Обрабатывает собственную блокировку внутренне.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЃРѕР±СЃС‚РІРµРЅРЅСѓСЋ Р±Р»РѕРєРёСЂРѕРІРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµ.
  ******************************************************************************/
 static SockCtx* Sock_Add(SOCKET s) {
     Lock();
     
-    // Check if already exists / Проверить, уже существует ли
+    // Check if already exists / РџСЂРѕРІРµСЂРёС‚СЊ, СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ Р»Рё
     SockCtx* c = Sock_Find(s);
     if (c) { 
         Unlock(); 
-        return c;  // Already exists / Уже существует
+        return c;  // Already exists / РЈР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
     }
 
-    // Find first free slot in pool / Найти первый свободный слот в пуле
+    // Find first free slot in pool / РќР°Р№С‚Рё РїРµСЂРІС‹Р№ СЃРІРѕР±РѕРґРЅС‹Р№ СЃР»РѕС‚ РІ РїСѓР»Рµ
     for (int i = 0; i < MAX_STREAMS; ++i) {
         if (!g_ctxPool[i].inUse) {
             c = &g_ctxPool[i];
             
-            // Reset/initialize context state / Сбросить/инициализировать состояние контекста
+            // Reset/initialize context state / РЎР±СЂРѕСЃРёС‚СЊ/РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р°
             c->s = s;
             c->inUse = TRUE;
             c->headerDone = 0;
@@ -411,7 +411,7 @@ static SockCtx* Sock_Add(SOCKET s) {
         }
     }
     
-    // Pool is full - return NULL / Пул заполнен - вернуть NULL
+    // Pool is full - return NULL / РџСѓР» Р·Р°РїРѕР»РЅРµРЅ - РІРµСЂРЅСѓС‚СЊ NULL
     Unlock();
     return NULL;
 }
@@ -419,25 +419,25 @@ static SockCtx* Sock_Add(SOCKET s) {
 /*******************************************************************************
  * Sock_Del
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Removes a socket from the context pool by marking its context as not in use.
  * 
- * Удаляет сокет из пула контекстов, отмечая его контекст как не используемый.
+ * РЈРґР°Р»СЏРµС‚ СЃРѕРєРµС‚ РёР· РїСѓР»Р° РєРѕРЅС‚РµРєСЃС‚РѕРІ, РѕС‚РјРµС‡Р°СЏ РµРіРѕ РєРѕРЅС‚РµРєСЃС‚ РєР°Рє РЅРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Р№.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - Socket handle to remove / Дескриптор сокета для удаления
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - Socket handle to remove / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р° РґР»СЏ СѓРґР°Р»РµРЅРёСЏ
  * 
- * THREAD SAFETY / ПОТОКОБЕЗОПАСНОСТЬ:
+ * THREAD SAFETY / РџРћРўРћРљРћР‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * Handles its own locking internally.
- * Обрабатывает собственную блокировку внутренне.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЃРѕР±СЃС‚РІРµРЅРЅСѓСЋ Р±Р»РѕРєРёСЂРѕРІРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµ.
  ******************************************************************************/
 static void Sock_Del(SOCKET s) {
     Lock();
     
-    // Find and mark as free / Найти и отметить как свободный
+    // Find and mark as free / РќР°Р№С‚Рё Рё РѕС‚РјРµС‚РёС‚СЊ РєР°Рє СЃРІРѕР±РѕРґРЅС‹Р№
     for (int i = 0; i < MAX_STREAMS; ++i) {
         if (g_ctxPool[i].inUse && g_ctxPool[i].s == s) {
-            g_ctxPool[i].inUse = FALSE;  // Mark as free / Отметить как свободный
+            g_ctxPool[i].inUse = FALSE;  // Mark as free / РћС‚РјРµС‚РёС‚СЊ РєР°Рє СЃРІРѕР±РѕРґРЅС‹Р№
             break;
         }
     }
@@ -447,51 +447,51 @@ static void Sock_Del(SOCKET s) {
 
 /*******************************************************************************
  * REAL API FUNCTION POINTERS
- * УКАЗАТЕЛИ НА РЕАЛЬНЫЕ ФУНКЦИИ API
+ * РЈРљРђР—РђРўР•Р›Р РќРђ Р Р•РђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР API
  * 
  * These pointers store the addresses of the original Winsock functions before
  * we patch them. They are used to call the real implementation after we've
  * processed the data.
  * 
- * Эти указатели хранят адреса оригинальных функций Winsock до того, как мы
- * их пропатчили. Они используются для вызова реальной реализации после того,
- * как мы обработали данные.
+ * Р­С‚Рё СѓРєР°Р·Р°С‚РµР»Рё С…СЂР°РЅСЏС‚ Р°РґСЂРµСЃР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… С„СѓРЅРєС†РёР№ Winsock РґРѕ С‚РѕРіРѕ, РєР°Рє РјС‹
+ * РёС… РїСЂРѕРїР°С‚С‡РёР»Рё. РћРЅРё РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РґР»СЏ РІС‹Р·РѕРІР° СЂРµР°Р»СЊРЅРѕР№ СЂРµР°Р»РёР·Р°С†РёРё РїРѕСЃР»Рµ С‚РѕРіРѕ,
+ * РєР°Рє РјС‹ РѕР±СЂР°Р±РѕС‚Р°Р»Рё РґР°РЅРЅС‹Рµ.
  ******************************************************************************/
 
-static PFN_send         Real_send         = NULL;  // Original send function / Оригинальная функция send
-static PFN_WSASend      Real_WSASend      = NULL;  // Original WSASend function / Оригинальная функция WSASend
-static PFN_recv         Real_recv         = NULL;  // Original recv function / Оригинальная функция recv
-static PFN_WSARecv      Real_WSARecv      = NULL;  // Original WSARecv function / Оригинальная функция WSARecv
-static PFN_closesocket  Real_closesocket  = NULL;  // Original closesocket function / Оригинальная функция closesocket
+static PFN_send         Real_send         = NULL;  // Original send function / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ send
+static PFN_WSASend      Real_WSASend      = NULL;  // Original WSASend function / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ WSASend
+static PFN_recv         Real_recv         = NULL;  // Original recv function / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ recv
+static PFN_WSARecv      Real_WSARecv      = NULL;  // Original WSARecv function / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ WSARecv
+static PFN_closesocket  Real_closesocket  = NULL;  // Original closesocket function / РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ closesocket
 
 /*******************************************************************************
  * HEADER/METADATA PARSING AND FIXING HELPERS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ПАРСИНГА И ИСПРАВЛЕНИЯ ЗАГОЛОВКОВ/МЕТАДАННЫХ
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР РџРђР РЎРРќР“Рђ Р РРЎРџР РђР’Р›Р•РќРРЇ Р—РђР“РћР›РћР’РљРћР’/РњР•РўРђР”РђРќРќР«РҐ
  ******************************************************************************/
 
 /*******************************************************************************
  * key_eq_ci
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Case-insensitive string comparison for checking header keys. Compares the
  * beginning of string 's' with the key string.
  * 
- * Сравнение строк без учёта регистра для проверки ключей заголовков. Сравнивает
- * начало строки 's' со строкой ключа.
+ * РЎСЂР°РІРЅРµРЅРёРµ СЃС‚СЂРѕРє Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР° РґР»СЏ РїСЂРѕРІРµСЂРєРё РєР»СЋС‡РµР№ Р·Р°РіРѕР»РѕРІРєРѕРІ. РЎСЂР°РІРЅРёРІР°РµС‚
+ * РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё 's' СЃРѕ СЃС‚СЂРѕРєРѕР№ РєР»СЋС‡Р°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s   - String to check / Строка для проверки
- * key - Key string to match / Строка ключа для сопоставления
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s   - String to check / РЎС‚СЂРѕРєР° РґР»СЏ РїСЂРѕРІРµСЂРєРё
+ * key - Key string to match / РЎС‚СЂРѕРєР° РєР»СЋС‡Р° РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if 's' starts with 'key' (case-insensitive), FALSE otherwise
- * TRUE если 's' начинается с 'key' (без учёта регистра), FALSE иначе
+ * TRUE РµСЃР»Рё 's' РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ 'key' (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°), FALSE РёРЅР°С‡Рµ
  ******************************************************************************/
 static BOOL key_eq_ci(const char* s, const char* key) {
     while (*key) {
         char a = *s++, b = *key++;
         
-        // Convert to lowercase for comparison / Преобразовать в нижний регистр для сравнения
+        // Convert to lowercase for comparison / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
         if (a >= 'A' && a <= 'Z') a = (char)(a + 'a' - 'A');
         if (b >= 'A' && b <= 'Z') b = (char)(b + 'a' - 'A');
         
@@ -503,52 +503,52 @@ static BOOL key_eq_ci(const char* s, const char* key) {
 /*******************************************************************************
  * FixHeaderValueInplace
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Fixes encoding of a single HTTP header line in-place. Identifies known
  * headers that commonly have encoding issues (station name, genre, URL) and
  * applies mojibake fix to their values.
  * 
- * Исправляет кодировку одной строки HTTP-заголовка на месте. Идентифицирует
- * известные заголовки, которые обычно имеют проблемы с кодировкой (название
- * станции, жанр, URL) и применяет исправление mojibake к их значениям.
+ * РСЃРїСЂР°РІР»СЏРµС‚ РєРѕРґРёСЂРѕРІРєСѓ РѕРґРЅРѕР№ СЃС‚СЂРѕРєРё HTTP-Р·Р°РіРѕР»РѕРІРєР° РЅР° РјРµСЃС‚Рµ. РРґРµРЅС‚РёС„РёС†РёСЂСѓРµС‚
+ * РёР·РІРµСЃС‚РЅС‹Рµ Р·Р°РіРѕР»РѕРІРєРё, РєРѕС‚РѕСЂС‹Рµ РѕР±С‹С‡РЅРѕ РёРјРµСЋС‚ РїСЂРѕР±Р»РµРјС‹ СЃ РєРѕРґРёСЂРѕРІРєРѕР№ (РЅР°Р·РІР°РЅРёРµ
+ * СЃС‚Р°РЅС†РёРё, Р¶Р°РЅСЂ, URL) Рё РїСЂРёРјРµРЅСЏРµС‚ РёСЃРїСЂР°РІР»РµРЅРёРµ mojibake Рє РёС… Р·РЅР°С‡РµРЅРёСЏРј.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * lineStart - Pointer to start of header line
- *             Указатель на начало строки заголовка
+ *             РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё Р·Р°РіРѕР»РѕРІРєР°
  * lineEnd   - Pointer to end of header line
- *             Указатель на конец строки заголовка
+ *             РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РєРѕРЅРµС† СЃС‚СЂРѕРєРё Р·Р°РіРѕР»РѕРІРєР°
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Find colon separator
  * 2. Check if header key matches known problematic headers
  * 3. If match, extract value after colon
  * 4. Apply encoding fix
  * 5. Write fixed value back (in-place)
  * 
- * 1. Найти разделитель двоеточие
- * 2. Проверить, соответствует ли ключ заголовка известным проблемным заголовкам
- * 3. Если совпадение, извлечь значение после двоеточия
- * 4. Применить исправление кодировки
- * 5. Записать исправленное значение обратно (на месте)
+ * 1. РќР°Р№С‚Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ РґРІРѕРµС‚РѕС‡РёРµ
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р»Рё РєР»СЋС‡ Р·Р°РіРѕР»РѕРІРєР° РёР·РІРµСЃС‚РЅС‹Рј РїСЂРѕР±Р»РµРјРЅС‹Рј Р·Р°РіРѕР»РѕРІРєР°Рј
+ * 3. Р•СЃР»Рё СЃРѕРІРїР°РґРµРЅРёРµ, РёР·РІР»РµС‡СЊ Р·РЅР°С‡РµРЅРёРµ РїРѕСЃР»Рµ РґРІРѕРµС‚РѕС‡РёСЏ
+ * 4. РџСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё
+ * 5. Р—Р°РїРёСЃР°С‚СЊ РёСЃРїСЂР°РІР»РµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РѕР±СЂР°С‚РЅРѕ (РЅР° РјРµСЃС‚Рµ)
  ******************************************************************************/
 static void FixHeaderValueInplace(char* lineStart, char* lineEnd) {
     // List of headers that commonly have encoding issues
-    // Список заголовков, которые обычно имеют проблемы с кодировкой
+    // РЎРїРёСЃРѕРє Р·Р°РіРѕР»РѕРІРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ РѕР±С‹С‡РЅРѕ РёРјРµСЋС‚ РїСЂРѕР±Р»РµРјС‹ СЃ РєРѕРґРёСЂРѕРІРєРѕР№
     static const char* keys[] = {
-        "icy-name:", "ice-name:", "x-audiocast-name:",      // Station name / Название станции
-        "icy-genre:", "ice-genre:", "x-audiocast-genre:",   // Genre / Жанр
-        "icy-url:", "ice-url:", "x-audiocast-url:"          // Station URL / URL станции
+        "icy-name:", "ice-name:", "x-audiocast-name:",      // Station name / РќР°Р·РІР°РЅРёРµ СЃС‚Р°РЅС†РёРё
+        "icy-genre:", "ice-genre:", "x-audiocast-genre:",   // Genre / Р–Р°РЅСЂ
+        "icy-url:", "ice-url:", "x-audiocast-url:"          // Station URL / URL СЃС‚Р°РЅС†РёРё
     };
     
-    // Find colon separator / Найти разделитель двоеточие
+    // Find colon separator / РќР°Р№С‚Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ РґРІРѕРµС‚РѕС‡РёРµ
     char* colon = NULL;
     for (char* p = lineStart; p < lineEnd; ++p) {
         if (*p == ':') { colon = p; break; }
     }
-    if (!colon) return;  // No colon found / Двоеточие не найдено
+    if (!colon) return;  // No colon found / Р”РІРѕРµС‚РѕС‡РёРµ РЅРµ РЅР°Р№РґРµРЅРѕ
 
     // Check if this header matches any known problematic headers
-    // Проверить, соответствует ли этот заголовок любому известному проблемному заголовку
+    // РџСЂРѕРІРµСЂРёС‚СЊ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р»Рё СЌС‚РѕС‚ Р·Р°РіРѕР»РѕРІРѕРє Р»СЋР±РѕРјСѓ РёР·РІРµСЃС‚РЅРѕРјСѓ РїСЂРѕР±Р»РµРјРЅРѕРјСѓ Р·Р°РіРѕР»РѕРІРєСѓ
     BOOL match = FALSE;
     for (int i = 0; i < ARRAYSIZE(keys); i++) {
         int kl = (int)lstrlenA(keys[i]);
@@ -557,33 +557,33 @@ static void FixHeaderValueInplace(char* lineStart, char* lineEnd) {
             break;
         }
     }
-    if (!match) return;  // Not a header we care about / Не заголовок, который нас интересует
+    if (!match) return;  // Not a header we care about / РќРµ Р·Р°РіРѕР»РѕРІРѕРє, РєРѕС‚РѕСЂС‹Р№ РЅР°СЃ РёРЅС‚РµСЂРµСЃСѓРµС‚
 
     // Extract value (skip whitespace after colon)
-    // Извлечь значение (пропустить пробелы после двоеточия)
+    // РР·РІР»РµС‡СЊ Р·РЅР°С‡РµРЅРёРµ (РїСЂРѕРїСѓСЃС‚РёС‚СЊ РїСЂРѕР±РµР»С‹ РїРѕСЃР»Рµ РґРІРѕРµС‚РѕС‡РёСЏ)
     const char* vbeg = colon + 1;
     while (*vbeg == ' ' || *vbeg == '\t') ++vbeg;
     
     int vlen = (int)(lineEnd - (char*)vbeg);
-    if (vlen <= 0) return;  // Empty value / Пустое значение
+    if (vlen <= 0) return;  // Empty value / РџСѓСЃС‚РѕРµ Р·РЅР°С‡РµРЅРёРµ
 
-    // Copy value to temporary buffer / Копировать значение во временный буфер
+    // Copy value to temporary buffer / РљРѕРїРёСЂРѕРІР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ
     char val[ABUF_MAX] = {0};
     int take = (vlen < ABUF_MAX - 1) ? vlen : (ABUF_MAX - 1);
     CopyMemory(val, vbeg, take);
     val[take] = 0;
 
-    // Apply encoding fix / Применить исправление кодировки
+    // Apply encoding fix / РџСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё
     char fixed[ABUF_MAX] = {0};
     if (DECRYPT_ToACP_Best(val, fixed, ABUF_MAX) > 0) {
         // Write fixed value back (in-place)
-        // Записать исправленное значение обратно (на месте)
+        // Р—Р°РїРёСЃР°С‚СЊ РёСЃРїСЂР°РІР»РµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РѕР±СЂР°С‚РЅРѕ (РЅР° РјРµСЃС‚Рµ)
         int ulen = (int)lstrlenA(fixed);
-        if (ulen > vlen) ulen = vlen;  // Don't overflow original space / Не переполнять оригинальное пространство
+        if (ulen > vlen) ulen = vlen;  // Don't overflow original space / РќРµ РїРµСЂРµРїРѕР»РЅСЏС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРµ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ
         
         CopyMemory((char*)vbeg, fixed, ulen);
         
-        // Zero out any remaining space / Обнулить оставшееся пространство
+        // Zero out any remaining space / РћР±РЅСѓР»РёС‚СЊ РѕСЃС‚Р°РІС€РµРµСЃСЏ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ
         if (ulen < vlen) 
             ZeroMemory((char*)vbeg + ulen, vlen - ulen);
     }
@@ -592,50 +592,50 @@ static void FixHeaderValueInplace(char* lineStart, char* lineEnd) {
 /*******************************************************************************
  * FixHeaderFieldsInChunk
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Processes a chunk of data that may contain HTTP headers, identifying
  * individual header lines and applying encoding fixes to each.
  * 
- * Обрабатывает блок данных, который может содержать HTTP-заголовки,
- * идентифицируя отдельные строки заголовков и применяя исправления
- * кодировки к каждой.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ Р±Р»РѕРє РґР°РЅРЅС‹С…, РєРѕС‚РѕСЂС‹Р№ РјРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ HTTP-Р·Р°РіРѕР»РѕРІРєРё,
+ * РёРґРµРЅС‚РёС„РёС†РёСЂСѓСЏ РѕС‚РґРµР»СЊРЅС‹Рµ СЃС‚СЂРѕРєРё Р·Р°РіРѕР»РѕРІРєРѕРІ Рё РїСЂРёРјРµРЅСЏСЏ РёСЃРїСЂР°РІР»РµРЅРёСЏ
+ * РєРѕРґРёСЂРѕРІРєРё Рє РєР°Р¶РґРѕР№.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * chunk - Pointer to data chunk / Указатель на блок данных
- * len   - Length of chunk in bytes / Длина блока в байтах
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * chunk - Pointer to data chunk / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р±Р»РѕРє РґР°РЅРЅС‹С…
+ * len   - Length of chunk in bytes / Р”Р»РёРЅР° Р±Р»РѕРєР° РІ Р±Р°Р№С‚Р°С…
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Scan through chunk byte by byte
  * 2. Identify line boundaries (lines end with \r\n or \n)
  * 3. For each line, call FixHeaderValueInplace
  * 4. Stop after HDR_SCAN_MAX bytes to avoid excessive processing
  * 
- * 1. Сканировать блок побайтно
- * 2. Идентифицировать границы строк (строки заканчиваются \r\n или \n)
- * 3. Для каждой строки вызвать FixHeaderValueInplace
- * 4. Остановиться после HDR_SCAN_MAX байт, чтобы избежать чрезмерной обработки
+ * 1. РЎРєР°РЅРёСЂРѕРІР°С‚СЊ Р±Р»РѕРє РїРѕР±Р°Р№С‚РЅРѕ
+ * 2. РРґРµРЅС‚РёС„РёС†РёСЂРѕРІР°С‚СЊ РіСЂР°РЅРёС†С‹ СЃС‚СЂРѕРє (СЃС‚СЂРѕРєРё Р·Р°РєР°РЅС‡РёРІР°СЋС‚СЃСЏ \r\n РёР»Рё \n)
+ * 3. Р”Р»СЏ РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё РІС‹Р·РІР°С‚СЊ FixHeaderValueInplace
+ * 4. РћСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ РїРѕСЃР»Рµ HDR_SCAN_MAX Р±Р°Р№С‚, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ С‡СЂРµР·РјРµСЂРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё
  ******************************************************************************/
 static void FixHeaderFieldsInChunk(char* chunk, int len) {
     if (!chunk || len <= 0) return;
     
     int i = 0;
     while (i < len) {
-        // Find start of line / Найти начало строки
+        // Find start of line / РќР°Р№С‚Рё РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё
         int s = i;
         
         // Find end of line (before CR or LF)
-        // Найти конец строки (перед CR или LF)
+        // РќР°Р№С‚Рё РєРѕРЅРµС† СЃС‚СЂРѕРєРё (РїРµСЂРµРґ CR РёР»Рё LF)
         while (i < len && chunk[i] != '\n' && chunk[i] != '\r') ++i;
         int e = i;
         
-        // Skip CR/LF characters / Пропустить символы CR/LF
+        // Skip CR/LF characters / РџСЂРѕРїСѓСЃС‚РёС‚СЊ СЃРёРјРІРѕР»С‹ CR/LF
         while (i < len && (chunk[i] == '\r' || chunk[i] == '\n')) ++i;
         
-        // Process line if it has content / Обработать строку, если она имеет содержимое
+        // Process line if it has content / РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃС‚СЂРѕРєСѓ, РµСЃР»Рё РѕРЅР° РёРјРµРµС‚ СЃРѕРґРµСЂР¶РёРјРѕРµ
         if (e > s) 
             FixHeaderValueInplace(chunk + s, chunk + e);
         
-        // Safety limit / Ограничение безопасности
+        // Safety limit / РћРіСЂР°РЅРёС‡РµРЅРёРµ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё
         if (i > HDR_SCAN_MAX) break;
     }
 }
@@ -643,30 +643,30 @@ static void FixHeaderFieldsInChunk(char* chunk, int len) {
 /*******************************************************************************
  * ParseDec32
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Parses a decimal integer from a string (used for icy-metaint value).
  * 
- * Парсит десятичное целое число из строки (используется для значения icy-metaint).
+ * РџР°СЂСЃРёС‚ РґРµСЃСЏС‚РёС‡РЅРѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ РёР· СЃС‚СЂРѕРєРё (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ Р·РЅР°С‡РµРЅРёСЏ icy-metaint).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - String containing decimal number / Строка, содержащая десятичное число
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - String containing decimal number / РЎС‚СЂРѕРєР°, СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РґРµСЃСЏС‚РёС‡РЅРѕРµ С‡РёСЃР»Рѕ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * DWORD - Parsed value, or 0 if invalid / Разобранное значение или 0, если недопустимо
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * DWORD - Parsed value, or 0 if invalid / Р Р°Р·РѕР±СЂР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР»Рё 0, РµСЃР»Рё РЅРµРґРѕРїСѓСЃС‚РёРјРѕ
  ******************************************************************************/
 static DWORD ParseDec32(const char* s) {
     DWORD v = 0;
     if (!s) return 0;
     
-    // Skip leading whitespace / Пропустить ведущие пробелы
+    // Skip leading whitespace / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РІРµРґСѓС‰РёРµ РїСЂРѕР±РµР»С‹
     while (*s == ' ' || *s == '\t') ++s;
     
-    // Parse digits / Разобрать цифры
+    // Parse digits / Р Р°Р·РѕР±СЂР°С‚СЊ С†РёС„СЂС‹
     while (*s >= '0' && *s <= '9') {
         v = v * 10 + (DWORD)(*s - '0');
         ++s;
         
-        // Prevent overflow / Предотвратить переполнение
+        // Prevent overflow / РџСЂРµРґРѕС‚РІСЂР°С‚РёС‚СЊ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ
         if (v > 0x7FFFFFFF) break;
     }
     
@@ -676,53 +676,53 @@ static DWORD ParseDec32(const char* s) {
 /*******************************************************************************
  * FindHeaderEnd
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Finds the end of HTTP headers in a buffer. HTTP headers end with either
  * \r\n\r\n (CRLF CRLF) or \n\n (LF LF).
  * 
- * Находит конец HTTP-заголовков в буфере. HTTP-заголовки заканчиваются либо
- * \r\n\r\n (CRLF CRLF), либо \n\n (LF LF).
+ * РќР°С…РѕРґРёС‚ РєРѕРЅРµС† HTTP-Р·Р°РіРѕР»РѕРІРєРѕРІ РІ Р±СѓС„РµСЂРµ. HTTP-Р·Р°РіРѕР»РѕРІРєРё Р·Р°РєР°РЅС‡РёРІР°СЋС‚СЃСЏ Р»РёР±Рѕ
+ * \r\n\r\n (CRLF CRLF), Р»РёР±Рѕ \n\n (LF LF).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * b - Buffer to search / Буфер для поиска
- * n - Buffer length / Длина буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * b - Buffer to search / Р‘СѓС„РµСЂ РґР»СЏ РїРѕРёСЃРєР°
+ * n - Buffer length / Р”Р»РёРЅР° Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Position of first byte after headers (start of body), or -1 if not found
- * Позиция первого байта после заголовков (начало тела), или -1 если не найдено
+ * РџРѕР·РёС†РёСЏ РїРµСЂРІРѕРіРѕ Р±Р°Р№С‚Р° РїРѕСЃР»Рµ Р·Р°РіРѕР»РѕРІРєРѕРІ (РЅР°С‡Р°Р»Рѕ С‚РµР»Р°), РёР»Рё -1 РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅРѕ
  ******************************************************************************/
 static int FindHeaderEnd(const char* b, int n) {
-    // Look for \r\n\r\n / Искать \r\n\r\n
+    // Look for \r\n\r\n / РСЃРєР°С‚СЊ \r\n\r\n
     for (int i = 0; i + 3 < n; i++)
         if (b[i] == '\r' && b[i + 1] == '\n' && b[i + 2] == '\r' && b[i + 3] == '\n') 
             return i + 4;
     
-    // Look for \n\n / Искать \n\n
+    // Look for \n\n / РСЃРєР°С‚СЊ \n\n
     for (int i = 0; i + 1 < n; i++)
         if (b[i] == '\n' && b[i + 1] == '\n') 
             return i + 2;
     
-    return -1;  // Not found / Не найдено
+    return -1;  // Not found / РќРµ РЅР°Р№РґРµРЅРѕ
 }
 
 /*******************************************************************************
  * FixIcyMetadataInPlace
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Fixes encoding of ICY metadata (StreamTitle, StreamUrl) in-place. This is
  * the metadata that's embedded in the audio stream at regular intervals.
  * 
- * Исправляет кодировку ICY-метаданных (StreamTitle, StreamUrl) на месте. Это
- * метаданные, которые встроены в аудиопоток через регулярные интервалы.
+ * РСЃРїСЂР°РІР»СЏРµС‚ РєРѕРґРёСЂРѕРІРєСѓ ICY-РјРµС‚Р°РґР°РЅРЅС‹С… (StreamTitle, StreamUrl) РЅР° РјРµСЃС‚Рµ. Р­С‚Рѕ
+ * РјРµС‚Р°РґР°РЅРЅС‹Рµ, РєРѕС‚РѕСЂС‹Рµ РІСЃС‚СЂРѕРµРЅС‹ РІ Р°СѓРґРёРѕРїРѕС‚РѕРє С‡РµСЂРµР· СЂРµРіСѓР»СЏСЂРЅС‹Рµ РёРЅС‚РµСЂРІР°Р»С‹.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * meta    - Pointer to metadata buffer / Указатель на буфер метаданных
- * metaLen - Length of metadata in bytes / Длина метаданных в байтах
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * meta    - Pointer to metadata buffer / РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ РјРµС‚Р°РґР°РЅРЅС‹С…
+ * metaLen - Length of metadata in bytes / Р”Р»РёРЅР° РјРµС‚Р°РґР°РЅРЅС‹С… РІ Р±Р°Р№С‚Р°С…
  * 
- * METADATA FORMAT / ФОРМАТ МЕТАДАННЫХ:
+ * METADATA FORMAT / Р¤РћР РњРђРў РњР•РўРђР”РђРќРќР«РҐ:
  * StreamTitle='Artist - Song Title';StreamUrl='http://...';
  * 
- * PROCESS / ПРОЦЕСС:
+ * PROCESS / РџР РћР¦Р•РЎРЎ:
  * 1. Copy metadata to temporary buffer
  * 2. Find "StreamTitle='" in the string
  * 3. Extract the value between single quotes
@@ -730,44 +730,44 @@ static int FindHeaderEnd(const char* b, int n) {
  * 5. Reconstruct the metadata string with fixed value
  * 6. Write back to original buffer (in-place)
  * 
- * 1. Копировать метаданные во временный буфер
- * 2. Найти "StreamTitle='" в строке
- * 3. Извлечь значение между одинарными кавычками
- * 4. Применить исправление кодировки к извлечённому значению
- * 5. Реконструировать строку метаданных с исправленным значением
- * 6. Записать обратно в оригинальный буфер (на месте)
+ * 1. РљРѕРїРёСЂРѕРІР°С‚СЊ РјРµС‚Р°РґР°РЅРЅС‹Рµ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ
+ * 2. РќР°Р№С‚Рё "StreamTitle='" РІ СЃС‚СЂРѕРєРµ
+ * 3. РР·РІР»РµС‡СЊ Р·РЅР°С‡РµРЅРёРµ РјРµР¶РґСѓ РѕРґРёРЅР°СЂРЅС‹РјРё РєР°РІС‹С‡РєР°РјРё
+ * 4. РџСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё Рє РёР·РІР»РµС‡С‘РЅРЅРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ
+ * 5. Р РµРєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РјРµС‚Р°РґР°РЅРЅС‹С… СЃ РёСЃРїСЂР°РІР»РµРЅРЅС‹Рј Р·РЅР°С‡РµРЅРёРµРј
+ * 6. Р—Р°РїРёСЃР°С‚СЊ РѕР±СЂР°С‚РЅРѕ РІ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ Р±СѓС„РµСЂ (РЅР° РјРµСЃС‚Рµ)
  ******************************************************************************/
 static void FixIcyMetadataInPlace(unsigned char* meta, int metaLen) {
     // Copy to temporary buffer for processing
-    // Копировать во временный буфер для обработки
+    // РљРѕРїРёСЂРѕРІР°С‚СЊ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё
     char in[4096] = {0};
     int m = (metaLen < (int)sizeof(in) - 1) ? metaLen : (int)sizeof(in) - 1;
     CopyMemory(in, meta, m);
     in[m] = 0;
 
-    // Look for StreamTitle field / Искать поле StreamTitle
+    // Look for StreamTitle field / РСЃРєР°С‚СЊ РїРѕР»Рµ StreamTitle
     const char* key = "StreamTitle='";
     const char* pkey = strstr(in, key);
     if (pkey) {
-        // Find value between quotes / Найти значение между кавычками
+        // Find value between quotes / РќР°Р№С‚Рё Р·РЅР°С‡РµРЅРёРµ РјРµР¶РґСѓ РєР°РІС‹С‡РєР°РјРё
         const char* p = pkey + lstrlenA(key);
         const char* e = strchr(p, '\'');
         if (e) {
-            // Extract title value / Извлечь значение названия
+            // Extract title value / РР·РІР»РµС‡СЊ Р·РЅР°С‡РµРЅРёРµ РЅР°Р·РІР°РЅРёСЏ
             char title[2048] = {0};
             int L = (int)(e - p);
             if (L > (int)sizeof(title) - 1) L = (int)sizeof(title) - 1;
             if (L > 0) CopyMemory(title, p, L);
             title[L] = 0;
 
-            // Apply encoding fix / Применить исправление кодировки
+            // Apply encoding fix / РџСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё
             char fixed[2048] = {0};
             if (DECRYPT_ToACP_Best(title, fixed, sizeof(fixed)) > 0) {
-                // Reconstruct metadata string / Реконструировать строку метаданных
+                // Reconstruct metadata string / Р РµРєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РјРµС‚Р°РґР°РЅРЅС‹С…
                 char out[4096] = {0};
                 int pos = 0;
                 
-                // Copy everything before StreamTitle / Копировать всё перед StreamTitle
+                // Copy everything before StreamTitle / РљРѕРїРёСЂРѕРІР°С‚СЊ РІСЃС‘ РїРµСЂРµРґ StreamTitle
                 int pre = (int)(pkey - in);
                 if (pre > 0) { 
                     CopyMemory(out, in, pre); 
@@ -775,7 +775,7 @@ static void FixIcyMetadataInPlace(unsigned char* meta, int metaLen) {
                 }
 
                 // Write StreamTitle with fixed value
-                // Записать StreamTitle с исправленным значением
+                // Р—Р°РїРёСЃР°С‚СЊ StreamTitle СЃ РёСЃРїСЂР°РІР»РµРЅРЅС‹Рј Р·РЅР°С‡РµРЅРёРµРј
                 lstrcpynA(out + pos, "StreamTitle='", 4096 - pos);
                 pos += lstrlenA("StreamTitle='");
                 lstrcpynA(out + pos, fixed, 4096 - pos);
@@ -784,18 +784,18 @@ static void FixIcyMetadataInPlace(unsigned char* meta, int metaLen) {
                 out[pos++] = ';';
 
                 // Copy everything after the closing quote
-                // Копировать всё после закрывающей кавычки
+                // РљРѕРїРёСЂРѕРІР°С‚СЊ РІСЃС‘ РїРѕСЃР»Рµ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ РєР°РІС‹С‡РєРё
                 const char* semi = strchr(e, ';');
                 if (semi) 
                     lstrcpynA(out + pos, semi + 1, 4096 - pos);
                 
                 // Write fixed metadata back (in-place)
-                // Записать исправленные метаданные обратно (на месте)
+                // Р—Р°РїРёСЃР°С‚СЊ РёСЃРїСЂР°РІР»РµРЅРЅС‹Рµ РјРµС‚Р°РґР°РЅРЅС‹Рµ РѕР±СЂР°С‚РЅРѕ (РЅР° РјРµСЃС‚Рµ)
                 int outLen = lstrlenA(out);
                 if (outLen > metaLen) outLen = metaLen;
                 CopyMemory(meta, out, outLen);
                 
-                // Zero out remaining space / Обнулить оставшееся пространство
+                // Zero out remaining space / РћР±РЅСѓР»РёС‚СЊ РѕСЃС‚Р°РІС€РµРµСЃСЏ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ
                 if (outLen < metaLen) 
                     ZeroMemory(meta + outLen, metaLen - outLen);
             }
@@ -806,29 +806,29 @@ static void FixIcyMetadataInPlace(unsigned char* meta, int metaLen) {
 /*******************************************************************************
  * looks_like_new_response_start
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Detects if data looks like the start of a new HTTP/ICY response. This is
  * used to reset context state when a new stream starts on the same socket.
  * 
- * Обнаруживает, выглядят ли данные как начало нового HTTP/ICY-ответа. Это
- * используется для сброса состояния контекста, когда новый поток начинается
- * на том же сокете.
+ * РћР±РЅР°СЂСѓР¶РёРІР°РµС‚, РІС‹РіР»СЏРґСЏС‚ Р»Рё РґР°РЅРЅС‹Рµ РєР°Рє РЅР°С‡Р°Р»Рѕ РЅРѕРІРѕРіРѕ HTTP/ICY-РѕС‚РІРµС‚Р°. Р­С‚Рѕ
+ * РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЃР±СЂРѕСЃР° СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р°, РєРѕРіРґР° РЅРѕРІС‹Р№ РїРѕС‚РѕРє РЅР°С‡РёРЅР°РµС‚СЃСЏ
+ * РЅР° С‚РѕРј Р¶Рµ СЃРѕРєРµС‚Рµ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * b - Buffer to check / Буфер для проверки
- * n - Buffer length / Длина буфера
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * b - Buffer to check / Р‘СѓС„РµСЂ РґР»СЏ РїСЂРѕРІРµСЂРєРё
+ * n - Buffer length / Р”Р»РёРЅР° Р±СѓС„РµСЂР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if data starts with "HTTP/" or "ICY", FALSE otherwise
- * TRUE если данные начинаются с "HTTP/" или "ICY", FALSE иначе
+ * TRUE РµСЃР»Рё РґР°РЅРЅС‹Рµ РЅР°С‡РёРЅР°СЋС‚СЃСЏ СЃ "HTTP/" РёР»Рё "ICY", FALSE РёРЅР°С‡Рµ
  ******************************************************************************/
 static BOOL looks_like_new_response_start(const char* b, int n) {
     if (!b || n < 4) return FALSE;
     
-    // Check for "HTTP/" / Проверить на "HTTP/"
+    // Check for "HTTP/" / РџСЂРѕРІРµСЂРёС‚СЊ РЅР° "HTTP/"
     if (_strnicmp(b, "HTTP/", 5) == 0) return TRUE;
     
-    // Check for "ICY" (SHOUTcast protocol) / Проверить на "ICY" (протокол SHOUTcast)
+    // Check for "ICY" (SHOUTcast protocol) / РџСЂРѕРІРµСЂРёС‚СЊ РЅР° "ICY" (РїСЂРѕС‚РѕРєРѕР» SHOUTcast)
     if (_strnicmp(b, "ICY", 3) == 0) return TRUE;
     
     return FALSE;
@@ -836,67 +836,67 @@ static BOOL looks_like_new_response_start(const char* b, int n) {
 
 /*******************************************************************************
  * MAIN DATA PROCESSING FUNCTION
- * ГЛАВНАЯ ФУНКЦИЯ ОБРАБОТКИ ДАННЫХ
+ * Р“Р›РђР’РќРђРЇ Р¤РЈРќРљР¦РРЇ РћР‘Р РђР‘РћРўРљР Р”РђРќРќР«РҐ
  ******************************************************************************/
 
 /*******************************************************************************
  * ProcessWinsockData
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Main state machine for processing streaming data. Handles:
  * 1. HTTP header parsing and icy-metaint extraction
  * 2. Audio/metadata chunk separation based on metaint
  * 3. Encoding fix application to headers and metadata
  * 
- * Основная машина состояний для обработки потоковых данных. Обрабатывает:
- * 1. Парсинг HTTP-заголовков и извлечение icy-metaint
- * 2. Разделение блоков аудио/метаданных на основе metaint
- * 3. Применение исправления кодировки к заголовкам и метаданным
+ * РћСЃРЅРѕРІРЅР°СЏ РјР°С€РёРЅР° СЃРѕСЃС‚РѕСЏРЅРёР№ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РїРѕС‚РѕРєРѕРІС‹С… РґР°РЅРЅС‹С…. РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚:
+ * 1. РџР°СЂСЃРёРЅРі HTTP-Р·Р°РіРѕР»РѕРІРєРѕРІ Рё РёР·РІР»РµС‡РµРЅРёРµ icy-metaint
+ * 2. Р Р°Р·РґРµР»РµРЅРёРµ Р±Р»РѕРєРѕРІ Р°СѓРґРёРѕ/РјРµС‚Р°РґР°РЅРЅС‹С… РЅР° РѕСЃРЅРѕРІРµ metaint
+ * 3. РџСЂРёРјРµРЅРµРЅРёРµ РёСЃРїСЂР°РІР»РµРЅРёСЏ РєРѕРґРёСЂРѕРІРєРё Рє Р·Р°РіРѕР»РѕРІРєР°Рј Рё РјРµС‚Р°РґР°РЅРЅС‹Рј
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * c - Socket context / Контекст сокета
- * p - Data buffer / Буфер данных
- * n - Data length / Длина данных
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * c - Socket context / РљРѕРЅС‚РµРєСЃС‚ СЃРѕРєРµС‚Р°
+ * p - Data buffer / Р‘СѓС„РµСЂ РґР°РЅРЅС‹С…
+ * n - Data length / Р”Р»РёРЅР° РґР°РЅРЅС‹С…
  * 
- * STATE MACHINE PHASES / ФАЗЫ МАШИНЫ СОСТОЯНИЙ:
+ * STATE MACHINE PHASES / Р¤РђР—Р« РњРђРЁРРќР« РЎРћРЎРўРћРЇРќРР™:
  * 
  * PHASE 1: Header Processing (headerDone == 0)
  * - Accumulate header data across multiple recv calls
  * - Look for end of headers (\r\n\r\n or \n\n)
  * - When found: apply encoding fixes, extract icy-metaint, advance to Phase 2
  * 
- * ФАЗА 1: Обработка заголовка (headerDone == 0)
- * - Накапливать данные заголовка через несколько вызовов recv
- * - Искать конец заголовков (\r\n\r\n или \n\n)
- * - Когда найдено: применить исправления кодировки, извлечь icy-metaint, перейти к Фазе 2
+ * Р¤РђР—Рђ 1: РћР±СЂР°Р±РѕС‚РєР° Р·Р°РіРѕР»РѕРІРєР° (headerDone == 0)
+ * - РќР°РєР°РїР»РёРІР°С‚СЊ РґР°РЅРЅС‹Рµ Р·Р°РіРѕР»РѕРІРєР° С‡РµСЂРµР· РЅРµСЃРєРѕР»СЊРєРѕ РІС‹Р·РѕРІРѕРІ recv
+ * - РСЃРєР°С‚СЊ РєРѕРЅРµС† Р·Р°РіРѕР»РѕРІРєРѕРІ (\r\n\r\n РёР»Рё \n\n)
+ * - РљРѕРіРґР° РЅР°Р№РґРµРЅРѕ: РїСЂРёРјРµРЅРёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РєРѕРґРёСЂРѕРІРєРё, РёР·РІР»РµС‡СЊ icy-metaint, РїРµСЂРµР№С‚Рё Рє Р¤Р°Р·Рµ 2
  * 
  * PHASE 2: Stream Processing (headerDone == 1, metaInt > 0)
  * - Track position in audio/metadata stream
  * - State: reading audio > reading metadata length byte > reading metadata > back to audio
  * - Apply encoding fix to metadata chunks as they're received
  * 
- * ФАЗА 2: Обработка потока (headerDone == 1, metaInt > 0)
- * - Отслеживать позицию в потоке аудио/метаданных
- * - Состояние: чтение аудио > чтение байта длины метаданных > чтение метаданных > обратно к аудио
- * - Применять исправление кодировки к блокам метаданных по мере их получения
+ * Р¤РђР—Рђ 2: РћР±СЂР°Р±РѕС‚РєР° РїРѕС‚РѕРєР° (headerDone == 1, metaInt > 0)
+ * - РћС‚СЃР»РµР¶РёРІР°С‚СЊ РїРѕР·РёС†РёСЋ РІ РїРѕС‚РѕРєРµ Р°СѓРґРёРѕ/РјРµС‚Р°РґР°РЅРЅС‹С…
+ * - РЎРѕСЃС‚РѕСЏРЅРёРµ: С‡С‚РµРЅРёРµ Р°СѓРґРёРѕ > С‡С‚РµРЅРёРµ Р±Р°Р№С‚Р° РґР»РёРЅС‹ РјРµС‚Р°РґР°РЅРЅС‹С… > С‡С‚РµРЅРёРµ РјРµС‚Р°РґР°РЅРЅС‹С… > РѕР±СЂР°С‚РЅРѕ Рє Р°СѓРґРёРѕ
+ * - РџСЂРёРјРµРЅСЏС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё Рє Р±Р»РѕРєР°Рј РјРµС‚Р°РґР°РЅРЅС‹С… РїРѕ РјРµСЂРµ РёС… РїРѕР»СѓС‡РµРЅРёСЏ
  * 
- * STREAM FORMAT / ФОРМАТ ПОТОКА:
+ * STREAM FORMAT / Р¤РћР РњРђРў РџРћРўРћРљРђ:
  * [metaInt bytes audio][1 byte len][len*16 bytes metadata][metaInt bytes audio][...]
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This function modifies data in-place, which is safe because:
  * 1. Fixed text is never longer than original (we truncate if needed)
  * 2. We're processing data after recv, before it reaches the plugin
  * 
- * Эта функция изменяет данные на месте, что безопасно, потому что:
- * 1. Исправленный текст никогда не длиннее оригинала (мы обрезаем при необходимости)
- * 2. Мы обрабатываем данные после recv, до того как они попадут в плагин
+ * Р­С‚Р° С„СѓРЅРєС†РёСЏ РёР·РјРµРЅСЏРµС‚ РґР°РЅРЅС‹Рµ РЅР° РјРµСЃС‚Рµ, С‡С‚Рѕ Р±РµР·РѕРїР°СЃРЅРѕ, РїРѕС‚РѕРјСѓ С‡С‚Рѕ:
+ * 1. РСЃРїСЂР°РІР»РµРЅРЅС‹Р№ С‚РµРєСЃС‚ РЅРёРєРѕРіРґР° РЅРµ РґР»РёРЅРЅРµРµ РѕСЂРёРіРёРЅР°Р»Р° (РјС‹ РѕР±СЂРµР·Р°РµРј РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё)
+ * 2. РњС‹ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј РґР°РЅРЅС‹Рµ РїРѕСЃР»Рµ recv, РґРѕ С‚РѕРіРѕ РєР°Рє РѕРЅРё РїРѕРїР°РґСѓС‚ РІ РїР»Р°РіРёРЅ
  ******************************************************************************/
 static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
     if (!c || !p || n == 0) return;
 
     // Reset context if we see a new HTTP response starting
-    // Сбросить контекст, если видим начало нового HTTP-ответа
+    // РЎР±СЂРѕСЃРёС‚СЊ РєРѕРЅС‚РµРєСЃС‚, РµСЃР»Рё РІРёРґРёРј РЅР°С‡Р°Р»Рѕ РЅРѕРІРѕРіРѕ HTTP-РѕС‚РІРµС‚Р°
     if (looks_like_new_response_start((const char*)p, (int)n)) {
         c->headerDone = 0; 
         c->hdrLen = 0; 
@@ -906,10 +906,10 @@ static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
     DWORD pos = 0;
 
     // ===== PHASE 1: Process HTTP Header =====
-    // ===== ФАЗА 1: Обработка HTTP-заголовка =====
+    // ===== Р¤РђР—Рђ 1: РћР±СЂР°Р±РѕС‚РєР° HTTP-Р·Р°РіРѕР»РѕРІРєР° =====
     if (!c->headerDone) {
         // Append new data to header buffer
-        // Добавить новые данные к буферу заголовка
+        // Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Рµ РґР°РЅРЅС‹Рµ Рє Р±СѓС„РµСЂСѓ Р·Р°РіРѕР»РѕРІРєР°
         int cap = HDR_SCAN_MAX - c->hdrLen;
         int app = (int)((n < (DWORD)cap) ? n : (DWORD)cap);
         if (app > 0) {
@@ -918,41 +918,41 @@ static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
         }
 
         // Check if we have complete headers now
-        // Проверить, есть ли у нас полные заголовки теперь
+        // РџСЂРѕРІРµСЂРёС‚СЊ, РµСЃС‚СЊ Р»Рё Сѓ РЅР°СЃ РїРѕР»РЅС‹Рµ Р·Р°РіРѕР»РѕРІРєРё С‚РµРїРµСЂСЊ
         int eoh = FindHeaderEnd(c->hdrBuf, c->hdrLen);
         if (eoh >= 0) {
-            // Headers are complete! / Заголовки завершены!
+            // Headers are complete! / Р—Р°РіРѕР»РѕРІРєРё Р·Р°РІРµСЂС€РµРЅС‹!
             c->headerDone = 1;
             
             // Calculate how much of current buffer is header
-            // Вычислить, сколько текущего буфера является заголовком
+            // Р’С‹С‡РёСЃР»РёС‚СЊ, СЃРєРѕР»СЊРєРѕ С‚РµРєСѓС‰РµРіРѕ Р±СѓС„РµСЂР° СЏРІР»СЏРµС‚СЃСЏ Р·Р°РіРѕР»РѕРІРєРѕРј
             int prevLen = c->hdrLen - app;
             int headerInThis = eoh - prevLen;
             
             // Fix encoding in the header portion of this buffer
-            // Исправить кодировку в части заголовка этого буфера
+            // РСЃРїСЂР°РІРёС‚СЊ РєРѕРґРёСЂРѕРІРєСѓ РІ С‡Р°СЃС‚Рё Р·Р°РіРѕР»РѕРІРєР° СЌС‚РѕРіРѕ Р±СѓС„РµСЂР°
             if (headerInThis > 0) {
                 int scan = (headerInThis < HDR_SCAN_MAX) ? headerInThis : HDR_SCAN_MAX;
                 FixHeaderFieldsInChunk((char*)p, scan);
             }
 
             // Parse icy-metaint from accumulated headers
-            // Парсить icy-metaint из накопленных заголовков
+            // РџР°СЂСЃРёС‚СЊ icy-metaint РёР· РЅР°РєРѕРїР»РµРЅРЅС‹С… Р·Р°РіРѕР»РѕРІРєРѕРІ
             char* hb = c->hdrBuf;
             int i = 0;
             while(i < c->hdrLen) {
-                // Find line boundaries / Найти границы строк
+                // Find line boundaries / РќР°Р№С‚Рё РіСЂР°РЅРёС†С‹ СЃС‚СЂРѕРє
                 int s = i;
                 while(i < c->hdrLen && hb[i] != '\r' && hb[i] != '\n') ++i;
                 int e = i;
                 
-                // Check for icy-metaint header / Проверить заголовок icy-metaint
+                // Check for icy-metaint header / РџСЂРѕРІРµСЂРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє icy-metaint
                 const char* k = "icy-metaint:";
                 int klen = lstrlenA(k);
                 if (e - s > klen && _strnicmp(hb + s, k, klen) == 0) {
-                    // Found it! Parse the value / Нашли! Парсить значение
+                    // Found it! Parse the value / РќР°С€Р»Рё! РџР°СЂСЃРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ
                     DWORD v = ParseDec32(hb + s + klen);
-                    if (v > 0 && v < 2*1024*1024) {  // Sanity check (2MB max) / Проверка разумности (максимум 2МБ)
+                    if (v > 0 && v < 2*1024*1024) {  // Sanity check (2MB max) / РџСЂРѕРІРµСЂРєР° СЂР°Р·СѓРјРЅРѕСЃС‚Рё (РјР°РєСЃРёРјСѓРј 2РњР‘)
                         c->metaInt = v;
                         c->leftAudio = v;
                         c->needLenByte = 1;
@@ -960,31 +960,31 @@ static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
                     }
                 }
                 
-                // Skip line endings / Пропустить окончания строк
+                // Skip line endings / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РѕРєРѕРЅС‡Р°РЅРёСЏ СЃС‚СЂРѕРє
                 while(i < c->hdrLen && (hb[i] == '\r' || hb[i] == '\n')) ++i;
             }
 
             // Advance position past header in current buffer
-            // Продвинуть позицию за заголовок в текущем буфере
+            // РџСЂРѕРґРІРёРЅСѓС‚СЊ РїРѕР·РёС†РёСЋ Р·Р° Р·Р°РіРѕР»РѕРІРѕРє РІ С‚РµРєСѓС‰РµРј Р±СѓС„РµСЂРµ
             pos = (DWORD)(eoh - prevLen);
-            if (pos > n) pos = n;  // Safety clamp / Ограничение безопасности
+            if (pos > n) pos = n;  // Safety clamp / РћРіСЂР°РЅРёС‡РµРЅРёРµ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё
         } else {
             // Headers not complete yet - fix what we have and wait for more
-            // Заголовки ещё не завершены - исправить что есть и ждать больше
+            // Р—Р°РіРѕР»РѕРІРєРё РµС‰С‘ РЅРµ Р·Р°РІРµСЂС€РµРЅС‹ - РёСЃРїСЂР°РІРёС‚СЊ С‡С‚Рѕ РµСЃС‚СЊ Рё Р¶РґР°С‚СЊ Р±РѕР»СЊС€Рµ
             FixHeaderFieldsInChunk((char*)p, app);
             return;
         }
     }
 
     // If no metadata interval, nothing more to do
-    // Если нет интервала метаданных, больше нечего делать
+    // Р•СЃР»Рё РЅРµС‚ РёРЅС‚РµСЂРІР°Р»Р° РјРµС‚Р°РґР°РЅРЅС‹С…, Р±РѕР»СЊС€Рµ РЅРµС‡РµРіРѕ РґРµР»Р°С‚СЊ
     if (c->metaInt == 0) return;
 
     // ===== PHASE 2: Process Stream Data (Audio + Metadata) =====
-    // ===== ФАЗА 2: Обработка потоковых данных (Аудио + Метаданные) =====
+    // ===== Р¤РђР—Рђ 2: РћР±СЂР°Р±РѕС‚РєР° РїРѕС‚РѕРєРѕРІС‹С… РґР°РЅРЅС‹С… (РђСѓРґРёРѕ + РњРµС‚Р°РґР°РЅРЅС‹Рµ) =====
     while (pos < n) {
         if (c->leftAudio > 0) {
-            // STATE: Reading audio data / СОСТОЯНИЕ: Чтение аудиоданных
+            // STATE: Reading audio data / РЎРћРЎРўРћРЇРќРР•: Р§С‚РµРЅРёРµ Р°СѓРґРёРѕРґР°РЅРЅС‹С…
             DWORD avail = n - pos;
             DWORD take = (c->leftAudio < avail) ? c->leftAudio : avail;
             pos += take;
@@ -992,37 +992,37 @@ static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
         } else {
             if (pos >= n) break;
             
-            // STATE: Reading metadata length byte / СОСТОЯНИЕ: Чтение байта длины метаданных
+            // STATE: Reading metadata length byte / РЎРћРЎРўРћРЇРќРР•: Р§С‚РµРЅРёРµ Р±Р°Р№С‚Р° РґР»РёРЅС‹ РјРµС‚Р°РґР°РЅРЅС‹С…
             if (c->needLenByte) {
                 BYTE L = p[pos++];
-                c->metaLeft = (DWORD)L * 16;  // Length is multiplied by 16 / Длина умножается на 16
+                c->metaLeft = (DWORD)L * 16;  // Length is multiplied by 16 / Р”Р»РёРЅР° СѓРјРЅРѕР¶Р°РµС‚СЃСЏ РЅР° 16
                 c->needLenByte = 0;
                 
                 if (c->metaLeft == 0) {
                     // No metadata this time - go back to reading audio
-                    // Нет метаданных в этот раз - вернуться к чтению аудио
+                    // РќРµС‚ РјРµС‚Р°РґР°РЅРЅС‹С… РІ СЌС‚РѕС‚ СЂР°Р· - РІРµСЂРЅСѓС‚СЊСЃСЏ Рє С‡С‚РµРЅРёСЋ Р°СѓРґРёРѕ
                     c->leftAudio = c->metaInt;
                     c->needLenByte = 1;
                     continue;
                 }
             }
 
-            // STATE: Reading metadata / СОСТОЯНИЕ: Чтение метаданных
+            // STATE: Reading metadata / РЎРћРЎРўРћРЇРќРР•: Р§С‚РµРЅРёРµ РјРµС‚Р°РґР°РЅРЅС‹С…
             if (c->metaLeft > 0) {
                 DWORD avail = n - pos;
                 if (avail < c->metaLeft) {
                     // Partial metadata chunk - can't process yet
-                    // Частичный блок метаданных - пока не можем обработать
+                    // Р§Р°СЃС‚РёС‡РЅС‹Р№ Р±Р»РѕРє РјРµС‚Р°РґР°РЅРЅС‹С… - РїРѕРєР° РЅРµ РјРѕР¶РµРј РѕР±СЂР°Р±РѕС‚Р°С‚СЊ
                     c->metaLeft -= avail;
                     pos = n;
                 } else {
                     // Complete metadata chunk available - process it!
-                    // Полный блок метаданных доступен - обработать его!
+                    // РџРѕР»РЅС‹Р№ Р±Р»РѕРє РјРµС‚Р°РґР°РЅРЅС‹С… РґРѕСЃС‚СѓРїРµРЅ - РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РµРіРѕ!
                     FixIcyMetadataInPlace(p + pos, (int)c->metaLeft);
                     pos += c->metaLeft;
                     
                     // Reset state for next audio chunk
-                    // Сбросить состояние для следующего блока аудио
+                    // РЎР±СЂРѕСЃРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ Р±Р»РѕРєР° Р°СѓРґРёРѕ
                     c->metaLeft = 0;
                     c->leftAudio = c->metaInt;
                     c->needLenByte = 1;
@@ -1034,72 +1034,72 @@ static void ProcessWinsockData(SockCtx* c, unsigned char* p, DWORD n) {
 
 /*******************************************************************************
  * WINSOCK API HOOK IMPLEMENTATIONS
- * РЕАЛИЗАЦИИ ПЕРЕХВАТЧИКОВ API WINSOCK
+ * Р Р•РђР›РР—РђР¦РР РџР•Р Р•РҐР’РђРўР§РРљРћР’ API WINSOCK
  ******************************************************************************/
 
 /*******************************************************************************
  * Hook_send
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts send() calls to track new socket connections. When data is sent,
  * we add the socket to our tracking pool if not already tracked.
  * 
- * Перехватывает вызовы send() для отслеживания новых соединений сокетов. Когда
- * данные отправляются, мы добавляем сокет в наш пул отслеживания, если ещё не отслеживается.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹ send() РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ РЅРѕРІС‹С… СЃРѕРµРґРёРЅРµРЅРёР№ СЃРѕРєРµС‚РѕРІ. РљРѕРіРґР°
+ * РґР°РЅРЅС‹Рµ РѕС‚РїСЂР°РІР»СЏСЋС‚СЃСЏ, РјС‹ РґРѕР±Р°РІР»СЏРµРј СЃРѕРєРµС‚ РІ РЅР°С€ РїСѓР» РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ, РµСЃР»Рё РµС‰С‘ РЅРµ РѕС‚СЃР»РµР¶РёРІР°РµС‚СЃСЏ.
  ******************************************************************************/
 static int WINAPI Hook_send(SOCKET s, const char* buf, int len, int flags) {
     SockCtx* c;
     Lock();
     
     // Always track new sockets to catch header requests
-    // Всегда отслеживать новые сокеты для перехвата запросов заголовков
+    // Р’СЃРµРіРґР° РѕС‚СЃР»РµР¶РёРІР°С‚СЊ РЅРѕРІС‹Рµ СЃРѕРєРµС‚С‹ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° Р·Р°РїСЂРѕСЃРѕРІ Р·Р°РіРѕР»РѕРІРєРѕРІ
     c = Sock_Find(s);
     if (!c) { 
         Unlock(); 
-        Sock_Add(s);  // Add if not found / Добавить, если не найден
+        Sock_Add(s);  // Add if not found / Р”РѕР±Р°РІРёС‚СЊ, РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅ
     } else {
         Unlock();
     }
     
-    // Call real send / Вызвать реальный send
+    // Call real send / Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅС‹Р№ send
     return Real_send ? Real_send(s, buf, len, flags) : -1;
 }
 
 /*******************************************************************************
  * Hook_recv
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts recv() calls to process received streaming data. This is where
  * most of the magic happens - we parse headers, separate audio from metadata,
  * and fix encoding issues.
  * 
- * Перехватывает вызовы recv() для обработки получаемых потоковых данных. Здесь
- * происходит большая часть магии - мы парсим заголовки, разделяем аудио от
- * метаданных и исправляем проблемы кодировки.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹ recv() РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РїРѕР»СѓС‡Р°РµРјС‹С… РїРѕС‚РѕРєРѕРІС‹С… РґР°РЅРЅС‹С…. Р—РґРµСЃСЊ
+ * РїСЂРѕРёСЃС…РѕРґРёС‚ Р±РѕР»СЊС€Р°СЏ С‡Р°СЃС‚СЊ РјР°РіРёРё - РјС‹ РїР°СЂСЃРёРј Р·Р°РіРѕР»РѕРІРєРё, СЂР°Р·РґРµР»СЏРµРј Р°СѓРґРёРѕ РѕС‚
+ * РјРµС‚Р°РґР°РЅРЅС‹С… Рё РёСЃРїСЂР°РІР»СЏРµРј РїСЂРѕР±Р»РµРјС‹ РєРѕРґРёСЂРѕРІРєРё.
  ******************************************************************************/
 static int WINAPI Hook_recv(SOCKET s, char* buf, int len, int flags) {
-    // Call real recv first / Сначала вызвать реальный recv
+    // Call real recv first / РЎРЅР°С‡Р°Р»Р° РІС‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅС‹Р№ recv
     int r = Real_recv ? Real_recv(s, buf, len, flags) : -1;
-    if (r <= 0) return r;  // Error or connection closed / Ошибка или соединение закрыто
+    if (r <= 0) return r;  // Error or connection closed / РћС€РёР±РєР° РёР»Рё СЃРѕРµРґРёРЅРµРЅРёРµ Р·Р°РєСЂС‹С‚Рѕ
     
-    // Find or create context for this socket / Найти или создать контекст для этого сокета
+    // Find or create context for this socket / РќР°Р№С‚Рё РёР»Рё СЃРѕР·РґР°С‚СЊ РєРѕРЅС‚РµРєСЃС‚ РґР»СЏ СЌС‚РѕРіРѕ СЃРѕРєРµС‚Р°
     SockCtx* c;
     Lock();
     c = Sock_Find(s);
     if (!c) { 
         Unlock(); 
-        c = Sock_Add(s);  // [FIX] Always track / [ИСПРАВЛЕНИЕ] Всегда отслеживать
+        c = Sock_Add(s);  // [FIX] Always track / [РРЎРџР РђР’Р›Р•РќРР•] Р’СЃРµРіРґР° РѕС‚СЃР»РµР¶РёРІР°С‚СЊ
     } else { 
         Unlock(); 
     }
 
     if (c) {
         // Process data through our state machine
-        // Обработать данные через нашу машину состояний
+        // РћР±СЂР°Р±РѕС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ С‡РµСЂРµР· РЅР°С€Сѓ РјР°С€РёРЅСѓ СЃРѕСЃС‚РѕСЏРЅРёР№
         ProcessWinsockData(c, (unsigned char*)buf, (DWORD)r);
     } else {
         // Fallback if context creation failed: simple header scan
-        // Резервный вариант, если создание контекста не удалось: простое сканирование заголовка
+        // Р РµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚, РµСЃР»Рё СЃРѕР·РґР°РЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р° РЅРµ СѓРґР°Р»РѕСЃСЊ: РїСЂРѕСЃС‚РѕРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ Р·Р°РіРѕР»РѕРІРєР°
         if (r > 0 && r < HDR_SCAN_MAX) 
             FixHeaderFieldsInChunk(buf, r);
     }
@@ -1110,24 +1110,24 @@ static int WINAPI Hook_recv(SOCKET s, char* buf, int len, int flags) {
 /*******************************************************************************
  * Hook_WSARecv
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts WSARecv() calls (async/scatter-gather receive). Works similarly
  * to Hook_recv but handles multiple buffers.
  * 
- * Перехватывает вызовы WSARecv() (асинхронное/scatter-gather получение). Работает
- * аналогично Hook_recv, но обрабатывает несколько буферов.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹ WSARecv() (Р°СЃРёРЅС…СЂРѕРЅРЅРѕРµ/scatter-gather РїРѕР»СѓС‡РµРЅРёРµ). Р Р°Р±РѕС‚Р°РµС‚
+ * Р°РЅР°Р»РѕРіРёС‡РЅРѕ Hook_recv, РЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РЅРµСЃРєРѕР»СЊРєРѕ Р±СѓС„РµСЂРѕРІ.
  ******************************************************************************/
 static int WINAPI Hook_WSARecv(SOCKET s, LPWSABUF bufs, DWORD cnt, LPDWORD pRecvd, LPDWORD pFlags,
                                LPWSAOVERLAPPED ovl, LPWSAOVERLAPPED_COMPLETION_ROUTINE cr) 
 {
-    // Call real WSARecv first / Сначала вызвать реальный WSARecv
+    // Call real WSARecv first / РЎРЅР°С‡Р°Р»Р° РІС‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅС‹Р№ WSARecv
     int r = Real_WSARecv ? Real_WSARecv(s, bufs, cnt, pRecvd, pFlags, ovl, cr) : -1;
     
     // Process if successful and data was received
-    // Обработать, если успешно и данные получены
+    // РћР±СЂР°Р±РѕС‚Р°С‚СЊ, РµСЃР»Рё СѓСЃРїРµС€РЅРѕ Рё РґР°РЅРЅС‹Рµ РїРѕР»СѓС‡РµРЅС‹
     if (r == 0 && pRecvd && *pRecvd > 0 && bufs && cnt > 0) {
         // [FIX] Full processing for WSARecv too
-        // [ИСПРАВЛЕНИЕ] Полная обработка для WSARecv тоже
+        // [РРЎРџР РђР’Р›Р•РќРР•] РџРѕР»РЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° РґР»СЏ WSARecv С‚РѕР¶Рµ
         SockCtx* c;
         Lock();
         c = Sock_Find(s);
@@ -1138,16 +1138,16 @@ static int WINAPI Hook_WSARecv(SOCKET s, LPWSABUF bufs, DWORD cnt, LPDWORD pRecv
             Unlock(); 
         }
 
-        // Process each buffer / Обработать каждый буфер
+        // Process each buffer / РћР±СЂР°Р±РѕС‚Р°С‚СЊ РєР°Р¶РґС‹Р№ Р±СѓС„РµСЂ
         DWORD remain = *pRecvd;
         for (DWORD i = 0; i < cnt && remain > 0; ++i) {
             DWORD take = (bufs[i].len < remain) ? bufs[i].len : remain;
             if (take > 0 && bufs[i].buf) {
                 if (c) {
-                    // Full state machine processing / Полная обработка машиной состояний
+                    // Full state machine processing / РџРѕР»РЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° РјР°С€РёРЅРѕР№ СЃРѕСЃС‚РѕСЏРЅРёР№
                     ProcessWinsockData(c, (unsigned char*)bufs[i].buf, take);
                 } else {
-                    // Fallback: simple header scan / Резервный вариант: простое сканирование заголовка
+                    // Fallback: simple header scan / Р РµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚: РїСЂРѕСЃС‚РѕРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ Р·Р°РіРѕР»РѕРІРєР°
                     int scan = (take < HDR_SCAN_MAX) ? (int)take : HDR_SCAN_MAX;
                     FixHeaderFieldsInChunk(bufs[i].buf, scan);
                 }
@@ -1161,12 +1161,12 @@ static int WINAPI Hook_WSARecv(SOCKET s, LPWSABUF bufs, DWORD cnt, LPDWORD pRecv
 /*******************************************************************************
  * Hook_WSASend
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts WSASend() calls (async/scatter-gather send). Currently just
  * passes through to real implementation - no processing needed for send.
  * 
- * Перехватывает вызовы WSASend() (асинхронная/scatter-gather отправка). В данный
- * момент просто передаёт реальной реализации - обработка для отправки не нужна.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹ WSASend() (Р°СЃРёРЅС…СЂРѕРЅРЅР°СЏ/scatter-gather РѕС‚РїСЂР°РІРєР°). Р’ РґР°РЅРЅС‹Р№
+ * РјРѕРјРµРЅС‚ РїСЂРѕСЃС‚Рѕ РїРµСЂРµРґР°С‘С‚ СЂРµР°Р»СЊРЅРѕР№ СЂРµР°Р»РёР·Р°С†РёРё - РѕР±СЂР°Р±РѕС‚РєР° РґР»СЏ РѕС‚РїСЂР°РІРєРё РЅРµ РЅСѓР¶РЅР°.
  ******************************************************************************/
 static int WINAPI Hook_WSASend(SOCKET s, LPWSABUF bufs, DWORD cnt, LPDWORD pSent, DWORD flags,
                                LPWSAOVERLAPPED ovl, LPWSAOVERLAPPED_COMPLETION_ROUTINE cr) {
@@ -1176,28 +1176,28 @@ static int WINAPI Hook_WSASend(SOCKET s, LPWSABUF bufs, DWORD cnt, LPDWORD pSent
 /*******************************************************************************
  * Hook_closesocket
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Intercepts closesocket() calls to clean up socket contexts when connections
  * are closed. Removes socket from tracking pool.
  * 
- * Перехватывает вызовы closesocket() для очистки контекстов сокетов при
- * закрытии соединений. Удаляет сокет из пула отслеживания.
+ * РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ РІС‹Р·РѕРІС‹ closesocket() РґР»СЏ РѕС‡РёСЃС‚РєРё РєРѕРЅС‚РµРєСЃС‚РѕРІ СЃРѕРєРµС‚РѕРІ РїСЂРё
+ * Р·Р°РєСЂС‹С‚РёРё СЃРѕРµРґРёРЅРµРЅРёР№. РЈРґР°Р»СЏРµС‚ СЃРѕРєРµС‚ РёР· РїСѓР»Р° РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ.
  ******************************************************************************/
 static int WINAPI Hook_closesocket(SOCKET s) {
-    // Remove from tracking pool / Удалить из пула отслеживания
+    // Remove from tracking pool / РЈРґР°Р»РёС‚СЊ РёР· РїСѓР»Р° РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ
     Sock_Del(s);
     
-    // Call real closesocket / Вызвать реальный closesocket
+    // Call real closesocket / Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅС‹Р№ closesocket
     return Real_closesocket ? Real_closesocket(s) : 0;
 }
 
 /*******************************************************************************
  * PUBLIC API AND HOOK INSTALLATION
- * ПУБЛИЧНЫЙ API И УСТАНОВКА ХУКОВ
+ * РџРЈР‘Р›РР§РќР«Р™ API Р РЈРЎРўРђРќРћР’РљРђ РҐРЈРљРћР’
  ******************************************************************************/
 
 // External IAT patching functions (defined elsewhere)
-// Внешние функции патчинга IAT (определены в другом месте)
+// Р’РЅРµС€РЅРёРµ С„СѓРЅРєС†РёРё РїР°С‚С‡РёРЅРіР° IAT (РѕРїСЂРµРґРµР»РµРЅС‹ РІ РґСЂСѓРіРѕРј РјРµСЃС‚Рµ)
 extern "C" BOOL IAT_PatchByName(HMODULE module, const char* importedDll, const char* funcName, void* newFn, void** pOrigFn);
 extern "C" BOOL IAT_PatchByAddr(HMODULE module, const char* importedDll, void* origFn, void* newFn, void** pOrigFn);
 extern "C" BOOL DECRYPT_IsWin9x(void);
@@ -1205,48 +1205,48 @@ extern "C" BOOL DECRYPT_IsWin9x(void);
 /*******************************************************************************
  * InstallWinsockHooks_9x_Targeted
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Installs Winsock hooks for Windows 9x systems. Win9x uses WSOCK32.dll and
  * streaming happens in in_mp3.dll plugin, so we only patch that specific module.
  * 
- * Устанавливает хуки Winsock для систем Windows 9x. Win9x использует WSOCK32.dll,
- * и потоковая передача происходит в плагине in_mp3.dll, поэтому мы патчим только
- * этот конкретный модуль.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё Winsock РґР»СЏ СЃРёСЃС‚РµРј Windows 9x. Win9x РёСЃРїРѕР»СЊР·СѓРµС‚ WSOCK32.dll,
+ * Рё РїРѕС‚РѕРєРѕРІР°СЏ РїРµСЂРµРґР°С‡Р° РїСЂРѕРёСЃС…РѕРґРёС‚ РІ РїР»Р°РіРёРЅРµ in_mp3.dll, РїРѕСЌС‚РѕРјСѓ РјС‹ РїР°С‚С‡РёРј С‚РѕР»СЊРєРѕ
+ * СЌС‚РѕС‚ РєРѕРЅРєСЂРµС‚РЅС‹Р№ РјРѕРґСѓР»СЊ.
  * 
- * WIN9X SPECIFICS / ОСОБЕННОСТИ WIN9X:
+ * WIN9X SPECIFICS / РћРЎРћР‘Р•РќРќРћРЎРўР WIN9X:
  * - Uses WSOCK32.dll (not WS2_32.dll)
  * - Winamp 2.95 uses in_mp3.dll for streaming
  * - Need to wait briefly for in_mp3.dll to load
  * 
- * - Использует WSOCK32.dll (не WS2_32.dll)
- * - Winamp 2.95 использует in_mp3.dll для потоковой передачи
- * - Нужно немного подождать загрузки in_mp3.dll
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ WSOCK32.dll (РЅРµ WS2_32.dll)
+ * - Winamp 2.95 РёСЃРїРѕР»СЊР·СѓРµС‚ in_mp3.dll РґР»СЏ РїРѕС‚РѕРєРѕРІРѕР№ РїРµСЂРµРґР°С‡Рё
+ * - РќСѓР¶РЅРѕ РЅРµРјРЅРѕРіРѕ РїРѕРґРѕР¶РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё in_mp3.dll
  ******************************************************************************/
 static void InstallWinsockHooks_9x_Targeted(void) {
-    // Get WSOCK32.dll module / Получить модуль WSOCK32.dll
+    // Get WSOCK32.dll module / РџРѕР»СѓС‡РёС‚СЊ РјРѕРґСѓР»СЊ WSOCK32.dll
     HMODULE hWS1 = GetModuleHandleA("WSOCK32.dll");
     if (!hWS1) return;
 
     // Get original function addresses from WSOCK32.dll
     // Use GetProcAddress to avoid link dependencies
-    // Получить адреса оригинальных функций из WSOCK32.dll
-    // Использовать GetProcAddress для избежания зависимостей компоновки
+    // РџРѕР»СѓС‡РёС‚СЊ Р°РґСЂРµСЃР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… С„СѓРЅРєС†РёР№ РёР· WSOCK32.dll
+    // РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ GetProcAddress РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№ РєРѕРјРїРѕРЅРѕРІРєРё
     if (!Real_send)        Real_send        = (PFN_send)       GetProcAddress(hWS1, "send");
     if (!Real_recv)        Real_recv        = (PFN_recv)       GetProcAddress(hWS1, "recv");
     if (!Real_closesocket) Real_closesocket = (PFN_closesocket)GetProcAddress(hWS1, "closesocket");
 
     // Only patch in_mp3.dll for Winamp 2.95
-    // Патчить только in_mp3.dll для Winamp 2.95
+    // РџР°С‚С‡РёС‚СЊ С‚РѕР»СЊРєРѕ in_mp3.dll РґР»СЏ Winamp 2.95
     HMODULE hInMp3 = GetModuleHandleA("in_mp3.dll");
     if (hInMp3) {
         // Try patching by name first (preferred)
-        // Сначала попытаться пропатчить по имени (предпочтительно)
+        // РЎРЅР°С‡Р°Р»Р° РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РїСЂРѕРїР°С‚С‡РёС‚СЊ РїРѕ РёРјРµРЅРё (РїСЂРµРґРїРѕС‡С‚РёС‚РµР»СЊРЅРѕ)
         BOOL a = IAT_PatchByName(hInMp3, "WSOCK32.dll", "send",        (void*)Hook_send,        (void**)&Real_send);
         BOOL b = IAT_PatchByName(hInMp3, "WSOCK32.dll", "recv",        (void*)Hook_recv,        (void**)&Real_recv);
         BOOL c = IAT_PatchByName(hInMp3, "WSOCK32.dll", "closesocket", (void*)Hook_closesocket, (void**)&Real_closesocket);
 
         // Fallback to patching by address if name patching failed
-        // Резервный вариант патчинга по адресу, если патчинг по имени не удался
+        // Р РµР·РµСЂРІРЅС‹Р№ РІР°СЂРёР°РЅС‚ РїР°С‚С‡РёРЅРіР° РїРѕ Р°РґСЂРµСЃСѓ, РµСЃР»Рё РїР°С‚С‡РёРЅРі РїРѕ РёРјРµРЅРё РЅРµ СѓРґР°Р»СЃСЏ
         if (!a && Real_send)        IAT_PatchByAddr(hInMp3, "WSOCK32.dll", (void*)Real_send,        (void*)Hook_send,        (void**)&Real_send);
         if (!b && Real_recv)        IAT_PatchByAddr(hInMp3, "WSOCK32.dll", (void*)Real_recv,        (void*)Hook_recv,        (void**)&Real_recv);
         if (!c && Real_closesocket) IAT_PatchByAddr(hInMp3, "WSOCK32.dll", (void*)Real_closesocket, (void*)Hook_closesocket, (void**)&Real_closesocket);
@@ -1256,34 +1256,34 @@ static void InstallWinsockHooks_9x_Targeted(void) {
 /*******************************************************************************
  * InstallWinsockHooks_NT_All
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Installs Winsock hooks for Windows NT/2000/XP/Vista/7+ systems. These systems
  * use WS2_32.dll, and WSOCK32.dll is just a compatibility wrapper that forwards
  * to WS2_32.dll. We patch WSOCK32's IAT to intercept all plugins at once.
  * 
- * Устанавливает хуки Winsock для систем Windows NT/2000/XP/Vista/7+. Эти системы
- * используют WS2_32.dll, а WSOCK32.dll - это просто обёртка совместимости, которая
- * перенаправляет в WS2_32.dll. Мы патчим IAT WSOCK32 для перехвата всех плагинов сразу.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё Winsock РґР»СЏ СЃРёСЃС‚РµРј Windows NT/2000/XP/Vista/7+. Р­С‚Рё СЃРёСЃС‚РµРјС‹
+ * РёСЃРїРѕР»СЊР·СѓСЋС‚ WS2_32.dll, Р° WSOCK32.dll - СЌС‚Рѕ РїСЂРѕСЃС‚Рѕ РѕР±С‘СЂС‚РєР° СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё, РєРѕС‚РѕСЂР°СЏ
+ * РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ РІ WS2_32.dll. РњС‹ РїР°С‚С‡РёРј IAT WSOCK32 РґР»СЏ РїРµСЂРµС…РІР°С‚Р° РІСЃРµС… РїР»Р°РіРёРЅРѕРІ СЃСЂР°Р·Сѓ.
  * 
- * NT+ SPECIFICS / ОСОБЕННОСТИ NT+:
+ * NT+ SPECIFICS / РћРЎРћР‘Р•РќРќРћРЎРўР NT+:
  * - Uses WS2_32.dll (main Winsock implementation)
  * - WSOCK32.dll forwards to WS2_32.dll
  * - By patching WSOCK32, we catch all plugins using either DLL
  * - Supports both recv/send and WSARecv/WSASend
  * 
- * - Использует WS2_32.dll (основная реализация Winsock)
- * - WSOCK32.dll перенаправляет в WS2_32.dll
- * - Патчем WSOCK32, мы ловим все плагины, использующие любую DLL
- * - Поддерживает как recv/send, так и WSARecv/WSASend
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ WS2_32.dll (РѕСЃРЅРѕРІРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ Winsock)
+ * - WSOCK32.dll РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ РІ WS2_32.dll
+ * - РџР°С‚С‡РµРј WSOCK32, РјС‹ Р»РѕРІРёРј РІСЃРµ РїР»Р°РіРёРЅС‹, РёСЃРїРѕР»СЊР·СѓСЋС‰РёРµ Р»СЋР±СѓСЋ DLL
+ * - РџРѕРґРґРµСЂР¶РёРІР°РµС‚ РєР°Рє recv/send, С‚Р°Рє Рё WSARecv/WSASend
  ******************************************************************************/
 static void InstallWinsockHooks_NT_All(void) {
-    // Get both DLL modules / Получить модули обеих DLL
+    // Get both DLL modules / РџРѕР»СѓС‡РёС‚СЊ РјРѕРґСѓР»Рё РѕР±РµРёС… DLL
     HMODULE hWS2 = GetModuleHandleA("WS2_32.dll");
     HMODULE hWS1 = GetModuleHandleA("WSOCK32.dll");
     if (!hWS2 || !hWS1) return;
 
     // Get original function addresses from WS2_32.dll
-    // Получить адреса оригинальных функций из WS2_32.dll
+    // РџРѕР»СѓС‡РёС‚СЊ Р°РґСЂРµСЃР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… С„СѓРЅРєС†РёР№ РёР· WS2_32.dll
     if (!Real_send)        Real_send        = (PFN_send)       GetProcAddress(hWS2, "send");
     if (!Real_WSASend)     Real_WSASend     = (PFN_WSASend)    GetProcAddress(hWS2, "WSASend");
     if (!Real_recv)        Real_recv        = (PFN_recv)       GetProcAddress(hWS2, "recv");
@@ -1294,8 +1294,8 @@ static void InstallWinsockHooks_NT_All(void) {
 
     // Patch WSOCK32's IAT to point to our hooks instead of forwarding to WS2_32
     // This catches all plugins using WSOCK32 (which forwards to WS2_32)
-    // Пропатчить IAT WSOCK32 для указания на наши хуки вместо перенаправления в WS2_32
-    // Это ловит все плагины, использующие WSOCK32 (который перенаправляет в WS2_32)
+    // РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT WSOCK32 РґР»СЏ СѓРєР°Р·Р°РЅРёСЏ РЅР° РЅР°С€Рё С…СѓРєРё РІРјРµСЃС‚Рѕ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РІ WS2_32
+    // Р­С‚Рѕ Р»РѕРІРёС‚ РІСЃРµ РїР»Р°РіРёРЅС‹, РёСЃРїРѕР»СЊР·СѓСЋС‰РёРµ WSOCK32 (РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ РІ WS2_32)
     IAT_PatchByName(hWS1, "WS2_32.dll", "send",        (void*)Hook_send,        (void**)&Real_send);
     IAT_PatchByName(hWS1, "WS2_32.dll", "recv",        (void*)Hook_recv,        (void**)&Real_recv);
     IAT_PatchByName(hWS1, "WS2_32.dll", "WSASend",     (void*)Hook_WSASend,     (void**)&Real_WSASend);
@@ -1305,60 +1305,60 @@ static void InstallWinsockHooks_NT_All(void) {
 
 /*******************************************************************************
  * EXPORTED PUBLIC API FUNCTIONS
- * ЭКСПОРТИРУЕМЫЕ ФУНКЦИИ ПУБЛИЧНОГО API
+ * Р­РљРЎРџРћР РўРР РЈР•РњР«Р• Р¤РЈРќРљР¦РР РџРЈР‘Р›РР§РќРћР“Рћ API
  ******************************************************************************/
 
 /*******************************************************************************
  * MP3_StreamFix_Init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes the streaming metadata fix module. This is the main entry point
  * that should be called during Winamp initialization.
  * 
- * Инициализирует модуль исправления метаданных потоковой передачи. Это главная
- * точка входа, которая должна вызываться во время инициализации Winamp.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РјРµС‚Р°РґР°РЅРЅС‹С… РїРѕС‚РѕРєРѕРІРѕР№ РїРµСЂРµРґР°С‡Рё. Р­С‚Рѕ РіР»Р°РІРЅР°СЏ
+ * С‚РѕС‡РєР° РІС…РѕРґР°, РєРѕС‚РѕСЂР°СЏ РґРѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Winamp.
  * 
- * INITIALIZATION PROCESS / ПРОЦЕСС ИНИЦИАЛИЗАЦИИ:
+ * INITIALIZATION PROCESS / РџР РћР¦Р•РЎРЎ РРќРР¦РРђР›РР—РђР¦РР:
  * 1. Initialize critical section
  * 2. Detect Windows version (9x vs NT+)
  * 3. For Win9x: Wait briefly for in_mp3.dll to load, then patch it
  * 4. For NT+: Patch WSOCK32.dll immediately (catches all plugins)
  * 
- * 1. Инициализировать критическую секцию
- * 2. Определить версию Windows (9x против NT+)
- * 3. Для Win9x: немного подождать загрузки in_mp3.dll, затем пропатчить её
- * 4. Для NT+: немедленно пропатчить WSOCK32.dll (ловит все плагины)
+ * 1. РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
+ * 2. РћРїСЂРµРґРµР»РёС‚СЊ РІРµСЂСЃРёСЋ Windows (9x РїСЂРѕС‚РёРІ NT+)
+ * 3. Р”Р»СЏ Win9x: РЅРµРјРЅРѕРіРѕ РїРѕРґРѕР¶РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё in_mp3.dll, Р·Р°С‚РµРј РїСЂРѕРїР°С‚С‡РёС‚СЊ РµС‘
+ * 4. Р”Р»СЏ NT+: РЅРµРјРµРґР»РµРЅРЅРѕ РїСЂРѕРїР°С‚С‡РёС‚СЊ WSOCK32.dll (Р»РѕРІРёС‚ РІСЃРµ РїР»Р°РіРёРЅС‹)
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * The wait loop for Win9x ensures in_mp3.dll has time to load before we
  * try to patch it. NT+ systems don't need this as we patch the wrapper DLL.
  * 
- * Цикл ожидания для Win9x гарантирует, что у in_mp3.dll есть время загрузиться
- * до того, как мы попытаемся её пропатчить. Системы NT+ не нуждаются в этом,
- * так как мы патчим обёрточную DLL.
+ * Р¦РёРєР» РѕР¶РёРґР°РЅРёСЏ РґР»СЏ Win9x РіР°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ Сѓ in_mp3.dll РµСЃС‚СЊ РІСЂРµРјСЏ Р·Р°РіСЂСѓР·РёС‚СЊСЃСЏ
+ * РґРѕ С‚РѕРіРѕ, РєР°Рє РјС‹ РїРѕРїС‹С‚Р°РµРјСЃСЏ РµС‘ РїСЂРѕРїР°С‚С‡РёС‚СЊ. РЎРёСЃС‚РµРјС‹ NT+ РЅРµ РЅСѓР¶РґР°СЋС‚СЃСЏ РІ СЌС‚РѕРј,
+ * С‚Р°Рє РєР°Рє РјС‹ РїР°С‚С‡РёРј РѕР±С‘СЂС‚РѕС‡РЅСѓСЋ DLL.
  ******************************************************************************/
 extern "C" void MP3_StreamFix_Init(void) {
     // Initialize critical section for thread-safe operations
-    // Инициализировать критическую секцию для потокобезопасных операций
+    // РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ РґР»СЏ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅС‹С… РѕРїРµСЂР°С†РёР№
     CS_Init();
 
     if (DECRYPT_IsWin9x()) {
-        // Windows 9x path / Путь для Windows 9x
+        // Windows 9x path / РџСѓС‚СЊ РґР»СЏ Windows 9x
         
         // Wait briefly for in_mp3.dll to load on 9x systems (up to 2 seconds)
-        // Немного подождать загрузки in_mp3.dll на системах 9x (до 2 секунд)
+        // РќРµРјРЅРѕРіРѕ РїРѕРґРѕР¶РґР°С‚СЊ Р·Р°РіСЂСѓР·РєРё in_mp3.dll РЅР° СЃРёСЃС‚РµРјР°С… 9x (РґРѕ 2 СЃРµРєСѓРЅРґ)
         for (int i = 0; i < 20; i++) {
             if (GetModuleHandleA("in_mp3.dll")) break;
             Sleep(100);
         }
         
-        // Install hooks for Win9x / Установить хуки для Win9x
+        // Install hooks for Win9x / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРєРё РґР»СЏ Win9x
         InstallWinsockHooks_9x_Targeted();
     } else {
-        // Windows NT/2000/XP/Vista/7+ path / Путь для Windows NT/2000/XP/Vista/7+
+        // Windows NT/2000/XP/Vista/7+ path / РџСѓС‚СЊ РґР»СЏ Windows NT/2000/XP/Vista/7+
         
         // Install hooks for NT+ systems (immediate, no wait needed)
-        // Установить хуки для систем NT+ (немедленно, ожидание не требуется)
+        // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРєРё РґР»СЏ СЃРёСЃС‚РµРј NT+ (РЅРµРјРµРґР»РµРЅРЅРѕ, РѕР¶РёРґР°РЅРёРµ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ)
         InstallWinsockHooks_NT_All();
     }
 }
@@ -1366,30 +1366,30 @@ extern "C" void MP3_StreamFix_Init(void) {
 /*******************************************************************************
  * MP3_StreamFix_Quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up the streaming metadata fix module. Should be called during Winamp
  * shutdown.
  * 
- * Очищает модуль исправления метаданных потоковой передачи. Должна вызываться
- * при завершении Winamp.
+ * РћС‡РёС‰Р°РµС‚ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РјРµС‚Р°РґР°РЅРЅС‹С… РїРѕС‚РѕРєРѕРІРѕР№ РїРµСЂРµРґР°С‡Рё. Р”РѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ
+ * РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё Winamp.
  * 
- * CLEANUP PROCESS / ПРОЦЕСС ОЧИСТКИ:
+ * CLEANUP PROCESS / РџР РћР¦Р•РЎРЎ РћР§РРЎРўРљР:
  * 1. Delete critical section
  * 
- * 1. Удалить критическую секцию
+ * 1. РЈРґР°Р»РёС‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * We don't unpatch the IAT hooks because:
  * 1. It's risky to unpatch while streams might be active
  * 2. Winamp is shutting down anyway
  * 3. The hooks are designed to be safe to leave in place
  * 
- * Мы не снимаем патчи хуков IAT, потому что:
- * 1. Рискованно снимать патчи, пока потоки могут быть активны
- * 2. Winamp всё равно завершает работу
- * 3. Хуки разработаны так, чтобы быть безопасными для оставления на месте
+ * РњС‹ РЅРµ СЃРЅРёРјР°РµРј РїР°С‚С‡Рё С…СѓРєРѕРІ IAT, РїРѕС‚РѕРјСѓ С‡С‚Рѕ:
+ * 1. Р РёСЃРєРѕРІР°РЅРЅРѕ СЃРЅРёРјР°С‚СЊ РїР°С‚С‡Рё, РїРѕРєР° РїРѕС‚РѕРєРё РјРѕРіСѓС‚ Р±С‹С‚СЊ Р°РєС‚РёРІРЅС‹
+ * 2. Winamp РІСЃС‘ СЂР°РІРЅРѕ Р·Р°РІРµСЂС€Р°РµС‚ СЂР°Р±РѕС‚Сѓ
+ * 3. РҐСѓРєРё СЂР°Р·СЂР°Р±РѕС‚Р°РЅС‹ С‚Р°Рє, С‡С‚РѕР±С‹ Р±С‹С‚СЊ Р±РµР·РѕРїР°СЃРЅС‹РјРё РґР»СЏ РѕСЃС‚Р°РІР»РµРЅРёСЏ РЅР° РјРµСЃС‚Рµ
  ******************************************************************************/
 extern "C" void MP3_StreamFix_Quit(void) {
-    // Clean up critical section / Очистить критическую секцию
+    // Clean up critical section / РћС‡РёСЃС‚РёС‚СЊ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ
     CS_Done();
 }
