@@ -19,7 +19,7 @@ Special attention is given to proper **Unicode and Cyrillic support**.
 - Added a keyboard shortcut for the **Mute** function  
 - Playlist buttons replaced with a Winamp 5 Modern–style menu  
 - Added skins removal and renaming features  
-- Modified Windows Explorer context menu for setting cover art  
+- Modified Windows Explorer context menu for setting skin  
 - Fixed Cyrillic text rendering when playing video in fullscreen mode  
 - Cyrillic Unicode tags are now displayed correctly in:
   - Playlist  
