@@ -1,109 +1,109 @@
 /*******************************************************************************
  * WINAMP FIXER PLUGIN - MAIN MODULE
- * ПЛАГИН WINAMP FIXER - ОСНОВНОЙ МОДУЛЬ
+ * РџР›РђР“РРќ WINAMP FIXER - РћРЎРќРћР’РќРћР™ РњРћР”РЈР›Р¬
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Main entry point for Winamp Fixer - a comprehensive plugin that fixes various
  * issues in Winamp 2.95 related to Unicode, fonts, UI, and functionality.
  * Manages initialization, configuration, and coordination of all submodules.
  * 
- * Главная точка входа для Winamp Fixer - всеобъемлющего плагина, исправляющего
- * различные проблемы в Winamp 2.95, связанные с Unicode, шрифтами, UI и
- * функциональностью. Управляет инициализацией, конфигурацией и координацией
- * всех подмодулей.
+ * Р“Р»Р°РІРЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР° РґР»СЏ Winamp Fixer - РІСЃРµРѕР±СЉРµРјР»СЋС‰РµРіРѕ РїР»Р°РіРёРЅР°, РёСЃРїСЂР°РІР»СЏСЋС‰РµРіРѕ
+ * СЂР°Р·Р»РёС‡РЅС‹Рµ РїСЂРѕР±Р»РµРјС‹ РІ Winamp 2.95, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ Unicode, С€СЂРёС„С‚Р°РјРё, UI Рё
+ * С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊСЋ. РЈРїСЂР°РІР»СЏРµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёРµР№, РєРѕРЅС„РёРіСѓСЂР°С†РёРµР№ Рё РєРѕРѕСЂРґРёРЅР°С†РёРµР№
+ * РІСЃРµС… РїРѕРґРјРѕРґСѓР»РµР№.
  * 
- * ARCHITECTURE / АРХИТЕКТУРА:
+ * ARCHITECTURE / РђР РҐРРўР•РљРўРЈР Рђ:
  * 
  * The plugin is composed of multiple independent modules:
- * Плагин состоит из нескольких независимых модулей:
+ * РџР»Р°РіРёРЅ СЃРѕСЃС‚РѕРёС‚ РёР· РЅРµСЃРєРѕР»СЊРєРёС… РЅРµР·Р°РІРёСЃРёРјС‹С… РјРѕРґСѓР»РµР№:
  * 
- * CORE MODULES (always active) / ОСНОВНЫЕ МОДУЛИ (всегда активны):
- * - mod_unicode_tags_fix     - ID3 tag encoding fixes / Исправление кодировок ID3-тегов
- * - mod_unicode_stream_fix   - SHOUTcast metadata fixes / Исправление метаданных SHOUTcast
- * - mod_unicode_ml_fix       - Media Library encoding / Кодировка библиотеки
- * - mod_ml_fonts             - Media Library font smoothing / Сглаживание шрифтов библиотеки
- * - mod_ml_icons             - Icon tinting for themes / Тонирование иконок для тем
- * - mod_ml_search            - Cyrillic search fix / Исправление поиска кириллицы
- * - mod_m3u8                 - M3U8 playlist support / Поддержка M3U8 плейлистов
- * - mod_skininstall          - Skin installation context menu / Контекстное меню установки скинов
+ * CORE MODULES (always active) / РћРЎРќРћР’РќР«Р• РњРћР”РЈР›Р (РІСЃРµРіРґР° Р°РєС‚РёРІРЅС‹):
+ * - mod_unicode_tags_fix     - ID3 tag encoding fixes / РСЃРїСЂР°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРѕРє ID3-С‚РµРіРѕРІ
+ * - mod_unicode_stream_fix   - SHOUTcast metadata fixes / РСЃРїСЂР°РІР»РµРЅРёРµ РјРµС‚Р°РґР°РЅРЅС‹С… SHOUTcast
+ * - mod_unicode_ml_fix       - Media Library encoding / РљРѕРґРёСЂРѕРІРєР° Р±РёР±Р»РёРѕС‚РµРєРё
+ * - mod_ml_fonts             - Media Library font smoothing / РЎРіР»Р°Р¶РёРІР°РЅРёРµ С€СЂРёС„С‚РѕРІ Р±РёР±Р»РёРѕС‚РµРєРё
+ * - mod_ml_icons             - Icon tinting for themes / РўРѕРЅРёСЂРѕРІР°РЅРёРµ РёРєРѕРЅРѕРє РґР»СЏ С‚РµРј
+ * - mod_ml_search            - Cyrillic search fix / РСЃРїСЂР°РІР»РµРЅРёРµ РїРѕРёСЃРєР° РєРёСЂРёР»Р»РёС†С‹
+ * - mod_m3u8                 - M3U8 playlist support / РџРѕРґРґРµСЂР¶РєР° M3U8 РїР»РµР№Р»РёСЃС‚РѕРІ
+ * - mod_skininstall          - Skin installation context menu / РљРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ СѓСЃС‚Р°РЅРѕРІРєРё СЃРєРёРЅРѕРІ
  * 
- * OPTIONAL MODULES (configurable) / ОПЦИОНАЛЬНЫЕ МОДУЛИ (настраиваемые):
- * - mod_startup_foreground   - Force foreground on startup / Принудительно на передний план при старте
- * - mod_iconfix              - Fix window icon / Исправление иконки окна
- * - mod_menu_restart         - Add restart menu item / Добавить пункт меню перезапуска
- * - mod_mute                 - Mute hotkey (Ctrl+Space) / Горячая клавиша выключения звука
- * - mod_skin_delete          - Skin delete/rename in dialog / Удаление/переименование скинов в диалоге
- * - mod_plist_buttons        - Playlist editor zones / Зоны редактора плейлистов
- * - mod_videofontfix         - Video plugin font fix / Исправление шрифтов видео плагинов
+ * OPTIONAL MODULES (configurable) / РћРџР¦РРћРќРђР›Р¬РќР«Р• РњРћР”РЈР›Р (РЅР°СЃС‚СЂР°РёРІР°РµРјС‹Рµ):
+ * - mod_startup_foreground   - Force foreground on startup / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РЅР° РїРµСЂРµРґРЅРёР№ РїР»Р°РЅ РїСЂРё СЃС‚Р°СЂС‚Рµ
+ * - mod_iconfix              - Fix window icon / РСЃРїСЂР°РІР»РµРЅРёРµ РёРєРѕРЅРєРё РѕРєРЅР°
+ * - mod_menu_restart         - Add restart menu item / Р”РѕР±Р°РІРёС‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ РїРµСЂРµР·Р°РїСѓСЃРєР°
+ * - mod_mute                 - Mute hotkey (Ctrl+Space) / Р“РѕСЂСЏС‡Р°СЏ РєР»Р°РІРёС€Р° РІС‹РєР»СЋС‡РµРЅРёСЏ Р·РІСѓРєР°
+ * - mod_skin_delete          - Skin delete/rename in dialog / РЈРґР°Р»РµРЅРёРµ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃРєРёРЅРѕРІ РІ РґРёР°Р»РѕРіРµ
+ * - mod_plist_buttons        - Playlist editor zones / Р—РѕРЅС‹ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
+ * - mod_videofontfix         - Video plugin font fix / РСЃРїСЂР°РІР»РµРЅРёРµ С€СЂРёС„С‚РѕРІ РІРёРґРµРѕ РїР»Р°РіРёРЅРѕРІ
  * 
- * CONFIGURATION / КОНФИГУРАЦИЯ:
+ * CONFIGURATION / РљРћРќР¤РР“РЈР РђР¦РРЇ:
  * Settings stored in plugin.ini in plugin directory.
  * User can enable/disable optional modules via preferences dialog.
  * Changes applied immediately without restart.
  * 
- * Настройки хранятся в plugin.ini в каталоге плагина.
- * Пользователь может включать/отключать опциональные модули через диалог настроек.
- * Изменения применяются немедленно без перезапуска.
+ * РќР°СЃС‚СЂРѕР№РєРё С…СЂР°РЅСЏС‚СЃСЏ РІ plugin.ini РІ РєР°С‚Р°Р»РѕРіРµ РїР»Р°РіРёРЅР°.
+ * РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РјРѕР¶РµС‚ РІРєР»СЋС‡Р°С‚СЊ/РѕС‚РєР»СЋС‡Р°С‚СЊ РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Рµ РјРѕРґСѓР»Рё С‡РµСЂРµР· РґРёР°Р»РѕРі РЅР°СЃС‚СЂРѕРµРє.
+ * РР·РјРµРЅРµРЅРёСЏ РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ Р±РµР· РїРµСЂРµР·Р°РїСѓСЃРєР°.
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - Compiler: Visual C++ 7.1 (VS2003)
  * - OS: Windows 98 through Windows 11
  * - Character set: ANSI with unicows.lib for Unicode support on Win9x
  * - Winamp: 2.95 and compatible versions
  * 
- * - Компилятор: Visual C++ 7.1 (VS2003)
- * - ОС: Windows 98 до Windows 11
- * - Кодировка: ANSI с unicows.lib для поддержки Unicode на Win9x
- * - Winamp: 2.95 и совместимые версии
+ * - РљРѕРјРїРёР»СЏС‚РѕСЂ: Visual C++ 7.1 (VS2003)
+ * - РћРЎ: Windows 98 РґРѕ Windows 11
+ * - РљРѕРґРёСЂРѕРІРєР°: ANSI СЃ unicows.lib РґР»СЏ РїРѕРґРґРµСЂР¶РєРё Unicode РЅР° Win9x
+ * - Winamp: 2.95 Рё СЃРѕРІРјРµСЃС‚РёРјС‹Рµ РІРµСЂСЃРёРё
  * 
  ******************************************************************************/
 /*******************************************************************************
- * OPTIMIZATIONS APPLIED / ПРИМЕНЁННЫЕ ОПТИМИЗАЦИИ:
+ * OPTIMIZATIONS APPLIED / РџР РРњР•РќРЃРќРќР«Р• РћРџРўРРњРР—РђР¦РР:
  * 
  * This file has been optimized from the original Main.cpp with the following changes:
- * Этот файл был оптимизирован от оригинального Main.cpp со следующими изменениями:
+ * Р­С‚РѕС‚ С„Р°Р№Р» Р±С‹Р» РѕРїС‚РёРјРёР·РёСЂРѕРІР°РЅ РѕС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ Main.cpp СЃРѕ СЃР»РµРґСѓСЋС‰РёРјРё РёР·РјРµРЅРµРЅРёСЏРјРё:
  * 
  * 1. CRITICAL FIX: Removed duplicate PeZones_Quit() call (lines 1106, 1122 in original)
- *    КРИТИЧНО: Удалён дублированный вызов PeZones_Quit() (строки 1106, 1122 в оригинале)
+ *    РљР РРўРР§РќРћ: РЈРґР°Р»С‘РЅ РґСѓР±Р»РёСЂРѕРІР°РЅРЅС‹Р№ РІС‹Р·РѕРІ PeZones_Quit() (СЃС‚СЂРѕРєРё 1106, 1122 РІ РѕСЂРёРіРёРЅР°Р»Рµ)
  *    - Was called both unconditionally and conditionally, causing potential double-free
- *    - Вызывался и безусловно и условно, вызывая потенциальный double-free
+ *    - Р’С‹Р·С‹РІР°Р»СЃСЏ Рё Р±РµР·СѓСЃР»РѕРІРЅРѕ Рё СѓСЃР»РѕРІРЅРѕ, РІС‹Р·С‹РІР°СЏ РїРѕС‚РµРЅС†РёР°Р»СЊРЅС‹Р№ double-free
  * 
  * 2. CRITICAL FIX: All module quit() calls now protected by g_started flags
- *    КРИТИЧНО: Все вызовы module quit() теперь защищены флагами g_started
+ *    РљР РРўРР§РќРћ: Р’СЃРµ РІС‹Р·РѕРІС‹ module quit() С‚РµРїРµСЂСЊ Р·Р°С‰РёС‰РµРЅС‹ С„Р»Р°РіР°РјРё g_started
  *    - Prevents cleanup of modules that were never initialized
- *    - Предотвращает очистку модулей, которые никогда не инициализировались
+ *    - РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РѕС‡РёСЃС‚РєСѓ РјРѕРґСѓР»РµР№, РєРѕС‚РѕСЂС‹Рµ РЅРёРєРѕРіРґР° РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°Р»РёСЃСЊ
  * 
  * 3. Removed commented-out code in init() function (lines 1040-1048)
- *    Удалён закомментированный код в функции init() (строки 1040-1048)
+ *    РЈРґР°Р»С‘РЅ Р·Р°РєРѕРјРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹Р№ РєРѕРґ РІ С„СѓРЅРєС†РёРё init() (СЃС‚СЂРѕРєРё 1040-1048)
  * 
  * 4. Removed unused parameter 'oldCfg' from ApplyRuntime()
- *    Удалён неиспользуемый параметр 'oldCfg' из ApplyRuntime()
+ *    РЈРґР°Р»С‘РЅ РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ 'oldCfg' РёР· ApplyRuntime()
  * 
  * 5. Optimized FindWinamp() usage in quit() - uses cached plugin.hwndParent
- *    Оптимизировано использование FindWinamp() в quit() - использует кэшированный plugin.hwndParent
+ *    РћРїС‚РёРјРёР·РёСЂРѕРІР°РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ FindWinamp() РІ quit() - РёСЃРїРѕР»СЊР·СѓРµС‚ РєСЌС€РёСЂРѕРІР°РЅРЅС‹Р№ plugin.hwndParent
  * 
  * 6. Simplified g_started initialization from {0,0,0,...} to {0}
- *    Упрощена инициализация g_started с {0,0,0,...} на {0}
+ *    РЈРїСЂРѕС‰РµРЅР° РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ g_started СЃ {0,0,0,...} РЅР° {0}
  * 
- * CODE REDUCTION / СОКРАЩЕНИЕ КОДА:
+ * CODE REDUCTION / РЎРћРљР РђР©Р•РќРР• РљРћР”Рђ:
  * - Removed ~30 lines of code
- *   Удалено ~30 строк кода
+ *   РЈРґР°Р»РµРЅРѕ ~30 СЃС‚СЂРѕРє РєРѕРґР°
  * - Eliminated critical double-cleanup bug
- *   Устранён критический баг двойной очистки
+ *   РЈСЃС‚СЂР°РЅС‘РЅ РєСЂРёС‚РёС‡РµСЃРєРёР№ Р±Р°Рі РґРІРѕР№РЅРѕР№ РѕС‡РёСЃС‚РєРё
  * - Improved code maintainability
- *   Улучшена поддерживаемость кода
+ *   РЈР»СѓС‡С€РµРЅР° РїРѕРґРґРµСЂР¶РёРІР°РµРјРѕСЃС‚СЊ РєРѕРґР°
  * 
- * PERFORMANCE IMPACT / ВЛИЯНИЕ НА ПРОИЗВОДИТЕЛЬНОСТЬ:
+ * PERFORMANCE IMPACT / Р’Р›РРЇРќРР• РќРђ РџР РћРР—Р’РћР”РРўР•Р›Р¬РќРћРЎРўР¬:
  * - Eliminated unnecessary FindWinamp() call on plugin unload
- *   Устранён ненужный вызов FindWinamp() при выгрузке плагина
+ *   РЈСЃС‚СЂР°РЅС‘РЅ РЅРµРЅСѓР¶РЅС‹Р№ РІС‹Р·РѕРІ FindWinamp() РїСЂРё РІС‹РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°
  * - Reduced code size and improved readability
- *   Уменьшен размер кода и улучшена читаемость
+ *   РЈРјРµРЅСЊС€РµРЅ СЂР°Р·РјРµСЂ РєРѕРґР° Рё СѓР»СѓС‡С€РµРЅР° С‡РёС‚Р°РµРјРѕСЃС‚СЊ
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - 100% compatible with original functionality
- *   100% совместимо с оригинальной функциональностью
+ *   100% СЃРѕРІРјРµСЃС‚РёРјРѕ СЃ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊСЋ
  * - All changes are conservative and safe
- *   Все изменения консервативны и безопасны
+ *   Р’СЃРµ РёР·РјРµРЅРµРЅРёСЏ РєРѕРЅСЃРµСЂРІР°С‚РёРІРЅС‹ Рё Р±РµР·РѕРїР°СЃРЅС‹
  * 
  ******************************************************************************/
 
@@ -124,7 +124,7 @@
 #include "Resources/plugin_common.h"
 #include "Resources/resource.h"       // IDD_FIXER_CFG, IDB_FIXER, IDC_CHK_*
 
-// Core UI modules / Основные UI модули
+// Core UI modules / РћСЃРЅРѕРІРЅС‹Рµ UI РјРѕРґСѓР»Рё
 #include "Modules/mod_startup_foreground.h"
 #include "Modules/mod_iconfix.h"
 #include "Modules/mod_menu_restart.h"
@@ -134,17 +134,17 @@
 #include "Modules/mod_skininstall.h"
 #include "Modules/mod_save_id3v2.h"
 
-// M3U8 support / Поддержка M3U8
+// M3U8 support / РџРѕРґРґРµСЂР¶РєР° M3U8
 #include "m3u8/mod_unicode_m3u8.h"
 
-// Unicode fixes / Исправления Unicode
+// Unicode fixes / РСЃРїСЂР°РІР»РµРЅРёСЏ Unicode
 #include "Unicode/mod_unicode_fullscreen_video_fix.h"
 #include "Unicode/mod_unicode_ml_fix.h"
 #include "Unicode/mod_unicode_tags_fix.h"
 #include "Unicode/mod_unicode_stream_fix.h"
 
 
-// Media Library enhancements / Улучшения медиатеки
+// Media Library enhancements / РЈР»СѓС‡С€РµРЅРёСЏ РјРµРґРёР°С‚РµРєРё
 #include "MediaLibrary/mod_ml_fonts.h"
 #include "MediaLibrary/mod_ml_icons.h"
 #include "MediaLibrary/mod_ml_search.h"
@@ -153,17 +153,17 @@
 
 /*******************************************************************************
  * COMPILER AND LINKER CONFIGURATION
- * КОНФИГУРАЦИЯ КОМПИЛЯТОРА И ЛИНКОВЩИКА
+ * РљРћРќР¤РР“РЈР РђР¦РРЇ РљРћРњРџРР›РЇРўРћР Рђ Р Р›РРќРљРћР’Р©РРљРђ
  ******************************************************************************/
 
 #ifdef _MSC_VER
 // Set subsystem version to 4.0 for Windows 95/98 compatibility
-// Установить версию подсистемы 4.0 для совместимости с Windows 95/98
+// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РІРµСЂСЃРёСЋ РїРѕРґСЃРёСЃС‚РµРјС‹ 4.0 РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ Windows 95/98
 #pragma comment(linker, "/SUBSYSTEM:WINDOWS,4.0")
 #endif
 
-// Required libraries / Необходимые библиотеки
-#pragma comment(lib, "unicows.lib")   // Unicode layer for Win9x / Слой Unicode для Win9x
+// Required libraries / РќРµРѕР±С…РѕРґРёРјС‹Рµ Р±РёР±Р»РёРѕС‚РµРєРё
+#pragma comment(lib, "unicows.lib")   // Unicode layer for Win9x / РЎР»РѕР№ Unicode РґР»СЏ Win9x
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "comctl32.lib")
@@ -171,10 +171,10 @@
 
 /*******************************************************************************
  * VC7.1 / WIN9X COMPATIBILITY TYPEDEFS
- * ОПРЕДЕЛЕНИЯ ТИПОВ ДЛЯ СОВМЕСТИМОСТИ С VC7.1 / WIN9X
+ * РћРџР Р•Р”Р•Р›Р•РќРРЇ РўРРџРћР’ Р”Р›РЇ РЎРћР’РњР•РЎРўРРњРћРЎРўР РЎ VC7.1 / WIN9X
  * 
  * Visual C++ 7.1 (VS2003) doesn't define intptr_t/uintptr_t in older platform SDK.
- * Visual C++ 7.1 (VS2003) не определяет intptr_t/uintptr_t в старом platform SDK.
+ * Visual C++ 7.1 (VS2003) РЅРµ РѕРїСЂРµРґРµР»СЏРµС‚ intptr_t/uintptr_t РІ СЃС‚Р°СЂРѕРј platform SDK.
  ******************************************************************************/
 #ifndef intptr_t
 typedef int intptr_t;
@@ -183,137 +183,137 @@ typedef int intptr_t;
 typedef unsigned int uintptr_t;
 #endif
 
-// Winamp plugin header version / Версия заголовка плагина Winamp
+// Winamp plugin header version / Р’РµСЂСЃРёСЏ Р·Р°РіРѕР»РѕРІРєР° РїР»Р°РіРёРЅР° Winamp
 #ifndef GPPHDR_VER
 #define GPPHDR_VER 0x10
 #endif
 
 /*******************************************************************************
  * PLUGIN INTERFACE FUNCTIONS
- * ФУНКЦИИ ИНТЕРФЕЙСА ПЛАГИНА
+ * Р¤РЈРќРљР¦РР РРќРўР•Р Р¤Р•Р™РЎРђ РџР›РђР“РРќРђ
  * 
  * These are the main entry points called by Winamp during plugin lifecycle.
- * Это главные точки входа, вызываемые Winamp во время жизненного цикла плагина.
+ * Р­С‚Рѕ РіР»Р°РІРЅС‹Рµ С‚РѕС‡РєРё РІС…РѕРґР°, РІС‹Р·С‹РІР°РµРјС‹Рµ Winamp РІРѕ РІСЂРµРјСЏ Р¶РёР·РЅРµРЅРЅРѕРіРѕ С†РёРєР»Р° РїР»Р°РіРёРЅР°.
  ******************************************************************************/
 
-int  init(void);    // Called when plugin loads / Вызывается при загрузке плагина
-void config(void);  // Called when user clicks "Configure" / Вызывается при клике "Настроить"
-void quit(void);    // Called when plugin unloads / Вызывается при выгрузке плагина
+int  init(void);    // Called when plugin loads / Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°
+void config(void);  // Called when user clicks "Configure" / Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РєР»РёРєРµ "РќР°СЃС‚СЂРѕРёС‚СЊ"
+void quit(void);    // Called when plugin unloads / Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РІС‹РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°
 
 /*******************************************************************************
  * WINAMP PLUGIN DESCRIPTOR
- * ДЕСКРИПТОР ПЛАГИНА WINAMP
+ * Р”Р•РЎРљР РРџРўРћР  РџР›РђР“РРќРђ WINAMP
  * 
  * This structure is read by Winamp to identify and initialize the plugin.
  * It contains plugin metadata and pointers to lifecycle functions.
  * 
- * Эта структура читается Winamp для идентификации и инициализации плагина.
- * Она содержит метаданные плагина и указатели на функции жизненного цикла.
+ * Р­С‚Р° СЃС‚СЂСѓРєС‚СѓСЂР° С‡РёС‚Р°РµС‚СЃСЏ Winamp РґР»СЏ РёРґРµРЅС‚РёС„РёРєР°С†РёРё Рё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°.
+ * РћРЅР° СЃРѕРґРµСЂР¶РёС‚ РјРµС‚Р°РґР°РЅРЅС‹Рµ РїР»Р°РіРёРЅР° Рё СѓРєР°Р·Р°С‚РµР»Рё РЅР° С„СѓРЅРєС†РёРё Р¶РёР·РЅРµРЅРЅРѕРіРѕ С†РёРєР»Р°.
  * 
- * FIELDS / ПОЛЯ:
- * version      - Plugin API version (0x10) / Версия API плагина
- * description  - Plugin name shown in UI / Имя плагина, показываемое в UI
- * init         - Initialization function / Функция инициализации
- * config       - Configuration function / Функция конфигурации  
- * quit         - Cleanup function / Функция очистки
- * hwndParent   - Filled by Winamp with main window handle / Заполняется Winamp дескриптором главного окна
- * hDllInstance - Filled by Winamp with plugin DLL instance / Заполняется Winamp экземпляром DLL плагина
+ * FIELDS / РџРћР›РЇ:
+ * version      - Plugin API version (0x10) / Р’РµСЂСЃРёСЏ API РїР»Р°РіРёРЅР°
+ * description  - Plugin name shown in UI / РРјСЏ РїР»Р°РіРёРЅР°, РїРѕРєР°Р·С‹РІР°РµРјРѕРµ РІ UI
+ * init         - Initialization function / Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
+ * config       - Configuration function / Р¤СѓРЅРєС†РёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё  
+ * quit         - Cleanup function / Р¤СѓРЅРєС†РёСЏ РѕС‡РёСЃС‚РєРё
+ * hwndParent   - Filled by Winamp with main window handle / Р—Р°РїРѕР»РЅСЏРµС‚СЃСЏ Winamp РґРµСЃРєСЂРёРїС‚РѕСЂРѕРј РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°
+ * hDllInstance - Filled by Winamp with plugin DLL instance / Р—Р°РїРѕР»РЅСЏРµС‚СЃСЏ Winamp СЌРєР·РµРјРїР»СЏСЂРѕРј DLL РїР»Р°РіРёРЅР°
  ******************************************************************************/
 winampGeneralPurposePlugin plugin =
 {
-    GPPHDR_VER,              // Header version / Версия заголовка
-    (char*)PLUGIN_NAME,      // Plugin name (from SwitchLangUI.h) / Имя плагина
-    init,                    // Init function / Функция инициализации
-    config,                  // Config function / Функция конфигурации
-    quit,                    // Quit function / Функция выхода
-    0,                       // hwndParent (filled by Winamp) / hwndParent (заполняется Winamp)
-    0                        // hDllInstance (filled by Winamp) / hDllInstance (заполняется Winamp)
+    GPPHDR_VER,              // Header version / Р’РµСЂСЃРёСЏ Р·Р°РіРѕР»РѕРІРєР°
+    (char*)PLUGIN_NAME,      // Plugin name (from SwitchLangUI.h) / РРјСЏ РїР»Р°РіРёРЅР°
+    init,                    // Init function / Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
+    config,                  // Config function / Р¤СѓРЅРєС†РёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+    quit,                    // Quit function / Р¤СѓРЅРєС†РёСЏ РІС‹С…РѕРґР°
+    0,                       // hwndParent (filled by Winamp) / hwndParent (Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ Winamp)
+    0                        // hDllInstance (filled by Winamp) / hDllInstance (Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ Winamp)
 };
 
 /*******************************************************************************
  * winampGetGeneralPurposePlugin
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * DLL export function that Winamp calls to get plugin descriptor.
  * This is the entry point for plugin loading.
  * 
- * Функция экспорта DLL, которую Winamp вызывает для получения дескриптора плагина.
- * Это точка входа для загрузки плагина.
+ * Р¤СѓРЅРєС†РёСЏ СЌРєСЃРїРѕСЂС‚Р° DLL, РєРѕС‚РѕСЂСѓСЋ Winamp РІС‹Р·С‹РІР°РµС‚ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґРµСЃРєСЂРёРїС‚РѕСЂР° РїР»Р°РіРёРЅР°.
+ * Р­С‚Рѕ С‚РѕС‡РєР° РІС…РѕРґР° РґР»СЏ Р·Р°РіСЂСѓР·РєРё РїР»Р°РіРёРЅР°.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Pointer to plugin descriptor structure
- * Указатель на структуру дескриптора плагина
+ * РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ РґРµСЃРєСЂРёРїС‚РѕСЂР° РїР»Р°РіРёРЅР°
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must be exported with C linkage (__declspec(dllexport) extern "C").
  * Winamp loads plugin by calling GetProcAddress for this function.
  * Function name must be exactly "winampGetGeneralPurposePlugin".
  * 
- * Должна быть экспортирована с C linkage.
- * Winamp загружает плагин, вызывая GetProcAddress для этой функции.
- * Имя функции должно быть точно "winampGetGeneralPurposePlugin".
+ * Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅР° СЃ C linkage.
+ * Winamp Р·Р°РіСЂСѓР¶Р°РµС‚ РїР»Р°РіРёРЅ, РІС‹Р·С‹РІР°СЏ GetProcAddress РґР»СЏ СЌС‚РѕР№ С„СѓРЅРєС†РёРё.
+ * РРјСЏ С„СѓРЅРєС†РёРё РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ С‚РѕС‡РЅРѕ "winampGetGeneralPurposePlugin".
  ******************************************************************************/
 extern "C" __declspec(dllexport)
 winampGeneralPurposePlugin* winampGetGeneralPurposePlugin(void)
 {
-    return &plugin;  // Return pointer to our plugin descriptor / Вернуть указатель на наш дескриптор плагина
+    return &plugin;  // Return pointer to our plugin descriptor / Р’РµСЂРЅСѓС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С€ РґРµСЃРєСЂРёРїС‚РѕСЂ РїР»Р°РіРёРЅР°
 }
 /*******************************************************************************
  * WINAMP IPC CONSTANTS
- * КОНСТАНТЫ WINAMP IPC
+ * РљРћРќРЎРўРђРќРўР« WINAMP IPC
  * 
  * These constants define message IDs for inter-process communication with Winamp.
  * Used to query playlist information and control Winamp.
  * 
- * Эти константы определяют идентификаторы сообщений для межпроцессного
- * взаимодействия с Winamp. Используются для запроса информации о плейлисте
- * и управления Winamp.
+ * Р­С‚Рё РєРѕРЅСЃС‚Р°РЅС‚С‹ РѕРїСЂРµРґРµР»СЏСЋС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ СЃРѕРѕР±С‰РµРЅРёР№ РґР»СЏ РјРµР¶РїСЂРѕС†РµСЃСЃРЅРѕРіРѕ
+ * РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ СЃ Winamp. РСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РґР»СЏ Р·Р°РїСЂРѕСЃР° РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїР»РµР№Р»РёСЃС‚Рµ
+ * Рё СѓРїСЂР°РІР»РµРЅРёСЏ Winamp.
  ******************************************************************************/
 
 #ifndef WM_WA_IPC
-#define WM_WA_IPC (WM_USER)  // Base message for Winamp IPC / Базовое сообщение для Winamp IPC
+#define WM_WA_IPC (WM_USER)  // Base message for Winamp IPC / Р‘Р°Р·РѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РґР»СЏ Winamp IPC
 #endif
-#define IPC_GETLISTPOS      125  // Get current playlist position / Получить текущую позицию плейлиста
-#define IPC_GETPLAYLISTFILE 211  // Get playlist file at index / Получить файл плейлиста по индексу
+#define IPC_GETLISTPOS      125  // Get current playlist position / РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰СѓСЋ РїРѕР·РёС†РёСЋ РїР»РµР№Р»РёСЃС‚Р°
+#define IPC_GETPLAYLISTFILE 211  // Get playlist file at index / РџРѕР»СѓС‡РёС‚СЊ С„Р°Р№Р» РїР»РµР№Р»РёСЃС‚Р° РїРѕ РёРЅРґРµРєСЃСѓ
 
 /*******************************************************************************
  * GLOBAL STATE
- * ГЛОБАЛЬНОЕ СОСТОЯНИЕ
+ * Р“Р›РћР‘РђР›Р¬РќРћР• РЎРћРЎРўРћРЇРќРР•
  * 
  * Global variables that maintain plugin state across function calls.
- * Глобальные переменные, которые поддерживают состояние плагина между вызовами функций.
+ * Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ, РєРѕС‚РѕСЂС‹Рµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РїР»Р°РіРёРЅР° РјРµР¶РґСѓ РІС‹Р·РѕРІР°РјРё С„СѓРЅРєС†РёР№.
  ******************************************************************************/
 
 // Plugin DLL instance handle (filled in DllMain)
-// Дескриптор экземпляра DLL плагина (заполняется в DllMain)
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР° DLL РїР»Р°РіРёРЅР° (Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ РІ DllMain)
 static HINSTANCE g_hDll = NULL;
 
 // Full path to plugin.ini configuration file
-// Полный путь к файлу конфигурации plugin.ini
+// РџРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё plugin.ini
 static char g_iniPath[MAX_PATH] = {0};
 
 // Preferences dialog descriptor for Winamp integration
-// Дескриптор диалога настроек для интеграции с Winamp
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ РґРёР°Р»РѕРіР° РЅР°СЃС‚СЂРѕРµРє РґР»СЏ РёРЅС‚РµРіСЂР°С†РёРё СЃ Winamp
 static prefsDlgRec g_prefsPage;
 
 // Tab control handle in preferences dialog
-// Дескриптор tab control в диалоге настроек
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ tab control РІ РґРёР°Р»РѕРіРµ РЅР°СЃС‚СЂРѕРµРє
 static HWND g_hTab = NULL;
 
 // Handle to "General" tab page dialog
-// Дескриптор диалога страницы "Общие"
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ РґРёР°Р»РѕРіР° СЃС‚СЂР°РЅРёС†С‹ "РћР±С‰РёРµ"
 static HWND g_hPageGeneral = NULL;
 
 // Handle to "About" tab page dialog
-// Дескриптор диалога страницы "О программе"
+// Р”РµСЃРєСЂРёРїС‚РѕСЂ РґРёР°Р»РѕРіР° СЃС‚СЂР°РЅРёС†С‹ "Рћ РїСЂРѕРіСЂР°РјРјРµ"
 static HWND g_hPageAbout   = NULL;
 
 /*******************************************************************************
  * FORWARD DECLARATIONS
- * ПРЕДВАРИТЕЛЬНЫЕ ОБЪЯВЛЕНИЯ
+ * РџР Р•Р”Р’РђР РРўР•Р›Р¬РќР«Р• РћР‘РЄРЇР’Р›Р•РќРРЇ
  * 
  * Dialog procedures must be declared before they are used in CreateDialogParam.
- * Процедуры диалогов должны быть объявлены перед их использованием в CreateDialogParam.
+ * РџСЂРѕС†РµРґСѓСЂС‹ РґРёР°Р»РѕРіРѕРІ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕР±СЉСЏРІР»РµРЅС‹ РїРµСЂРµРґ РёС… РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РІ CreateDialogParam.
  ******************************************************************************/
 static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static INT_PTR CALLBACK TabAboutDlgProc  (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -322,29 +322,29 @@ static INT_PTR CALLBACK PrefsDlgProc     (HWND hDlg, UINT uMsg, WPARAM wParam, L
 /*******************************************************************************
  * PositionPageToTab
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Positions a child dialog page to fit inside the tab control's display area.
  * Positions and sizes the page to exactly match the tab's client area.
  * 
- * Позиционирует дочерний диалог страницы так, чтобы он помещался внутри области
- * отображения tab control. Позиционирует и изменяет размер страницы, чтобы точно
- * соответствовать клиентской области вкладки.
+ * РџРѕР·РёС†РёРѕРЅРёСЂСѓРµС‚ РґРѕС‡РµСЂРЅРёР№ РґРёР°Р»РѕРі СЃС‚СЂР°РЅРёС†С‹ С‚Р°Рє, С‡С‚РѕР±С‹ РѕРЅ РїРѕРјРµС‰Р°Р»СЃСЏ РІРЅСѓС‚СЂРё РѕР±Р»Р°СЃС‚Рё
+ * РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ tab control. РџРѕР·РёС†РёРѕРЅРёСЂСѓРµС‚ Рё РёР·РјРµРЅСЏРµС‚ СЂР°Р·РјРµСЂ СЃС‚СЂР°РЅРёС†С‹, С‡С‚РѕР±С‹ С‚РѕС‡РЅРѕ
+ * СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё РІРєР»Р°РґРєРё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hHost - Host dialog containing the tab control / Хост-диалог, содержащий tab control
- * hTab  - Tab control window handle / Дескриптор окна tab control
- * hPage - Child page dialog to position / Дочерний диалог страницы для позиционирования
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hHost - Host dialog containing the tab control / РҐРѕСЃС‚-РґРёР°Р»РѕРі, СЃРѕРґРµСЂР¶Р°С‰РёР№ tab control
+ * hTab  - Tab control window handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° tab control
+ * hPage - Child page dialog to position / Р”РѕС‡РµСЂРЅРёР№ РґРёР°Р»РѕРі СЃС‚СЂР°РЅРёС†С‹ РґР»СЏ РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°РЅРёСЏ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get tab control's client rectangle
  * 2. Adjust rectangle to get display area (excluding tab headers)
  * 3. Convert coordinates from tab to host dialog space
  * 4. Position and resize page dialog to match
  * 
- * 1. Получить клиентский прямоугольник tab control
- * 2. Скорректировать прямоугольник для получения области отображения (без заголовков вкладок)
- * 3. Преобразовать координаты из пространства tab в пространство хост-диалога
- * 4. Позиционировать и изменить размер диалога страницы для соответствия
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РєР»РёРµРЅС‚СЃРєРёР№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє tab control
+ * 2. РЎРєРѕСЂСЂРµРєС‚РёСЂРѕРІР°С‚СЊ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕР±Р»Р°СЃС‚Рё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ (Р±РµР· Р·Р°РіРѕР»РѕРІРєРѕРІ РІРєР»Р°РґРѕРє)
+ * 3. РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ РёР· РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР° tab РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ С…РѕСЃС‚-РґРёР°Р»РѕРіР°
+ * 4. РџРѕР·РёС†РёРѕРЅРёСЂРѕРІР°С‚СЊ Рё РёР·РјРµРЅРёС‚СЊ СЂР°Р·РјРµСЂ РґРёР°Р»РѕРіР° СЃС‚СЂР°РЅРёС†С‹ РґР»СЏ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ
  ******************************************************************************/
 static void PositionPageToTab(HWND hHost, HWND hTab, HWND hPage)
 {
@@ -352,16 +352,16 @@ static void PositionPageToTab(HWND hHost, HWND hTab, HWND hPage)
     GetClientRect(hTab, &rc);
 
     // Get internal tab area (excluding tab headers)
-    // Получить внутреннюю область вкладки (без заголовков вкладок)
+    // РџРѕР»СѓС‡РёС‚СЊ РІРЅСѓС‚СЂРµРЅРЅСЋСЋ РѕР±Р»Р°СЃС‚СЊ РІРєР»Р°РґРєРё (Р±РµР· Р·Р°РіРѕР»РѕРІРєРѕРІ РІРєР»Р°РґРѕРє)
     TabCtrl_AdjustRect(hTab, FALSE, &rc);
 
-    // Convert to host dialog coordinates / Преобразовать в координаты хост-диалога
+    // Convert to host dialog coordinates / РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РєРѕРѕСЂРґРёРЅР°С‚С‹ С…РѕСЃС‚-РґРёР°Р»РѕРіР°
     POINT pt = { rc.left, rc.top };
-    ClientToScreen(hTab, &pt);      // Tab client to screen / Клиентские координаты tab в экранные
-    ScreenToClient(hHost, &pt);     // Screen to host client / Экранные в клиентские координаты хоста
+    ClientToScreen(hTab, &pt);      // Tab client to screen / РљР»РёРµРЅС‚СЃРєРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ tab РІ СЌРєСЂР°РЅРЅС‹Рµ
+    ScreenToClient(hHost, &pt);     // Screen to host client / Р­РєСЂР°РЅРЅС‹Рµ РІ РєР»РёРµРЅС‚СЃРєРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ С…РѕСЃС‚Р°
 
     // Position page dialog inside tab display area
-    // Позиционировать диалог страницы внутри области отображения вкладки
+    // РџРѕР·РёС†РёРѕРЅРёСЂРѕРІР°С‚СЊ РґРёР°Р»РѕРі СЃС‚СЂР°РЅРёС†С‹ РІРЅСѓС‚СЂРё РѕР±Р»Р°СЃС‚Рё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІРєР»Р°РґРєРё
     SetWindowPos(hPage, NULL,
                  pt.x, pt.y,
                  rc.right - rc.left,
@@ -372,23 +372,23 @@ static void PositionPageToTab(HWND hHost, HWND hTab, HWND hPage)
 /*******************************************************************************
  * ShowTabPage
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Shows/hides appropriate tab page based on selected tab index.
  * Only one page is visible at a time.
  * 
- * Показывает/скрывает соответствующую страницу вкладки на основе выбранного индекса.
- * Только одна страница видима в каждый момент времени.
+ * РџРѕРєР°Р·С‹РІР°РµС‚/СЃРєСЂС‹РІР°РµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ СЃС‚СЂР°РЅРёС†Сѓ РІРєР»Р°РґРєРё РЅР° РѕСЃРЅРѕРІРµ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РёРЅРґРµРєСЃР°.
+ * РўРѕР»СЊРєРѕ РѕРґРЅР° СЃС‚СЂР°РЅРёС†Р° РІРёРґРёРјР° РІ РєР°Р¶РґС‹Р№ РјРѕРјРµРЅС‚ РІСЂРµРјРµРЅРё.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
  * idx - Tab index (0 = General, 1 = About)
- *       Индекс вкладки (0 = Общие, 1 = О программе)
+ *       РРЅРґРµРєСЃ РІРєР»Р°РґРєРё (0 = РћР±С‰РёРµ, 1 = Рћ РїСЂРѕРіСЂР°РјРјРµ)
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * Show General page if idx==0, hide otherwise
  * Show About page if idx==1, hide otherwise
  * 
- * Показать страницу Общие если idx==0, скрыть иначе
- * Показать страницу О программе если idx==1, скрыть иначе
+ * РџРѕРєР°Р·Р°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ РћР±С‰РёРµ РµСЃР»Рё idx==0, СЃРєСЂС‹С‚СЊ РёРЅР°С‡Рµ
+ * РџРѕРєР°Р·Р°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ Рћ РїСЂРѕРіСЂР°РјРјРµ РµСЃР»Рё idx==1, СЃРєСЂС‹С‚СЊ РёРЅР°С‡Рµ
  ******************************************************************************/
 static void ShowTabPage(int idx)
 {
@@ -399,113 +399,113 @@ static void ShowTabPage(int idx)
 /*******************************************************************************
  * BuildIniPath
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Constructs full path to plugin.ini configuration file.
  * The file is located in the same directory as the plugin DLL.
  * 
- * Строит полный путь к файлу конфигурации plugin.ini.
- * Файл расположен в том же каталоге, что и DLL плагина.
+ * РЎС‚СЂРѕРёС‚ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё plugin.ini.
+ * Р¤Р°Р№Р» СЂР°СЃРїРѕР»РѕР¶РµРЅ РІ С‚РѕРј Р¶Рµ РєР°С‚Р°Р»РѕРіРµ, С‡С‚Рѕ Рё DLL РїР»Р°РіРёРЅР°.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Check if path already built (g_iniPath[0] != 0)
  * 2. Get plugin DLL full path via GetModuleFileNameA
  * 3. Find last backslash to get directory
  * 4. Truncate at directory level
  * 5. Append "plugin.ini" filename
  * 
- * 1. Проверить, построен ли путь уже (g_iniPath[0] != 0)
- * 2. Получить полный путь DLL плагина через GetModuleFileNameA
- * 3. Найти последний обратный слеш для получения каталога
- * 4. Обрезать на уровне каталога
- * 5. Добавить имя файла "plugin.ini"
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ, РїРѕСЃС‚СЂРѕРµРЅ Р»Рё РїСѓС‚СЊ СѓР¶Рµ (g_iniPath[0] != 0)
+ * 2. РџРѕР»СѓС‡РёС‚СЊ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ DLL РїР»Р°РіРёРЅР° С‡РµСЂРµР· GetModuleFileNameA
+ * 3. РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅРёР№ РѕР±СЂР°С‚РЅС‹Р№ СЃР»РµС€ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєР°С‚Р°Р»РѕРіР°
+ * 4. РћР±СЂРµР·Р°С‚СЊ РЅР° СѓСЂРѕРІРЅРµ РєР°С‚Р°Р»РѕРіР°
+ * 5. Р”РѕР±Р°РІРёС‚СЊ РёРјСЏ С„Р°Р№Р»Р° "plugin.ini"
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Idempotent - safe to call multiple times, only builds path once.
  * Path stored in global g_iniPath array.
  * 
- * Идемпотентна - безопасно вызывать много раз, строит путь только один раз.
- * Путь сохраняется в глобальном массиве g_iniPath.
+ * РРґРµРјРїРѕС‚РµРЅС‚РЅР° - Р±РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РјРЅРѕРіРѕ СЂР°Р·, СЃС‚СЂРѕРёС‚ РїСѓС‚СЊ С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·.
+ * РџСѓС‚СЊ СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РІ РіР»РѕР±Р°Р»СЊРЅРѕРј РјР°СЃСЃРёРІРµ g_iniPath.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * If DLL is at: C:\Program Files\Winamp\Plugins\gen_fixer.dll
  * Result:       C:\Program Files\Winamp\Plugins\plugin.ini
  ******************************************************************************/
 static void BuildIniPath(void)
 {
-    if (g_iniPath[0]) return;  // Already built / Уже построен
+    if (g_iniPath[0]) return;  // Already built / РЈР¶Рµ РїРѕСЃС‚СЂРѕРµРЅ
     
-    // Get DLL full path / Получить полный путь DLL
+    // Get DLL full path / РџРѕР»СѓС‡РёС‚СЊ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ DLL
     char dll[MAX_PATH]; 
     dll[0] = 0;
     GetModuleFileNameA(g_hDll, dll, MAX_PATH);
     
-    // Find last backslash to strip filename / Найти последний обратный слеш для удаления имени файла
+    // Find last backslash to strip filename / РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅРёР№ РѕР±СЂР°С‚РЅС‹Р№ СЃР»РµС€ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РёРјРµРЅРё С„Р°Р№Р»Р°
     char* p = dll; 
-    while (*p) ++p;                             // Move to end of string / Переместиться в конец строки
-    while (p > dll && *(p - 1) != '\\') --p;    // Back up to last backslash / Вернуться к последнему обратному слешу
-    *p = 0;  // Truncate at directory / Обрезать до каталога
+    while (*p) ++p;                             // Move to end of string / РџРµСЂРµРјРµСЃС‚РёС‚СЊСЃСЏ РІ РєРѕРЅРµС† СЃС‚СЂРѕРєРё
+    while (p > dll && *(p - 1) != '\\') --p;    // Back up to last backslash / Р’РµСЂРЅСѓС‚СЊСЃСЏ Рє РїРѕСЃР»РµРґРЅРµРјСѓ РѕР±СЂР°С‚РЅРѕРјСѓ СЃР»РµС€Сѓ
+    *p = 0;  // Truncate at directory / РћР±СЂРµР·Р°С‚СЊ РґРѕ РєР°С‚Р°Р»РѕРіР°
     
-    // Build ini path: directory + "plugin.ini" / Построить путь ini: каталог + "plugin.ini"
+    // Build ini path: directory + "plugin.ini" / РџРѕСЃС‚СЂРѕРёС‚СЊ РїСѓС‚СЊ ini: РєР°С‚Р°Р»РѕРі + "plugin.ini"
     lstrcpyA(g_iniPath, dll);
     lstrcatA(g_iniPath, "plugin.ini");
 }
 
 /*******************************************************************************
  * CONFIGURATION STRUCTURE
- * СТРУКТУРА КОНФИГУРАЦИИ
+ * РЎРўР РЈРљРўРЈР Рђ РљРћРќР¤РР“РЈР РђР¦РР
  * 
  * Stores enabled/disabled state for all optional modules.
  * Each field corresponds to one module that can be toggled.
  * 
- * Хранит состояние включено/отключено для всех опциональных модулей.
- * Каждое поле соответствует одному модулю, который можно переключать.
+ * РҐСЂР°РЅРёС‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РІРєР»СЋС‡РµРЅРѕ/РѕС‚РєР»СЋС‡РµРЅРѕ РґР»СЏ РІСЃРµС… РѕРїС†РёРѕРЅР°Р»СЊРЅС‹С… РјРѕРґСѓР»РµР№.
+ * РљР°Р¶РґРѕРµ РїРѕР»Рµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РѕРґРЅРѕРјСѓ РјРѕРґСѓР»СЋ, РєРѕС‚РѕСЂС‹Р№ РјРѕР¶РЅРѕ РїРµСЂРµРєР»СЋС‡Р°С‚СЊ.
  * 
- * VALUES / ЗНАЧЕНИЯ:
- * 0 = Module disabled / Модуль отключён
- * 1 = Module enabled / Модуль включён
+ * VALUES / Р—РќРђР§Р•РќРРЇ:
+ * 0 = Module disabled / РњРѕРґСѓР»СЊ РѕС‚РєР»СЋС‡С‘РЅ
+ * 1 = Module enabled / РњРѕРґСѓР»СЊ РІРєР»СЋС‡С‘РЅ
  * 
- * PERSISTENCE / СОХРАНЕНИЕ:
+ * PERSISTENCE / РЎРћРҐР РђРќР•РќРР•:
  * Loaded from plugin.ini on startup via LoadCfg()
  * Saved to plugin.ini when changed via SaveCfg()
  * 
- * Загружается из plugin.ini при запуске через LoadCfg()
- * Сохраняется в plugin.ini при изменении через SaveCfg()
+ * Р—Р°РіСЂСѓР¶Р°РµС‚СЃСЏ РёР· plugin.ini РїСЂРё Р·Р°РїСѓСЃРєРµ С‡РµСЂРµР· LoadCfg()
+ * РЎРѕС…СЂР°РЅСЏРµС‚СЃСЏ РІ plugin.ini РїСЂРё РёР·РјРµРЅРµРЅРёРё С‡РµСЂРµР· SaveCfg()
  ******************************************************************************/
 struct FixerCfg {
-    int startup_foreground;  // Force Winamp to foreground on startup / Принудительно на передний план при старте
-    int iconfix;             // Fix window icon issues / Исправить проблемы с иконками окон
-    int restart_menu;        // Add "Restart Winamp" menu item / Добавить пункт меню "Перезапустить Winamp"
-    int mute_hotkey;         // Enable Ctrl+Space mute hotkey / Включить горячую клавишу Ctrl+Space для выключения звука
-    int skin_delete;         // Enable skin delete/rename in dialog / Включить удаление/переименование скинов в диалоге
-    int pe_zones;            // Enable playlist editor clickable zones / Включить кликабельные зоны редактора плейлистов
-    int video_fontfix;       // Fix fonts in video plugins / Исправить шрифты в видео плагинах
-    int skin_install;        // Skin installation context menu / Контекстное меню установки скинов
-	int m3u8;                // M3U8 playlist loader / Загрузчик M3U8 плейлистов
-	int unitag;              // Unicode ID3 tag fixes / Исправления Unicode ID3-тегов
-	int unistr;              // Unicode stream metadata fixes / Исправления метаданных Unicode потоков
-	int mlfont;              // Media Library font smoothing / Сглаживание шрифтов библиотеки
-	int mlico;               // Media Library icon tinting / Тонирование иконок библиотеки
-	int mlsearch;            // Cyrillic search fix / Исправление поиска кириллицы
-	int patch_url;           // URL museum patch / Патч URL-музея
-	int patch_mb_skin;       // Minibrowser skin patch / Патч скинов мини-браузера
-	int patch_mb;            // Minibrowser removal patch / Патч удаления мини-браузера
-	int plsearch;            // Playlist Cyrillic search / Поиск кириллицы в плейлисте
-	int id3;                 // ID3v2 save fix / Исправление сохранения ID3v2
-	int mlcd;                // Remove CD ripping from Media Library / Удалить риппинг CD из библиотеки
+    int startup_foreground;  // Force Winamp to foreground on startup / РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РЅР° РїРµСЂРµРґРЅРёР№ РїР»Р°РЅ РїСЂРё СЃС‚Р°СЂС‚Рµ
+    int iconfix;             // Fix window icon issues / РСЃРїСЂР°РІРёС‚СЊ РїСЂРѕР±Р»РµРјС‹ СЃ РёРєРѕРЅРєР°РјРё РѕРєРѕРЅ
+    int restart_menu;        // Add "Restart Winamp" menu item / Р”РѕР±Р°РІРёС‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ "РџРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ Winamp"
+    int mute_hotkey;         // Enable Ctrl+Space mute hotkey / Р’РєР»СЋС‡РёС‚СЊ РіРѕСЂСЏС‡СѓСЋ РєР»Р°РІРёС€Сѓ Ctrl+Space РґР»СЏ РІС‹РєР»СЋС‡РµРЅРёСЏ Р·РІСѓРєР°
+    int skin_delete;         // Enable skin delete/rename in dialog / Р’РєР»СЋС‡РёС‚СЊ СѓРґР°Р»РµРЅРёРµ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃРєРёРЅРѕРІ РІ РґРёР°Р»РѕРіРµ
+    int pe_zones;            // Enable playlist editor clickable zones / Р’РєР»СЋС‡РёС‚СЊ РєР»РёРєР°Р±РµР»СЊРЅС‹Рµ Р·РѕРЅС‹ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
+    int video_fontfix;       // Fix fonts in video plugins / РСЃРїСЂР°РІРёС‚СЊ С€СЂРёС„С‚С‹ РІ РІРёРґРµРѕ РїР»Р°РіРёРЅР°С…
+    int skin_install;        // Skin installation context menu / РљРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ СѓСЃС‚Р°РЅРѕРІРєРё СЃРєРёРЅРѕРІ
+	int m3u8;                // M3U8 playlist loader / Р—Р°РіСЂСѓР·С‡РёРє M3U8 РїР»РµР№Р»РёСЃС‚РѕРІ
+	int unitag;              // Unicode ID3 tag fixes / РСЃРїСЂР°РІР»РµРЅРёСЏ Unicode ID3-С‚РµРіРѕРІ
+	int unistr;              // Unicode stream metadata fixes / РСЃРїСЂР°РІР»РµРЅРёСЏ РјРµС‚Р°РґР°РЅРЅС‹С… Unicode РїРѕС‚РѕРєРѕРІ
+	int mlfont;              // Media Library font smoothing / РЎРіР»Р°Р¶РёРІР°РЅРёРµ С€СЂРёС„С‚РѕРІ Р±РёР±Р»РёРѕС‚РµРєРё
+	int mlico;               // Media Library icon tinting / РўРѕРЅРёСЂРѕРІР°РЅРёРµ РёРєРѕРЅРѕРє Р±РёР±Р»РёРѕС‚РµРєРё
+	int mlsearch;            // Cyrillic search fix / РСЃРїСЂР°РІР»РµРЅРёРµ РїРѕРёСЃРєР° РєРёСЂРёР»Р»РёС†С‹
+	int patch_url;           // URL museum patch / РџР°С‚С‡ URL-РјСѓР·РµСЏ
+	int patch_mb_skin;       // Minibrowser skin patch / РџР°С‚С‡ СЃРєРёРЅРѕРІ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
+	int patch_mb;            // Minibrowser removal patch / РџР°С‚С‡ СѓРґР°Р»РµРЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
+	int plsearch;            // Playlist Cyrillic search / РџРѕРёСЃРє РєРёСЂРёР»Р»РёС†С‹ РІ РїР»РµР№Р»РёСЃС‚Рµ
+	int id3;                 // ID3v2 save fix / РСЃРїСЂР°РІР»РµРЅРёРµ СЃРѕС…СЂР°РЅРµРЅРёСЏ ID3v2
+	int mlcd;                // Remove CD ripping from Media Library / РЈРґР°Р»РёС‚СЊ СЂРёРїРїРёРЅРі CD РёР· Р±РёР±Р»РёРѕС‚РµРєРё
 
-} g_cfg = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};  // Default: all enabled / По умолчанию: всё включено
+} g_cfg = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};  // Default: all enabled / РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ: РІСЃС‘ РІРєР»СЋС‡РµРЅРѕ
 
 /*******************************************************************************
  * LoadCfg
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Loads configuration from plugin.ini file into g_cfg structure.
  * Each module's enabled state is read from the [Fixer] section.
  * 
- * Загружает конфигурацию из файла plugin.ini в структуру g_cfg.
- * Состояние включения каждого модуля читается из секции [Fixer].
+ * Р—Р°РіСЂСѓР¶Р°РµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РёР· С„Р°Р№Р»Р° plugin.ini РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ g_cfg.
+ * РЎРѕСЃС‚РѕСЏРЅРёРµ РІРєР»СЋС‡РµРЅРёСЏ РєР°Р¶РґРѕРіРѕ РјРѕРґСѓР»СЏ С‡РёС‚Р°РµС‚СЃСЏ РёР· СЃРµРєС†РёРё [Fixer].
  * 
- * FILE FORMAT / ФОРМАТ ФАЙЛА:
+ * FILE FORMAT / Р¤РћР РњРђРў Р¤РђР™Р›Рђ:
  * [Fixer]
  * StartupFix=1
  * IconFix=1
@@ -516,29 +516,29 @@ struct FixerCfg {
  * VideoFontFix=1
  * ...
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Build path to plugin.ini if not already built
  * 2. Read each setting using GetPrivateProfileIntA
  * 3. Default to 1 (enabled) if key doesn't exist
  * 
- * 1. Построить путь к plugin.ini если ещё не построен
- * 2. Прочитать каждую настройку используя GetPrivateProfileIntA
- * 3. По умолчанию 1 (включено) если ключ не существует
+ * 1. РџРѕСЃС‚СЂРѕРёС‚СЊ РїСѓС‚СЊ Рє plugin.ini РµСЃР»Рё РµС‰С‘ РЅРµ РїРѕСЃС‚СЂРѕРµРЅ
+ * 2. РџСЂРѕС‡РёС‚Р°С‚СЊ РєР°Р¶РґСѓСЋ РЅР°СЃС‚СЂРѕР№РєСѓ РёСЃРїРѕР»СЊР·СѓСЏ GetPrivateProfileIntA
+ * 3. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 1 (РІРєР»СЋС‡РµРЅРѕ) РµСЃР»Рё РєР»СЋС‡ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Called once during plugin initialization in init()
  * If plugin.ini doesn't exist, defaults are used (all enabled)
  * 
- * Вызывается один раз во время инициализации плагина в init()
- * Если plugin.ini не существует, используются значения по умолчанию (всё включено)
+ * Р’С‹Р·С‹РІР°РµС‚СЃСЏ РѕРґРёРЅ СЂР°Р· РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР° РІ init()
+ * Р•СЃР»Рё plugin.ini РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ Р·РЅР°С‡РµРЅРёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ (РІСЃС‘ РІРєР»СЋС‡РµРЅРѕ)
  ******************************************************************************/
 static void LoadCfg(void)
 {
-    // Ensure ini path is built / Убедиться что путь ini построен
+    // Ensure ini path is built / РЈР±РµРґРёС‚СЊСЃСЏ С‡С‚Рѕ РїСѓС‚СЊ ini РїРѕСЃС‚СЂРѕРµРЅ
     BuildIniPath();
 
     // Read all configuration values from [Fixer] section
-    // Прочитать все значения конфигурации из секции [Fixer]
+    // РџСЂРѕС‡РёС‚Р°С‚СЊ РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РёР· СЃРµРєС†РёРё [Fixer]
     g_cfg.startup_foreground = GetPrivateProfileIntA("Fixer", "StartupFix",		    1, g_iniPath);
     g_cfg.iconfix            = GetPrivateProfileIntA("Fixer", "IconFix",            1, g_iniPath);
     g_cfg.restart_menu       = GetPrivateProfileIntA("Fixer", "RestartMenuItem",    1, g_iniPath);
@@ -564,38 +564,38 @@ static void LoadCfg(void)
 /*******************************************************************************
  * SaveCfg
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Saves current configuration from g_cfg structure to plugin.ini file.
  * Called automatically when user changes settings in preferences dialog.
  * 
- * Сохраняет текущую конфигурацию из структуры g_cfg в файл plugin.ini.
- * Вызывается автоматически когда пользователь меняет настройки в диалоге настроек.
+ * РЎРѕС…СЂР°РЅСЏРµС‚ С‚РµРєСѓС‰СѓСЋ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РёР· СЃС‚СЂСѓРєС‚СѓСЂС‹ g_cfg РІ С„Р°Р№Р» plugin.ini.
+ * Р’С‹Р·С‹РІР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РјРµРЅСЏРµС‚ РЅР°СЃС‚СЂРѕР№РєРё РІ РґРёР°Р»РѕРіРµ РЅР°СЃС‚СЂРѕРµРє.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Build path to plugin.ini if not already built
  * 2. Write each setting using WritePrivateProfileStringA
  * 3. Convert integer values to "0" or "1" strings
  * 
- * 1. Построить путь к plugin.ini если ещё не построен
- * 2. Записать каждую настройку используя WritePrivateProfileStringA
- * 3. Преобразовать целочисленные значения в строки "0" или "1"
+ * 1. РџРѕСЃС‚СЂРѕРёС‚СЊ РїСѓС‚СЊ Рє plugin.ini РµСЃР»Рё РµС‰С‘ РЅРµ РїРѕСЃС‚СЂРѕРµРЅ
+ * 2. Р—Р°РїРёСЃР°С‚СЊ РєР°Р¶РґСѓСЋ РЅР°СЃС‚СЂРѕР№РєСѓ РёСЃРїРѕР»СЊР·СѓСЏ WritePrivateProfileStringA
+ * 3. РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ С†РµР»РѕС‡РёСЃР»РµРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РІ СЃС‚СЂРѕРєРё "0" РёР»Рё "1"
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Creates plugin.ini if it doesn't exist
  * All values written to [Fixer] section
  * Changes take effect immediately via ApplyRuntime()
  * 
- * Создаёт plugin.ini если не существует
- * Все значения записываются в секцию [Fixer]
- * Изменения вступают в силу немедленно через ApplyRuntime()
+ * РЎРѕР·РґР°С‘С‚ plugin.ini РµСЃР»Рё РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
+ * Р’СЃРµ Р·РЅР°С‡РµРЅРёСЏ Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ РІ СЃРµРєС†РёСЋ [Fixer]
+ * РР·РјРµРЅРµРЅРёСЏ РІСЃС‚СѓРїР°СЋС‚ РІ СЃРёР»Сѓ РЅРµРјРµРґР»РµРЅРЅРѕ С‡РµСЂРµР· ApplyRuntime()
  ******************************************************************************/
 static void SaveCfg(void)
 {
-    // Ensure ini path is built / Убедиться что путь ini построен
+    // Ensure ini path is built / РЈР±РµРґРёС‚СЊСЃСЏ С‡С‚Рѕ РїСѓС‚СЊ ini РїРѕСЃС‚СЂРѕРµРЅ
     BuildIniPath();
     
     // Write all configuration values to [Fixer] section as "0" or "1" strings
-    // Записать все значения конфигурации в секцию [Fixer] как строки "0" или "1"
+    // Р—Р°РїРёСЃР°С‚СЊ РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РІ СЃРµРєС†РёСЋ [Fixer] РєР°Рє СЃС‚СЂРѕРєРё "0" РёР»Рё "1"
     WritePrivateProfileStringA("Fixer", "StartupFix",			   g_cfg.startup_foreground ? "1":"0", g_iniPath);
     WritePrivateProfileStringA("Fixer", "IconFix",				   g_cfg.iconfix            ? "1":"0", g_iniPath);
     WritePrivateProfileStringA("Fixer", "RestartMenuItem",		   g_cfg.restart_menu       ? "1":"0", g_iniPath);
@@ -620,98 +620,98 @@ static void SaveCfg(void)
 
 /*******************************************************************************
  * MODULE STATE TRACKING
- * ОТСЛЕЖИВАНИЕ СОСТОЯНИЯ МОДУЛЕЙ
+ * РћРўРЎР›Р•Р–РР’РђРќРР• РЎРћРЎРўРћРЇРќРРЇ РњРћР”РЈР›Р•Р™
  * 
  * Tracks which modules are currently initialized and running.
  * Used to ensure proper cleanup and prevent double-initialization/cleanup.
  * 
- * Отслеживает, какие модули в данный момент инициализированы и работают.
- * Используется для обеспечения правильной очистки и предотвращения двойной
- * инициализации/очистки.
+ * РћС‚СЃР»РµР¶РёРІР°РµС‚, РєР°РєРёРµ РјРѕРґСѓР»Рё РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅС‹ Рё СЂР°Р±РѕС‚Р°СЋС‚.
+ * РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ РїСЂР°РІРёР»СЊРЅРѕР№ РѕС‡РёСЃС‚РєРё Рё РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РґРІРѕР№РЅРѕР№
+ * РёРЅРёС†РёР°Р»РёР·Р°С†РёРё/РѕС‡РёСЃС‚РєРё.
  * 
- * VALUES / ЗНАЧЕНИЯ:
- * 0 = Module not started / Модуль не запущен
- * 1 = Module started and running / Модуль запущен и работает
+ * VALUES / Р—РќРђР§Р•РќРРЇ:
+ * 0 = Module not started / РњРѕРґСѓР»СЊ РЅРµ Р·Р°РїСѓС‰РµРЅ
+ * 1 = Module started and running / РњРѕРґСѓР»СЊ Р·Р°РїСѓС‰РµРЅ Рё СЂР°Р±РѕС‚Р°РµС‚
  * 
- * IMPORTANCE / ВАЖНОСТЬ:
+ * IMPORTANCE / Р’РђР–РќРћРЎРўР¬:
  * CRITICAL: Must check these flags before calling module quit() functions.
  * Calling quit() on uninitialized module can cause crashes.
  * 
- * КРИТИЧНО: Нужно проверять эти флаги перед вызовом функций quit() модулей.
- * Вызов quit() на неинициализированном модуле может вызвать краш.
+ * РљР РРўРР§РќРћ: РќСѓР¶РЅРѕ РїСЂРѕРІРµСЂСЏС‚СЊ СЌС‚Рё С„Р»Р°РіРё РїРµСЂРµРґ РІС‹Р·РѕРІРѕРј С„СѓРЅРєС†РёР№ quit() РјРѕРґСѓР»РµР№.
+ * Р’С‹Р·РѕРІ quit() РЅР° РЅРµРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅРѕРј РјРѕРґСѓР»Рµ РјРѕР¶РµС‚ РІС‹Р·РІР°С‚СЊ РєСЂР°С€.
  ******************************************************************************/
 static struct {
-    int startup;				// mod_startup_foreground active / mod_startup_foreground активен
-    int iconfix;				// mod_iconfix active / mod_iconfix активен
-    int restart;				// mod_menu_restart active / mod_menu_restart активен
-    int mute;					// mod_mute active / mod_mute активен
-    int skindel;				// mod_skin_delete active / mod_skin_delete активен
-    int pezones;				// mod_plist_buttons active / mod_plist_buttons активен
-    int vidfont;				// mod_videofontfix active / mod_videofontfix активен 
-    int skin_install;           // mod_skininstall active / mod_skininstall активен
-	int m3u8;                   // mod_m3u8 active / mod_m3u8 активен
-	int unitag;                 // mod_unicode_tags active / mod_unicode_tags активен
-	int unistr;                 // mod_unicode_stream active / mod_unicode_stream активен
-	int mlfont;                 // mod_ml_fonts active / mod_ml_fonts активен
-	int mlico;                  // mod_ml_icons active / mod_ml_icons активен
-	int mlsearch;               // mod_ml_search active / mod_ml_search активен
-	int patch_url;              // patch_url active / patch_url активен
-	int patch_mb_skin;          // patch_mb_skin active / patch_mb_skin активен
-	int patch_mb;               // patch_mb active / patch_mb активен
-	int plsearch;               // patch_pl active / patch_pl активен
-	int id3;                    // mod_save_id3v2 active / mod_save_id3v2 активен
-	int mlcd;                   // patch_cd active / patch_cd активен
+    int startup;				// mod_startup_foreground active / mod_startup_foreground Р°РєС‚РёРІРµРЅ
+    int iconfix;				// mod_iconfix active / mod_iconfix Р°РєС‚РёРІРµРЅ
+    int restart;				// mod_menu_restart active / mod_menu_restart Р°РєС‚РёРІРµРЅ
+    int mute;					// mod_mute active / mod_mute Р°РєС‚РёРІРµРЅ
+    int skindel;				// mod_skin_delete active / mod_skin_delete Р°РєС‚РёРІРµРЅ
+    int pezones;				// mod_plist_buttons active / mod_plist_buttons Р°РєС‚РёРІРµРЅ
+    int vidfont;				// mod_videofontfix active / mod_videofontfix Р°РєС‚РёРІРµРЅ 
+    int skin_install;           // mod_skininstall active / mod_skininstall Р°РєС‚РёРІРµРЅ
+	int m3u8;                   // mod_m3u8 active / mod_m3u8 Р°РєС‚РёРІРµРЅ
+	int unitag;                 // mod_unicode_tags active / mod_unicode_tags Р°РєС‚РёРІРµРЅ
+	int unistr;                 // mod_unicode_stream active / mod_unicode_stream Р°РєС‚РёРІРµРЅ
+	int mlfont;                 // mod_ml_fonts active / mod_ml_fonts Р°РєС‚РёРІРµРЅ
+	int mlico;                  // mod_ml_icons active / mod_ml_icons Р°РєС‚РёРІРµРЅ
+	int mlsearch;               // mod_ml_search active / mod_ml_search Р°РєС‚РёРІРµРЅ
+	int patch_url;              // patch_url active / patch_url Р°РєС‚РёРІРµРЅ
+	int patch_mb_skin;          // patch_mb_skin active / patch_mb_skin Р°РєС‚РёРІРµРЅ
+	int patch_mb;               // patch_mb active / patch_mb Р°РєС‚РёРІРµРЅ
+	int plsearch;               // patch_pl active / patch_pl Р°РєС‚РёРІРµРЅ
+	int id3;                    // mod_save_id3v2 active / mod_save_id3v2 Р°РєС‚РёРІРµРЅ
+	int mlcd;                   // patch_cd active / patch_cd Р°РєС‚РёРІРµРЅ
 
-} g_started = {0};  // Initialize all to 0 (not started) / Инициализировать всё в 0 (не запущено)
+} g_started = {0};  // Initialize all to 0 (not started) / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РІСЃС‘ РІ 0 (РЅРµ Р·Р°РїСѓС‰РµРЅРѕ)
 
 /*******************************************************************************
  * ApplyRuntime
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Applies configuration changes at runtime by starting/stopping modules as needed.
  * Called both during initial plugin load and when user changes settings.
  * Implements hot-swapping of modules without requiring Winamp restart.
  * 
- * Применяет изменения конфигурации во время выполнения, запуская/останавливая
- * модули по мере необходимости. Вызывается как во время начальной загрузки плагина,
- * так и когда пользователь меняет настройки. Реализует горячую замену модулей без
- * необходимости перезапуска Winamp.
+ * РџСЂРёРјРµРЅСЏРµС‚ РёР·РјРµРЅРµРЅРёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РІРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ, Р·Р°РїСѓСЃРєР°СЏ/РѕСЃС‚Р°РЅР°РІР»РёРІР°СЏ
+ * РјРѕРґСѓР»Рё РїРѕ РјРµСЂРµ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё. Р’С‹Р·С‹РІР°РµС‚СЃСЏ РєР°Рє РІРѕ РІСЂРµРјСЏ РЅР°С‡Р°Р»СЊРЅРѕР№ Р·Р°РіСЂСѓР·РєРё РїР»Р°РіРёРЅР°,
+ * С‚Р°Рє Рё РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РјРµРЅСЏРµС‚ РЅР°СЃС‚СЂРѕР№РєРё. Р РµР°Р»РёР·СѓРµС‚ РіРѕСЂСЏС‡СѓСЋ Р·Р°РјРµРЅСѓ РјРѕРґСѓР»РµР№ Р±РµР·
+ * РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµР·Р°РїСѓСЃРєР° Winamp.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * For each module:
  * 1. If module not started AND config enabled: call module init(), mark as started
  * 2. If module started AND config disabled: call module quit(), mark as stopped
  * 
- * Для каждого модуля:
- * 1. Если модуль не запущен И конфиг включён: вызвать init() модуля, отметить как запущенный
- * 2. Если модуль запущен И конфиг отключён: вызвать quit() модуля, отметить как остановленный
+ * Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РјРѕРґСѓР»СЏ:
+ * 1. Р•СЃР»Рё РјРѕРґСѓР»СЊ РЅРµ Р·Р°РїСѓС‰РµРЅ Р РєРѕРЅС„РёРі РІРєР»СЋС‡С‘РЅ: РІС‹Р·РІР°С‚СЊ init() РјРѕРґСѓР»СЏ, РѕС‚РјРµС‚РёС‚СЊ РєР°Рє Р·Р°РїСѓС‰РµРЅРЅС‹Р№
+ * 2. Р•СЃР»Рё РјРѕРґСѓР»СЊ Р·Р°РїСѓС‰РµРЅ Р РєРѕРЅС„РёРі РѕС‚РєР»СЋС‡С‘РЅ: РІС‹Р·РІР°С‚СЊ quit() РјРѕРґСѓР»СЏ, РѕС‚РјРµС‚РёС‚СЊ РєР°Рє РѕСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Р№
  * 
- * OPTIMIZATIONS / ОПТИМИЗАЦИИ:
+ * OPTIMIZATIONS / РћРџРўРРњРР—РђР¦РР:
  * - Removed unused 'oldCfg' parameter from original version
  * - Groups modules that need Winamp window handle for efficiency
  * 
- * - Удалён неиспользуемый параметр 'oldCfg' из оригинальной версии
- * - Группирует модули, которым нужен дескриптор окна Winamp для эффективности
+ * - РЈРґР°Р»С‘РЅ РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ 'oldCfg' РёР· РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ РІРµСЂСЃРёРё
+ * - Р“СЂСѓРїРїРёСЂСѓРµС‚ РјРѕРґСѓР»Рё, РєРѕС‚РѕСЂС‹Рј РЅСѓР¶РµРЅ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° Winamp РґР»СЏ СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Some modules require Winamp window handle (wa), so we find it first.
  * Module initialization order generally doesn't matter, but we group related modules.
  * 
- * Некоторые модули требуют дескриптор окна Winamp (wa), поэтому находим его сначала.
- * Порядок инициализации модулей обычно не важен, но мы группируем связанные модули.
+ * РќРµРєРѕС‚РѕСЂС‹Рµ РјРѕРґСѓР»Рё С‚СЂРµР±СѓСЋС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° Winamp (wa), РїРѕСЌС‚РѕРјСѓ РЅР°С…РѕРґРёРј РµРіРѕ СЃРЅР°С‡Р°Р»Р°.
+ * РџРѕСЂСЏРґРѕРє РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РјРѕРґСѓР»РµР№ РѕР±С‹С‡РЅРѕ РЅРµ РІР°Р¶РµРЅ, РЅРѕ РјС‹ РіСЂСѓРїРїРёСЂСѓРµРј СЃРІСЏР·Р°РЅРЅС‹Рµ РјРѕРґСѓР»Рё.
  ******************************************************************************/
-static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗИРОВАНО: Удалён неиспользуемый параметр
+static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / РћРџРўРРњРР—РР РћР’РђРќРћ: РЈРґР°Р»С‘РЅ РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ
 {
     // Get Winamp main window handle (needed by some modules)
-    // Получить дескриптор главного окна Winamp (нужен некоторым модулям)
+    // РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° Winamp (РЅСѓР¶РµРЅ РЅРµРєРѕС‚РѕСЂС‹Рј РјРѕРґСѓР»СЏРј)
     HWND wa = plugin.hwndParent;
 
     /***************************************************************************
      * STARTUP FOREGROUND MODULE
-     * МОДУЛЬ ПРИНУДИТЕЛЬНОГО ПЕРЕДНЕГО ПЛАНА ПРИ СТАРТЕ
+     * РњРћР”РЈР›Р¬ РџР РРќРЈР”РРўР•Р›Р¬РќРћР“Рћ РџР•Р Р•Р”РќР•Р“Рћ РџР›РђРќРђ РџР Р РЎРўРђР РўР•
      * 
      * Forces Winamp window to foreground on startup.
-     * Принудительно выводит окно Winamp на передний план при запуске.
+     * РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РІС‹РІРѕРґРёС‚ РѕРєРЅРѕ Winamp РЅР° РїРµСЂРµРґРЅРёР№ РїР»Р°РЅ РїСЂРё Р·Р°РїСѓСЃРєРµ.
      ***************************************************************************/
     if (!g_started.startup && g_cfg.startup_foreground) { 
         Startup_Init(); 
@@ -723,15 +723,15 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
     }
 
     // Modules that require Winamp window handle
-    // Модули, которым требуется дескриптор окна Winamp
+    // РњРѕРґСѓР»Рё, РєРѕС‚РѕСЂС‹Рј С‚СЂРµР±СѓРµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° Winamp
     if (wa) {
 
         /***************************************************************************
          * RESTART MENU MODULE
-         * МОДУЛЬ МЕНЮ ПЕРЕЗАПУСКА
+         * РњРћР”РЈР›Р¬ РњР•РќР® РџР•Р Р•Р—РђРџРЈРЎРљРђ
          * 
          * Adds "Restart Winamp" menu item to main menu.
-         * Добавляет пункт меню "Перезапустить Winamp" в главное меню.
+         * Р”РѕР±Р°РІР»СЏРµС‚ РїСѓРЅРєС‚ РјРµРЅСЋ "РџРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ Winamp" РІ РіР»Р°РІРЅРѕРµ РјРµРЅСЋ.
          ***************************************************************************/
         if (!g_started.restart && g_cfg.restart_menu) { 
             Menu_Init(wa); 
@@ -744,10 +744,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
         
         /***************************************************************************
          * ICON FIX MODULE
-         * МОДУЛЬ ИСПРАВЛЕНИЯ ИКОНОК
+         * РњРћР”РЈР›Р¬ РРЎРџР РђР’Р›Р•РќРРЇ РРљРћРќРћРљ
          * 
          * Fixes window icon display issues.
-         * Исправляет проблемы отображения иконок окон.
+         * РСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРєРѕРЅРѕРє РѕРєРѕРЅ.
          ***************************************************************************/
         if (!g_started.iconfix && g_cfg.iconfix) { 
             IconFix_Init(wa); 
@@ -760,10 +760,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
         
         /***************************************************************************
          * VIDEO FONT FIX MODULE
-         * МОДУЛЬ ИСПРАВЛЕНИЯ ШРИФТОВ ВИДЕО
+         * РњРћР”РЈР›Р¬ РРЎРџР РђР’Р›Р•РќРРЇ РЁР РР¤РўРћР’ Р’РР”Р•Рћ
          * 
          * Fixes font issues in video plugin windows.
-         * Исправляет проблемы со шрифтами в окнах видео плагинов.
+         * РСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ СЃРѕ С€СЂРёС„С‚Р°РјРё РІ РѕРєРЅР°С… РІРёРґРµРѕ РїР»Р°РіРёРЅРѕРІ.
          ***************************************************************************/
         if (!g_started.vidfont && g_cfg.video_fontfix) { 
             VideoFontFix_Init(wa); 
@@ -777,10 +777,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
     /***************************************************************************
      * MUTE HOTKEY MODULE
-     * МОДУЛЬ ГОРЯЧЕЙ КЛАВИШИ ВЫКЛЮЧЕНИЯ ЗВУКА
+     * РњРћР”РЈР›Р¬ Р“РћР РЇР§Р•Р™ РљР›РђР’РРЁР Р’Р«РљР›Р®Р§Р•РќРРЇ Р—Р’РЈРљРђ
      * 
      * Adds Ctrl+Space global hotkey for mute toggle.
-     * Добавляет глобальную горячую клавишу Ctrl+Space для переключения звука.
+     * Р”РѕР±Р°РІР»СЏРµС‚ РіР»РѕР±Р°Р»СЊРЅСѓСЋ РіРѕСЂСЏС‡СѓСЋ РєР»Р°РІРёС€Сѓ Ctrl+Space РґР»СЏ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ Р·РІСѓРєР°.
      ***************************************************************************/
     if (!g_started.mute && g_cfg.mute_hotkey) { 
         Mute_Init(); 
@@ -793,10 +793,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
     /***************************************************************************
      * SKIN DELETE MODULE
-     * МОДУЛЬ УДАЛЕНИЯ СКИНОВ
+     * РњРћР”РЈР›Р¬ РЈР”РђР›Р•РќРРЇ РЎРљРРќРћР’
      * 
      * Enables skin delete/rename functionality in skin selection dialog.
-     * Включает функциональность удаления/переименования скинов в диалоге выбора.
+     * Р’РєР»СЋС‡Р°РµС‚ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ СѓРґР°Р»РµРЅРёСЏ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ СЃРєРёРЅРѕРІ РІ РґРёР°Р»РѕРіРµ РІС‹Р±РѕСЂР°.
      ***************************************************************************/
     if (!g_started.skindel && g_cfg.skin_delete) { 
         SkinDel_Init(); 
@@ -809,13 +809,13 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
     /***************************************************************************
      * PLAYLIST EDITOR ZONES MODULE
-     * МОДУЛЬ ЗОН РЕДАКТОРА ПЛЕЙЛИСТОВ
+     * РњРћР”РЈР›Р¬ Р—РћРќ Р Р•Р”РђРљРўРћР Рђ РџР›Р•Р™Р›РРЎРўРћР’
      * 
      * Adds clickable zones to playlist editor window.
-     * Добавляет кликабельные зоны в окно редактора плейлистов.
+     * Р”РѕР±Р°РІР»СЏРµС‚ РєР»РёРєР°Р±РµР»СЊРЅС‹Рµ Р·РѕРЅС‹ РІ РѕРєРЅРѕ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ.
      ***************************************************************************/
     if (!g_started.pezones && g_cfg.pe_zones) {
-        PeZones_SetInstance(g_hDll);  // Module needs DLL instance / Модулю нужен экземпляр DLL
+        PeZones_SetInstance(g_hDll);  // Module needs DLL instance / РњРѕРґСѓР»СЋ РЅСѓР¶РµРЅ СЌРєР·РµРјРїР»СЏСЂ DLL
         PeZones_Init();
         g_started.pezones=1;
     }
@@ -826,29 +826,29 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * SKIN INSTALL MODULE
-     * МОДУЛЬ УСТАНОВКИ СКИНОВ
+     * РњРћР”РЈР›Р¬ РЈРЎРўРђРќРћР’РљР РЎРљРРќРћР’
      * 
      * Adds context menu for skin installation.
      * Adds registry association for .wsz files.
      * 
-     * Добавляет контекстное меню для установки скинов.
-     * Добавляет ассоциацию реестра для файлов .wsz.
+     * Р”РѕР±Р°РІР»СЏРµС‚ РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё СЃРєРёРЅРѕРІ.
+     * Р”РѕР±Р°РІР»СЏРµС‚ Р°СЃСЃРѕС†РёР°С†РёСЋ СЂРµРµСЃС‚СЂР° РґР»СЏ С„Р°Р№Р»РѕРІ .wsz.
      ***************************************************************************/
 	if (!g_started.skin_install && g_cfg.skin_install) {
-		SkinInstall_RunOnce();  // Run once to register / Запустить один раз для регистрации
+		SkinInstall_RunOnce();  // Run once to register / Р—Р°РїСѓСЃС‚РёС‚СЊ РѕРґРёРЅ СЂР°Р· РґР»СЏ СЂРµРіРёСЃС‚СЂР°С†РёРё
 		g_started.skin_install = 1;
 	}
 	if ( g_started.skin_install && !g_cfg.skin_install) {
-		SkinInstall_RunOnce();  // Run once to unregister / Запустить один раз для отмены регистрации
+		SkinInstall_RunOnce();  // Run once to unregister / Р—Р°РїСѓСЃС‚РёС‚СЊ РѕРґРёРЅ СЂР°Р· РґР»СЏ РѕС‚РјРµРЅС‹ СЂРµРіРёСЃС‚СЂР°С†РёРё
 		g_started.skin_install = 0;
 	}
 
 	/***************************************************************************
      * M3U8 LOADER MODULE
-     * МОДУЛЬ ЗАГРУЗЧИКА M3U8
+     * РњРћР”РЈР›Р¬ Р—РђР“Р РЈР—Р§РРљРђ M3U8
      * 
      * Adds support for M3U8 UTF-8 playlist format.
-     * Добавляет поддержку формата плейлистов M3U8 UTF-8.
+     * Р”РѕР±Р°РІР»СЏРµС‚ РїРѕРґРґРµСЂР¶РєСѓ С„РѕСЂРјР°С‚Р° РїР»РµР№Р»РёСЃС‚РѕРІ M3U8 UTF-8.
      ***************************************************************************/
 	if (!g_started.m3u8 && g_cfg.m3u8) {
 		m3u8_Loader_Init();
@@ -861,13 +861,13 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * UNICODE TAG MODULE
-     * МОДУЛЬ UNICODE ТЕГОВ
+     * РњРћР”РЈР›Р¬ UNICODE РўР•Р“РћР’
      * 
      * Fixes Unicode encoding issues in ID3v2 tags.
      * Also initializes Media Library Unicode fixes.
      * 
-     * Исправляет проблемы кодировки Unicode в ID3v2 тегах.
-     * Также инициализирует исправления Unicode библиотеки.
+     * РСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ РєРѕРґРёСЂРѕРІРєРё Unicode РІ ID3v2 С‚РµРіР°С….
+     * РўР°РєР¶Рµ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РёСЃРїСЂР°РІР»РµРЅРёСЏ Unicode Р±РёР±Р»РёРѕС‚РµРєРё.
      ***************************************************************************/
 	if (!g_started.unitag && g_cfg.unitag) {
 		MP3_TagsFix_Init();
@@ -882,10 +882,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * UNICODE STREAM MODULE
-     * МОДУЛЬ UNICODE ПОТОКОВ
+     * РњРћР”РЈР›Р¬ UNICODE РџРћРўРћРљРћР’
      * 
      * Fixes Unicode encoding in SHOUTcast stream metadata.
-     * Исправляет кодировку Unicode в метаданных SHOUTcast потоков.
+     * РСЃРїСЂР°РІР»СЏРµС‚ РєРѕРґРёСЂРѕРІРєСѓ Unicode РІ РјРµС‚Р°РґР°РЅРЅС‹С… SHOUTcast РїРѕС‚РѕРєРѕРІ.
      ***************************************************************************/
 	if (!g_started.unistr && g_cfg.unistr) {
 		MP3_StreamFix_Init();
@@ -898,10 +898,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * MEDIA LIBRARY FONT MODULE
-     * МОДУЛЬ ШРИФТОВ БИБЛИОТЕКИ
+     * РњРћР”РЈР›Р¬ РЁР РР¤РўРћР’ Р‘РР‘Р›РРћРўР•РљР
      * 
      * Enables ClearType/font smoothing in Media Library windows.
-     * Включает ClearType/сглаживание шрифтов в окнах библиотеки.
+     * Р’РєР»СЋС‡Р°РµС‚ ClearType/СЃРіР»Р°Р¶РёРІР°РЅРёРµ С€СЂРёС„С‚РѕРІ РІ РѕРєРЅР°С… Р±РёР±Р»РёРѕС‚РµРєРё.
      ***************************************************************************/
 	if (!g_started.mlfont && g_cfg.mlfont) {
 		ML_SmoothFonts_Init();
@@ -914,10 +914,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * MEDIA LIBRARY ICON TINT MODULE
-     * МОДУЛЬ ТОНИРОВАНИЯ ИКОНОК БИБЛИОТЕКИ
+     * РњРћР”РЈР›Р¬ РўРћРќРР РћР’РђРќРРЇ РРљРћРќРћРљ Р‘РР‘Р›РРћРўР•РљР
      * 
      * Tints Media Library icons to match skin colors.
-     * Тонирует иконки библиотеки для соответствия цветам скина.
+     * РўРѕРЅРёСЂСѓРµС‚ РёРєРѕРЅРєРё Р±РёР±Р»РёРѕС‚РµРєРё РґР»СЏ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ С†РІРµС‚Р°Рј СЃРєРёРЅР°.
      ***************************************************************************/
 	if (!g_started.mlico && g_cfg.mlico) {
 		ML_IconsTint_Start(GetModuleHandleA(NULL));
@@ -930,10 +930,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * MEDIA LIBRARY CYRILLIC SEARCH MODULE
-     * МОДУЛЬ ПОИСКА КИРИЛЛИЦЫ В БИБЛИОТЕКЕ
+     * РњРћР”РЈР›Р¬ РџРћРРЎРљРђ РљРР РР›Р›РР¦Р« Р’ Р‘РР‘Р›РРћРўР•РљР•
      * 
      * Fixes Cyrillic character search in Media Library.
-     * Исправляет поиск кириллических символов в библиотеке.
+     * РСЃРїСЂР°РІР»СЏРµС‚ РїРѕРёСЃРє РєРёСЂРёР»Р»РёС‡РµСЃРєРёС… СЃРёРјРІРѕР»РѕРІ РІ Р±РёР±Р»РёРѕС‚РµРєРµ.
      ***************************************************************************/
 	if (!g_started.mlsearch && g_cfg.mlsearch) {
 		ML_CyrSearchFix_Init();
@@ -946,10 +946,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * URL MUSEUM PATCH MODULE
-     * МОДУЛЬ ПАТЧА URL-МУЗЕЯ
+     * РњРћР”РЈР›Р¬ РџРђРўР§Рђ URL-РњРЈР—Р•РЇ
      * 
      * Patches URLs to use archive/museum versions.
-     * Патчит URL для использования архивных/музейных версий.
+     * РџР°С‚С‡РёС‚ URL РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ Р°СЂС…РёРІРЅС‹С…/РјСѓР·РµР№РЅС‹С… РІРµСЂСЃРёР№.
      ***************************************************************************/
 	if (!g_started.patch_url && g_cfg.patch_url) {
 		patch_url_init();
@@ -962,10 +962,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * MINIBROWSER SKIN PATCH MODULE
-     * МОДУЛЬ ПАТЧА СКИНОВ МИНИ-БРАУЗЕРА
+     * РњРћР”РЈР›Р¬ РџРђРўР§Рђ РЎРљРРќРћР’ РњРРќР-Р‘Р РђРЈР—Р•Р Рђ
      * 
      * Patches minibrowser skin handling.
-     * Патчит обработку скинов мини-браузера.
+     * РџР°С‚С‡РёС‚ РѕР±СЂР°Р±РѕС‚РєСѓ СЃРєРёРЅРѕРІ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
      ***************************************************************************/
 	if (!g_started.patch_mb_skin && g_cfg.patch_mb_skin) {
 		patch_mb_skin_init();
@@ -978,10 +978,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * MINIBROWSER REMOVAL PATCH MODULE
-     * МОДУЛЬ ПАТЧА УДАЛЕНИЯ МИНИ-БРАУЗЕРА
+     * РњРћР”РЈР›Р¬ РџРђРўР§Рђ РЈР”РђР›Р•РќРРЇ РњРРќР-Р‘Р РђРЈР—Р•Р Рђ
      * 
      * Removes/disables minibrowser functionality.
-     * Удаляет/отключает функциональность мини-браузера.
+     * РЈРґР°Р»СЏРµС‚/РѕС‚РєР»СЋС‡Р°РµС‚ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
      ***************************************************************************/
 	if (!g_started.patch_mb && g_cfg.patch_mb) {
 		patch_mb_init();
@@ -994,10 +994,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * PLAYLIST CYRILLIC SEARCH MODULE
-     * МОДУЛЬ ПОИСКА КИРИЛЛИЦЫ В ПЛЕЙЛИСТЕ
+     * РњРћР”РЈР›Р¬ РџРћРРЎРљРђ РљРР РР›Р›РР¦Р« Р’ РџР›Р•Р™Р›РРЎРўР•
      * 
      * Fixes Cyrillic character search in playlist editor.
-     * Исправляет поиск кириллических символов в редакторе плейлистов.
+     * РСЃРїСЂР°РІР»СЏРµС‚ РїРѕРёСЃРє РєРёСЂРёР»Р»РёС‡РµСЃРєРёС… СЃРёРјРІРѕР»РѕРІ РІ СЂРµРґР°РєС‚РѕСЂРµ РїР»РµР№Р»РёСЃС‚РѕРІ.
      ***************************************************************************/
 	if (!g_started.plsearch && g_cfg.plsearch) {
 		patch_pl_init();
@@ -1010,10 +1010,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * ID3V2 SAVE FIX MODULE
-     * МОДУЛЬ ИСПРАВЛЕНИЯ СОХРАНЕНИЯ ID3V2
+     * РњРћР”РЈР›Р¬ РРЎРџР РђР’Р›Р•РќРРЇ РЎРћРҐР РђРќР•РќРРЇ ID3V2
      * 
      * Fixes issues with saving ID3v2 tags.
-     * Исправляет проблемы с сохранением ID3v2 тегов.
+     * РСЃРїСЂР°РІР»СЏРµС‚ РїСЂРѕР±Р»РµРјС‹ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј ID3v2 С‚РµРіРѕРІ.
      ***************************************************************************/
 	if (!g_started.id3 && g_cfg.id3) {
 		MP3_SaveFix_Init();
@@ -1026,10 +1026,10 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 
 	/***************************************************************************
      * CD RIPPING REMOVAL PATCH MODULE
-     * МОДУЛЬ ПАТЧА УДАЛЕНИЯ РИППИНГА CD
+     * РњРћР”РЈР›Р¬ РџРђРўР§Рђ РЈР”РђР›Р•РќРРЇ Р РРџРџРРќР“Рђ CD
      * 
      * Removes CD ripping functionality from Media Library.
-     * Удаляет функциональность риппинга CD из библиотеки.
+     * РЈРґР°Р»СЏРµС‚ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ СЂРёРїРїРёРЅРіР° CD РёР· Р±РёР±Р»РёРѕС‚РµРєРё.
      ***************************************************************************/
 	if (!g_started.mlcd && g_cfg.mlcd) {
 		patch_cd_init();
@@ -1044,20 +1044,20 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
 /*******************************************************************************
  * UpdateFlagFromClick
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Updates configuration and applies changes when user clicks a checkbox in
  * preferences dialog. Provides immediate feedback by applying changes without
  * requiring Winamp restart.
  * 
- * Обновляет конфигурацию и применяет изменения, когда пользователь кликает
- * чекбокс в диалоге настроек. Обеспечивает немедленную обратную связь, применяя
- * изменения без необходимости перезапуска Winamp.
+ * РћР±РЅРѕРІР»СЏРµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ Рё РїСЂРёРјРµРЅСЏРµС‚ РёР·РјРµРЅРµРЅРёСЏ, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РєР»РёРєР°РµС‚
+ * С‡РµРєР±РѕРєСЃ РІ РґРёР°Р»РѕРіРµ РЅР°СЃС‚СЂРѕРµРє. РћР±РµСЃРїРµС‡РёРІР°РµС‚ РЅРµРјРµРґР»РµРЅРЅСѓСЋ РѕР±СЂР°С‚РЅСѓСЋ СЃРІСЏР·СЊ, РїСЂРёРјРµРЅСЏСЏ
+ * РёР·РјРµРЅРµРЅРёСЏ Р±РµР· РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµР·Р°РїСѓСЃРєР° Winamp.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hDlg   - Dialog window handle / Дескриптор окна диалога
- * ctrlID - Control ID of clicked checkbox / ID контрола нажатого чекбокса
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hDlg   - Dialog window handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° РґРёР°Р»РѕРіР°
+ * ctrlID - Control ID of clicked checkbox / ID РєРѕРЅС‚СЂРѕР»Р° РЅР°Р¶Р°С‚РѕРіРѕ С‡РµРєР±РѕРєСЃР°
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Save old configuration (for potential future use)
  * 2. Read checkbox state (checked/unchecked)
  * 3. Map control ID to corresponding config flag
@@ -1065,26 +1065,26 @@ static void ApplyRuntime(void)  // OPTIMIZED: Removed unused parameter / ОПТИМИЗ
  * 5. Save configuration to plugin.ini
  * 6. Apply runtime changes (start/stop affected modules)
  * 
- * 1. Сохранить старую конфигурацию (для потенциального будущего использования)
- * 2. Прочитать состояние чекбокса (отмечен/не отмечен)
- * 3. Сопоставить ID контрола с соответствующим флагом конфигурации
- * 4. Обновить флаг конфигурации на основе состояния чекбокса
- * 5. Сохранить конфигурацию в plugin.ini
- * 6. Применить изменения во время выполнения (запустить/остановить затронутые модули)
+ * 1. РЎРѕС…СЂР°РЅРёС‚СЊ СЃС‚Р°СЂСѓСЋ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ (РґР»СЏ РїРѕС‚РµРЅС†РёР°Р»СЊРЅРѕРіРѕ Р±СѓРґСѓС‰РµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ)
+ * 2. РџСЂРѕС‡РёС‚Р°С‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ С‡РµРєР±РѕРєСЃР° (РѕС‚РјРµС‡РµРЅ/РЅРµ РѕС‚РјРµС‡РµРЅ)
+ * 3. РЎРѕРїРѕСЃС‚Р°РІРёС‚СЊ ID РєРѕРЅС‚СЂРѕР»Р° СЃ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРј С„Р»Р°РіРѕРј РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+ * 4. РћР±РЅРѕРІРёС‚СЊ С„Р»Р°Рі РєРѕРЅС„РёРіСѓСЂР°С†РёРё РЅР° РѕСЃРЅРѕРІРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ С‡РµРєР±РѕРєСЃР°
+ * 5. РЎРѕС…СЂР°РЅРёС‚СЊ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РІ plugin.ini
+ * 6. РџСЂРёРјРµРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ (Р·Р°РїСѓСЃС‚РёС‚СЊ/РѕСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‚СЂРѕРЅСѓС‚С‹Рµ РјРѕРґСѓР»Рё)
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Changes take effect immediately - no restart required.
  * Old config saved but currently unused - available for rollback features.
  * 
- * Изменения вступают в силу немедленно - перезапуск не требуется.
- * Старая конфигурация сохраняется но не используется - доступна для функций отката.
+ * РР·РјРµРЅРµРЅРёСЏ РІСЃС‚СѓРїР°СЋС‚ РІ СЃРёР»Сѓ РЅРµРјРµРґР»РµРЅРЅРѕ - РїРµСЂРµР·Р°РїСѓСЃРє РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ.
+ * РЎС‚Р°СЂР°СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РЅРѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ - РґРѕСЃС‚СѓРїРЅР° РґР»СЏ С„СѓРЅРєС†РёР№ РѕС‚РєР°С‚Р°.
  ******************************************************************************/
 static void UpdateFlagFromClick(HWND hDlg, int ctrlID)
 {
 
     BOOL checked = (IsDlgButtonChecked(hDlg, ctrlID) == BST_CHECKED);
 
-    // Map control ID to config flag / Сопоставить ID контрола с флагом конфигурации	
+    // Map control ID to config flag / РЎРѕРїРѕСЃС‚Р°РІРёС‚СЊ ID РєРѕРЅС‚СЂРѕР»Р° СЃ С„Р»Р°РіРѕРј РєРѕРЅС„РёРіСѓСЂР°С†РёРё	
     if	    (ctrlID == IDC_CHK_STARTUP)			 g_cfg.startup_foreground = checked;
 	else if (ctrlID == IDC_CHK_ICONFIX)			 g_cfg.iconfix		      = checked;
     else if (ctrlID == IDC_CHK_RESTART)			 g_cfg.restart_menu       = checked;
@@ -1106,43 +1106,43 @@ static void UpdateFlagFromClick(HWND hDlg, int ctrlID)
 	else if (ctrlID == IDC_CHK_ID3)				 g_cfg.id3			      = checked;
 	else if (ctrlID == IDC_CHK_MLCD)			 g_cfg.mlcd			      = checked;
 
-    SaveCfg();          // Persist changes to plugin.ini / Сохранить изменения в plugin.ini
-    ApplyRuntime();     // Apply changes immediately / Применить изменения немедленно
+    SaveCfg();          // Persist changes to plugin.ini / РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ plugin.ini
+    ApplyRuntime();     // Apply changes immediately / РџСЂРёРјРµРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РЅРµРјРµРґР»РµРЅРЅРѕ
 }
 
 /*******************************************************************************
  * PrefsDlgProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Main dialog procedure for plugin preferences page in Winamp settings.
  * Handles tab control creation and management for multi-page preferences.
  * 
- * Главная процедура диалога для страницы настроек плагина в настройках Winamp.
- * Обрабатывает создание и управление tab control для многостраничных настроек.
+ * Р“Р»Р°РІРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РґРёР°Р»РѕРіР° РґР»СЏ СЃС‚СЂР°РЅРёС†С‹ РЅР°СЃС‚СЂРѕРµРє РїР»Р°РіРёРЅР° РІ РЅР°СЃС‚СЂРѕР№РєР°С… Winamp.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЃРѕР·РґР°РЅРёРµ Рё СѓРїСЂР°РІР»РµРЅРёРµ tab control РґР»СЏ РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅС‹С… РЅР°СЃС‚СЂРѕРµРє.
  * 
- * MESSAGES / СООБЩЕНИЯ:
+ * MESSAGES / РЎРћРћР‘Р©Р•РќРРЇ:
  * WM_INITDIALOG - Create tab control and child page dialogs
- *                 Создать tab control и дочерние диалоги страниц
+ *                 РЎРѕР·РґР°С‚СЊ tab control Рё РґРѕС‡РµСЂРЅРёРµ РґРёР°Р»РѕРіРё СЃС‚СЂР°РЅРёС†
  * WM_NOTIFY     - Handle tab selection changes
- *                 Обработать изменения выбора вкладки
+ *                 РћР±СЂР°Р±РѕС‚Р°С‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІС‹Р±РѕСЂР° РІРєР»Р°РґРєРё
  * WM_DESTROY    - Cleanup child dialogs
- *                 Очистить дочерние диалоги
+ *                 РћС‡РёСЃС‚РёС‚СЊ РґРѕС‡РµСЂРЅРёРµ РґРёР°Р»РѕРіРё
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hDlg   - Dialog window handle / Дескриптор окна диалога
- * uMsg   - Message ID / Идентификатор сообщения
- * wParam - Message parameter 1 / Параметр сообщения 1
- * lParam - Message parameter 2 / Параметр сообщения 2
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hDlg   - Dialog window handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР° РґРёР°Р»РѕРіР°
+ * uMsg   - Message ID / РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕРѕР±С‰РµРЅРёСЏ
+ * wParam - Message parameter 1 / РџР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ 1
+ * lParam - Message parameter 2 / РџР°СЂР°РјРµС‚СЂ СЃРѕРѕР±С‰РµРЅРёСЏ 2
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if message processed, FALSE otherwise
- * TRUE если сообщение обработано, FALSE иначе
+ * TRUE РµСЃР»Рё СЃРѕРѕР±С‰РµРЅРёРµ РѕР±СЂР°Р±РѕС‚Р°РЅРѕ, FALSE РёРЅР°С‡Рµ
  * 
- * TAB STRUCTURE / СТРУКТУРА ВКЛАДОК:
+ * TAB STRUCTURE / РЎРўР РЈРљРўРЈР Рђ Р’РљР›РђР”РћРљ:
  * Tab 0: General settings (main features)
- *        Общие настройки (основные функции)
+ *        РћР±С‰РёРµ РЅР°СЃС‚СЂРѕР№РєРё (РѕСЃРЅРѕРІРЅС‹Рµ С„СѓРЅРєС†РёРё)
  * Tab 1: About/Advanced settings
- *        О программе/Дополнительные настройки
+ *        Рћ РїСЂРѕРіСЂР°РјРјРµ/Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё
  ******************************************************************************/
 static INT_PTR CALLBACK PrefsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1150,36 +1150,36 @@ static INT_PTR CALLBACK PrefsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
     {
     case WM_INITDIALOG:
 
-        // Get tab control handle / Получить дескриптор tab control
+        // Get tab control handle / РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ tab control
         g_hTab = GetDlgItem(hDlg, IDC_TAB_MAIN);
         if (g_hTab)
         {
-            // Initialize tab item structure / Инициализировать структуру элемента вкладки
+            // Initialize tab item structure / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ СЌР»РµРјРµРЅС‚Р° РІРєР»Р°РґРєРё
             TCITEMA ti;
             ZeroMemory(&ti, sizeof(ti));
             ti.mask = TCIF_TEXT;
 
-            // Insert "General" tab / Вставить вкладку "Общие"
+            // Insert "General" tab / Р’СЃС‚Р°РІРёС‚СЊ РІРєР»Р°РґРєСѓ "РћР±С‰РёРµ"
             ti.pszText = TAB_OPT1;
             TabCtrl_InsertItem(g_hTab, 0, &ti);
 
-            // Insert "About" tab / Вставить вкладку "О программе"
+            // Insert "About" tab / Р’СЃС‚Р°РІРёС‚СЊ РІРєР»Р°РґРєСѓ "Рћ РїСЂРѕРіСЂР°РјРјРµ"
             ti.pszText = TAB_OPT2;
             TabCtrl_InsertItem(g_hTab, 1, &ti);
 
             // Create page dialogs as children of main dialog
-            // Создать диалоги страниц как дочерние элементы главного диалога
+            // РЎРѕР·РґР°С‚СЊ РґРёР°Р»РѕРіРё СЃС‚СЂР°РЅРёС† РєР°Рє РґРѕС‡РµСЂРЅРёРµ СЌР»РµРјРµРЅС‚С‹ РіР»Р°РІРЅРѕРіРѕ РґРёР°Р»РѕРіР°
             g_hPageGeneral = CreateDialogParamA(g_hDll, MAKEINTRESOURCEA(IDD_FIXER_PAGE_GENERAL),
                                                 hDlg, TabGeneralDlgProc, 0);
             g_hPageAbout   = CreateDialogParamA(g_hDll, MAKEINTRESOURCEA(IDD_FIXER_PAGE_ABOUT),
                                                 hDlg, TabAboutDlgProc, 0);
 
             // Position pages to fit inside tab display area
-            // Позиционировать страницы для соответствия области отображения вкладки
+            // РџРѕР·РёС†РёРѕРЅРёСЂРѕРІР°С‚СЊ СЃС‚СЂР°РЅРёС†С‹ РґР»СЏ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ РѕР±Р»Р°СЃС‚Рё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІРєР»Р°РґРєРё
             if (g_hPageGeneral) PositionPageToTab(hDlg, g_hTab, g_hPageGeneral);
             if (g_hPageAbout)   PositionPageToTab(hDlg, g_hTab, g_hPageAbout);
 
-            // Show initial tab (General) / Показать начальную вкладку (Общие)
+            // Show initial tab (General) / РџРѕРєР°Р·Р°С‚СЊ РЅР°С‡Р°Р»СЊРЅСѓСЋ РІРєР»Р°РґРєСѓ (РћР±С‰РёРµ)
             TabCtrl_SetCurSel(g_hTab, 0);
             ShowTabPage(0);
         }
@@ -1190,18 +1190,18 @@ static INT_PTR CALLBACK PrefsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
         if (lParam)
         {
             NMHDR* nh = (NMHDR*)lParam;
-            // Handle tab selection change / Обработать изменение выбора вкладки
+            // Handle tab selection change / РћР±СЂР°Р±РѕС‚Р°С‚СЊ РёР·РјРµРЅРµРЅРёРµ РІС‹Р±РѕСЂР° РІРєР»Р°РґРєРё
             if (nh->idFrom == IDC_TAB_MAIN && nh->code == TCN_SELCHANGE)
             {
                 int idx = TabCtrl_GetCurSel(g_hTab);
-                ShowTabPage(idx);  // Show selected page, hide others / Показать выбранную страницу, скрыть остальные
+                ShowTabPage(idx);  // Show selected page, hide others / РџРѕРєР°Р·Р°С‚СЊ РІС‹Р±СЂР°РЅРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ, СЃРєСЂС‹С‚СЊ РѕСЃС‚Р°Р»СЊРЅС‹Рµ
                 return TRUE;
             }
         }
         break;
 
     case WM_DESTROY:
-        // Cleanup child page dialogs / Очистить дочерние диалоги страниц
+        // Cleanup child page dialogs / РћС‡РёСЃС‚РёС‚СЊ РґРѕС‡РµСЂРЅРёРµ РґРёР°Р»РѕРіРё СЃС‚СЂР°РЅРёС†
         if (g_hPageGeneral) { DestroyWindow(g_hPageGeneral); g_hPageGeneral = NULL; }
         if (g_hPageAbout)   { DestroyWindow(g_hPageAbout);   g_hPageAbout = NULL; }
         g_hTab = NULL;
@@ -1214,10 +1214,10 @@ static INT_PTR CALLBACK PrefsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
 
 /*******************************************************************************
  * TOOLTIP HELPER FUNCTIONS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ВСПЛЫВАЮЩИХ ПОДСКАЗОК
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР Р”Р›РЇ Р’РЎРџР›Р«Р’РђР®Р©РРҐ РџРћР”РЎРљРђР—РћРљ
  * 
  * Compatible with Windows 98 through Windows 11
- * Совместимо с Windows 98 до Windows 11
+ * РЎРѕРІРјРµСЃС‚РёРјРѕ СЃ Windows 98 РґРѕ Windows 11
  ******************************************************************************/
 
 /**
@@ -1227,7 +1227,7 @@ static INT_PTR CALLBACK PrefsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
  */
 static HWND CreateCheckboxTooltips(HWND hDlg)
 {
-    // Create tooltip control / Создать контрол всплывающих подсказок
+    // Create tooltip control / РЎРѕР·РґР°С‚СЊ РєРѕРЅС‚СЂРѕР» РІСЃРїР»С‹РІР°СЋС‰РёС… РїРѕРґСЃРєР°Р·РѕРє
     HWND hwndTT = CreateWindowExA(
         0,
         TOOLTIPS_CLASSA,      // Use ANSI for Win98 compatibility
@@ -1243,10 +1243,10 @@ static HWND CreateCheckboxTooltips(HWND hDlg)
     if (!hwndTT)
         return NULL;
     
-    // Set max width for multiline tooltips / Установить макс. ширину для многострочных подсказок
+    // Set max width for multiline tooltips / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјР°РєСЃ. С€РёСЂРёРЅСѓ РґР»СЏ РјРЅРѕРіРѕСЃС‚СЂРѕС‡РЅС‹С… РїРѕРґСЃРєР°Р·РѕРє
     SendMessageA(hwndTT, TTM_SETMAXTIPWIDTH, 0, 250);
     
-    // Tooltip structure / Структура подсказки
+    // Tooltip structure / РЎС‚СЂСѓРєС‚СѓСЂР° РїРѕРґСЃРєР°Р·РєРё
     TOOLINFOA ti;
     ZeroMemory(&ti, sizeof(ti));
     ti.cbSize   = sizeof(TOOLINFOA);
@@ -1254,8 +1254,8 @@ static HWND CreateCheckboxTooltips(HWND hDlg)
     ti.hwnd     = hDlg;
     ti.hinst    = GetModuleHandleA(NULL);
     
-    // Tooltip texts (multiline with \r\n) / Тексты подсказок (многострочные с \r\n)
-    // Using numbered format as requested / Используем нумерованный формат как запрошено
+    // Tooltip texts (multiline with \r\n) / РўРµРєСЃС‚С‹ РїРѕРґСЃРєР°Р·РѕРє (РјРЅРѕРіРѕСЃС‚СЂРѕС‡РЅС‹Рµ СЃ \r\n)
+    // Using numbered format as requested / РСЃРїРѕР»СЊР·СѓРµРј РЅСѓРјРµСЂРѕРІР°РЅРЅС‹Р№ С„РѕСЂРјР°С‚ РєР°Рє Р·Р°РїСЂРѕС€РµРЅРѕ
     
     // 1. M3U8 Support
     ti.uId = (UINT_PTR)GetDlgItem(hDlg, IDC_CHK_M3U8);
@@ -1316,39 +1316,39 @@ static HWND CreateCheckboxTooltips(HWND hDlg)
 /*******************************************************************************
  * TabGeneralDlgProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Dialog procedure for the "General" settings tab page.
  * Handles initialization and checkbox clicks for main plugin features.
  * 
- * Процедура диалога для страницы вкладки "Общие" настройки.
- * Обрабатывает инициализацию и клики чекбоксов для основных функций плагина.
+ * РџСЂРѕС†РµРґСѓСЂР° РґРёР°Р»РѕРіР° РґР»СЏ СЃС‚СЂР°РЅРёС†С‹ РІРєР»Р°РґРєРё "РћР±С‰РёРµ" РЅР°СЃС‚СЂРѕР№РєРё.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ Рё РєР»РёРєРё С‡РµРєР±РѕРєСЃРѕРІ РґР»СЏ РѕСЃРЅРѕРІРЅС‹С… С„СѓРЅРєС†РёР№ РїР»Р°РіРёРЅР°.
  * 
- * MESSAGES / СООБЩЕНИЯ:
+ * MESSAGES / РЎРћРћР‘Р©Р•РќРРЇ:
  * WM_INITDIALOG - Set checkbox labels and states from current config
- *                 Установить метки чекбоксов и состояния из текущей конфигурации
+ *                 РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјРµС‚РєРё С‡РµРєР±РѕРєСЃРѕРІ Рё СЃРѕСЃС‚РѕСЏРЅРёСЏ РёР· С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
  * WM_COMMAND    - Handle checkbox click events
- *                 Обработать события клика чекбоксов
+ *                 РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃРѕР±С‹С‚РёСЏ РєР»РёРєР° С‡РµРєР±РѕРєСЃРѕРІ
  * 
- * FEATURES ON THIS PAGE / ФУНКЦИИ НА ЭТОЙ СТРАНИЦЕ:
- * - M3U8 playlist support / Поддержка плейлистов M3U8
- * - Skin delete/rename / Удаление/переименование скинов
- * - Playlist editor zones / Зоны редактора плейлистов
- * - Restart menu item / Пункт меню перезапуска
- * - Mute hotkey / Горячая клавиша выключения звука
- * - Media Library fonts / Шрифты библиотеки
- * - Media Library icons / Иконки библиотеки
- * - CD ripping removal / Удаление риппинга CD
- * - Minibrowser patches / Патчи мини-браузера
+ * FEATURES ON THIS PAGE / Р¤РЈРќРљР¦РР РќРђ Р­РўРћР™ РЎРўР РђРќРР¦Р•:
+ * - M3U8 playlist support / РџРѕРґРґРµСЂР¶РєР° РїР»РµР№Р»РёСЃС‚РѕРІ M3U8
+ * - Skin delete/rename / РЈРґР°Р»РµРЅРёРµ/РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃРєРёРЅРѕРІ
+ * - Playlist editor zones / Р—РѕРЅС‹ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
+ * - Restart menu item / РџСѓРЅРєС‚ РјРµРЅСЋ РїРµСЂРµР·Р°РїСѓСЃРєР°
+ * - Mute hotkey / Р“РѕСЂСЏС‡Р°СЏ РєР»Р°РІРёС€Р° РІС‹РєР»СЋС‡РµРЅРёСЏ Р·РІСѓРєР°
+ * - Media Library fonts / РЁСЂРёС„С‚С‹ Р±РёР±Р»РёРѕС‚РµРєРё
+ * - Media Library icons / РРєРѕРЅРєРё Р±РёР±Р»РёРѕС‚РµРєРё
+ * - CD ripping removal / РЈРґР°Р»РµРЅРёРµ СЂРёРїРїРёРЅРіР° CD
+ * - Minibrowser patches / РџР°С‚С‡Рё РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
  ******************************************************************************/
 static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM)
 {
-    static HWND s_hwndTooltip = NULL;  // Store tooltip handle / Хранить хэндл подсказок
+    static HWND s_hwndTooltip = NULL;  // Store tooltip handle / РҐСЂР°РЅРёС‚СЊ С…СЌРЅРґР» РїРѕРґСЃРєР°Р·РѕРє
 
     switch (uMsg)
     {
     case WM_INITDIALOG:
 
-		// Set checkbox labels from language strings / Установить метки чекбоксов из языковых строк
+		// Set checkbox labels from language strings / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјРµС‚РєРё С‡РµРєР±РѕРєСЃРѕРІ РёР· СЏР·С‹РєРѕРІС‹С… СЃС‚СЂРѕРє
 		SetDlgItemTextA(hDlg, IDC_CHK_M3U8, M3U8);
 		SetDlgItemTextA(hDlg, IDC_CHK_SKINDEL, DELSKIN);
 		SetDlgItemTextA(hDlg, IDC_CHK_PEZONES, PL_MENUS);
@@ -1361,7 +1361,7 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
 		SetDlgItemTextA(hDlg, IDC_CHK_PATCHMB, PATCHMB);
 
 
-        // Initialize checkboxes from current config / Инициализировать чекбоксы из текущей конфигурации
+        // Initialize checkboxes from current config / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ С‡РµРєР±РѕРєСЃС‹ РёР· С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
         CheckDlgButton(hDlg, IDC_CHK_M3U8, g_cfg.m3u8					    ? BST_CHECKED : BST_UNCHECKED);
 		CheckDlgButton(hDlg, IDC_CHK_SKINDEL, g_cfg.skin_delete			    ? BST_CHECKED : BST_UNCHECKED);
 		CheckDlgButton(hDlg, IDC_CHK_PEZONES, g_cfg.pe_zones				? BST_CHECKED : BST_UNCHECKED);
@@ -1379,7 +1379,7 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
             EnableWindow(GetDlgItem(hDlg, IDC_CHK_PATCHMBSKIN), FALSE);
         }
         
-        // Create tooltips for all checkboxes / Создать подсказки для всех чекбоксов
+        // Create tooltips for all checkboxes / РЎРѕР·РґР°С‚СЊ РїРѕРґСЃРєР°Р·РєРё РґР»СЏ РІСЃРµС… С‡РµРєР±РѕРєСЃРѕРІ
         s_hwndTooltip = CreateCheckboxTooltips(hDlg);
         
         return TRUE;
@@ -1396,23 +1396,23 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
         case IDC_CHK_MLICO:
         case IDC_CHK_MLCD:
         case IDC_CHK_PATCHMBSKIN:
-            if (HIWORD(wParam) == BN_CLICKED)  // Only handle click events / Обрабатывать только события клика
+            if (HIWORD(wParam) == BN_CLICKED)  // Only handle click events / РћР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ С‚РѕР»СЊРєРѕ СЃРѕР±С‹С‚РёСЏ РєР»РёРєР°
                 UpdateFlagFromClick(hDlg, LOWORD(wParam));
             return TRUE;
             
         case IDC_CHK_PATCHMB:
             if (HIWORD(wParam) == BN_CLICKED)
             {
-                // Update PATCHMB flag / Обновить флаг PATCHMB
+                // Update PATCHMB flag / РћР±РЅРѕРІРёС‚СЊ С„Р»Р°Рі PATCHMB
                 UpdateFlagFromClick(hDlg, LOWORD(wParam));
                 
-                // Check if PATCHMB is now checked / Проверить включен ли теперь PATCHMB
+                // Check if PATCHMB is now checked / РџСЂРѕРІРµСЂРёС‚СЊ РІРєР»СЋС‡РµРЅ Р»Рё С‚РµРїРµСЂСЊ PATCHMB
                 BOOL isPatchMbChecked = (IsDlgButtonChecked(hDlg, IDC_CHK_PATCHMB) == BST_CHECKED);
                 
                 if (isPatchMbChecked)
                 {
                     // PATCHMB enabled: check and disable PATCHMBSKIN
-                    // PATCHMB включен: включить и сделать недоступным PATCHMBSKIN
+                    // PATCHMB РІРєР»СЋС‡РµРЅ: РІРєР»СЋС‡РёС‚СЊ Рё СЃРґРµР»Р°С‚СЊ РЅРµРґРѕСЃС‚СѓРїРЅС‹Рј PATCHMBSKIN
                     CheckDlgButton(hDlg, IDC_CHK_PATCHMBSKIN, BST_CHECKED);
                     EnableWindow(GetDlgItem(hDlg, IDC_CHK_PATCHMBSKIN), FALSE);
                     UpdateFlagFromClick(hDlg, IDC_CHK_PATCHMBSKIN);
@@ -1420,7 +1420,7 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
                 else
                 {
                     // PATCHMB disabled: re-enable PATCHMBSKIN
-                    // PATCHMB выключен: сделать PATCHMBSKIN доступным
+                    // PATCHMB РІС‹РєР»СЋС‡РµРЅ: СЃРґРµР»Р°С‚СЊ PATCHMBSKIN РґРѕСЃС‚СѓРїРЅС‹Рј
                     EnableWindow(GetDlgItem(hDlg, IDC_CHK_PATCHMBSKIN), TRUE);
                 }
             }
@@ -1429,7 +1429,7 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
         break;
         
     case WM_DESTROY:
-        // Clean up tooltip control / Очистить контрол подсказок
+        // Clean up tooltip control / РћС‡РёСЃС‚РёС‚СЊ РєРѕРЅС‚СЂРѕР» РїРѕРґСЃРєР°Р·РѕРє
         if (s_hwndTooltip)
         {
             DestroyWindow(s_hwndTooltip);
@@ -1444,7 +1444,7 @@ static INT_PTR CALLBACK TabGeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
  * CreateAdvancedCheckboxTooltips
  * 
  * PURPOSE: Creates tooltip control for Advanced/About tab checkboxes
- * НАЗНАЧЕНИЕ: Создаёт tooltips для вкладки Advanced/About
+ * РќРђР—РќРђР§Р•РќРР•: РЎРѕР·РґР°С‘С‚ tooltips РґР»СЏ РІРєР»Р°РґРєРё Advanced/About
  ******************************************************************************/
 static HWND CreateAdvancedCheckboxTooltips(HWND hDlg)
 {
@@ -1529,40 +1529,40 @@ static HWND CreateAdvancedCheckboxTooltips(HWND hDlg)
 /*******************************************************************************
  * TabAboutDlgProc
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Dialog procedure for the "About/Advanced" settings tab page.
  * Handles initialization and checkbox clicks for advanced/experimental features.
  * 
- * Процедура диалога для страницы вкладки "О программе/Дополнительные" настройки.
- * Обрабатывает инициализацию и клики чекбоксов для дополнительных/экспериментальных функций.
+ * РџСЂРѕС†РµРґСѓСЂР° РґРёР°Р»РѕРіР° РґР»СЏ СЃС‚СЂР°РЅРёС†С‹ РІРєР»Р°РґРєРё "Рћ РїСЂРѕРіСЂР°РјРјРµ/Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ" РЅР°СЃС‚СЂРѕР№РєРё.
+ * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ Рё РєР»РёРєРё С‡РµРєР±РѕРєСЃРѕРІ РґР»СЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С…/СЌРєСЃРїРµСЂРёРјРµРЅС‚Р°Р»СЊРЅС‹С… С„СѓРЅРєС†РёР№.
  * 
- * MESSAGES / СООБЩЕНИЯ:
+ * MESSAGES / РЎРћРћР‘Р©Р•РќРРЇ:
  * WM_INITDIALOG - Set checkbox labels and states from current config
- *                 Установить метки чекбоксов и состояния из текущей конфигурации
+ *                 РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјРµС‚РєРё С‡РµРєР±РѕРєСЃРѕРІ Рё СЃРѕСЃС‚РѕСЏРЅРёСЏ РёР· С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
  * WM_COMMAND    - Handle checkbox click events
- *                 Обработать события клика чекбоксов
+ *                 РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃРѕР±С‹С‚РёСЏ РєР»РёРєР° С‡РµРєР±РѕРєСЃРѕРІ
  * 
- * FEATURES ON THIS PAGE / ФУНКЦИИ НА ЭТОЙ СТРАНИЦЕ:
- * - Unicode tag fixes / Исправления Unicode тегов
- * - Unicode stream fixes / Исправления Unicode потоков
- * - Playlist Cyrillic search / Поиск кириллицы в плейлисте
- * - Media Library Cyrillic search / Поиск кириллицы в библиотеке
- * - Video font fix / Исправление шрифтов видео
- * - Startup foreground / Передний план при запуске
- * - Icon fix / Исправление иконок
- * - ID3v2 save fix / Исправление сохранения ID3v2
- * - URL museum patch / Патч URL-музея
- * - Skin install menu / Меню установки скинов
+ * FEATURES ON THIS PAGE / Р¤РЈРќРљР¦РР РќРђ Р­РўРћР™ РЎРўР РђРќРР¦Р•:
+ * - Unicode tag fixes / РСЃРїСЂР°РІР»РµРЅРёСЏ Unicode С‚РµРіРѕРІ
+ * - Unicode stream fixes / РСЃРїСЂР°РІР»РµРЅРёСЏ Unicode РїРѕС‚РѕРєРѕРІ
+ * - Playlist Cyrillic search / РџРѕРёСЃРє РєРёСЂРёР»Р»РёС†С‹ РІ РїР»РµР№Р»РёСЃС‚Рµ
+ * - Media Library Cyrillic search / РџРѕРёСЃРє РєРёСЂРёР»Р»РёС†С‹ РІ Р±РёР±Р»РёРѕС‚РµРєРµ
+ * - Video font fix / РСЃРїСЂР°РІР»РµРЅРёРµ С€СЂРёС„С‚РѕРІ РІРёРґРµРѕ
+ * - Startup foreground / РџРµСЂРµРґРЅРёР№ РїР»Р°РЅ РїСЂРё Р·Р°РїСѓСЃРєРµ
+ * - Icon fix / РСЃРїСЂР°РІР»РµРЅРёРµ РёРєРѕРЅРѕРє
+ * - ID3v2 save fix / РСЃРїСЂР°РІР»РµРЅРёРµ СЃРѕС…СЂР°РЅРµРЅРёСЏ ID3v2
+ * - URL museum patch / РџР°С‚С‡ URL-РјСѓР·РµСЏ
+ * - Skin install menu / РњРµРЅСЋ СѓСЃС‚Р°РЅРѕРІРєРё СЃРєРёРЅРѕРІ
  ******************************************************************************/
 static INT_PTR CALLBACK TabAboutDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM)
 {
-    static HWND s_hwndTooltip = NULL;  // Store tooltip handle / Хранить хэндл подсказок
+    static HWND s_hwndTooltip = NULL;  // Store tooltip handle / РҐСЂР°РЅРёС‚СЊ С…СЌРЅРґР» РїРѕРґСЃРєР°Р·РѕРє
 
     switch (uMsg)
     {
     case WM_INITDIALOG:
 		
-		// Set checkbox labels from language strings / Установить метки чекбоксов из языковых строк
+		// Set checkbox labels from language strings / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјРµС‚РєРё С‡РµРєР±РѕРєСЃРѕРІ РёР· СЏР·С‹РєРѕРІС‹С… СЃС‚СЂРѕРє
 		SetDlgItemTextA(hDlg, IDC_CHK_UNITAG, UNITAG);
 		SetDlgItemTextA(hDlg, IDC_CHK_UNISTR, UNISTR);
 		SetDlgItemTextA(hDlg, IDC_CHK_PLSEARCH, PLSEARCH);
@@ -1575,7 +1575,7 @@ static INT_PTR CALLBACK TabAboutDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
 		SetDlgItemTextA(hDlg, IDC_CHK_SKININSTALL, SKININSTALL);
 		
 
-		// Initialize checkboxes from current config / Инициализировать чекбоксы из текущей конфигурации
+		// Initialize checkboxes from current config / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ С‡РµРєР±РѕРєСЃС‹ РёР· С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 		CheckDlgButton(hDlg, IDC_CHK_UNITAG, g_cfg.unitag				    ? BST_CHECKED : BST_UNCHECKED);
 		CheckDlgButton(hDlg, IDC_CHK_UNISTR, g_cfg.unistr				    ? BST_CHECKED : BST_UNCHECKED);
 		CheckDlgButton(hDlg, IDC_CHK_PLSEARCH, g_cfg.plsearch				? BST_CHECKED : BST_UNCHECKED);	
@@ -1591,14 +1591,14 @@ static INT_PTR CALLBACK TabAboutDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
 
 
         
-        // Create tooltips for all advanced checkboxes / Создать подсказки для дополнительных чекбоксов
+        // Create tooltips for all advanced checkboxes / РЎРѕР·РґР°С‚СЊ РїРѕРґСЃРєР°Р·РєРё РґР»СЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… С‡РµРєР±РѕРєСЃРѕРІ
         s_hwndTooltip = CreateAdvancedCheckboxTooltips(hDlg);
         
         return TRUE;
 
 case WM_COMMAND:
 
-    if (HIWORD(wParam) == BN_CLICKED)  // Only handle click events / Обрабатывать только события клика
+    if (HIWORD(wParam) == BN_CLICKED)  // Only handle click events / РћР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ С‚РѕР»СЊРєРѕ СЃРѕР±С‹С‚РёСЏ РєР»РёРєР°
     {
         switch (LOWORD(wParam))
         {
@@ -1620,7 +1620,7 @@ case WM_COMMAND:
     break;
 
 case WM_DESTROY:
-    // Clean up tooltip control / Очистить контрол подсказок
+    // Clean up tooltip control / РћС‡РёСЃС‚РёС‚СЊ РєРѕРЅС‚СЂРѕР» РїРѕРґСЃРєР°Р·РѕРє
     if (s_hwndTooltip)
     {
         DestroyWindow(s_hwndTooltip);
@@ -1634,80 +1634,80 @@ case WM_DESTROY:
 /*******************************************************************************
  * init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Plugin initialization function. Called by Winamp when plugin is loaded.
  * Loads configuration and initializes all enabled modules.
  * 
- * Функция инициализации плагина. Вызывается Winamp при загрузке плагина.
- * Загружает конфигурацию и инициализирует все включённые модули.
+ * Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°. Р’С‹Р·С‹РІР°РµС‚СЃСЏ Winamp РїСЂРё Р·Р°РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°.
+ * Р—Р°РіСЂСѓР¶Р°РµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ Рё РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РІСЃРµ РІРєР»СЋС‡С‘РЅРЅС‹Рµ РјРѕРґСѓР»Рё.
  * 
- * INITIALIZATION ORDER / ПОРЯДОК ИНИЦИАЛИЗАЦИИ:
+ * INITIALIZATION ORDER / РџРћР РЇР”РћРљ РРќРР¦РРђР›РР—РђР¦РР:
  * 1. Load configuration from plugin.ini via LoadCfg()
  * 2. Apply configuration by starting enabled modules via ApplyRuntime()
  * 3. Register preferences dialog with Winamp
  * 
- * 1. Загрузить конфигурацию из plugin.ini через LoadCfg()
- * 2. Применить конфигурацию, запустив включённые модули через ApplyRuntime()
- * 3. Зарегистрировать диалог настроек в Winamp
+ * 1. Р—Р°РіСЂСѓР·РёС‚СЊ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РёР· plugin.ini С‡РµСЂРµР· LoadCfg()
+ * 2. РџСЂРёРјРµРЅРёС‚СЊ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ, Р·Р°РїСѓСЃС‚РёРІ РІРєР»СЋС‡С‘РЅРЅС‹Рµ РјРѕРґСѓР»Рё С‡РµСЂРµР· ApplyRuntime()
+ * 3. Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РґРёР°Р»РѕРі РЅР°СЃС‚СЂРѕРµРє РІ Winamp
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * 0 on success / 0 при успехе
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * 0 on success / 0 РїСЂРё СѓСЃРїРµС…Рµ
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This is the main entry point for plugin functionality.
  * All module initialization happens through ApplyRuntime().
  * Preferences dialog allows user to enable/disable modules.
  * 
- * Это главная точка входа для функциональности плагина.
- * Вся инициализация модулей происходит через ApplyRuntime().
- * Диалог настроек позволяет пользователю включать/отключать модули.
+ * Р­С‚Рѕ РіР»Р°РІРЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР° РґР»СЏ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚Рё РїР»Р°РіРёРЅР°.
+ * Р’СЃСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРѕРґСѓР»РµР№ РїСЂРѕРёСЃС…РѕРґРёС‚ С‡РµСЂРµР· ApplyRuntime().
+ * Р”РёР°Р»РѕРі РЅР°СЃС‚СЂРѕРµРє РїРѕР·РІРѕР»СЏРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ РІРєР»СЋС‡Р°С‚СЊ/РѕС‚РєР»СЋС‡Р°С‚СЊ РјРѕРґСѓР»Рё.
  ******************************************************************************/
 int init(void)
 
 {
-    // Load configuration from plugin.ini / Загрузить конфигурацию из plugin.ini
+    // Load configuration from plugin.ini / Р—Р°РіСЂСѓР·РёС‚СЊ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РёР· plugin.ini
     LoadCfg();
 
-	// Initialize all enabled modules / Инициализировать все включённые модули
+	// Initialize all enabled modules / РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РІСЃРµ РІРєР»СЋС‡С‘РЅРЅС‹Рµ РјРѕРґСѓР»Рё
 	ApplyRuntime();
 
 
-    // Register preferences dialog with Winamp / Зарегистрировать диалог настроек в Winamp
+    // Register preferences dialog with Winamp / Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РґРёР°Р»РѕРі РЅР°СЃС‚СЂРѕРµРє РІ Winamp
     g_prefsPage.hInst = g_hDll;
     g_prefsPage.dlgID = IDD_FIXER_CFG;
-    g_prefsPage.name  = (char*)PREFFS_NAME;          // Dialog title from SwitchLangUI.h / Заголовок диалога из SwitchLangUI.h
-    g_prefsPage.where = (intptr_t)&g_prefsPage;      // Unique identifier / Уникальный идентификатор
+    g_prefsPage.name  = (char*)PREFFS_NAME;          // Dialog title from SwitchLangUI.h / Р—Р°РіРѕР»РѕРІРѕРє РґРёР°Р»РѕРіР° РёР· SwitchLangUI.h
+    g_prefsPage.where = (intptr_t)&g_prefsPage;      // Unique identifier / РЈРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ
     g_prefsPage.proc  = PrefsDlgProc;
     SendMessage(plugin.hwndParent, WM_WA_IPC, (WPARAM)&g_prefsPage, IPC_ADD_PREFS_DLG);
 
 
 
     
-    return 0;  // Success / Успех
+    return 0;  // Success / РЈСЃРїРµС…
 }
 
 /*******************************************************************************
  * config
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Called when user clicks plugin's "Configure" button in Winamp preferences.
  * Shows informational message directing user to the preferences page.
  * 
- * Вызывается, когда пользователь кликает кнопку "Настроить" плагина в настройках Winamp.
- * Показывает информационное сообщение, направляющее пользователя на страницу настроек.
+ * Р’С‹Р·С‹РІР°РµС‚СЃСЏ, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РєР»РёРєР°РµС‚ РєРЅРѕРїРєСѓ "РќР°СЃС‚СЂРѕРёС‚СЊ" РїР»Р°РіРёРЅР° РІ РЅР°СЃС‚СЂРѕР№РєР°С… Winamp.
+ * РџРѕРєР°Р·С‹РІР°РµС‚ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ, РЅР°РїСЂР°РІР»СЏСЋС‰РµРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РЅР°СЃС‚СЂРѕРµРє.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Actual configuration UI is in preferences dialog (IDD_FIXER_CFG), not here.
  * This is just a helper message to guide users.
  * The real configuration happens through the registered preferences page.
  * 
- * Фактический UI конфигурации находится в диалоге настроек (IDD_FIXER_CFG), не здесь.
- * Это просто вспомогательное сообщение для направления пользователей.
- * Реальная конфигурация происходит через зарегистрированную страницу настроек.
+ * Р¤Р°РєС‚РёС‡РµСЃРєРёР№ UI РєРѕРЅС„РёРіСѓСЂР°С†РёРё РЅР°С…РѕРґРёС‚СЃСЏ РІ РґРёР°Р»РѕРіРµ РЅР°СЃС‚СЂРѕРµРє (IDD_FIXER_CFG), РЅРµ Р·РґРµСЃСЊ.
+ * Р­С‚Рѕ РїСЂРѕСЃС‚Рѕ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РґР»СЏ РЅР°РїСЂР°РІР»РµРЅРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№.
+ * Р РµР°Р»СЊРЅР°СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРѕРёСЃС…РѕРґРёС‚ С‡РµСЂРµР· Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ РЅР°СЃС‚СЂРѕРµРє.
  ******************************************************************************/
 void config(void)
 {
-    // Show message directing to preferences page / Показать сообщение, направляющее на страницу настроек
+    // Show message directing to preferences page / РџРѕРєР°Р·Р°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ, РЅР°РїСЂР°РІР»СЏСЋС‰РµРµ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РЅР°СЃС‚СЂРѕРµРє
     MessageBoxA(0, APPCONFIG, APPCONFIG_TITLE, MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
 }
 
@@ -1715,156 +1715,156 @@ void config(void)
 /*******************************************************************************
  * DllMain
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * DLL entry point. Called by Windows when DLL is loaded/unloaded.
  * Performs minimal initialization - just stores DLL instance handle.
  * 
- * Точка входа DLL. Вызывается Windows при загрузке/выгрузке DLL.
- * Выполняет минимальную инициализацию - просто сохраняет дескриптор экземпляра DLL.
+ * РўРѕС‡РєР° РІС…РѕРґР° DLL. Р’С‹Р·С‹РІР°РµС‚СЃСЏ Windows РїСЂРё Р·Р°РіСЂСѓР·РєРµ/РІС‹РіСЂСѓР·РєРµ DLL.
+ * Р’С‹РїРѕР»РЅСЏРµС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ - РїСЂРѕСЃС‚Рѕ СЃРѕС…СЂР°РЅСЏРµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР° DLL.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hInst  - DLL instance handle / Дескриптор экземпляра DLL
- * reason - Reason for calling (DLL_PROCESS_ATTACH, etc.) / Причина вызова
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hInst  - DLL instance handle / Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР° DLL
+ * reason - Reason for calling (DLL_PROCESS_ATTACH, etc.) / РџСЂРёС‡РёРЅР° РІС‹Р·РѕРІР°
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE to allow DLL loading, FALSE to abort
- * TRUE для разрешения загрузки DLL, FALSE для отмены
+ * TRUE РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ Р·Р°РіСЂСѓР·РєРё DLL, FALSE РґР»СЏ РѕС‚РјРµРЅС‹
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must call DisableThreadLibraryCalls to avoid per-thread notifications.
  * This improves performance and avoids potential issues with thread creation/destruction.
  * 
- * Должен вызвать DisableThreadLibraryCalls для избежания уведомлений на каждый поток.
- * Это улучшает производительность и избегает потенциальных проблем с созданием/уничтожением потоков.
+ * Р”РѕР»Р¶РµРЅ РІС‹Р·РІР°С‚СЊ DisableThreadLibraryCalls РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ СѓРІРµРґРѕРјР»РµРЅРёР№ РЅР° РєР°Р¶РґС‹Р№ РїРѕС‚РѕРє.
+ * Р­С‚Рѕ СѓР»СѓС‡С€Р°РµС‚ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚СЊ Рё РёР·Р±РµРіР°РµС‚ РїРѕС‚РµРЅС†РёР°Р»СЊРЅС‹С… РїСЂРѕР±Р»РµРј СЃ СЃРѕР·РґР°РЅРёРµРј/СѓРЅРёС‡С‚РѕР¶РµРЅРёРµРј РїРѕС‚РѕРєРѕРІ.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Actual plugin initialization happens in init(), not here.
  * DllMain is just for DLL-level setup.
  * 
- * Фактическая инициализация плагина происходит в init(), не здесь.
- * DllMain только для настройки уровня DLL.
+ * Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїР»Р°РіРёРЅР° РїСЂРѕРёСЃС…РѕРґРёС‚ РІ init(), РЅРµ Р·РґРµСЃСЊ.
+ * DllMain С‚РѕР»СЊРєРѕ РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё СѓСЂРѕРІРЅСЏ DLL.
  ******************************************************************************/
 BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID)
 {
     if (reason == DLL_PROCESS_ATTACH) {
-        g_hDll = hInst;      // Store DLL instance handle / Сохранить дескриптор экземпляра DLL
-        DisableThreadLibraryCalls(hInst);  // Optimize: disable per-thread callbacks / Оптимизация: отключить обратные вызовы на поток
+        g_hDll = hInst;      // Store DLL instance handle / РЎРѕС…СЂР°РЅРёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР° DLL
+        DisableThreadLibraryCalls(hInst);  // Optimize: disable per-thread callbacks / РћРїС‚РёРјРёР·Р°С†РёСЏ: РѕС‚РєР»СЋС‡РёС‚СЊ РѕР±СЂР°С‚РЅС‹Рµ РІС‹Р·РѕРІС‹ РЅР° РїРѕС‚РѕРє
     }
     return TRUE;
 }
 /*******************************************************************************
  * quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Plugin cleanup function. Called by Winamp when plugin is unloaded.
  * Must cleanup all modules, free resources, and unregister hooks.
  * 
- * Функция очистки плагина. Вызывается Winamp при выгрузке плагина.
- * Должна очистить все модули, освободить ресурсы и отменить регистрацию хуков.
+ * Р¤СѓРЅРєС†РёСЏ РѕС‡РёСЃС‚РєРё РїР»Р°РіРёРЅР°. Р’С‹Р·С‹РІР°РµС‚СЃСЏ Winamp РїСЂРё РІС‹РіСЂСѓР·РєРµ РїР»Р°РіРёРЅР°.
+ * Р”РѕР»Р¶РЅР° РѕС‡РёСЃС‚РёС‚СЊ РІСЃРµ РјРѕРґСѓР»Рё, РѕСЃРІРѕР±РѕРґРёС‚СЊ СЂРµСЃСѓСЂСЃС‹ Рё РѕС‚РјРµРЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ С…СѓРєРѕРІ.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Order matters! Cleanup in reverse order of initialization where dependencies exist.
  * Must not leave any hooks, subclasses, or threads running.
  * All module quit() calls protected by g_started flags to prevent double-cleanup.
  * 
- * Порядок важен! Очистка в обратном порядке инициализации, где существуют зависимости.
- * Не должно остаться никаких хуков, субклассов или запущенных потоков.
- * Все вызовы quit() модулей защищены флагами g_started для предотвращения двойной очистки.
+ * РџРѕСЂСЏРґРѕРє РІР°Р¶РµРЅ! РћС‡РёСЃС‚РєР° РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё, РіРґРµ СЃСѓС‰РµСЃС‚РІСѓСЋС‚ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё.
+ * РќРµ РґРѕР»Р¶РЅРѕ РѕСЃС‚Р°С‚СЊСЃСЏ РЅРёРєР°РєРёС… С…СѓРєРѕРІ, СЃСѓР±РєР»Р°СЃСЃРѕРІ РёР»Рё Р·Р°РїСѓС‰РµРЅРЅС‹С… РїРѕС‚РѕРєРѕРІ.
+ * Р’СЃРµ РІС‹Р·РѕРІС‹ quit() РјРѕРґСѓР»РµР№ Р·Р°С‰РёС‰РµРЅС‹ С„Р»Р°РіР°РјРё g_started РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РґРІРѕР№РЅРѕР№ РѕС‡РёСЃС‚РєРё.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Cleanup optional UI modules (skin delete, icon fix, etc.)
  * 2. Cleanup menu and startup modules
  * 3. Cleanup core modules (Unicode fixes, Media Library, etc.)
  * 4. Cleanup patch modules
  * 5. Unregister preferences dialog from Winamp
  * 
- * 1. Очистить опциональные UI модули (удаление скинов, исправление иконок и т.д.)
- * 2. Очистить модули меню и запуска
- * 3. Очистить основные модули (исправления Unicode, библиотека и т.д.)
- * 4. Очистить модули патчей
- * 5. Отменить регистрацию диалога настроек в Winamp
+ * 1. РћС‡РёСЃС‚РёС‚СЊ РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Рµ UI РјРѕРґСѓР»Рё (СѓРґР°Р»РµРЅРёРµ СЃРєРёРЅРѕРІ, РёСЃРїСЂР°РІР»РµРЅРёРµ РёРєРѕРЅРѕРє Рё С‚.Рґ.)
+ * 2. РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»Рё РјРµРЅСЋ Рё Р·Р°РїСѓСЃРєР°
+ * 3. РћС‡РёСЃС‚РёС‚СЊ РѕСЃРЅРѕРІРЅС‹Рµ РјРѕРґСѓР»Рё (РёСЃРїСЂР°РІР»РµРЅРёСЏ Unicode, Р±РёР±Р»РёРѕС‚РµРєР° Рё С‚.Рґ.)
+ * 4. РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»Рё РїР°С‚С‡РµР№
+ * 5. РћС‚РјРµРЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РґРёР°Р»РѕРіР° РЅР°СЃС‚СЂРѕРµРє РІ Winamp
  * 
- * OPTIMIZATIONS / ОПТИМИЗАЦИИ:
+ * OPTIMIZATIONS / РћРџРўРРњРР—РђР¦РР:
  * - All quit calls now protected by g_started flags (prevents crashes)
  * - Uses cached plugin.hwndParent instead of FindWinamp() call
  * - Removed duplicate PeZones_Quit() call (was a critical bug!)
  * 
- * - Все вызовы quit теперь защищены флагами g_started (предотвращает краши)
- * - Использует кэшированный plugin.hwndParent вместо вызова FindWinamp()
- * - Удалён дублированный вызов PeZones_Quit() (был критическим багом!)
+ * - Р’СЃРµ РІС‹Р·РѕРІС‹ quit С‚РµРїРµСЂСЊ Р·Р°С‰РёС‰РµРЅС‹ С„Р»Р°РіР°РјРё g_started (РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РєСЂР°С€Рё)
+ * - РСЃРїРѕР»СЊР·СѓРµС‚ РєСЌС€РёСЂРѕРІР°РЅРЅС‹Р№ plugin.hwndParent РІРјРµСЃС‚Рѕ РІС‹Р·РѕРІР° FindWinamp()
+ * - РЈРґР°Р»С‘РЅ РґСѓР±Р»РёСЂРѕРІР°РЅРЅС‹Р№ РІС‹Р·РѕРІ PeZones_Quit() (Р±С‹Р» РєСЂРёС‚РёС‡РµСЃРєРёРј Р±Р°РіРѕРј!)
  ******************************************************************************/
 void quit(void)
 {
     /***************************************************************************
      * CLEANUP OPTIONAL UI MODULES
-     * ОЧИСТКА ОПЦИОНАЛЬНЫХ UI МОДУЛЕЙ
+     * РћР§РРЎРўРљРђ РћРџР¦РРћРќРђР›Р¬РќР«РҐ UI РњРћР”РЈР›Р•Р™
      ***************************************************************************/
     
     // Cleanup skin delete module (must unhook window procedure)
-    // Очистить модуль удаления скинов (нужно отцепить оконную процедуру)
+    // РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ СѓРґР°Р»РµРЅРёСЏ СЃРєРёРЅРѕРІ (РЅСѓР¶РЅРѕ РѕС‚С†РµРїРёС‚СЊ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ)
     if (g_started.skindel) SkinDel_Quit();
     
-    // Cleanup icon fix module / Очистить модуль исправления иконок
+    // Cleanup icon fix module / РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РёРєРѕРЅРѕРє
     if (g_started.iconfix) IconFix_Quit();
     
     // OPTIMIZED: Use cached plugin.hwndParent instead of FindWinamp()
-    // ОПТИМИЗИРОВАНО: Используем кэшированный plugin.hwndParent вместо FindWinamp()
+    // РћРџРўРРњРР—РР РћР’РђРќРћ: РСЃРїРѕР»СЊР·СѓРµРј РєСЌС€РёСЂРѕРІР°РЅРЅС‹Р№ plugin.hwndParent РІРјРµСЃС‚Рѕ FindWinamp()
     // Cleanup restart menu module (must remove menu items)
-    // Очистить модуль меню перезапуска (нужно удалить пункты меню)
+    // РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ РјРµРЅСЋ РїРµСЂРµР·Р°РїСѓСЃРєР° (РЅСѓР¶РЅРѕ СѓРґР°Р»РёС‚СЊ РїСѓРЅРєС‚С‹ РјРµРЅСЋ)
     if (g_started.restart && plugin.hwndParent) {
         Menu_Quit(plugin.hwndParent);
     }
     
-    // Cleanup startup foreground module / Очистить модуль переднего плана при запуске
+    // Cleanup startup foreground module / РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ РїРµСЂРµРґРЅРµРіРѕ РїР»Р°РЅР° РїСЂРё Р·Р°РїСѓСЃРєРµ
     if (g_started.startup) Startup_Quit();
     
     // Cleanup mute hotkey module (must unregister hotkey)
-    // Очистить модуль горячей клавиши выключения звука (нужно отменить регистрацию горячей клавиши)
+    // РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ РіРѕСЂСЏС‡РµР№ РєР»Р°РІРёС€Рё РІС‹РєР»СЋС‡РµРЅРёСЏ Р·РІСѓРєР° (РЅСѓР¶РЅРѕ РѕС‚РјРµРЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РіРѕСЂСЏС‡РµР№ РєР»Р°РІРёС€Рё)
     if (g_started.mute)    Mute_Quit();
     
     // OPTIMIZED: Only one PeZones_Quit() call, protected by flag (was duplicated!)
-    // ОПТИМИЗИРОВАНО: Только один вызов PeZones_Quit(), защищён флагом (был дублирован!)
+    // РћРџРўРРњРР—РР РћР’РђРќРћ: РўРѕР»СЊРєРѕ РѕРґРёРЅ РІС‹Р·РѕРІ PeZones_Quit(), Р·Р°С‰РёС‰С‘РЅ С„Р»Р°РіРѕРј (Р±С‹Р» РґСѓР±Р»РёСЂРѕРІР°РЅ!)
     // Cleanup playlist editor zones module
-    // Очистить модуль зон редактора плейлистов
+    // РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ Р·РѕРЅ СЂРµРґР°РєС‚РѕСЂР° РїР»РµР№Р»РёСЃС‚РѕРІ
     if (g_started.pezones) PeZones_Quit();
     
-    // Cleanup video font fix module / Очистить модуль исправления шрифтов видео
+    // Cleanup video font fix module / РћС‡РёСЃС‚РёС‚СЊ РјРѕРґСѓР»СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ С€СЂРёС„С‚РѕРІ РІРёРґРµРѕ
     if (g_started.vidfont) VideoFontFix_Quit();
     
     /***************************************************************************
      * CLEANUP CORE MODULES (protected by flags)
-     * ОЧИСТКА ОСНОВНЫХ МОДУЛЕЙ (защищено флагами)
+     * РћР§РРЎРўРљРђ РћРЎРќРћР’РќР«РҐ РњРћР”РЈР›Р•Р™ (Р·Р°С‰РёС‰РµРЅРѕ С„Р»Р°РіР°РјРё)
      ***************************************************************************/
     
     // Cleanup Unicode tag and Media Library fixes
-    // Очистить исправления Unicode тегов и библиотеки
+    // РћС‡РёСЃС‚РёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ Unicode С‚РµРіРѕРІ Рё Р±РёР±Р»РёРѕС‚РµРєРё
     if (g_started.unitag) {
         MP3_TagsFix_Quit();
         ML_UnicodeFix_Quit(plugin.hwndParent);
     }
     
-    // Cleanup Unicode stream metadata fixes / Очистить исправления метаданных Unicode потоков
+    // Cleanup Unicode stream metadata fixes / РћС‡РёСЃС‚РёС‚СЊ РёСЃРїСЂР°РІР»РµРЅРёСЏ РјРµС‚Р°РґР°РЅРЅС‹С… Unicode РїРѕС‚РѕРєРѕРІ
     if (g_started.unistr)   MP3_StreamFix_Quit();
     
-    // Cleanup Media Library font smoothing / Очистить сглаживание шрифтов библиотеки
+    // Cleanup Media Library font smoothing / РћС‡РёСЃС‚РёС‚СЊ СЃРіР»Р°Р¶РёРІР°РЅРёРµ С€СЂРёС„С‚РѕРІ Р±РёР±Р»РёРѕС‚РµРєРё
     if (g_started.mlfont)   ML_SmoothFonts_Quit();
     
-    // Cleanup Media Library icon tinting / Очистить тонирование иконок библиотеки
+    // Cleanup Media Library icon tinting / РћС‡РёСЃС‚РёС‚СЊ С‚РѕРЅРёСЂРѕРІР°РЅРёРµ РёРєРѕРЅРѕРє Р±РёР±Р»РёРѕС‚РµРєРё
     if (g_started.mlico)    ML_IconsTint_Stop();
     
-    // Cleanup Media Library Cyrillic search / Очистить поиск кириллицы в библиотеке
+    // Cleanup Media Library Cyrillic search / РћС‡РёСЃС‚РёС‚СЊ РїРѕРёСЃРє РєРёСЂРёР»Р»РёС†С‹ РІ Р±РёР±Р»РёРѕС‚РµРєРµ
     if (g_started.mlsearch) ML_CyrSearchFix_Quit();
     
-    // Cleanup M3U8 playlist loader / Очистить загрузчик M3U8 плейлистов
+    // Cleanup M3U8 playlist loader / РћС‡РёСЃС‚РёС‚СЊ Р·Р°РіСЂСѓР·С‡РёРє M3U8 РїР»РµР№Р»РёСЃС‚РѕРІ
     if (g_started.m3u8)     m3u8_Loader_Quit();
     
     /***************************************************************************
      * CLEANUP PATCH MODULES
-     * ОЧИСТКА МОДУЛЕЙ ПАТЧЕЙ
+     * РћР§РРЎРўРљРђ РњРћР”РЈР›Р•Р™ РџРђРўР§Р•Р™
      ***************************************************************************/
     
     // Cleanup various patch modules (URL museum, minibrowser, etc.)
-    // Очистить различные модули патчей (URL-музей, мини-браузер и т.д.)
+    // РћС‡РёСЃС‚РёС‚СЊ СЂР°Р·Р»РёС‡РЅС‹Рµ РјРѕРґСѓР»Рё РїР°С‚С‡РµР№ (URL-РјСѓР·РµР№, РјРёРЅРё-Р±СЂР°СѓР·РµСЂ Рё С‚.Рґ.)
     if (g_started.patch_url)     patch_url_quit();
     if (g_started.patch_mb_skin) patch_mb_skin_quit();
     if (g_started.patch_mb)      patch_mb_quit();
@@ -1874,11 +1874,11 @@ void quit(void)
 
     /***************************************************************************
      * CLEANUP WINAMP INTEGRATION
-     * ОЧИСТКА ИНТЕГРАЦИИ С WINAMP
+     * РћР§РРЎРўРљРђ РРќРўР•Р“Р РђР¦РР РЎ WINAMP
      ***************************************************************************/
     
     // Unregister preferences dialog from Winamp (if API available)
-    // Отменить регистрацию диалога настроек в Winamp (если API доступен)
+    // РћС‚РјРµРЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РґРёР°Р»РѕРіР° РЅР°СЃС‚СЂРѕРµРє РІ Winamp (РµСЃР»Рё API РґРѕСЃС‚СѓРїРµРЅ)
 #ifdef IPC_REMOVE_PREFS_DLG
     SendMessage(plugin.hwndParent, WM_WA_IPC, (WPARAM)&g_prefsPage, IPC_REMOVE_PREFS_DLG);
 #endif
