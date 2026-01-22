@@ -2,78 +2,78 @@
  * patch_mb.cpp
  * 
  * MINIBROWSER REMOVAL PATCH
- * ПАТЧ УДАЛЕНИЯ МИНИ-БРАУЗЕРА
+ * РџРђРўР§ РЈР”РђР›Р•РќРРЇ РњРРќР-Р‘Р РђРЈР—Р•Р Рђ
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Removes Winamp's built-in minibrowser (web browser component) functionality.
  * Consists of two parts: blocking minibrowser creation and hiding menu item.
  * 
- * Удаляет встроенную функциональность мини-браузера Winamp (компонент веб-браузера).
- * Состоит из двух частей: блокировка создания мини-браузера и скрытие пункта меню.
+ * РЈРґР°Р»СЏРµС‚ РІСЃС‚СЂРѕРµРЅРЅСѓСЋ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° Winamp (РєРѕРјРїРѕРЅРµРЅС‚ РІРµР±-Р±СЂР°СѓР·РµСЂР°).
+ * РЎРѕСЃС‚РѕРёС‚ РёР· РґРІСѓС… С‡Р°СЃС‚РµР№: Р±Р»РѕРєРёСЂРѕРІРєР° СЃРѕР·РґР°РЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° Рё СЃРєСЂС‹С‚РёРµ РїСѓРЅРєС‚Р° РјРµРЅСЋ.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 
- * PART 1 - CREATION BLOCKING / ЧАСТЬ 1 - БЛОКИРОВКА СОЗДАНИЯ:
+ * PART 1 - CREATION BLOCKING / Р§РђРЎРўР¬ 1 - Р‘Р›РћРљРР РћР’РљРђ РЎРћР—Р”РђРќРРЇ:
  * 1. Patches byte at RVA 0x00023BE0 in winamp.exe
  * 2. Changes 0x57 (PUSH EDI) to 0xC3 (RET)
  * 3. This makes minibrowser creation function return immediately
  * 4. Prevents minibrowser window from being created
  * 
- * 1. Патчит байт по RVA 0x00023BE0 в winamp.exe
- * 2. Меняет 0x57 (PUSH EDI) на 0xC3 (RET)
- * 3. Это заставляет функцию создания мини-браузера вернуться немедленно
- * 4. Предотвращает создание окна мини-браузера
+ * 1. РџР°С‚С‡РёС‚ Р±Р°Р№С‚ РїРѕ RVA 0x00023BE0 РІ winamp.exe
+ * 2. РњРµРЅСЏРµС‚ 0x57 (PUSH EDI) РЅР° 0xC3 (RET)
+ * 3. Р­С‚Рѕ Р·Р°СЃС‚Р°РІР»СЏРµС‚ С„СѓРЅРєС†РёСЋ СЃРѕР·РґР°РЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° РІРµСЂРЅСѓС‚СЊСЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ
+ * 4. РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ СЃРѕР·РґР°РЅРёРµ РѕРєРЅР° РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
  * 
- * PART 2 - MENU HIDING / ЧАСТЬ 2 - СКРЫТИЕ МЕНЮ:
+ * PART 2 - MENU HIDING / Р§РђРЎРўР¬ 2 - РЎРљР Р«РўРР• РњР•РќР®:
  * 1. Hooks TrackPopupMenu and TrackPopupMenuEx in winamp.exe
  * 2. Before showing any menu, converts menu item 40298 to disabled separator
  * 3. This hides "Open Minibrowser" menu item without changing menu indices
  * 4. Safe approach - doesn't use DeleteMenu which shifts indices
  * 
- * 1. Перехватывает TrackPopupMenu и TrackPopupMenuEx в winamp.exe
- * 2. Перед показом любого меню конвертирует пункт меню 40298 в отключённый разделитель
- * 3. Это скрывает пункт меню "Открыть мини-браузер" без изменения индексов меню
- * 4. Безопасный подход - не использует DeleteMenu который смещает индексы
+ * 1. РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ TrackPopupMenu Рё TrackPopupMenuEx РІ winamp.exe
+ * 2. РџРµСЂРµРґ РїРѕРєР°Р·РѕРј Р»СЋР±РѕРіРѕ РјРµРЅСЋ РєРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ РїСѓРЅРєС‚ РјРµРЅСЋ 40298 РІ РѕС‚РєР»СЋС‡С‘РЅРЅС‹Р№ СЂР°Р·РґРµР»РёС‚РµР»СЊ
+ * 3. Р­С‚Рѕ СЃРєСЂС‹РІР°РµС‚ РїСѓРЅРєС‚ РјРµРЅСЋ "РћС‚РєСЂС‹С‚СЊ РјРёРЅРё-Р±СЂР°СѓР·РµСЂ" Р±РµР· РёР·РјРµРЅРµРЅРёСЏ РёРЅРґРµРєСЃРѕРІ РјРµРЅСЋ
+ * 4. Р‘РµР·РѕРїР°СЃРЅС‹Р№ РїРѕРґС…РѕРґ - РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚ DeleteMenu РєРѕС‚РѕСЂС‹Р№ СЃРјРµС‰Р°РµС‚ РёРЅРґРµРєСЃС‹
  * 
- * TECHNICAL DETAILS / ТЕХНИЧЕСКИЕ ДЕТАЛИ:
+ * TECHNICAL DETAILS / РўР•РҐРќРР§Р•РЎРљРР• Р”Р•РўРђР›Р:
  * 
- * PATCH LOCATION / РАСПОЛОЖЕНИЕ ПАТЧА:
+ * PATCH LOCATION / Р РђРЎРџРћР›РћР–Р•РќРР• РџРђРўР§Рђ:
  * - Target: winamp.exe
  * - RVA: 0x00023BE0 (minibrowser creation function entry point)
  * - Original: 0x57 (PUSH EDI - function prologue)
  * - Patched: 0xC3 (RET - immediate return)
  * 
- * - Цель: winamp.exe
- * - RVA: 0x00023BE0 (точка входа функции создания мини-браузера)
- * - Оригинал: 0x57 (PUSH EDI - пролог функции)
- * - Пропатчено: 0xC3 (RET - немедленный возврат)
+ * - Р¦РµР»СЊ: winamp.exe
+ * - RVA: 0x00023BE0 (С‚РѕС‡РєР° РІС…РѕРґР° С„СѓРЅРєС†РёРё СЃРѕР·РґР°РЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°)
+ * - РћСЂРёРіРёРЅР°Р»: 0x57 (PUSH EDI - РїСЂРѕР»РѕРі С„СѓРЅРєС†РёРё)
+ * - РџСЂРѕРїР°С‚С‡РµРЅРѕ: 0xC3 (RET - РЅРµРјРµРґР»РµРЅРЅС‹Р№ РІРѕР·РІСЂР°С‚)
  * 
- * MENU ITEM ID / ID ПУНКТА МЕНЮ:
+ * MENU ITEM ID / ID РџРЈРќРљРўРђ РњР•РќР®:
  * - Command ID: 40298 (standard Winamp minibrowser menu ID)
  * - Method: Convert to MFT_SEPARATOR + MFS_DISABLED
  * - Why: Preserves menu structure, prevents crashes
  * 
- * - ID команды: 40298 (стандартный ID меню мини-браузера Winamp)
- * - Метод: Преобразование в MFT_SEPARATOR + MFS_DISABLED
- * - Почему: Сохраняет структуру меню, предотвращает краши
+ * - ID РєРѕРјР°РЅРґС‹: 40298 (СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ ID РјРµРЅСЋ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° Winamp)
+ * - РњРµС‚РѕРґ: РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ MFT_SEPARATOR + MFS_DISABLED
+ * - РџРѕС‡РµРјСѓ: РЎРѕС…СЂР°РЅСЏРµС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ РјРµРЅСЋ, РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РєСЂР°С€Рё
  * 
- * WHY THIS APPROACH / ПОЧЕМУ ЭТОТ ПОДХОД:
+ * WHY THIS APPROACH / РџРћР§Р•РњРЈ Р­РўРћРў РџРћР”РҐРћР”:
  * Blocking creation is cleaner than trying to hide/destroy window after creation.
  * Menu hiding prevents user confusion about non-functional menu item.
  * Converting to separator (not deleting) prevents menu index issues.
  * 
- * Блокировка создания чище чем попытки скрыть/уничтожить окно после создания.
- * Скрытие меню предотвращает путаницу пользователя о нефункциональном пункте меню.
- * Преобразование в разделитель (не удаление) предотвращает проблемы с индексами меню.
+ * Р‘Р»РѕРєРёСЂРѕРІРєР° СЃРѕР·РґР°РЅРёСЏ С‡РёС‰Рµ С‡РµРј РїРѕРїС‹С‚РєРё СЃРєСЂС‹С‚СЊ/СѓРЅРёС‡С‚РѕР¶РёС‚СЊ РѕРєРЅРѕ РїРѕСЃР»Рµ СЃРѕР·РґР°РЅРёСЏ.
+ * РЎРєСЂС‹С‚РёРµ РјРµРЅСЋ РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РїСѓС‚Р°РЅРёС†Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рѕ РЅРµС„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕРј РїСѓРЅРєС‚Рµ РјРµРЅСЋ.
+ * РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ СЂР°Р·РґРµР»РёС‚РµР»СЊ (РЅРµ СѓРґР°Р»РµРЅРёРµ) РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РїСЂРѕР±Р»РµРјС‹ СЃ РёРЅРґРµРєСЃР°РјРё РјРµРЅСЋ.
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - Winamp 2.95 and compatible versions
  * - Windows 98 through Windows 11
  * - Safe with other Winamp plugins
  * 
- * - Winamp 2.95 и совместимые версии
- * - Windows 98 до Windows 11
- * - Безопасно с другими плагинами Winamp
+ * - Winamp 2.95 Рё СЃРѕРІРјРµСЃС‚РёРјС‹Рµ РІРµСЂСЃРёРё
+ * - Windows 98 РґРѕ Windows 11
+ * - Р‘РµР·РѕРїР°СЃРЅРѕ СЃ РґСЂСѓРіРёРјРё РїР»Р°РіРёРЅР°РјРё Winamp
  * 
  ******************************************************************************/
 
@@ -83,49 +83,49 @@
 
 /*******************************************************************************
  * PART 1: MINIBROWSER CREATION BLOCKING PATCH
- * ЧАСТЬ 1: ПАТЧ БЛОКИРОВКИ СОЗДАНИЯ МИНИ-БРАУЗЕРА
+ * Р§РђРЎРўР¬ 1: РџРђРўР§ Р‘Р›РћРљРР РћР’РљР РЎРћР—Р”РђРќРРЇ РњРРќР-Р‘Р РђРЈР—Р•Р Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * g_mbBlockCreate
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Byte patch table to block minibrowser window creation.
  * Single-byte patch that makes creation function return immediately.
  * 
- * Таблица байтовых патчей для блокировки создания окна мини-браузера.
- * Однобайтовый патч, который заставляет функцию создания вернуться немедленно.
+ * РўР°Р±Р»РёС†Р° Р±Р°Р№С‚РѕРІС‹С… РїР°С‚С‡РµР№ РґР»СЏ Р±Р»РѕРєРёСЂРѕРІРєРё СЃРѕР·РґР°РЅРёСЏ РѕРєРЅР° РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
+ * РћРґРЅРѕР±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡, РєРѕС‚РѕСЂС‹Р№ Р·Р°СЃС‚Р°РІР»СЏРµС‚ С„СѓРЅРєС†РёСЋ СЃРѕР·РґР°РЅРёСЏ РІРµСЂРЅСѓС‚СЊСЃСЏ РЅРµРјРµРґР»РµРЅРЅРѕ.
  * 
- * PATCH DETAILS / ДЕТАЛИ ПАТЧА:
+ * PATCH DETAILS / Р”Р•РўРђР›Р РџРђРўР§Рђ:
  * RVA 0x00023BE0 is the entry point of minibrowser creation function.
  * Original byte 0x57 (PUSH EDI) is part of function prologue.
  * Patched byte 0xC3 (RET) causes immediate return from function.
  * 
- * RVA 0x00023BE0 - точка входа функции создания мини-браузера.
- * Оригинальный байт 0x57 (PUSH EDI) - часть пролога функции.
- * Пропатченный байт 0xC3 (RET) вызывает немедленный возврат из функции.
+ * RVA 0x00023BE0 - С‚РѕС‡РєР° РІС…РѕРґР° С„СѓРЅРєС†РёРё СЃРѕР·РґР°РЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
+ * РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ Р±Р°Р№С‚ 0x57 (PUSH EDI) - С‡Р°СЃС‚СЊ РїСЂРѕР»РѕРіР° С„СѓРЅРєС†РёРё.
+ * РџСЂРѕРїР°С‚С‡РµРЅРЅС‹Р№ Р±Р°Р№С‚ 0xC3 (RET) РІС‹Р·С‹РІР°РµС‚ РЅРµРјРµРґР»РµРЅРЅС‹Р№ РІРѕР·РІСЂР°С‚ РёР· С„СѓРЅРєС†РёРё.
  * 
- * EFFECT / ЭФФЕКТ:
+ * EFFECT / Р­Р¤Р¤Р•РљРў:
  * Function returns without executing any creation code.
  * Minibrowser window is never created.
  * No resources allocated for minibrowser.
  * 
- * Функция возвращается без выполнения какого-либо кода создания.
- * Окно мини-браузера никогда не создаётся.
- * Ресурсы для мини-браузера не выделяются.
+ * Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ Р±РµР· РІС‹РїРѕР»РЅРµРЅРёСЏ РєР°РєРѕРіРѕ-Р»РёР±Рѕ РєРѕРґР° СЃРѕР·РґР°РЅРёСЏ.
+ * РћРєРЅРѕ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° РЅРёРєРѕРіРґР° РЅРµ СЃРѕР·РґР°С‘С‚СЃСЏ.
+ * Р РµСЃСѓСЂСЃС‹ РґР»СЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° РЅРµ РІС‹РґРµР»СЏСЋС‚СЃСЏ.
  ******************************************************************************/
 static const PatchByte g_mbBlockCreate[] =
 {
-    /* RVA        Expected  Patch  Description / Описание */
-    { 0x00023BE0,  0x57,    0xC3 },  // PUSH EDI -> RET (block minibrowser creation / блокировать создание мини-браузера)
+    /* RVA        Expected  Patch  Description / РћРїРёСЃР°РЅРёРµ */
+    { 0x00023BE0,  0x57,    0xC3 },  // PUSH EDI -> RET (block minibrowser creation / Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ СЃРѕР·РґР°РЅРёРµ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°)
 };
 
-// Safe array size calculation / Безопасное вычисление размера массива
+// Safe array size calculation / Р‘РµР·РѕРїР°СЃРЅРѕРµ РІС‹С‡РёСЃР»РµРЅРёРµ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР°
 #define ARRAYSIZE_(a) ((int)(sizeof(a) / sizeof((a)[0])))
 
 /*******************************************************************************
  * PART 2: MENU ITEM HIDING
- * ЧАСТЬ 2: СКРЫТИЕ ПУНКТА МЕНЮ
+ * Р§РђРЎРўР¬ 2: РЎРљР Р«РўРР• РџРЈРќРљРўРђ РњР•РќР®
  ******************************************************************************/
 
 /*******************************************************************************
@@ -134,49 +134,49 @@ static const PatchByte g_mbBlockCreate[] =
  * Minibrowser menu command ID in Winamp.
  * This is the standard ID for "Open Minibrowser" menu item.
  * 
- * ID команды меню мини-браузера в Winamp.
- * Это стандартный ID для пункта меню "Открыть мини-браузер".
+ * ID РєРѕРјР°РЅРґС‹ РјРµРЅСЋ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° РІ Winamp.
+ * Р­С‚Рѕ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ ID РґР»СЏ РїСѓРЅРєС‚Р° РјРµРЅСЋ "РћС‚РєСЂС‹С‚СЊ РјРёРЅРё-Р±СЂР°СѓР·РµСЂ".
  ******************************************************************************/
 #define MB_MENU_CMD_ID 40298
 
 /*******************************************************************************
  * TRACKPOPUPMENU HOOK INFRASTRUCTURE
- * ИНФРАСТРУКТУРА ХУКОВ TRACKPOPUPMENU
+ * РРќР¤Р РђРЎРўР РЈРљРўРЈР Рђ РҐРЈРљРћР’ TRACKPOPUPMENU
  * 
  * Function pointer types and global variables for menu hooks.
- * Типы указателей функций и глобальные переменные для хуков меню.
+ * РўРёРїС‹ СѓРєР°Р·Р°С‚РµР»РµР№ С„СѓРЅРєС†РёР№ Рё РіР»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ С…СѓРєРѕРІ РјРµРЅСЋ.
  ******************************************************************************/
 
-// Function pointer types / Типы указателей функций
+// Function pointer types / РўРёРїС‹ СѓРєР°Р·Р°С‚РµР»РµР№ С„СѓРЅРєС†РёР№
 typedef BOOL (WINAPI *TPM)(HMENU, UINT, int, int, int, HWND, const RECT*);
 typedef BOOL (WINAPI *TPMX)(HMENU, UINT, int, int, HWND, LPTPMPARAMS);
 
-// Original function pointers (saved during patching) / Указатели на оригинальные функции
+// Original function pointers (saved during patching) / РЈРєР°Р·Р°С‚РµР»Рё РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
 static TPM  g_OrigTrackPopupMenu   = NULL;
 static TPMX g_OrigTrackPopupMenuEx = NULL;
 
-// IAT slot pointers (for restoration during cleanup) / Указатели на слоты IAT (для восстановления при очистке)
+// IAT slot pointers (for restoration during cleanup) / РЈРєР°Р·Р°С‚РµР»Рё РЅР° СЃР»РѕС‚С‹ IAT (РґР»СЏ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РїСЂРё РѕС‡РёСЃС‚РєРµ)
 static void** g_IAT_TrackPopupMenu   = NULL;
 static void** g_IAT_TrackPopupMenuEx = NULL;
 
 /*******************************************************************************
  * menu_hide_by_id_recursive
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Recursively searches menu hierarchy and "neutralizes" specified menu item.
  * Converts menu item to disabled separator instead of deleting it.
  * 
- * Рекурсивно ищет в иерархии меню и "нейтрализует" указанный пункт меню.
- * Преобразует пункт меню в отключённый разделитель вместо удаления.
+ * Р РµРєСѓСЂСЃРёРІРЅРѕ РёС‰РµС‚ РІ РёРµСЂР°СЂС…РёРё РјРµРЅСЋ Рё "РЅРµР№С‚СЂР°Р»РёР·СѓРµС‚" СѓРєР°Р·Р°РЅРЅС‹Р№ РїСѓРЅРєС‚ РјРµРЅСЋ.
+ * РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РїСѓРЅРєС‚ РјРµРЅСЋ РІ РѕС‚РєР»СЋС‡С‘РЅРЅС‹Р№ СЂР°Р·РґРµР»РёС‚РµР»СЊ РІРјРµСЃС‚Рѕ СѓРґР°Р»РµРЅРёСЏ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMenu - Menu handle to search / Дескриптор меню для поиска
- * id    - Command ID to hide / ID команды для скрытия
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMenu - Menu handle to search / Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРµРЅСЋ РґР»СЏ РїРѕРёСЃРєР°
+ * id    - Command ID to hide / ID РєРѕРјР°РЅРґС‹ РґР»СЏ СЃРєСЂС‹С‚РёСЏ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Number of items changed / Количество изменённых пунктов
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Number of items changed / РљРѕР»РёС‡РµСЃС‚РІРѕ РёР·РјРµРЅС‘РЅРЅС‹С… РїСѓРЅРєС‚РѕРІ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Iterate through all menu items
  * 2. For each submenu, recursively search it
  * 3. For each item with matching ID:
@@ -185,24 +185,24 @@ static void** g_IAT_TrackPopupMenuEx = NULL;
  *    - Use SetMenuItemInfoA by POSITION
  * 4. Return count of items changed
  * 
- * 1. Перебрать все пункты меню
- * 2. Для каждого подменю рекурсивно искать в нём
- * 3. Для каждого пункта с совпадающим ID:
- *    - Преобразовать в тип MFT_SEPARATOR
- *    - Установить состояние MFS_DISABLED
- *    - Использовать SetMenuItemInfoA по ПОЗИЦИИ
- * 4. Вернуть количество изменённых пунктов
+ * 1. РџРµСЂРµР±СЂР°С‚СЊ РІСЃРµ РїСѓРЅРєС‚С‹ РјРµРЅСЋ
+ * 2. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РїРѕРґРјРµРЅСЋ СЂРµРєСѓСЂСЃРёРІРЅРѕ РёСЃРєР°С‚СЊ РІ РЅС‘Рј
+ * 3. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РїСѓРЅРєС‚Р° СЃ СЃРѕРІРїР°РґР°СЋС‰РёРј ID:
+ *    - РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ С‚РёРї MFT_SEPARATOR
+ *    - РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ MFS_DISABLED
+ *    - РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ SetMenuItemInfoA РїРѕ РџРћР—РР¦РР
+ * 4. Р’РµСЂРЅСѓС‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РёР·РјРµРЅС‘РЅРЅС‹С… РїСѓРЅРєС‚РѕРІ
  * 
- * WHY SEPARATOR INSTEAD OF DELETE / ПОЧЕМУ РАЗДЕЛИТЕЛЬ ВМЕСТО УДАЛЕНИЯ:
+ * WHY SEPARATOR INSTEAD OF DELETE / РџРћР§Р•РњРЈ Р РђР—Р”Р•Р›РРўР•Р›Р¬ Р’РњР•РЎРўРћ РЈР”РђР›Р•РќРРЇ:
  * DeleteMenu shifts all indices after deleted item, which can cause:
  * - Other code using wrong menu indices
  * - Crashes if code caches menu positions
  * - Unexpected behavior in keyboard navigation
  * 
- * DeleteMenu смещает все индексы после удалённого пункта, что может вызвать:
- * - Использование другим кодом неправильных индексов меню
- * - Краши если код кэширует позиции меню
- * - Неожиданное поведение в навигации клавиатурой
+ * DeleteMenu СЃРјРµС‰Р°РµС‚ РІСЃРµ РёРЅРґРµРєСЃС‹ РїРѕСЃР»Рµ СѓРґР°Р»С‘РЅРЅРѕРіРѕ РїСѓРЅРєС‚Р°, С‡С‚Рѕ РјРѕР¶РµС‚ РІС‹Р·РІР°С‚СЊ:
+ * - РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РґСЂСѓРіРёРј РєРѕРґРѕРј РЅРµРїСЂР°РІРёР»СЊРЅС‹С… РёРЅРґРµРєСЃРѕРІ РјРµРЅСЋ
+ * - РљСЂР°С€Рё РµСЃР»Рё РєРѕРґ РєСЌС€РёСЂСѓРµС‚ РїРѕР·РёС†РёРё РјРµРЅСЋ
+ * - РќРµРѕР¶РёРґР°РЅРЅРѕРµ РїРѕРІРµРґРµРЅРёРµ РІ РЅР°РІРёРіР°С†РёРё РєР»Р°РІРёР°С‚СѓСЂРѕР№
  * 
  * Converting to separator:
  * - Keeps indices stable (no shifting)
@@ -210,30 +210,30 @@ static void** g_IAT_TrackPopupMenuEx = NULL;
  * - Prevents item from being selected
  * - Safe and compatible approach
  * 
- * Преобразование в разделитель:
- * - Сохраняет индексы стабильными (без смещения)
- * - Скрывает пункт визуально (появляется как пустое место)
- * - Предотвращает выбор пункта
- * - Безопасный и совместимый подход
+ * РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ СЂР°Р·РґРµР»РёС‚РµР»СЊ:
+ * - РЎРѕС…СЂР°РЅСЏРµС‚ РёРЅРґРµРєСЃС‹ СЃС‚Р°Р±РёР»СЊРЅС‹РјРё (Р±РµР· СЃРјРµС‰РµРЅРёСЏ)
+ * - РЎРєСЂС‹РІР°РµС‚ РїСѓРЅРєС‚ РІРёР·СѓР°Р»СЊРЅРѕ (РїРѕСЏРІР»СЏРµС‚СЃСЏ РєР°Рє РїСѓСЃС‚РѕРµ РјРµСЃС‚Рѕ)
+ * - РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РІС‹Р±РѕСЂ РїСѓРЅРєС‚Р°
+ * - Р‘РµР·РѕРїР°СЃРЅС‹Р№ Рё СЃРѕРІРјРµСЃС‚РёРјС‹Р№ РїРѕРґС…РѕРґ
  ******************************************************************************/
 /*******************************************************************************
- * menu_hide_by_id_recursive (MODIFIED / МОДИФИЦИРОВАННАЯ)
+ * menu_hide_by_id_recursive (MODIFIED / РњРћР”РР¤РР¦РР РћР’РђРќРќРђРЇ)
  *
- * NEW BEHAVIOR / НОВОЕ ПОВЕДЕНИЕ:
+ * NEW BEHAVIOR / РќРћР’РћР• РџРћР’Р•Р”Р•РќРР•:
  * Finds the item, deletes it, and inserts a separator just before the NEXT
  * existing separator (or at the end of the menu).
  * This "pushes" the gap down to the bottom of the group.
  *
- * Находит пункт, удаляет его и вставляет разделитель перед СЛЕДУЮЩИМ
- * существующим разделителем (или в конце меню).
- * Это "сдвигает" пустоту вниз к концу группы.
+ * РќР°С…РѕРґРёС‚ РїСѓРЅРєС‚, СѓРґР°Р»СЏРµС‚ РµРіРѕ Рё РІСЃС‚Р°РІР»СЏРµС‚ СЂР°Р·РґРµР»РёС‚РµР»СЊ РїРµСЂРµРґ РЎР›Р•Р”РЈР®Р©РРњ
+ * СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРј СЂР°Р·РґРµР»РёС‚РµР»РµРј (РёР»Рё РІ РєРѕРЅС†Рµ РјРµРЅСЋ).
+ * Р­С‚Рѕ "СЃРґРІРёРіР°РµС‚" РїСѓСЃС‚РѕС‚Сѓ РІРЅРёР· Рє РєРѕРЅС†Сѓ РіСЂСѓРїРїС‹.
  ******************************************************************************/
 static int menu_hide_by_id_recursive(HMENU hMenu, UINT id)
 {
     int changed = 0;
     int count = GetMenuItemCount(hMenu);
     
-    // Вспомогательная структура для проверки типа пункта
+    // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РїСЂРѕРІРµСЂРєРё С‚РёРїР° РїСѓРЅРєС‚Р°
     MENUITEMINFOA mii_check;
     ZeroMemory(&mii_check, sizeof(mii_check));
     mii_check.cbSize = sizeof(mii_check);
@@ -241,34 +241,34 @@ static int menu_hide_by_id_recursive(HMENU hMenu, UINT id)
 
     for (int i = 0; i < count; ++i)
     {
-        // 1. Рекурсивный поиск в подменю
+        // 1. Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РїРѕРёСЃРє РІ РїРѕРґРјРµРЅСЋ
         HMENU sub = GetSubMenu(hMenu, i);
         if (sub) {
             changed += menu_hide_by_id_recursive(sub, id);
         }
 
-        // 2. Проверка на совпадение ID
+        // 2. РџСЂРѕРІРµСЂРєР° РЅР° СЃРѕРІРїР°РґРµРЅРёРµ ID
         UINT cmd = GetMenuItemID(hMenu, i);
         if (cmd == id)
         {
-            // --- НАЧАЛО НОВОЙ ЛОГИКИ ---
+            // --- РќРђР§РђР›Рћ РќРћР’РћР™ Р›РћР“РРљР ---
 
-            // Ищем, куда сдвинуть (ищем следующий сепаратор)
-            int targetPos = count; // По умолчанию - в самый конец
+            // РС‰РµРј, РєСѓРґР° СЃРґРІРёРЅСѓС‚СЊ (РёС‰РµРј СЃР»РµРґСѓСЋС‰РёР№ СЃРµРїР°СЂР°С‚РѕСЂ)
+            int targetPos = count; // РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - РІ СЃР°РјС‹Р№ РєРѕРЅРµС†
             
-            // Сканируем от текущей позиции + 1 вниз
+            // РЎРєР°РЅРёСЂСѓРµРј РѕС‚ С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё + 1 РІРЅРёР·
             for (int j = i + 1; j < count; j++) {
                 if (GetMenuItemInfoA(hMenu, j, TRUE, &mii_check)) {
                     if (mii_check.fType & MFT_SEPARATOR) {
-                        targetPos = j; // Нашли сепаратор, остановимся ПЕРЕД ним
+                        targetPos = j; // РќР°С€Р»Рё СЃРµРїР°СЂР°С‚РѕСЂ, РѕСЃС‚Р°РЅРѕРІРёРјСЃСЏ РџР•Р Р•Р” РЅРёРј
                         break;
                     }
                 }
             }
 
-            // Если пункт уже стоит перед сепаратором, двигать не надо
+            // Р•СЃР»Рё РїСѓРЅРєС‚ СѓР¶Рµ СЃС‚РѕРёС‚ РїРµСЂРµРґ СЃРµРїР°СЂР°С‚РѕСЂРѕРј, РґРІРёРіР°С‚СЊ РЅРµ РЅР°РґРѕ
             if (targetPos == i + 1) {
-                // Просто превращаем в сепаратор на месте (старая логика)
+                // РџСЂРѕСЃС‚Рѕ РїСЂРµРІСЂР°С‰Р°РµРј РІ СЃРµРїР°СЂР°С‚РѕСЂ РЅР° РјРµСЃС‚Рµ (СЃС‚Р°СЂР°СЏ Р»РѕРіРёРєР°)
                 MENUITEMINFOA mii;
                 ZeroMemory(&mii, sizeof(mii));
                 mii.cbSize = sizeof(mii);
@@ -278,29 +278,29 @@ static int menu_hide_by_id_recursive(HMENU hMenu, UINT id)
                 SetMenuItemInfoA(hMenu, (UINT)i, TRUE, &mii);
             }
             else {
-                // ПЕРЕМЕЩЕНИЕ:
+                // РџР•Р Р•РњР•Р©Р•РќРР•:
                 
-                // 1. Удаляем пункт со старого места
+                // 1. РЈРґР°Р»СЏРµРј РїСѓРЅРєС‚ СЃРѕ СЃС‚Р°СЂРѕРіРѕ РјРµСЃС‚Р°
                 DeleteMenu(hMenu, i, MF_BYPOSITION);
                 
-                // ВНИМАНИЕ: После удаления индексы всех элементов ниже 'i' уменьшились на 1.
-                // Поэтому наш найденный targetPos тоже сдвинулся на 1 вверх.
+                // Р’РќРРњРђРќРР•: РџРѕСЃР»Рµ СѓРґР°Р»РµРЅРёСЏ РёРЅРґРµРєСЃС‹ РІСЃРµС… СЌР»РµРјРµРЅС‚РѕРІ РЅРёР¶Рµ 'i' СѓРјРµРЅСЊС€РёР»РёСЃСЊ РЅР° 1.
+                // РџРѕСЌС‚РѕРјСѓ РЅР°С€ РЅР°Р№РґРµРЅРЅС‹Р№ targetPos С‚РѕР¶Рµ СЃРґРІРёРЅСѓР»СЃСЏ РЅР° 1 РІРІРµСЂС….
                 targetPos--; 
-                count--; // Общее количество уменьшилось
+                count--; // РћР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СѓРјРµРЅСЊС€РёР»РѕСЃСЊ
 
-                // 2. Вставляем новый сепаратор на новую позицию
-                // (перед тем сепаратором, который мы нашли)
+                // 2. Р’СЃС‚Р°РІР»СЏРµРј РЅРѕРІС‹Р№ СЃРµРїР°СЂР°С‚РѕСЂ РЅР° РЅРѕРІСѓСЋ РїРѕР·РёС†РёСЋ
+                // (РїРµСЂРµРґ С‚РµРј СЃРµРїР°СЂР°С‚РѕСЂРѕРј, РєРѕС‚РѕСЂС‹Р№ РјС‹ РЅР°С€Р»Рё)
                 InsertMenuA(hMenu, targetPos, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
                 
-                // Поскольку мы вставили элемент, count снова увеличился,
-                // но 'i' мы должны уменьшить, чтобы цикл for не перескочил 
-                // через элемент, который "подтянулся" на место удаленного.
+                // РџРѕСЃРєРѕР»СЊРєСѓ РјС‹ РІСЃС‚Р°РІРёР»Рё СЌР»РµРјРµРЅС‚, count СЃРЅРѕРІР° СѓРІРµР»РёС‡РёР»СЃСЏ,
+                // РЅРѕ 'i' РјС‹ РґРѕР»Р¶РЅС‹ СѓРјРµРЅСЊС€РёС‚СЊ, С‡С‚РѕР±С‹ С†РёРєР» for РЅРµ РїРµСЂРµСЃРєРѕС‡РёР» 
+                // С‡РµСЂРµР· СЌР»РµРјРµРЅС‚, РєРѕС‚РѕСЂС‹Р№ "РїРѕРґС‚СЏРЅСѓР»СЃСЏ" РЅР° РјРµСЃС‚Рѕ СѓРґР°Р»РµРЅРЅРѕРіРѕ.
                 i--; 
                 count++; 
             }
 
             changed++;
-            // --- КОНЕЦ НОВОЙ ЛОГИКИ ---
+            // --- РљРћРќР•Р¦ РќРћР’РћР™ Р›РћР“РРљР ---
         }
     }
     return changed;
@@ -308,39 +308,39 @@ static int menu_hide_by_id_recursive(HMENU hMenu, UINT id)
 
 /*******************************************************************************
  * IAT PATCHING HELPER
- * ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ IAT ПАТЧИНГА
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќРђРЇ Р¤РЈРќРљР¦РРЇ IAT РџРђРўР§РРќР“Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * iat_patch_by_nameA
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Minimal IAT patch helper - replaces import by function name.
  * Similar to full IAT_Patch but also returns pointer to IAT slot.
  * 
- * Минимальная вспомогательная функция IAT патча - заменяет импорт по имени функции.
- * Похожа на полный IAT_Patch но также возвращает указатель на слот IAT.
+ * РњРёРЅРёРјР°Р»СЊРЅР°СЏ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ IAT РїР°С‚С‡Р° - Р·Р°РјРµРЅСЏРµС‚ РёРјРїРѕСЂС‚ РїРѕ РёРјРµРЅРё С„СѓРЅРєС†РёРё.
+ * РџРѕС…РѕР¶Р° РЅР° РїРѕР»РЅС‹Р№ IAT_Patch РЅРѕ С‚Р°РєР¶Рµ РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMod       - Module handle to patch / Дескриптор модуля для патча
- * dllName    - DLL name containing function / Имя DLL содержащей функцию
- * funcName   - Function name to hook / Имя функции для перехвата
- * newProc    - New function pointer / Новый указатель функции
- * outOldProc - Output: original function pointer / Вывод: оригинальный указатель функции
- * outIatSlot - Output: pointer to IAT slot / Вывод: указатель на слот IAT
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMod       - Module handle to patch / Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ РґР»СЏ РїР°С‚С‡Р°
+ * dllName    - DLL name containing function / РРјСЏ DLL СЃРѕРґРµСЂР¶Р°С‰РµР№ С„СѓРЅРєС†РёСЋ
+ * funcName   - Function name to hook / РРјСЏ С„СѓРЅРєС†РёРё РґР»СЏ РїРµСЂРµС…РІР°С‚Р°
+ * newProc    - New function pointer / РќРѕРІС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё
+ * outOldProc - Output: original function pointer / Р’С‹РІРѕРґ: РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё
+ * outIatSlot - Output: pointer to IAT slot / Р’С‹РІРѕРґ: СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 1 if patch successful, 0 otherwise
- * 1 если патч успешен, 0 иначе
+ * 1 РµСЃР»Рё РїР°С‚С‡ СѓСЃРїРµС€РµРЅ, 0 РёРЅР°С‡Рµ
  * 
- * WHY RETURN IAT SLOT / ПОЧЕМУ ВОЗВРАЩАЕМ СЛОТ IAT:
+ * WHY RETURN IAT SLOT / РџРћР§Р•РњРЈ Р’РћР—Р’Р РђР©РђР•Рњ РЎР›РћРў IAT:
  * Knowing IAT slot location allows easy restoration during cleanup.
  * We can directly write original pointer back without re-searching.
  * 
- * Знание расположения слота IAT позволяет лёгкое восстановление при очистке.
- * Можем напрямую записать оригинальный указатель обратно без повторного поиска.
+ * Р—РЅР°РЅРёРµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ СЃР»РѕС‚Р° IAT РїРѕР·РІРѕР»СЏРµС‚ Р»С‘РіРєРѕРµ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РїСЂРё РѕС‡РёСЃС‚РєРµ.
+ * РњРѕР¶РµРј РЅР°РїСЂСЏРјСѓСЋ Р·Р°РїРёСЃР°С‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РѕР±СЂР°С‚РЅРѕ Р±РµР· РїРѕРІС‚РѕСЂРЅРѕРіРѕ РїРѕРёСЃРєР°.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Validate PE structure
  * 2. Find import descriptor for specified DLL
  * 3. Search for function by name
@@ -350,88 +350,88 @@ static int menu_hide_by_id_recursive(HMENU hMenu, UINT id)
  * 7. Restore memory protection
  * 8. Return IAT slot pointer
  * 
- * 1. Проверить PE структуру
- * 2. Найти дескриптор импорта для указанной DLL
- * 3. Искать функцию по имени
- * 4. Изменить защиту памяти
- * 5. Заменить указатель функции
- * 6. Сбросить кэш инструкций (важно!)
- * 7. Восстановить защиту памяти
- * 8. Вернуть указатель на слот IAT
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ PE СЃС‚СЂСѓРєС‚СѓСЂСѓ
+ * 2. РќР°Р№С‚Рё РґРµСЃРєСЂРёРїС‚РѕСЂ РёРјРїРѕСЂС‚Р° РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕР№ DLL
+ * 3. РСЃРєР°С‚СЊ С„СѓРЅРєС†РёСЋ РїРѕ РёРјРµРЅРё
+ * 4. РР·РјРµРЅРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
+ * 5. Р—Р°РјРµРЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё
+ * 6. РЎР±СЂРѕСЃРёС‚СЊ РєСЌС€ РёРЅСЃС‚СЂСѓРєС†РёР№ (РІР°Р¶РЅРѕ!)
+ * 7. Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
+ * 8. Р’РµСЂРЅСѓС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
  ******************************************************************************/
 static int iat_patch_by_nameA(HMODULE hMod, const char* dllName, const char* funcName,
                              void* newProc, void** outOldProc, void*** outIatSlot)
 {
     BYTE* base = (BYTE*)hMod;
     
-    // Validate DOS header / Проверить DOS заголовок
+    // Validate DOS header / РџСЂРѕРІРµСЂРёС‚СЊ DOS Р·Р°РіРѕР»РѕРІРѕРє
     IMAGE_DOS_HEADER* dos = (IMAGE_DOS_HEADER*)base;
     if (!dos || dos->e_magic != IMAGE_DOS_SIGNATURE) return 0;
 
-    // Validate NT header / Проверить NT заголовок
+    // Validate NT header / РџСЂРѕРІРµСЂРёС‚СЊ NT Р·Р°РіРѕР»РѕРІРѕРє
     IMAGE_NT_HEADERS* nt = (IMAGE_NT_HEADERS*)(base + dos->e_lfanew);
     if (!nt || nt->Signature != IMAGE_NT_SIGNATURE) return 0;
 
-    // Get import directory / Получить каталог импорта
+    // Get import directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі РёРјРїРѕСЂС‚Р°
     DWORD impRva = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     if (!impRva) return 0;
 
     IMAGE_IMPORT_DESCRIPTOR* imp = (IMAGE_IMPORT_DESCRIPTOR*)(base + impRva);
 
-    // Search through import descriptors / Искать через дескрипторы импорта
+    // Search through import descriptors / РСЃРєР°С‚СЊ С‡РµСЂРµР· РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРјРїРѕСЂС‚Р°
     for (; imp->Name; ++imp)
     {
         const char* name = (const char*)(base + imp->Name);
         if (!name) continue;
 
-        // Check if this is target DLL / Проверить, это ли целевая DLL
+        // Check if this is target DLL / РџСЂРѕРІРµСЂРёС‚СЊ, СЌС‚Рѕ Р»Рё С†РµР»РµРІР°СЏ DLL
         if (lstrcmpiA(name, dllName) != 0) continue;
 
-        // Get thunk arrays / Получить массивы thunk
+        // Get thunk arrays / РџРѕР»СѓС‡РёС‚СЊ РјР°СЃСЃРёРІС‹ thunk
         IMAGE_THUNK_DATA* firstThunk = (IMAGE_THUNK_DATA*)(base + imp->FirstThunk);
         IMAGE_THUNK_DATA* origThunk  = imp->OriginalFirstThunk
                                      ? (IMAGE_THUNK_DATA*)(base + imp->OriginalFirstThunk)
                                      : firstThunk;
 
-        // Search through imports / Искать через импорты
+        // Search through imports / РСЃРєР°С‚СЊ С‡РµСЂРµР· РёРјРїРѕСЂС‚С‹
         for (; origThunk->u1.AddressOfData; ++origThunk, ++firstThunk)
         {
-            // Skip ordinal imports / Пропустить импорты по порядковому номеру
+            // Skip ordinal imports / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РёРјРїРѕСЂС‚С‹ РїРѕ РїРѕСЂСЏРґРєРѕРІРѕРјСѓ РЅРѕРјРµСЂСѓ
             if (origThunk->u1.Ordinal & IMAGE_ORDINAL_FLAG) continue;
 
-            // Get import name / Получить имя импорта
+            // Get import name / РџРѕР»СѓС‡РёС‚СЊ РёРјСЏ РёРјРїРѕСЂС‚Р°
             IMAGE_IMPORT_BY_NAME* ibn = (IMAGE_IMPORT_BY_NAME*)(base + origThunk->u1.AddressOfData);
             if (!ibn) continue;
 
             const char* impFunc = (const char*)ibn->Name;
             if (!impFunc) continue;
 
-            // Check if this is target function / Проверить, это ли целевая функция
+            // Check if this is target function / РџСЂРѕРІРµСЂРёС‚СЊ, СЌС‚Рѕ Р»Рё С†РµР»РµРІР°СЏ С„СѓРЅРєС†РёСЏ
             if (lstrcmpA(impFunc, funcName) == 0)
             {
-                // Get pointer to IAT slot / Получить указатель на слот IAT
+                // Get pointer to IAT slot / РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
                 void** slot = (void**)&firstThunk->u1.Function;
 
-                // Make memory writable / Сделать память доступной для записи
+                // Make memory writable / РЎРґРµР»Р°С‚СЊ РїР°РјСЏС‚СЊ РґРѕСЃС‚СѓРїРЅРѕР№ РґР»СЏ Р·Р°РїРёСЃРё
                 DWORD oldProt = 0;
                 if (!VirtualProtect(slot, sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProt))
                     return 0;
 
-                // Save original and install hook / Сохранить оригинал и установить хук
+                // Save original and install hook / РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р» Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРє
                 if (outOldProc) *outOldProc = *slot;
                 *slot = newProc;
                 
                 // CRITICAL: Flush instruction cache to ensure CPU sees new pointer
-                // КРИТИЧНО: Сбросить кэш инструкций чтобы CPU увидел новый указатель
+                // РљР РРўРР§РќРћ: РЎР±СЂРѕСЃРёС‚СЊ РєСЌС€ РёРЅСЃС‚СЂСѓРєС†РёР№ С‡С‚РѕР±С‹ CPU СѓРІРёРґРµР» РЅРѕРІС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ
                 FlushInstructionCache(GetCurrentProcess(), slot, sizeof(void*));
 
-                // Restore memory protection / Восстановить защиту памяти
+                // Restore memory protection / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
                 {
                     DWORD tmp = 0;
                     VirtualProtect(slot, sizeof(void*), oldProt, &tmp);
                 }
 
-                // Return IAT slot pointer / Вернуть указатель на слот IAT
+                // Return IAT slot pointer / Р’РµСЂРЅСѓС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
                 if (outIatSlot) *outIatSlot = slot;
                 return 1;
             }
@@ -442,86 +442,86 @@ static int iat_patch_by_nameA(HMODULE hMod, const char* dllName, const char* fun
 
 /*******************************************************************************
  * TRACKPOPUPMENU HOOK FUNCTIONS
- * ФУНКЦИИ ХУКОВ TRACKPOPUPMENU
+ * Р¤РЈРќРљР¦РР РҐРЈРљРћР’ TRACKPOPUPMENU
  ******************************************************************************/
 
 /*******************************************************************************
  * Hook_TrackPopupMenu
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for TrackPopupMenu that hides minibrowser menu item before showing menu.
- * Хук для TrackPopupMenu который скрывает пункт меню мини-браузера перед показом меню.
+ * РҐСѓРє РґР»СЏ TrackPopupMenu РєРѕС‚РѕСЂС‹Р№ СЃРєСЂС‹РІР°РµС‚ РїСѓРЅРєС‚ РјРµРЅСЋ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° РїРµСЂРµРґ РїРѕРєР°Р·РѕРј РјРµРЅСЋ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * Standard TrackPopupMenu parameters / Стандартные параметры TrackPopupMenu
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * Standard TrackPopupMenu parameters / РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ TrackPopupMenu
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * Result from original TrackPopupMenu / Результат оригинальной TrackPopupMenu
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * Result from original TrackPopupMenu / Р РµР·СѓР»СЊС‚Р°С‚ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ TrackPopupMenu
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Before showing menu, recursively hide menu item 40298
  * 2. Call original TrackPopupMenu to show menu
  * 3. Return result
  * 
- * 1. Перед показом меню рекурсивно скрыть пункт меню 40298
- * 2. Вызвать оригинальную TrackPopupMenu для показа меню
- * 3. Вернуть результат
+ * 1. РџРµСЂРµРґ РїРѕРєР°Р·РѕРј РјРµРЅСЋ СЂРµРєСѓСЂСЃРёРІРЅРѕ СЃРєСЂС‹С‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ 40298
+ * 2. Р’С‹Р·РІР°С‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ TrackPopupMenu РґР»СЏ РїРѕРєР°Р·Р° РјРµРЅСЋ
+ * 3. Р’РµСЂРЅСѓС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Safe: doesn't change menu item count or positions.
- * Безопасно: не изменяет количество пунктов меню или позиции.
+ * Р‘РµР·РѕРїР°СЃРЅРѕ: РЅРµ РёР·РјРµРЅСЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РїСѓРЅРєС‚РѕРІ РјРµРЅСЋ РёР»Рё РїРѕР·РёС†РёРё.
  ******************************************************************************/
 static BOOL WINAPI Hook_TrackPopupMenu(HMENU hMenu, UINT uFlags, int x, int y, int nRes,
                                       HWND hWnd, const RECT* prc)
 {
     // Hide minibrowser menu item (converts to disabled separator)
-    // Скрыть пункт меню мини-браузера (преобразует в отключённый разделитель)
+    // РЎРєСЂС‹С‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР° (РїСЂРµРѕР±СЂР°Р·СѓРµС‚ РІ РѕС‚РєР»СЋС‡С‘РЅРЅС‹Р№ СЂР°Р·РґРµР»РёС‚РµР»СЊ)
     menu_hide_by_id_recursive(hMenu, (UINT)MB_MENU_CMD_ID);
 
-    // Call original function / Вызвать оригинальную функцию
+    // Call original function / Р’С‹Р·РІР°С‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
     return g_OrigTrackPopupMenu ? g_OrigTrackPopupMenu(hMenu, uFlags, x, y, nRes, hWnd, prc) : FALSE;
 }
 
 /*******************************************************************************
  * Hook_TrackPopupMenuEx
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for TrackPopupMenuEx (extended version of TrackPopupMenu).
  * Same functionality as Hook_TrackPopupMenu but for extended API.
  * 
- * Хук для TrackPopupMenuEx (расширенная версия TrackPopupMenu).
- * Та же функциональность что Hook_TrackPopupMenu но для расширенного API.
+ * РҐСѓРє РґР»СЏ TrackPopupMenuEx (СЂР°СЃС€РёСЂРµРЅРЅР°СЏ РІРµСЂСЃРёСЏ TrackPopupMenu).
+ * РўР° Р¶Рµ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ С‡С‚Рѕ Hook_TrackPopupMenu РЅРѕ РґР»СЏ СЂР°СЃС€РёСЂРµРЅРЅРѕРіРѕ API.
  ******************************************************************************/
 static BOOL WINAPI Hook_TrackPopupMenuEx(HMENU hMenu, UINT uFlags, int x, int y,
                                         HWND hWnd, LPTPMPARAMS p)
 {
-    // Hide minibrowser menu item / Скрыть пункт меню мини-браузера
+    // Hide minibrowser menu item / РЎРєСЂС‹С‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
     menu_hide_by_id_recursive(hMenu, (UINT)MB_MENU_CMD_ID);
 
-    // Call original function / Вызвать оригинальную функцию
+    // Call original function / Р’С‹Р·РІР°С‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
     return g_OrigTrackPopupMenuEx ? g_OrigTrackPopupMenuEx(hMenu, uFlags, x, y, hWnd, p) : FALSE;
 }
 
 /*******************************************************************************
  * HOOK INSTALLATION AND REMOVAL
- * УСТАНОВКА И УДАЛЕНИЕ ХУКОВ
+ * РЈРЎРўРђРќРћР’РљРђ Р РЈР”РђР›Р•РќРР• РҐРЈРљРћР’
  ******************************************************************************/
 
 /*******************************************************************************
  * mb_menu_hook_install
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Installs TrackPopupMenu hooks in winamp.exe.
  * Patches both TrackPopupMenu and TrackPopupMenuEx for complete coverage.
  * 
- * Устанавливает хуки TrackPopupMenu в winamp.exe.
- * Патчит и TrackPopupMenu и TrackPopupMenuEx для полного охвата.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё TrackPopupMenu РІ winamp.exe.
+ * РџР°С‚С‡РёС‚ Рё TrackPopupMenu Рё TrackPopupMenuEx РґР»СЏ РїРѕР»РЅРѕРіРѕ РѕС…РІР°С‚Р°.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 1 if at least one hook installed successfully, 0 if both failed
- * 1 если хотя бы один хук установлен успешно, 0 если оба не удались
+ * 1 РµСЃР»Рё С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ С…СѓРє СѓСЃС‚Р°РЅРѕРІР»РµРЅ СѓСЃРїРµС€РЅРѕ, 0 РµСЃР»Рё РѕР±Р° РЅРµ СѓРґР°Р»РёСЃСЊ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Get winamp.exe module handle
  * 2. If TrackPopupMenu not hooked yet:
  *    - Patch IAT to install hook
@@ -533,33 +533,33 @@ static BOOL WINAPI Hook_TrackPopupMenuEx(HMENU hMenu, UINT uFlags, int x, int y,
  *    - Save IAT slot pointer
  * 4. Return success if at least one hook installed
  * 
- * 1. Получить дескриптор модуля winamp.exe
- * 2. Если TrackPopupMenu ещё не перехвачен:
- *    - Пропатчить IAT для установки хука
- *    - Сохранить указатель на оригинальную функцию
- *    - Сохранить указатель на слот IAT
- * 3. Если TrackPopupMenuEx ещё не перехвачен:
- *    - Пропатчить IAT для установки хука
- *    - Сохранить указатель на оригинальную функцию
- *    - Сохранить указатель на слот IAT
- * 4. Вернуть успех если хотя бы один хук установлен
+ * 1. РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ winamp.exe
+ * 2. Р•СЃР»Рё TrackPopupMenu РµС‰С‘ РЅРµ РїРµСЂРµС…РІР°С‡РµРЅ:
+ *    - РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С…СѓРєР°
+ *    - РЎРѕС…СЂР°РЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
+ *    - РЎРѕС…СЂР°РЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
+ * 3. Р•СЃР»Рё TrackPopupMenuEx РµС‰С‘ РЅРµ РїРµСЂРµС…РІР°С‡РµРЅ:
+ *    - РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С…СѓРєР°
+ *    - РЎРѕС…СЂР°РЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
+ *    - РЎРѕС…СЂР°РЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РѕС‚ IAT
+ * 4. Р’РµСЂРЅСѓС‚СЊ СѓСЃРїРµС… РµСЃР»Рё С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ С…СѓРє СѓСЃС‚Р°РЅРѕРІР»РµРЅ
  * 
- * WHY HOOK BOTH / ПОЧЕМУ ХУКАЕМ ОБА:
+ * WHY HOOK BOTH / РџРћР§Р•РњРЈ РҐРЈРљРђР•Рњ РћР‘Рђ:
  * Winamp might use either function depending on context.
  * Hooking both ensures complete menu hiding coverage.
  * 
- * Winamp может использовать любую функцию в зависимости от контекста.
- * Перехват обеих обеспечивает полное покрытие скрытия меню.
+ * Winamp РјРѕР¶РµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»СЋР±СѓСЋ С„СѓРЅРєС†РёСЋ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РєРѕРЅС‚РµРєСЃС‚Р°.
+ * РџРµСЂРµС…РІР°С‚ РѕР±РµРёС… РѕР±РµСЃРїРµС‡РёРІР°РµС‚ РїРѕР»РЅРѕРµ РїРѕРєСЂС‹С‚РёРµ СЃРєСЂС‹С‚РёСЏ РјРµРЅСЋ.
  ******************************************************************************/
 static int mb_menu_hook_install(void)
 {
-    // Get winamp.exe module / Получить модуль winamp.exe
+    // Get winamp.exe module / РџРѕР»СѓС‡РёС‚СЊ РјРѕРґСѓР»СЊ winamp.exe
     HMODULE hExe = GetModuleHandleA(NULL);
     if (!hExe) return 0;
 
     /***************************************************************************
      * Hook TrackPopupMenu
-     * Перехватить TrackPopupMenu
+     * РџРµСЂРµС…РІР°С‚РёС‚СЊ TrackPopupMenu
      ***************************************************************************/
     if (!g_OrigTrackPopupMenu)
     {
@@ -576,7 +576,7 @@ static int mb_menu_hook_install(void)
 
     /***************************************************************************
      * Hook TrackPopupMenuEx
-     * Перехватить TrackPopupMenuEx
+     * РџРµСЂРµС…РІР°С‚РёС‚СЊ TrackPopupMenuEx
      ***************************************************************************/
     if (!g_OrigTrackPopupMenuEx)
     {
@@ -592,18 +592,18 @@ static int mb_menu_hook_install(void)
     }
 
     // Return success if at least one hook installed
-    // Вернуть успех если хотя бы один хук установлен
+    // Р’РµСЂРЅСѓС‚СЊ СѓСЃРїРµС… РµСЃР»Рё С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ С…СѓРє СѓСЃС‚Р°РЅРѕРІР»РµРЅ
     return (g_OrigTrackPopupMenu != NULL) || (g_OrigTrackPopupMenuEx != NULL);
 }
 
 /*******************************************************************************
  * mb_menu_hook_remove
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Removes TrackPopupMenu hooks by restoring original IAT entries.
- * Удаляет хуки TrackPopupMenu восстановлением оригинальных записей IAT.
+ * РЈРґР°Р»СЏРµС‚ С…СѓРєРё TrackPopupMenu РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… Р·Р°РїРёСЃРµР№ IAT.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. If TrackPopupMenu was hooked:
  *    - Make IAT slot writable
  *    - Restore original pointer
@@ -613,31 +613,31 @@ static int mb_menu_hook_install(void)
  *    - Same restoration process
  * 3. Clear all global pointers
  * 
- * 1. Если TrackPopupMenu был перехвачен:
- *    - Сделать слот IAT доступным для записи
- *    - Восстановить оригинальный указатель
- *    - Сбросить кэш инструкций
- *    - Восстановить защиту памяти
- * 2. Если TrackPopupMenuEx был перехвачен:
- *    - Тот же процесс восстановления
- * 3. Очистить все глобальные указатели
+ * 1. Р•СЃР»Рё TrackPopupMenu Р±С‹Р» РїРµСЂРµС…РІР°С‡РµРЅ:
+ *    - РЎРґРµР»Р°С‚СЊ СЃР»РѕС‚ IAT РґРѕСЃС‚СѓРїРЅС‹Рј РґР»СЏ Р·Р°РїРёСЃРё
+ *    - Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ
+ *    - РЎР±СЂРѕСЃРёС‚СЊ РєСЌС€ РёРЅСЃС‚СЂСѓРєС†РёР№
+ *    - Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
+ * 2. Р•СЃР»Рё TrackPopupMenuEx Р±С‹Р» РїРµСЂРµС…РІР°С‡РµРЅ:
+ *    - РўРѕС‚ Р¶Рµ РїСЂРѕС†РµСЃСЃ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ
+ * 3. РћС‡РёСЃС‚РёС‚СЊ РІСЃРµ РіР»РѕР±Р°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Must be called before plugin unload to prevent crashes.
- * Должна быть вызвана перед выгрузкой плагина для предотвращения крашей.
+ * Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ РІС‹Р·РІР°РЅР° РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№ РїР»Р°РіРёРЅР° РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РєСЂР°С€РµР№.
  ******************************************************************************/
 static void mb_menu_hook_remove(void)
 {
     /***************************************************************************
      * Restore TrackPopupMenu
-     * Восстановить TrackPopupMenu
+     * Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ TrackPopupMenu
      ***************************************************************************/
     if (g_IAT_TrackPopupMenu && g_OrigTrackPopupMenu)
     {
         DWORD oldProt = 0;
         if (VirtualProtect(g_IAT_TrackPopupMenu, sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProt))
         {
-            *g_IAT_TrackPopupMenu = (void*)g_OrigTrackPopupMenu;  // Restore original / Восстановить оригинал
+            *g_IAT_TrackPopupMenu = (void*)g_OrigTrackPopupMenu;  // Restore original / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»
             FlushInstructionCache(GetCurrentProcess(), g_IAT_TrackPopupMenu, sizeof(void*));
             
             {
@@ -649,14 +649,14 @@ static void mb_menu_hook_remove(void)
 
     /***************************************************************************
      * Restore TrackPopupMenuEx
-     * Восстановить TrackPopupMenuEx
+     * Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ TrackPopupMenuEx
      ***************************************************************************/
     if (g_IAT_TrackPopupMenuEx && g_OrigTrackPopupMenuEx)
     {
         DWORD oldProt = 0;
         if (VirtualProtect(g_IAT_TrackPopupMenuEx, sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProt))
         {
-            *g_IAT_TrackPopupMenuEx = (void*)g_OrigTrackPopupMenuEx;  // Restore original / Восстановить оригинал
+            *g_IAT_TrackPopupMenuEx = (void*)g_OrigTrackPopupMenuEx;  // Restore original / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»
             FlushInstructionCache(GetCurrentProcess(), g_IAT_TrackPopupMenuEx, sizeof(void*));
             
             {
@@ -666,7 +666,7 @@ static void mb_menu_hook_remove(void)
         }
     }
 
-    // Clear all global pointers / Очистить все глобальные указатели
+    // Clear all global pointers / РћС‡РёСЃС‚РёС‚СЊ РІСЃРµ РіР»РѕР±Р°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё
     g_IAT_TrackPopupMenu = NULL;
     g_IAT_TrackPopupMenuEx = NULL;
     g_OrigTrackPopupMenu = NULL;
@@ -675,37 +675,37 @@ static void mb_menu_hook_remove(void)
 
 /*******************************************************************************
  * PUBLIC API
- * ПУБЛИЧНЫЙ API
+ * РџРЈР‘Р›РР§РќР«Р™ API
  ******************************************************************************/
 
 /*******************************************************************************
  * patch_mb_init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes minibrowser removal patch.
  * Applies both creation blocking patch and menu hiding hooks.
  * 
- * Инициализирует патч удаления мини-браузера.
- * Применяет и патч блокировки создания и хуки скрытия меню.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїР°С‚С‡ СѓРґР°Р»РµРЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
+ * РџСЂРёРјРµРЅСЏРµС‚ Рё РїР°С‚С‡ Р±Р»РѕРєРёСЂРѕРІРєРё СЃРѕР·РґР°РЅРёСЏ Рё С…СѓРєРё СЃРєСЂС‹С‚РёСЏ РјРµРЅСЋ.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 1 if initialization successful, 0 on failure
- * 1 если инициализация успешна, 0 при ошибке
+ * 1 РµСЃР»Рё РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СѓСЃРїРµС€РЅР°, 0 РїСЂРё РѕС€РёР±РєРµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Apply byte patch to block minibrowser creation
  * 2. Install menu hiding hooks
  * 3. Return success
  * 
- * 1. Применить байтовый патч для блокировки создания мини-браузера
- * 2. Установить хуки скрытия меню
- * 3. Вернуть успех
+ * 1. РџСЂРёРјРµРЅРёС‚СЊ Р±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡ РґР»СЏ Р±Р»РѕРєРёСЂРѕРІРєРё СЃРѕР·РґР°РЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°
+ * 2. РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРєРё СЃРєСЂС‹С‚РёСЏ РјРµРЅСЋ
+ * 3. Р’РµСЂРЅСѓС‚СЊ СѓСЃРїРµС…
  * 
- * WHEN TO CALL / КОГДА ВЫЗЫВАТЬ:
+ * WHEN TO CALL / РљРћР“Р”Рђ Р’Р«Р—Р«Р’РђРўР¬:
  * Call during plugin initialization.
- * Вызывайте во время инициализации плагина.
+ * Р’С‹Р·С‹РІР°Р№С‚Рµ РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * ```c
  * int plugin_init() {
  *     if (!patch_mb_init()) {
@@ -717,11 +717,11 @@ static void mb_menu_hook_remove(void)
  ******************************************************************************/
 int patch_mb_init(void)
 {
-    // Apply byte patch to block creation / Применить байтовый патч для блокировки создания
+    // Apply byte patch to block creation / РџСЂРёРјРµРЅРёС‚СЊ Р±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡ РґР»СЏ Р±Р»РѕРєРёСЂРѕРІРєРё СЃРѕР·РґР°РЅРёСЏ
     if (!patcher_apply_rva_table(g_mbBlockCreate, ARRAYSIZE_(g_mbBlockCreate)))
         return 0;
 
-    // Install menu hiding hooks / Установить хуки скрытия меню
+    // Install menu hiding hooks / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРєРё СЃРєСЂС‹С‚РёСЏ РјРµРЅСЋ
     mb_menu_hook_install();
     
     return 1;
@@ -730,29 +730,29 @@ int patch_mb_init(void)
 /*******************************************************************************
  * patch_mb_quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleans up minibrowser removal patch.
  * Removes menu hooks and reverts byte patches.
  * 
- * Очищает патч удаления мини-браузера.
- * Удаляет хуки меню и откатывает байтовые патчи.
+ * РћС‡РёС‰Р°РµС‚ РїР°С‚С‡ СѓРґР°Р»РµРЅРёСЏ РјРёРЅРё-Р±СЂР°СѓР·РµСЂР°.
+ * РЈРґР°Р»СЏРµС‚ С…СѓРєРё РјРµРЅСЋ Рё РѕС‚РєР°С‚С‹РІР°РµС‚ Р±Р°Р№С‚РѕРІС‹Рµ РїР°С‚С‡Рё.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Remove menu hiding hooks
  * 2. Revert byte patch (restore original byte)
  * 
- * 1. Удалить хуки скрытия меню
- * 2. Откатить байтовый патч (восстановить оригинальный байт)
+ * 1. РЈРґР°Р»РёС‚СЊ С…СѓРєРё СЃРєСЂС‹С‚РёСЏ РјРµРЅСЋ
+ * 2. РћС‚РєР°С‚РёС‚СЊ Р±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡ (РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ Р±Р°Р№С‚)
  * 
- * WHEN TO CALL / КОГДА ВЫЗЫВАТЬ:
+ * WHEN TO CALL / РљРћР“Р”Рђ Р’Р«Р—Р«Р’РђРўР¬:
  * Call during plugin cleanup, before unload.
- * Вызывайте во время очистки плагина, перед выгрузкой.
+ * Р’С‹Р·С‹РІР°Р№С‚Рµ РІРѕ РІСЂРµРјСЏ РѕС‡РёСЃС‚РєРё РїР»Р°РіРёРЅР°, РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№.
  * 
- * CRITICAL / КРИТИЧНО:
+ * CRITICAL / РљР РРўРР§РќРћ:
  * Must be called before plugin DLL is unloaded.
- * Должна быть вызвана перед выгрузкой DLL плагина.
+ * Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ РІС‹Р·РІР°РЅР° РїРµСЂРµРґ РІС‹РіСЂСѓР·РєРѕР№ DLL РїР»Р°РіРёРЅР°.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * ```c
  * void plugin_quit() {
  *     patch_mb_quit();
@@ -762,9 +762,9 @@ int patch_mb_init(void)
  ******************************************************************************/
 void patch_mb_quit(void)
 {
-    // Remove menu hooks / Удалить хуки меню
+    // Remove menu hooks / РЈРґР°Р»РёС‚СЊ С…СѓРєРё РјРµРЅСЋ
     mb_menu_hook_remove();
     
-    // Revert byte patch / Откатить байтовый патч
+    // Revert byte patch / РћС‚РєР°С‚РёС‚СЊ Р±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡
     patcher_revert_rva_table(g_mbBlockCreate, ARRAYSIZE_(g_mbBlockCreate));
 }

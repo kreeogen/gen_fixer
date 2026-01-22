@@ -95,7 +95,7 @@
 
 		#define ID3 "Use modern ID3v2 tag saving (recommended)"
 		#define STARTUP "Prevent Winamp from starting minimized"
-		#define ICONFIX "Show icon in this window’s title"
+		#define ICONFIX "Show icon in this window s title"
 		#define PATCH_URL "Replace 'Get more skins!' with Winamp Skin Museum"
 		#define SKININSTALL "Fix Explorer menu item for installing skins"
 	
@@ -144,126 +144,126 @@
 
 // -------------------- RUSSIAN --------------------
 
-		#define PLUGIN_NAME "Расширенные настройки Winamp v" PLUG_VER
-		#define PREFFS_NAME "Расширенные"
+		#define PLUGIN_NAME "                      Winamp v" PLUG_VER
+		#define PREFFS_NAME "           "
 
-		#define APPCONFIG "Добавляет пункт меню 'Расширенные' в Настройки\n\n"\
-						"Фикс некоторых багов Winamp 2.95 и мелкие твики,\n"\
-						"которые жизненно необходимы авторам сборки =)\n\n"\
-						"Специально для Пиратской Версии\n"\
+		#define APPCONFIG "                     '           '            \n\n"\
+						"                     Winamp 2.95               ,\n"\
+						"                                           =)\n\n"\
+						"                               \n"\
 						"kreeogen & IFkO (2026)"
 
-		#define APPCONFIG_TITLE "О модуле Fixer v" PLUG_VER
+		#define APPCONFIG_TITLE "         Fixer v" PLUG_VER
 
-		#define MENU_TEXT "Перезапустить Winamp"
+		#define MENU_TEXT "              Winamp"
 
 		#ifndef RC_INVOKED
-		static const char kDispA[] = "Установить обложку Winamp";
+		static const char kDispA[] = "                   Winamp";
 		#endif
 
-		#define ADD_FILE "Добавить файл(ы)\tL"
-		#define ADD_FOLDER "Добавить папку\tShift+L"
-		#define ADD_LOCATION "Добавить URL ссылку\tCtrl+L"
+		#define ADD_FILE "             ( )\tL"
+		#define ADD_FOLDER "              \tShift+L"
+		#define ADD_LOCATION "         URL       \tCtrl+L"
 
-		#define REM_SEL "Удалить выбранные\tDel"
-		#define CROP_SEL "Удалить всё, кроме выбранного\tCtrl+Del"
-		#define NEW_PL "Новый плэйлист (очистить)\tCtrl+Shift+Del"
-		#define RMV_DEAD "Убрать несуществующие\tAlt+Delete"
-		#define DEL_ALL "Стереть выбранные файлы с диска"
-		#define SUB_DEL "Удаление"
+		#define REM_SEL "                 \tDel"
+		#define CROP_SEL "          ,                 \tCtrl+Del"
+		#define NEW_PL "               (        )\tCtrl+Shift+Del"
+		#define RMV_DEAD "                     \tAlt+Delete"
+		#define DEL_ALL "                               "
+		#define SUB_DEL "        "
 
-		#define SEL_ALL "Выделить всё\tCtrl+A"
-		#define SEL_NONE "Снять выделение\tCtrl+Alt+D"
-		#define INVERT "Инвертировать выделение\tCtrl+I"
+		#define SEL_ALL "           \tCtrl+A"
+		#define SEL_NONE "               \tCtrl+Alt+D"
+		#define INVERT "                       \tCtrl+I"
 
-		#define FILE_INFO "Свойства файла\tAlt+3"
-		#define ENTRY "Изменить путь к файлу\tCtrl+E"
-		#define INFO "Информация"
+		#define FILE_INFO "              \tAlt+3"
+		#define ENTRY "                     \tCtrl+E"
+		#define INFO "          "
 
-		#define SORT_TIT "Сортировать по названию\tCtrl+Shift+1"
-		#define SORT_NAM "Сортировать по имени файла\tCtrl+Shift+2"
-		#define SORT_FOL "Сортировать по папкам\tCtrl+Shift+3"
-		#define SORT_REV "В обратном порядке\tCtrl+R"
-		#define SORT_RAN "Перемешать плейлист\tCtrl+Shift+R"
-		#define SORTALL "Сортировать"
+		#define SORT_TIT "                       \tCtrl+Shift+1"
+		#define SORT_NAM "                          \tCtrl+Shift+2"
+		#define SORT_FOL "                     \tCtrl+Shift+3"
+		#define SORT_REV "                  \tCtrl+R"
+		#define SORT_RAN "                   \tCtrl+Shift+R"
+		#define SORTALL "           "
 
-		#define HTML_PL "Создать HTML файл плейлиста\tCtrl+Alt+G"
-		#define EXT_INFO "Обновление данных композиций в плейлисте\tCtrl+Alt+E"
-		#define MISC "Прочее"
+		#define HTML_PL "        HTML               \tCtrl+Alt+G"
+		#define EXT_INFO "                                        \tCtrl+Alt+E"
+		#define MISC "      "
 
-		#define NEW_PL2 "Новый плейлист\tCtrl+N"
-		#define OPEN_PL "Открыть плейлист\tCtrl+O"
-		#define SAVE_PL "Сохранить плейлист\tCtrl+S"
+		#define NEW_PL2 "              \tCtrl+N"
+		#define OPEN_PL "                \tCtrl+O"
+		#define SAVE_PL "                  \tCtrl+S"
 
-		#define TAB_OPT1 "Дополнения"
-		#define TAB_OPT2 "Исправления"
+		#define TAB_OPT1 "          "
+		#define TAB_OPT2 "           "
 
-		#define ADVSET "Расширенные настройки"
+		#define ADVSET "                     "
 	
-		#define M3U8 "Поддержка плейлистов формата *.M3U8"
-		#define DELSKIN "Удаление и смена имён обложек в списке"
-		#define PL_MENUS "Контекстные меню вместо кнопок в Плейлисте"
-		#define REST_ITEM "Добавить пункт ''Перезапуск'' в меню"
-		#define MUTE "Ctrl + Space = Выключение громкости (Mute)"
+		#define M3U8 "                             *.M3U8"
+		#define DELSKIN "                                     "
+		#define PL_MENUS "                                          "
+		#define REST_ITEM "               ''          ''       "
+		#define MUTE "Ctrl + Space =                      (Mute)"
 
-		#define MLFONT "Шрифт в Медиатеке такой же, как в плейлисте"
-		#define MLICO "Тонирование иконок Медиатеки в цвет обложки"
-		#define MLCD "Удалить пункт ''Копирование CD'' из Настроек"
+		#define MLFONT "                          ,                "
+		#define MLICO "                                           "
+		#define MLCD "              ''            CD''            "
 		
-		#define PATCHMB "Отключить окно Минибраузера"
-		#define PATCHMBSKIN "Запретить обложкам открывать Минибраузер"
+		#define PATCHMB "                           "
+		#define PATCHMBSKIN "                                        "
 
-		#define UNITAG "Кириллица в юникодных тегах ID3v2"
-		#define UNISTR "Кириллица в метаданных радиостанций"
-		#define PLSEARCH "Поиск русских названий в Плейлисте"
-		#define MLSEARCH "Поиск русских названий в Медиатеке"
-		#define VIDEOFONTFIX "Кириллица в полноэкранном видео"
+		#define UNITAG "                            ID3v2"
+		#define UNISTR "                                   "
+		#define PLSEARCH "                                  "
+		#define MLSEARCH "                                  "
+		#define VIDEOFONTFIX "                               "
 
-		#define ID3 "Корректное сохранение тегов ID3v2 (без потерь)"
-		#define STARTUP "Предотвращать запуск Winamp в свёрнутом виде"
-		#define ICONFIX "Отображать иконку в заголовке этого окна"
-		#define PATCH_URL "Скачивать обложки из Музея обложек Winamp"
-		#define SKININSTALL "''Установить обложку Winamp'' в меню Проводника"
+		#define ID3 "                            ID3v2 (          )"
+		#define STARTUP "                     Winamp                "
+		#define ICONFIX "                                        "
+		#define PATCH_URL "                                   Winamp"
+		#define SKININSTALL "''                   Winamp''                  "
 
 
-		#define WINDOW_CANCEL      "Отмена"
-		#define MENU_RENAME        "Переименовать обложку\tF2"
-		#define RENAME_TITLE       "Переименование"
-		#define MENU_DELITEM	   "Удалить обложку\tDelete"
-		#define RENAME_PROMPT      "Введите новое имя:"
+		#define WINDOW_CANCEL      "      "
+		#define MENU_RENAME        "                     \tF2"
+		#define RENAME_TITLE       "              "
+		#define MENU_DELITEM	   "               \tDelete"
+		#define RENAME_PROMPT      "                 :"
 
-		#define ALL_PL      "Все плейлисты (*.pls;*.m3u;*.m3u8)"
-		#define PLS_FILES	"PLS плейлисты (*.pls)"
-		#define M3U_FILES	"M3U/M3U8 плейлисты (*.m3u;*.m3u8)"
-		#define ALL_FILES	"Все файлы (*.*)"
+		#define ALL_PL      "              (*.pls;*.m3u;*.m3u8)"
+		#define PLS_FILES	"PLS           (*.pls)"
+		#define M3U_FILES	"M3U/M3U8           (*.m3u;*.m3u8)"
+		#define ALL_FILES	"          (*.*)"
 
 
 // ---- GroupBox captions (what you need) ----
-#define STAT_1 "Общие"
-#define STAT_2 "Медиатека"
-#define STAT_3 "Исправления кодировок"
-#define STAT_4 "Прочие"
-#define STAT_5 "Минибраузер"
+#define STAT_1 "     "
+#define STAT_2 "         "
+#define STAT_3 "                     "
+#define STAT_4 "      "
+#define STAT_5 "           "
 
-#define TIP_M3U8        "Включает поддержку плейлистов M3U8 и PLS UTF-8. Исправляет проблемы с кодировкой кириллицы."
-#define TIP_SKINDEL     "Добавляет контекстное меню в диалог выбора обложки. Используйте F2, Delete или правый клик мышкой."
-#define TIP_PEZONES     "Включает менюшки вместо кнопок в редакторе плейлиста в стиле Modern обложек Winamp5."
-#define TIP_RESTART     "Добавляет опцию «Перезапустить Winamp» в главное контекстное меню."
-#define TIP_MUTE        "Включает быстрое отключение/включение звука сочетанием клавиш Ctrl+Пробел."
-#define TIP_MLFONT      "Применяет шрифт Плейлиста и его размер к шрифтам Медиатеки, включает сглаживание ClearType в системах WinXP+."
-#define TIP_MLICO       "Автоматически подкрашивает иконки Медиатеки под цвета текущей обложки."
-#define TIP_MLCD        "Убирает из окна Настроек пункт ''Копирование CD''. Идеально, если у вас нет CD-ROM привода в системе."
-#define TIP_PATCHMB     "Полностью отключает создание окна браузера. Применяется сразу, а для отмены требуется перезапуск Winamp."
-#define TIP_PATCHMBSKIN "Некоторые обложки принудительно открывают окно браузера. Выберите эту опцию, чтобы отключмть это."
-#define TIP_UNITAG      "Исправляет кодировку тегов ID3v2 для корректного отображения кириллицы и Unicode."
-#define TIP_UNISTR      "Исправляет кодировку метаданных SHOUTcast для корректного отображения кириллицы в интернет-радио."
-#define TIP_PLSEARCH    "Включает поиск по русским символам в главном окне Плейлиста."
-#define TIP_MLSEARCH    "Включает поддержку кириллицы при поиске в окне Медиатеки."
-#define TIP_VIDEOFONTFIX "Исправляет отображение кириллицы в интерфейсе полноэкранного режима видео."
-#define TIP_STARTUP     "Принудительно выводит окно Winamp на передний план при запуске приложения предотвращая баг с запуском в свернутом состоянии."
-#define TIP_ICONFIX     "Восстанавливает исчезающую иконку в заголовке окна настроек."
-#define TIP_ID3         "Исправляет сохранение тегов, защищая нестандартные поля ID3v2 от повреждения Winamp'ом."
-#define TIP_PATCHURL    "В меню заменяет нерабочую ссылку «Скачать обложки» на сайт Winamp на ссылку Winamp Skin Museum."
-#define TIP_SKININSTALL "Добавляет пункт «Установить обложку Winamp» в контекстное меню Проводника для файлов .wsz вместо «Install»."
+#define TIP_M3U8        "                              M3U8   PLS UTF-8.                                           ."
+#define TIP_SKINDEL     "                                                  .             F2, Delete                       ."
+#define TIP_PEZONES     "                                                             Modern         Winamp5."
+#define TIP_RESTART     "                               Winamp                            ."
+#define TIP_MUTE        "                           /                                  Ctrl+      ."
+#define TIP_MLFONT      "                                                          ,                      ClearType            WinXP+."
+#define TIP_MLICO       "                                                                     ."
+#define TIP_MLCD        "                               ''            CD''.         ,                CD-ROM                  ."
+#define TIP_PATCHMB     "                                          .                  ,                                   Winamp."
+#define TIP_PATCHMBSKIN "                                                       .                   ,                    ."
+#define TIP_UNITAG      "                           ID3v2                                         Unicode."
+#define TIP_UNISTR      "                                SHOUTcast                                                 -     ."
+#define TIP_PLSEARCH    "                                                           ."
+#define TIP_MLSEARCH    "                                                        ."
+#define TIP_VIDEOFONTFIX "                                                                         ."
+#define TIP_STARTUP     "                           Winamp                                                                                          ."
+#define TIP_ICONFIX     "                                                           ."
+#define TIP_ID3         "                           ,                            ID3v2                Winamp'  ."
+#define TIP_PATCHURL    "                                                          Winamp           Winamp Skin Museum."
+#define TIP_SKININSTALL "                                    Winamp                                           .wsz         Install ."
 
 #endif
