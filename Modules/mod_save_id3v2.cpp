@@ -88,6 +88,10 @@
 // Флаг готовности хуков (0=не готов, 1=готов)
 static volatile LONG g_hooksReady = 0;
 
+// Thread handle for SaveThread / Хэндл потока для SaveThread
+static HANDLE g_hThread = NULL;
+static HANDLE g_hStopEvent = NULL;
+
 /*******************************************************************************
  * DYNAMIC BUFFER STRUCTURE
  * СТРУКТУРА ДИНАМИЧЕСКОГО БУФЕРА
@@ -436,16 +440,33 @@ static volatile LONG g_saveCSInit = 0;
  * 3. Если не успешно, ждать пока флаг станет 2 (другой поток инициализирует)
  ******************************************************************************/
 static void SaveCS_Init() {
-    // Try to claim initialization / Попытаться заявить инициализацию
-    if (InterlockedCompareExchange(&g_saveCSInit, 1, 0) == 0) {
-        // We won the race - initialize / Мы выиграли гонку - инициализировать
+    LONG prev = InterlockedCompareExchange(&g_saveCSInit, 1, 0);
+
+    if (prev == 2) return;      // already inited
+    if (prev == -1) return;     // permanently failed
+
+    if (prev == 1) {
+        // someone else is initializing — don't spin forever
+        DWORD t0 = GetTickCount();
+        while (g_saveCSInit == 1) {
+            Sleep(1);
+            if ((GetTickCount() - t0) > 3000) { // 3s safety
+                InterlockedExchange(&g_saveCSInit, -1);
+                return;
+            }
+        }
+        return;
+    }
+
+    __try {
         InitializeCriticalSection(&g_saveCS);
-        InterlockedExchange(&g_saveCSInit, 2);  // Mark as complete / Отметить как завершённую
-    } else {
-        // Another thread is initializing - wait / Другой поток инициализирует - ждать
-        while (g_saveCSInit != 2) Sleep(0);
+        InterlockedExchange(&g_saveCSInit, 2);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        InterlockedExchange(&g_saveCSInit, -1);
     }
 }
+
 
 /*******************************************************************************
  * Bak_Lock / Bak_Unlock
@@ -616,55 +637,130 @@ static BOOL Bak_Peek(const char* orig, char* out) {
  * Это стандартная техника перехвата IAT.
  * Безопасна для Windows 98 до Windows 11.
  ******************************************************************************/
+static BOOL RvaInImage(DWORD rva, DWORD size, DWORD imageSize) {
+    if (!rva) return FALSE;
+    if (rva >= imageSize) return FALSE;
+    if (size > (imageSize - rva)) return FALSE;
+    return TRUE;
+}
+
+static BOOL PatchThunkDWORD(DWORD* pThunk, DWORD newVal, DWORD* oldVal) {
+    DWORD oldProt = 0;
+    if (!VirtualProtect(pThunk, sizeof(DWORD), PAGE_READWRITE, &oldProt))
+        return FALSE;
+
+    if (oldVal) *oldVal = *pThunk;
+    *pThunk = newVal;
+
+    DWORD dummy = 0;
+    VirtualProtect(pThunk, sizeof(DWORD), oldProt, &dummy);
+    FlushInstructionCache(GetCurrentProcess(), pThunk, sizeof(DWORD));
+    return TRUE;
+}
+
 static BOOL IAT_Patch(HMODULE hMod, const char* dll, const char* func, void* newFunc, void** oldFunc) {
     if (!hMod || !dll || !func || !newFunc) return FALSE;
-    
-    // Verify DOS header / Проверить DOS заголовок
-    PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)hMod;
+
+    BYTE* base = (BYTE*)hMod;
+
+    PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)base;
     if (dos->e_magic != IMAGE_DOS_SIGNATURE) return FALSE;
-    
-    // Verify NT header / Проверить NT заголовок
-    PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)((BYTE*)hMod + dos->e_lfanew);
+
+    PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)(base + dos->e_lfanew);
     if (nt->Signature != IMAGE_NT_SIGNATURE) return FALSE;
-    
-    // Get import descriptor / Получить дескриптор импорта
-    PIMAGE_IMPORT_DESCRIPTOR imp = (PIMAGE_IMPORT_DESCRIPTOR)((BYTE*)hMod + nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
-    if ((BYTE*)imp == (BYTE*)hMod) return FALSE;
-    
-    // Search for DLL in imports / Искать DLL в импортах
-    for (; imp->Name; imp++) {
-        if (lstrcmpiA((char*)((BYTE*)hMod + imp->Name), dll) == 0) {
-            // Found target DLL - search for function / Найдена целевая DLL - искать функцию
-            PIMAGE_THUNK_DATA oft = (PIMAGE_THUNK_DATA)((BYTE*)hMod + imp->OriginalFirstThunk);
-            PIMAGE_THUNK_DATA ft = (PIMAGE_THUNK_DATA)((BYTE*)hMod + imp->FirstThunk);
-            
-            for (; oft->u1.Function; oft++, ft++) {
-                // Skip ordinal imports / Пропустить импорты по порядковому номеру
-                if (IMAGE_SNAP_BY_ORDINAL(oft->u1.Ordinal)) continue;
-                
-                // Get import name / Получить имя импорта
-                PIMAGE_IMPORT_BY_NAME pIBN = (PIMAGE_IMPORT_BY_NAME)((BYTE*)hMod + oft->u1.AddressOfData);
-                
-                // Check if this is our target function / Проверить, это ли наша целевая функция
-                if (lstrcmpiA((char*)pIBN->Name, func) == 0) {
-                    // Make memory writable / Сделать память доступной для записи
-                    DWORD old;
-                    VirtualProtect(&ft->u1.Function, 4, PAGE_READWRITE, &old);
-                    
-                    // Save original and install hook / Сохранить оригинал и установить хук
-                    if (oldFunc) *oldFunc = (void*)ft->u1.Function;
-                    ft->u1.Function = (DWORD)newFunc;
-                    
-                    // Restore original protection / Восстановить оригинальную защиту
-                    VirtualProtect(&ft->u1.Function, 4, old, &old);
-                    
-                    return TRUE;
+
+    DWORD imageSize = nt->OptionalHeader.SizeOfImage;
+
+    IMAGE_DATA_DIRECTORY impDir = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
+    if (impDir.VirtualAddress == 0 || impDir.Size == 0) return FALSE;
+    if (!RvaInImage(impDir.VirtualAddress, sizeof(IMAGE_IMPORT_DESCRIPTOR), imageSize)) return FALSE;
+
+    PIMAGE_IMPORT_DESCRIPTOR imp = (PIMAGE_IMPORT_DESCRIPTOR)(base + impDir.VirtualAddress);
+
+    // Prepare fallback target address (for OFT==0 or ordinal cases)
+    HMODULE hDll = GetModuleHandleA(dll);
+    BOOL needFree = FALSE;
+    if (!hDll) {
+        hDll = LoadLibraryA(dll);
+        if (hDll) needFree = TRUE;
+    }
+    FARPROC targetProc = hDll ? GetProcAddress(hDll, func) : NULL;
+
+    BOOL patched = FALSE;
+
+    for (; imp->Name; ++imp) {
+        if (!RvaInImage(imp->Name, 1, imageSize)) continue;
+
+        const char* dllName = (const char*)(base + imp->Name);
+        if (!dllName) continue;
+        if (lstrcmpiA(dllName, dll) != 0) continue;
+
+        if (!RvaInImage(imp->FirstThunk, sizeof(IMAGE_THUNK_DATA), imageSize)) break;
+        PIMAGE_THUNK_DATA ft = (PIMAGE_THUNK_DATA)(base + imp->FirstThunk);
+
+        PIMAGE_THUNK_DATA oft = NULL;
+        if (imp->OriginalFirstThunk && RvaInImage(imp->OriginalFirstThunk, sizeof(IMAGE_THUNK_DATA), imageSize)) {
+            oft = (PIMAGE_THUNK_DATA)(base + imp->OriginalFirstThunk);
+        }
+
+        if (oft) {
+            // Name-based walk
+            for (; oft->u1.Function; ++oft, ++ft) {
+                if (IMAGE_SNAP_BY_ORDINAL(oft->u1.Ordinal)) {
+                    // fallback by address if possible
+                    if (targetProc && (FARPROC)ft->u1.Function == targetProc) {
+                        DWORD oldVal = 0;
+                        if (PatchThunkDWORD((DWORD*)&ft->u1.Function, (DWORD)newFunc, &oldVal)) {
+                            if (oldFunc) *oldFunc = (void*)oldVal;
+                            patched = TRUE;
+                        }
+                    }
+                    continue;
+                }
+
+                DWORD aod = oft->u1.AddressOfData;
+                if (!RvaInImage(aod, sizeof(IMAGE_IMPORT_BY_NAME), imageSize)) continue;
+
+                PIMAGE_IMPORT_BY_NAME ibn = (PIMAGE_IMPORT_BY_NAME)(base + aod);
+                if (!ibn) continue;
+
+                const char* name = (const char*)ibn->Name;
+                if (!name) continue;
+
+                // Minimal safety: name must be in image
+                // (we don't scan full string; just avoid totally invalid pointer)
+                if (!RvaInImage(aod + (DWORD)((BYTE*)ibn->Name - (BYTE*)ibn), 1, imageSize)) continue;
+
+                if (lstrcmpiA(name, func) == 0) {
+                    DWORD oldVal = 0;
+                    if (PatchThunkDWORD((DWORD*)&ft->u1.Function, (DWORD)newFunc, &oldVal)) {
+                        if (oldFunc) *oldFunc = (void*)oldVal;
+                        patched = TRUE;
+                    }
+                    break;
+                }
+            }
+        } else {
+            // OFT==0: patch by address
+            if (targetProc) {
+                for (; ft->u1.Function; ++ft) {
+                    if ((FARPROC)ft->u1.Function == targetProc) {
+                        DWORD oldVal = 0;
+                        if (PatchThunkDWORD((DWORD*)&ft->u1.Function, (DWORD)newFunc, &oldVal)) {
+                            if (oldFunc) *oldFunc = (void*)oldVal;
+                            patched = TRUE;
+                        }
+                        break;
+                    }
                 }
             }
         }
+
+        break; // processed the target dll descriptor
     }
-    
-    return FALSE;
+
+    if (needFree && hDll) FreeLibrary(hDll);
+    return patched;
 }
 
 /*******************************************************************************
@@ -1427,36 +1523,49 @@ BOOL WINAPI Hook_MoveFileExA(LPCSTR src, LPCSTR dst, DWORD f) {
  * Использует опрос для определения загрузки in_mp3.dll.
  ******************************************************************************/
 static unsigned __stdcall SaveThread(void*) {
-    // Wait for in_mp3.dll to load (max 10 seconds)
-    // Ждать загрузки in_mp3.dll (максимум 10 секунд)
+    // quick exit if stop requested
+    if (g_hStopEvent && WaitForSingleObject(g_hStopEvent, 0) == WAIT_OBJECT_0)
+        return 0;
+
     HMODULE h = NULL;
-    for (int i = 0; i < 50; i++) {
+
+    // wait up to ~10s for in_mp3.dll, but cancellable
+    for (int i = 0; i < 100; i++) {
+        if (g_hStopEvent && WaitForSingleObject(g_hStopEvent, 0) == WAIT_OBJECT_0)
+            return 0;
+
         h = GetModuleHandleA("in_mp3.dll");
         if (h) break;
-        Sleep(200);  // Check every 200ms / Проверять каждые 200мс
+        Sleep(100);
     }
-    
-    if (!h) return 0;  // in_mp3.dll not found - abort / in_mp3.dll не найден - прервать
-    
-    // Wait for stabilization / Ждать стабилизации
-    Sleep(500);
-    
-    // Get kernel32 module / Получить модуль kernel32
+    if (!h) return 0;
+
+    // stabilization delay (cancellable)
+    for (int j = 0; j < 60; j++) {
+        if (g_hStopEvent && WaitForSingleObject(g_hStopEvent, 0) == WAIT_OBJECT_0)
+            return 0;
+        Sleep(10);
+    }
+
     HMODULE k = GetModuleHandleA("KERNEL32.dll");
-    
-    // Get original function addresses / Получить адреса оригинальных функций
-    Orig_MoveFileA = (PFN_MoveFileA)GetProcAddress(k, "MoveFileA");
+    if (!k) return 0;
+
+    Orig_MoveFileA   = (PFN_MoveFileA)  GetProcAddress(k, "MoveFileA");
     Orig_MoveFileExA = (PFN_MoveFileExA)GetProcAddress(k, "MoveFileExA");
-    Real_MoveFileA = Orig_MoveFileA;
+    if (!Orig_MoveFileA || !Orig_MoveFileExA) return 0;
+
+    Real_MoveFileA   = Orig_MoveFileA;
     Real_MoveFileExA = Orig_MoveFileExA;
-    
-    // Patch in_mp3.dll's IAT / Пропатчить IAT in_mp3.dll
-    IAT_Patch(h, "KERNEL32.dll", "MoveFileA", (void*)Hook_MoveFileA, (void**)&Real_MoveFileA);
-    IAT_Patch(h, "KERNEL32.dll", "MoveFileExA", (void*)Hook_MoveFileExA, (void**)&Real_MoveFileExA);
-    
-    // Mark hooks as ready / Отметить хуки как готовые
-    InterlockedExchange(&g_hooksReady, 1);
-    
+
+    // patch IAT; allow "at least one succeeded"
+    BOOL ok1 = IAT_Patch(h, "KERNEL32.dll", "MoveFileA",   (void*)Hook_MoveFileA,   (void**)&Real_MoveFileA);
+    BOOL ok2 = IAT_Patch(h, "KERNEL32.dll", "MoveFileExA", (void*)Hook_MoveFileExA, (void**)&Real_MoveFileExA);
+
+    if (ok1 || ok2) {
+        InterlockedExchange(&g_hooksReady, 1);
+    } else {
+        InterlockedExchange(&g_hooksReady, 0);
+    }
     return 0;
 }
 
@@ -1475,13 +1584,32 @@ static unsigned __stdcall SaveThread(void*) {
  * Фоновый поток обрабатывает фактический перехват после задержки.
  ******************************************************************************/
 void MP3_SaveFix_Init(void) {
-    static BOOL i = FALSE;
-    if (!i) {
-        i = TRUE;
-        unsigned t;
-        _beginthreadex(NULL, 0, SaveThread, NULL, 0, &t);
+    static BOOL inited = FALSE;
+    if (inited) return;
+    inited = TRUE;
+
+    InterlockedExchange(&g_hooksReady, 0);
+
+    if (!g_hStopEvent) {
+        g_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL); // manual reset
+        if (!g_hStopEvent) {
+            inited = FALSE;
+            return;
+        }
+    } else {
+        ResetEvent(g_hStopEvent);
+    }
+
+    unsigned threadID = 0;
+    g_hThread = (HANDLE)_beginthreadex(NULL, 0, SaveThread, NULL, 0, &threadID);
+    if (!g_hThread) {
+        // allow retry
+        inited = FALSE;
+        SetEvent(g_hStopEvent);
+        return;
     }
 }
+
 
 /*******************************************************************************
  * MP3_SaveFix_Quit
@@ -1498,5 +1626,17 @@ void MP3_SaveFix_Init(void) {
  * Это предотвращает проблемы, если in_mp3.dll всё ещё загружен.
  ******************************************************************************/
 void MP3_SaveFix_Quit(void) { 
+    // 1. Сообщаем потоку, что пора закругляться (опционально, можно добавить глобальный флаг g_stopThread)
     InterlockedExchange(&g_hooksReady, 0);
+    
+    // 2. Ждем завершения потока, если он жив
+    if (g_hThread) {
+        // Ждем максимум 2 секунды, чтобы не зависнуть намертво
+        if (WaitForSingleObject(g_hThread, 2000) == WAIT_TIMEOUT) {
+            // Если поток завис - принудительно убиваем (нежелательно, но лучше, чем краш)
+            TerminateThread(g_hThread, 0); 
+        }
+        CloseHandle(g_hThread);
+        g_hThread = NULL;
+    }
 }
