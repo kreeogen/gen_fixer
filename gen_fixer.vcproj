@@ -69,11 +69,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEN_FIXX_EXPORTS"
+				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -159,6 +160,12 @@
 			</File>
 			<File
 				RelativePath=".\Modules\mod_plist_buttons.h">
+			</File>
+			<File
+				RelativePath=".\Modules\mod_save_id3v2.cpp">
+			</File>
+			<File
+				RelativePath=".\Modules\mod_save_id3v2.h">
 			</File>
 			<File
 				RelativePath=".\Modules\mod_skin_delete.cpp">
@@ -247,6 +254,31 @@
 			</File>
 			<File
 				RelativePath=".\Decrypt Engine\unicode_decrypt_engine.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Patcher"
+			Filter="">
+			<File
+				RelativePath=".\Patcher\patch_cd.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patch_mb.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patch_mb_skin.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patch_pl.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patch_url.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patcher_core.cpp">
+			</File>
+			<File
+				RelativePath=".\Patcher\patcher_core.h">
 			</File>
 		</Filter>
 		<File

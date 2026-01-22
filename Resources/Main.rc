@@ -1,7 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
-#include "SwitchLangUI.h"
+#include "..\SwitchLangUI.h" 
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -9,6 +9,7 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
+
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -19,9 +20,12 @@
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
 #endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // TEXTINCLUDE
@@ -35,7 +39,7 @@ END
 2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
-    "\0"
+	"\0"
 END
 
 3 TEXTINCLUDE 
@@ -46,48 +50,85 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_FIXER               BITMAP                  "fixer.bmp"
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-
-
-
-
-
-// ---- ENGLISH ----
 IDD_FIXER_CFG DIALOGEX 0, 0, 232, 231
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | WS_GROUP
+STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | 
+    WS_GROUP
 CAPTION "Winamp"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-
-
-    AUTOCHECKBOX  REST_ITEM,   2003, 10, 14, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  MUTE,2004, 10, 26, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  DELSKIN,2005, 10, 38, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-    AUTOCHECKBOX  PL_MENUS,       2006, 10, 50, 205, 10, WS_CHILD | WS_VISIBLE | WS_TABSTOP
-
-    GROUPBOX      ADVSET, -1, 0, 0, 232, 231, WS_CHILD | WS_VISIBLE
-
-
-    CONTROL       "", 1001, "STATIC", SS_BITMAP | SS_CENTERIMAGE | WS_CHILD | WS_VISIBLE, 192, 194, 36, 32
-
-
-    RTEXT         LOGOINFO,
-                  -1, 10, 206, 173, 20, WS_CHILD | WS_VISIBLE | WS_GROUP
+    CONTROL         "",1100,"SysTabControl32",WS_TABSTOP,0,0,232,231
 END
 
+IDD_FIXER_PAGE_GENERAL DIALOGEX 0, 0, 275, 235
+STYLE DS_SETFONT | DS_CONTROL | WS_CHILD
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_CHK_M3U8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,               
+                    10,17,205,10
+    CONTROL         "",IDC_CHK_SKINDEL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,29,205,10
+    CONTROL         "",IDC_CHK_PEZONES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,41,205,10
+    CONTROL         "",IDC_CHK_RESTART,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,53,205,10
+    CONTROL         "",IDC_CHK_MUTE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,65,205,10
 
+    CONTROL         "",IDC_CHK_MLFONT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,101,205,10
+    CONTROL         "",IDC_CHK_MLICO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,113,205,10
+    CONTROL         "",IDC_CHK_MLCD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,125,205,10
+
+    CONTROL         "",IDC_CHK_PATCHMB,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,161,205,10
+    CONTROL         "",IDC_CHK_PATCHMBSKIN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,173,205,10
+
+    GROUPBOX        STAT_1, IDC_STAT_1, 5,5,216,78
+	GROUPBOX        STAT_2, IDC_STAT_2, 5,89,216,53
+	GROUPBOX        STAT_5, IDC_STAT_5, 5,149,216,42
+
+END
+
+IDD_FIXER_PAGE_ABOUT DIALOGEX 0, 0, 214, 160
+STYLE DS_SETFONT | DS_CONTROL | WS_CHILD
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+
+    CONTROL         "",IDC_CHK_UNITAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,17,205,10
+    CONTROL         "",IDC_CHK_UNISTR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,29,205,10
+    CONTROL         "",IDC_CHK_PLSEARCH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,41,205,10
+    CONTROL         "",IDC_CHK_MLSEARCH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,53,205,10
+    CONTROL         "",IDC_CHK_VIDEOFONTFIX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,65,205,10
+
+    CONTROL         "",IDC_CHK_ID3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,101,205,10
+    CONTROL         "",IDC_CHK_STARTUP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,113,205,10
+    CONTROL         "",IDC_CHK_ICONFIX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,125,205,10
+    CONTROL         "",IDC_CHK_PATCHURL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,137,205,10
+    CONTROL         "",IDC_CHK_SKININSTALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    10,149,205,10
+
+    GROUPBOX        STAT_3, IDC_STAT_3, 5,5,216,78
+    GROUPBOX        STAT_4, IDC_STAT_4, 5,89,216,78
+    
+
+	END
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
@@ -103,4 +144,3 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-

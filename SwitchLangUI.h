@@ -1,46 +1,39 @@
 #pragma once
 
-// ==========================================
-// SET PLUGIN LANGUAGE \ НАСТРОЙКА ЯЗЫКА СБОРКИ
-// 0 - English
-// 1 - Russian
-// ==========================================
-#define BUILD_LANG 0 
-#define PLUG_VER "0.7"
-// ==========================================
+/*
+  BUILD_LANG:
+    0 - English
+    1 - Russian
+*/
 
+#ifndef BUILD_LANG
+#define BUILD_LANG 0
+#endif
+
+
+#ifndef PLUG_VER
+#define PLUG_VER "0.8"
+#endif
 
 #if BUILD_LANG == 0
-    // ******************************************
-    // ENGLISH
-    // ******************************************
+
+// -------------------- ENGLISH --------------------
+
 		#define PLUGIN_NAME "Advanced settings for Winamp v" PLUG_VER
 		#define PREFFS_NAME "Advanced"
 		#define APPCONFIG "Adds an 'Advanced' item to Preferences\n\n" \
-						"Fixes several Winamp 2.xx bugs and applies\n" \
+						"Fixes several Winamp 2.95 bugs and applies\n" \
 						"small tweaks that are essential for pack authors =)\n\n" \
-						"* fixed launching in minimized state\n" \
-						"* fixed icon in the Preferences window titlebar\n" \
-						"* fixed ID3v2 tag compatibility with modern standards\n" \
-						"* fixed Explorer menu when installing .wsz skins\n" \
-						"* fixed Cyrillic in ID3v2 Unicode tags\n" \
-						"* fixed Cyrillic in internet radio station names\n" \
-						"* fixed Cyrillic in fullscreen video mode\n" \
-						"* cyrillic search support in the Media Library\n" \
-						"+ Media Library & Playlist font synchronization\n" \
-						"+ unicode playlist support (*.m3u8, *.pls)\n" \
-						"+ added 'Restart' item to the context menu\n" \
-						"+ replaced buttons in the playlist window with a menu\n" \
-						"+ added ability to delete and rename skins\n" \
-						"+ added mute toggle (Ctrl+Space)\n\n" \
-						"Special for Winamp PE\n\n" \
+						"Special for Winamp PE\n" \
 						"kreeogen & IFkO (2026)"
 
 		#define APPCONFIG_TITLE "About Fixer v" PLUG_VER
 
 		#define MENU_TEXT "Restart Winamp"
 
-		static const char kDispA[]   = "Install Winamp Skin";
+		#ifndef RC_INVOKED
+		static const char kDispA[] = "Install Winamp skin";
+		#endif
 
 		#define ADD_FILE "Add file(s)\tL"
 		#define ADD_FOLDER "Add directory\tShift+L"
@@ -76,57 +69,97 @@
 		#define OPEN_PL "Open playlist\tCtrl+O"
 		#define SAVE_PL "Save playlist\tCtrl+S"
 
-		#define ADVSET "Advanced settings"
-		#define REST_ITEM "Add 'Restart Winamp' menu item"
-		#define MUTE "Ctrl + Space = Mute"
-		#define DELSKIN "Delete skins with Delete button"
-		#define PL_MENUS "Menus instead of buttons in PE"
-		#define LOGOINFO "Winamp Fixer for Win98-Win11 \nkreeogen and IFkO for Winamp PE (2026)"
+		#define TAB_OPT1 "General"
+		#define TAB_OPT2 "Fixes"
 
+		#define ADVSET "Advanced settings"
+
+		#define M3U8 "Support .m3u8 and Unicode .pls playlists"
+		#define DELSKIN "Delete skins with the Delete key"
+		#define PL_MENUS "Use menus instead of buttons in Playlist Editor"
+		#define REST_ITEM "Add 'Restart Winamp' menu item"
+		#define MUTE "Enable 'Mute' hotkey (Ctrl + Space)"
+
+		#define MLFONT "Sync Playlist and Media Library fonts"
+		#define MLICO "Enable Media Library icon tinting"
+		#define MLCD "Remove 'CD Ripping' item from Preferences"
+
+		#define PATCHMB "Disable Minibrowser"
+		#define PATCHMBSKIN "Prevent skins from opening Minibrowser"
+
+		#define UNITAG "Fix reading of Unicode ID3v2 tags"
+		#define UNISTR "Fix Cyrillic stream metadata"
+		#define PLSEARCH "Fix Cyrillic search in Playlist Editor"
+		#define MLSEARCH "Fix Cyrillic search in Media Library"
+		#define VIDEOFONTFIX "Fix Cyrillic text in fullscreen video"
+
+		#define ID3 "Use modern ID3v2 tag saving (recommended)"
+		#define STARTUP "Prevent Winamp from starting minimized"
+		#define ICONFIX "Show icon in this window’s title"
+		#define PATCH_URL "Replace 'Get more skins!' with Winamp Skin Museum"
+		#define SKININSTALL "Fix Explorer menu item for installing skins"
+	
 		#define WINDOW_CANCEL      "Cancel"
 		#define MENU_RENAME        "Rename Skin\tF2"
 		#define RENAME_TITLE       "Rename Skin"
 		#define MENU_DELITEM	   "Delete Skin\tDelete"
 		#define RENAME_PROMPT      "Enter a new name:"
 
-		#define ALL_PL      "All playlists (*.pls;*.m3u;*.m3u8)"
+		#define ALL_PL     	"All playlists (*.pls;*.m3u;*.m3u8)"
 		#define PLS_FILES	"PLS Playlists (*.pls)"
 		#define M3U_FILES	"M3U/M3U8 Playlists (*.m3u;*.m3u8)"
 		#define ALL_FILES	"All files (*.*)"
 
+// ---- GroupBox captions (what you need) ----
+#define STAT_1 "Add-ons"
+#define STAT_2 "Media Library"
+#define STAT_3 "Cyrillic and Unicode fixes"
+#define STAT_4 "Other fixes"
+#define STAT_5 "Minibrowser"
+
+
+#define TIP_M3U8        "Enables support for M3U8 and PLS UTF-8 playlists. Fixes encoding issues with Cyrillic text."
+#define TIP_SKINDEL     "Adds Delete and Rename buttons to the Skin Selection dialog. Use F2, DEL or Right-Click to do it"
+#define TIP_PEZONES     "Enables functional zones in Playlist Editor. Similar to Winamp 5 Modern skins."
+#define TIP_RESTART     "Adds 'Restart Winamp' option to the main menu for quick restart."
+#define TIP_MUTE        "Enables quick mute/unmute using Ctrl+Space keyboard shortcut."
+#define TIP_MLFONT      "Also enables ClearType font smoothing in Media Library for better readability."
+#define TIP_MLICO       "Automatically tints Media Library icons to match the current skin colors."
+#define TIP_MLCD        "Remove CD Ripping item from Preferences. Perfect if you don't have CD-ROM anymore."
+#define TIP_PATCHMB     "Blocks immediately. Restart Winamp to disable."
+#define TIP_PATCHMBSKIN "Some skins can open Minibrowser window. Select to prevent this."
+#define TIP_UNITAG      "Fixes ID3v2 tag encoding issues for proper display of Cyrillic and other Unicode."
+#define TIP_UNISTR      "Fixes SHOUTcast metadata encoding for proper display of stream info."
+#define TIP_PLSEARCH    "Enables Cyrillic character search in main playlist window."
+#define TIP_MLSEARCH    "Enables Cyrillic character search in Media Library window."
+#define TIP_VIDEOFONTFIX "Fixes Cyrillic font rendering issues in video fullscreen mode."
+#define TIP_STARTUP     "Forces Winamp window to foreground when starting the application."
+#define TIP_ICONFIX     "Fixes Preferences window icon to display correctly." \
+#define TIP_ID3         "Prevents Winamp from damaging custom ID3v2 frames."
+#define TIP_PATCHURL    "Replaces the broken 'Get More Skins' menu item with a link to the Winamp Skin Museum."
+#define TIP_SKININSTALL "Adds 'Install Winamp Skin' option to right-click menu for .wsz files in Explorer."
+
 
 #elif BUILD_LANG == 1
-    // ******************************************
-    // RUSSIAN
-    // ******************************************
+
+// -------------------- RUSSIAN --------------------
+
 		#define PLUGIN_NAME "Расширенные настройки Winamp v" PLUG_VER
 		#define PREFFS_NAME "Расширенные"
 
 		#define APPCONFIG "Добавляет пункт меню 'Расширенные' в Настройки\n\n"\
-						"Фикс некоторых багов Winamp 2.xx и мелкие твики,\n"\
+						"Фикс некоторых багов Winamp 2.95 и мелкие твики,\n"\
 						"которые жизненно необходимы авторам сборки =)\n\n"\
-						"* фикс запуска в свернутом состоянии\n"\
-						"* фикс иконки в заголовке окна Настройки\n"\
-						"* фикс меню Проводника при установке wsz-обложек\n"\
-						"* фикс тегов id3v2 под современные стандарты\n"\
-						"* фикс кириллицы в тегах id3v2 unicode\n"\
-						"* фикс кириллицы в названиях интернет-радиостанций\n"\
-						"* фикс кириллицы в полноэкранном видео-режиме\n"\
-						"* фикс поиска кириллических треков в Медиатеке\n"\
-						"+ синхронизация шрифтов Медиатеки и Плейлиста\n"\
-						"+ поддержка плейлистов в unicode (*m3u8,*pls)\n"\
-						"+ добавление пункта 'Перезапуск' в контекстное меню\n"\
-						"+ замена кнопок в окне плейлиста на меню\n"\
-						"+ добавлена возможность удалять и менять имя обложки\n"\
-						"+ добавлена возможность мутить звук (Ctrl+Пробел)\n\n"\
-						"Специально для Пиратской Версии\n\n"\
+						"Специально для Пиратской Версии\n"\
 						"kreeogen & IFkO (2026)"
 
 		#define APPCONFIG_TITLE "О модуле Fixer v" PLUG_VER
 
 		#define MENU_TEXT "Перезапустить Winamp"
 
-		static const char kDispA[]   = "Установить обложку Winamp";
+		#ifndef RC_INVOKED
+		static const char kDispA[] = "Установить обложку Winamp";
+		#endif
 
 		#define ADD_FILE "Добавить файл(ы)\tL"
 		#define ADD_FOLDER "Добавить папку\tShift+L"
@@ -162,12 +195,36 @@
 		#define OPEN_PL "Открыть плейлист\tCtrl+O"
 		#define SAVE_PL "Сохранить плейлист\tCtrl+S"
 
+		#define TAB_OPT1 "Дополнения"
+		#define TAB_OPT2 "Исправления"
+
 		#define ADVSET "Расширенные настройки"
-		#define REST_ITEM "Добавить пункт 'Перезапуск' в контекстное меню"
-		#define MUTE "Ctrl + Space = Выключение громкости (функция Mute)"
-		#define DELSKIN "Удалять обложки из списка кнопкой Delete (или ПКМ)"
-		#define PL_MENUS "Контекстные меню вместо кнопок в плэйлисте"
-		#define LOGOINFO "Winamp Fixer для Win98-Win11 \nkreeogen и IFkO для Пиратской Версии (2026)"
+	
+		#define M3U8 "Поддержка плейлистов формата *.M3U8"
+		#define DELSKIN "Удаление и смена имён обложек в списке"
+		#define PL_MENUS "Контекстные меню вместо кнопок в Плейлисте"
+		#define REST_ITEM "Добавить пункт ''Перезапуск'' в меню"
+		#define MUTE "Ctrl + Space = Выключение громкости (Mute)"
+
+		#define MLFONT "Шрифт в Медиатеке такой же, как в плейлисте"
+		#define MLICO "Тонирование иконок Медиатеки в цвет обложки"
+		#define MLCD "Удалить пункт ''Копирование CD'' из Настроек"
+		
+		#define PATCHMB "Отключить окно Минибраузера"
+		#define PATCHMBSKIN "Запретить обложкам открывать Минибраузер"
+
+		#define UNITAG "Кириллица в юникодных тегах ID3v2"
+		#define UNISTR "Кириллица в метаданных радиостанций"
+		#define PLSEARCH "Поиск русских названий в Плейлисте"
+		#define MLSEARCH "Поиск русских названий в Медиатеке"
+		#define VIDEOFONTFIX "Кириллица в полноэкранном видео"
+
+		#define ID3 "Корректное сохранение тегов ID3v2 (без потерь)"
+		#define STARTUP "Предотвращать запуск Winamp в свёрнутом виде"
+		#define ICONFIX "Отображать иконку в заголовке этого окна"
+		#define PATCH_URL "Скачивать обложки из Музея обложек Winamp"
+		#define SKININSTALL "''Установить обложку Winamp'' в меню Проводника"
+
 
 		#define WINDOW_CANCEL      "Отмена"
 		#define MENU_RENAME        "Переименовать обложку\tF2"
@@ -180,6 +237,33 @@
 		#define M3U_FILES	"M3U/M3U8 плейлисты (*.m3u;*.m3u8)"
 		#define ALL_FILES	"Все файлы (*.*)"
 
-#else
-    #error "Language not selected! Check BUILD_LANG in SwitchLangUI.h"
+
+// ---- GroupBox captions (what you need) ----
+#define STAT_1 "Общие"
+#define STAT_2 "Медиатека"
+#define STAT_3 "Исправления кодировок"
+#define STAT_4 "Прочие"
+#define STAT_5 "Минибраузер"
+
+#define TIP_M3U8        "Включает поддержку плейлистов M3U8 и PLS UTF-8. Исправляет проблемы с кодировкой кириллицы."
+#define TIP_SKINDEL     "Добавляет контекстное меню в диалог выбора обложки. Используйте F2, Delete или правый клик мышкой."
+#define TIP_PEZONES     "Включает менюшки вместо кнопок в редакторе плейлиста в стиле Modern обложек Winamp5."
+#define TIP_RESTART     "Добавляет опцию «Перезапустить Winamp» в главное контекстное меню."
+#define TIP_MUTE        "Включает быстрое отключение/включение звука сочетанием клавиш Ctrl+Пробел."
+#define TIP_MLFONT      "Применяет шрифт Плейлиста и его размер к шрифтам Медиатеки, включает сглаживание ClearType в системах WinXP+."
+#define TIP_MLICO       "Автоматически подкрашивает иконки Медиатеки под цвета текущей обложки."
+#define TIP_MLCD        "Убирает из окна Настроек пункт ''Копирование CD''. Идеально, если у вас нет CD-ROM привода в системе."
+#define TIP_PATCHMB     "Полностью отключает создание окна браузера. Применяется сразу, а для отмены требуется перезапуск Winamp."
+#define TIP_PATCHMBSKIN "Некоторые обложки принудительно открывают окно браузера. Выберите эту опцию, чтобы отключмть это."
+#define TIP_UNITAG      "Исправляет кодировку тегов ID3v2 для корректного отображения кириллицы и Unicode."
+#define TIP_UNISTR      "Исправляет кодировку метаданных SHOUTcast для корректного отображения кириллицы в интернет-радио."
+#define TIP_PLSEARCH    "Включает поиск по русским символам в главном окне Плейлиста."
+#define TIP_MLSEARCH    "Включает поддержку кириллицы при поиске в окне Медиатеки."
+#define TIP_VIDEOFONTFIX "Исправляет отображение кириллицы в интерфейсе полноэкранного режима видео."
+#define TIP_STARTUP     "Принудительно выводит окно Winamp на передний план при запуске приложения предотвращая баг с запуском в свернутом состоянии."
+#define TIP_ICONFIX     "Восстанавливает исчезающую иконку в заголовке окна настроек."
+#define TIP_ID3         "Исправляет сохранение тегов, защищая нестандартные поля ID3v2 от повреждения Winamp'ом."
+#define TIP_PATCHURL    "В меню заменяет нерабочую ссылку «Скачать обложки» на сайт Winamp на ссылку Winamp Skin Museum."
+#define TIP_SKININSTALL "Добавляет пункт «Установить обложку Winamp» в контекстное меню Проводника для файлов .wsz вместо «Install»."
+
 #endif
