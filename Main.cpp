@@ -150,6 +150,7 @@
 #include "MediaLibrary/mod_ml_search.h"
 
 #include "Patcher/patcher_core.h"
+#include "Modules\mod_dpi_override.h"
 
 /*******************************************************************************
  * COMPILER AND LINKER CONFIGURATION
@@ -1667,6 +1668,7 @@ int init(void)
 {
     // Load configuration from plugin.ini / Загрузить конфигурацию из plugin.ini
     LoadCfg();
+	DpiOverride_EnsureSystemEnhanced(plugin.hwndParent);
 
 	// Initialize all enabled modules / Инициализировать все включённые модули
 	ApplyRuntime();

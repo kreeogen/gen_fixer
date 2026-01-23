@@ -138,6 +138,12 @@
 			Name="Modules"
 			Filter="">
 			<File
+				RelativePath=".\Modules\mod_dpi_override.cpp">
+			</File>
+			<File
+				RelativePath=".\Modules\mod_dpi_override.h">
+			</File>
+			<File
 				RelativePath=".\Modules\mod_iconfix.cpp">
 			</File>
 			<File
