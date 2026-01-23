@@ -1,6 +1,6 @@
 // mod_dpi_override.cpp
 // EN: Module for setting "System (Enhanced)" DPI scaling compatibility flag
-// RU: Модуль для установки флага совместимости "Системное (расширенное)" масштабирование DPI
+// RU: РњРѕРґСѓР»СЊ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С„Р»Р°РіР° СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё "РЎРёСЃС‚РµРјРЅРѕРµ (СЂР°СЃС€РёСЂРµРЅРЅРѕРµ)" РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ DPI
 #include "mod_dpi_override.h"
 #include <windows.h>
 #include <winreg.h>
@@ -10,23 +10,23 @@
 #endif
 
 // EN: Registry key path for Windows compatibility layers (per-user)
-// RU: Путь к ключу реестра для слоёв совместимости Windows (для текущего пользователя)
+// RU: РџСѓС‚СЊ Рє РєР»СЋС‡Сѓ СЂРµРµСЃС‚СЂР° РґР»СЏ СЃР»РѕС‘РІ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё Windows (РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ)
 static const char *kLayersKey =
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers";
 
 // EN: System (Enhanced) layer string: GDIDPISCALING + DPIUNAWARE
 //     Forces Windows to bitmap-scale the entire app window (like on 4K monitors)
-// RU: Строка слоя "Системное (расширенное)": GDIDPISCALING + DPIUNAWARE
-//     Заставляет Windows растягивать всё окно приложения (полезно на 4K мониторах)
+// RU: РЎС‚СЂРѕРєР° СЃР»РѕСЏ "РЎРёСЃС‚РµРјРЅРѕРµ (СЂР°СЃС€РёСЂРµРЅРЅРѕРµ)": GDIDPISCALING + DPIUNAWARE
+//     Р—Р°СЃС‚Р°РІР»СЏРµС‚ Windows СЂР°СЃС‚СЏРіРёРІР°С‚СЊ РІСЃС‘ РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ (РїРѕР»РµР·РЅРѕ РЅР° 4K РјРѕРЅРёС‚РѕСЂР°С…)
 static const char *kSystemEnhancedValue = "~ GDIDPISCALING DPIUNAWARE";
 
 /* ---------------------------------------------------------
    EN: Small string helpers (no CRT/shlwapi dependency)
-   RU: Вспомогательные строковые функции (без зависимости от CRT/shlwapi)
+   RU: Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ СЃС‚СЂРѕРєРѕРІС‹Рµ С„СѓРЅРєС†РёРё (Р±РµР· Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ CRT/shlwapi)
    --------------------------------------------------------- */
 
 // EN: Convert character to lowercase (ASCII only)
-// RU: Преобразовать символ в нижний регистр (только ASCII)
+// RU: РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ СЃРёРјРІРѕР» РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ (С‚РѕР»СЊРєРѕ ASCII)
 static char ToLowerA(char c)
 {
     if (c >= 'A' && c <= 'Z') return (char)(c - 'A' + 'a');
@@ -34,39 +34,39 @@ static char ToLowerA(char c)
 }
 
 // EN: Case-insensitive substring search (like StrStrI but without shlwapi.lib)
-// RU: Поиск подстроки без учёта регистра (аналог StrStrI, но без shlwapi.lib)
+// RU: РџРѕРёСЃРє РїРѕРґСЃС‚СЂРѕРєРё Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР° (Р°РЅР°Р»РѕРі StrStrI, РЅРѕ Р±РµР· shlwapi.lib)
 static const char* StrStrI_A(const char *haystack, const char *needle)
 {
     if (!haystack || !needle) return NULL;
-    if (!*needle) return haystack; // EN: Empty needle matches anything | RU: Пустая подстрока совпадает с любой строкой
+    if (!*needle) return haystack; // EN: Empty needle matches anything | RU: РџСѓСЃС‚Р°СЏ РїРѕРґСЃС‚СЂРѕРєР° СЃРѕРІРїР°РґР°РµС‚ СЃ Р»СЋР±РѕР№ СЃС‚СЂРѕРєРѕР№
     
     for (const char *h = haystack; *h; ++h)
     {
         const char *h2 = h;
         const char *n2 = needle;
-        // EN: Compare characters case-insensitively | RU: Сравниваем символы без учёта регистра
+        // EN: Compare characters case-insensitively | RU: РЎСЂР°РІРЅРёРІР°РµРј СЃРёРјРІРѕР»С‹ Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°
         while (*h2 && *n2 && (ToLowerA(*h2) == ToLowerA(*n2)))
         {
             ++h2;
             ++n2;
         }
-        if (!*n2) return h; // EN: Full match found | RU: Полное совпадение найдено
+        if (!*n2) return h; // EN: Full match found | RU: РџРѕР»РЅРѕРµ СЃРѕРІРїР°РґРµРЅРёРµ РЅР°Р№РґРµРЅРѕ
     }
     return NULL;
 }
 
 // EN: Get full path to current executable (e.g., "C:\Program Files\Winamp\winamp.exe")
-// RU: Получить полный путь к текущему исполняемому файлу (например, "C:\Program Files\Winamp\winamp.exe")
+// RU: РџРѕР»СѓС‡РёС‚СЊ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С‚РµРєСѓС‰РµРјСѓ РёСЃРїРѕР»РЅСЏРµРјРѕРјСѓ С„Р°Р№Р»Сѓ (РЅР°РїСЂРёРјРµСЂ, "C:\Program Files\Winamp\winamp.exe")
 static void GetExePathA(char *outPath, DWORD cchOut)
 {
     if (!outPath || cchOut == 0) return;
     outPath[0] = 0;
     GetModuleFileNameA(NULL, outPath, cchOut);
-    outPath[cchOut - 1] = 0; // EN: Ensure null-termination | RU: Гарантируем нуль-терминатор
+    outPath[cchOut - 1] = 0; // EN: Ensure null-termination | RU: Р“Р°СЂР°РЅС‚РёСЂСѓРµРј РЅСѓР»СЊ-С‚РµСЂРјРёРЅР°С‚РѕСЂ
 }
 
 // EN: Read registry value for specific EXE path from Layers key
-// RU: Прочитать значение реестра для конкретного пути EXE из ключа Layers
+// RU: РџСЂРѕС‡РёС‚Р°С‚СЊ Р·РЅР°С‡РµРЅРёРµ СЂРµРµСЃС‚СЂР° РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїСѓС‚Рё EXE РёР· РєР»СЋС‡Р° Layers
 static BOOL ReadLayerValueA(HKEY hKey, const char *exePath, char *out, DWORD cchOut, DWORD *outType)
 {
     if (!out || cchOut == 0) return FALSE;
@@ -78,15 +78,15 @@ static BOOL ReadLayerValueA(HKEY hKey, const char *exePath, char *out, DWORD cch
     LONG r = RegQueryValueExA(hKey, exePath, NULL, &type, (LPBYTE)out, &cb);
     if (r != ERROR_SUCCESS) return FALSE;
     
-    out[cchOut - 1] = 0; // EN: Safety null-termination | RU: Безопасный нуль-терминатор
+    out[cchOut - 1] = 0; // EN: Safety null-termination | RU: Р‘РµР·РѕРїР°СЃРЅС‹Р№ РЅСѓР»СЊ-С‚РµСЂРјРёРЅР°С‚РѕСЂ
     if (outType) *outType = type;
     return TRUE;
 }
 
 // EN: Check if layer string contains "GDIDPISCALING" AND "DPIUNAWARE"
 //     (this is the "System (Enhanced)" compatibility mode)
-// RU: Проверить, содержит ли строка слоя "GDIDPISCALING" И "DPIUNAWARE"
-//     (это режим совместимости "Системное (расширенное)")
+// RU: РџСЂРѕРІРµСЂРёС‚СЊ, СЃРѕРґРµСЂР¶РёС‚ Р»Рё СЃС‚СЂРѕРєР° СЃР»РѕСЏ "GDIDPISCALING" Р "DPIUNAWARE"
+//     (СЌС‚Рѕ СЂРµР¶РёРј СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё "РЎРёСЃС‚РµРјРЅРѕРµ (СЂР°СЃС€РёСЂРµРЅРЅРѕРµ)")
 static BOOL ContainsSystemEnhanced(const char *s)
 {
     if (!s || !*s) return FALSE;
@@ -95,18 +95,18 @@ static BOOL ContainsSystemEnhanced(const char *s)
 }
 
 // EN: Write "~ GDIDPISCALING DPIUNAWARE" value for specified EXE path
-// RU: Записать значение "~ GDIDPISCALING DPIUNAWARE" для указанного пути EXE
+// RU: Р—Р°РїРёСЃР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ "~ GDIDPISCALING DPIUNAWARE" РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ РїСѓС‚Рё EXE
 static BOOL WriteSystemEnhancedForExe(HKEY hKey, const char *exePath)
 {
     const BYTE *data = (const BYTE*)kSystemEnhancedValue;
-    DWORD cb = (DWORD)lstrlenA(kSystemEnhancedValue) + 1; // EN: Include null terminator | RU: Включая нуль-терминатор
+    DWORD cb = (DWORD)lstrlenA(kSystemEnhancedValue) + 1; // EN: Include null terminator | RU: Р’РєР»СЋС‡Р°СЏ РЅСѓР»СЊ-С‚РµСЂРјРёРЅР°С‚РѕСЂ
     LONG r = RegSetValueExA(hKey, exePath, 0, REG_SZ, data, cb);
     return (r == ERROR_SUCCESS);
 }
 
 /* ---------------------------------------------------------
    EN: Public API entry point
-   RU: Публичная точка входа API
+   RU: РџСѓР±Р»РёС‡РЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР° API
    --------------------------------------------------------- */
 
 // EN: Ensures "System (Enhanced)" DPI scaling is enabled for current EXE
@@ -114,20 +114,20 @@ static BOOL WriteSystemEnhancedForExe(HKEY hKey, const char *exePath)
 //     - Windows will bitmap-scale the entire app window automatically
 //     - Useful for old apps (like Winamp 2.95) on modern 4K displays
 //
-// RU: Гарантирует включение "Системного (расширенного)" масштабирования DPI для текущего EXE
-//     - Создаёт запись в реестре HKCU (права администратора не нужны)
-//     - Windows автоматически растянет всё окно приложения
-//     - Полезно для старых программ (вроде Winamp 2.95) на современных 4K мониторах
+// RU: Р“Р°СЂР°РЅС‚РёСЂСѓРµС‚ РІРєР»СЋС‡РµРЅРёРµ "РЎРёСЃС‚РµРјРЅРѕРіРѕ (СЂР°СЃС€РёСЂРµРЅРЅРѕРіРѕ)" РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ DPI РґР»СЏ С‚РµРєСѓС‰РµРіРѕ EXE
+//     - РЎРѕР·РґР°С‘С‚ Р·Р°РїРёСЃСЊ РІ СЂРµРµСЃС‚СЂРµ HKCU (РїСЂР°РІР° Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР° РЅРµ РЅСѓР¶РЅС‹)
+//     - Windows Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЂР°СЃС‚СЏРЅРµС‚ РІСЃС‘ РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
+//     - РџРѕР»РµР·РЅРѕ РґР»СЏ СЃС‚Р°СЂС‹С… РїСЂРѕРіСЂР°РјРј (РІСЂРѕРґРµ Winamp 2.95) РЅР° СЃРѕРІСЂРµРјРµРЅРЅС‹С… 4K РјРѕРЅРёС‚РѕСЂР°С…
 void DpiOverride_EnsureSystemEnhanced(HWND /*hwndOwner*/)
 {
     // EN: 1. Get full path to our EXE
-    // RU: 1. Получаем полный путь к нашему EXE
+    // RU: 1. РџРѕР»СѓС‡Р°РµРј РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє РЅР°С€РµРјСѓ EXE
     char exePath[MAX_PATH] = {0};
     GetExePathA(exePath, ARRAYSIZE(exePath));
-    if (!exePath[0]) return; // EN: Failed to get path | RU: Не удалось получить путь
+    if (!exePath[0]) return; // EN: Failed to get path | RU: РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ РїСѓС‚СЊ
 
     // EN: 2. Open/create Layers registry key (HKCU, no admin needed)
-    // RU: 2. Открываем/создаём ключ реестра Layers (HKCU, админ не требуется)
+    // RU: 2. РћС‚РєСЂС‹РІР°РµРј/СЃРѕР·РґР°С‘Рј РєР»СЋС‡ СЂРµРµСЃС‚СЂР° Layers (HKCU, Р°РґРјРёРЅ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ)
     HKEY hKey = NULL;
     DWORD disp = 0;
     LONG r = RegCreateKeyExA(
@@ -142,10 +142,10 @@ void DpiOverride_EnsureSystemEnhanced(HWND /*hwndOwner*/)
         &disp
     );
     if (r != ERROR_SUCCESS || !hKey)
-        return; // EN: Failed to access registry | RU: Не удалось получить доступ к реестру
+        return; // EN: Failed to access registry | RU: РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ РґРѕСЃС‚СѓРї Рє СЂРµРµСЃС‚СЂСѓ
 
     // EN: 3. Check if "System (Enhanced)" is already set
-    // RU: 3. Проверяем, установлено ли уже "Системное (расширенное)"
+    // RU: 3. РџСЂРѕРІРµСЂСЏРµРј, СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ Р»Рё СѓР¶Рµ "РЎРёСЃС‚РµРјРЅРѕРµ (СЂР°СЃС€РёСЂРµРЅРЅРѕРµ)"
     char cur[512] = {0};
     DWORD type = 0;
     BOOL has = ReadLayerValueA(hKey, exePath, cur, ARRAYSIZE(cur), &type);
@@ -153,16 +153,16 @@ void DpiOverride_EnsureSystemEnhanced(HWND /*hwndOwner*/)
     if (has && type == REG_SZ && ContainsSystemEnhanced(cur))
     {
         // EN: Already configured, nothing to do
-        // RU: Уже настроено, ничего делать не нужно
+        // RU: РЈР¶Рµ РЅР°СЃС‚СЂРѕРµРЅРѕ, РЅРёС‡РµРіРѕ РґРµР»Р°С‚СЊ РЅРµ РЅСѓР¶РЅРѕ
         RegCloseKey(hKey);
         return;
     }
 
     // EN: 4. Write/replace with "~ GDIDPISCALING DPIUNAWARE"
-    // RU: 4. Записываем/заменяем на "~ GDIDPISCALING DPIUNAWARE"
+    // RU: 4. Р—Р°РїРёСЃС‹РІР°РµРј/Р·Р°РјРµРЅСЏРµРј РЅР° "~ GDIDPISCALING DPIUNAWARE"
     WriteSystemEnhancedForExe(hKey, exePath);
     RegCloseKey(hKey);
     
     // EN: NOTE: App restart required for Windows to apply the new DPI mode
-    // RU: ПРИМЕЧАНИЕ: Требуется перезапуск приложения, чтобы Windows применил новый режим DPI
+    // RU: РџР РРњР•Р§РђРќРР•: РўСЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµР·Р°РїСѓСЃРє РїСЂРёР»РѕР¶РµРЅРёСЏ, С‡С‚РѕР±С‹ Windows РїСЂРёРјРµРЅРёР» РЅРѕРІС‹Р№ СЂРµР¶РёРј DPI
 }
