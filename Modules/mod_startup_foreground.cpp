@@ -77,13 +77,19 @@ static UINT_PTR g_fgTimer = 0;
 // Счётчик количества выполненных попыток вывода на передний план
 static int      g_fgTries = 0;
 
+// Master enable flag for this module.
+// TRUE only after Startup_Init(), FALSE after Startup_Quit().
+// Главный флаг включения модуля.
+// TRUE только после Startup_Init(), FALSE после Startup_Quit().
+static BOOL     g_enabled = FALSE;
+
 // Flag indicating whether we're still in startup phase
 // TRUE = actively preventing minimize and enforcing foreground
 // FALSE = startup complete, normal window behavior allowed
 // Флаг, указывающий, находимся ли мы всё ещё в фазе запуска
 // TRUE = активно предотвращаем сворачивание и выводим на передний план
 // FALSE = запуск завершён, разрешено обычное поведение окна
-static BOOL     g_startupPhase = TRUE;
+static BOOL     g_startupPhase = FALSE;
 
 /*******************************************************************************
  * CONFIGURATION CONSTANTS
@@ -316,6 +322,15 @@ static void ForceWinampForeground(HWND wa)
  ******************************************************************************/
 static VOID CALLBACK ForegroundTimerProc(HWND, UINT, UINT_PTR id, DWORD)
 {
+    // Defensive: if module was disabled but timer still fires, stop it.
+    // Защита: если модуль отключён, но таймер всё ещё тикает - остановить его.
+    if (!g_enabled) {
+        KillTimer(NULL, id);
+        g_fgTimer = 0;
+        g_startupPhase = FALSE;
+        return;
+    }
+
     // Try to find Winamp main window / Попытаться найти главное окно Winamp
     HWND wa = FindWinamp();
     
@@ -391,6 +406,9 @@ void Startup_Init(void)
     // Reset attempt counter / Сбросить счётчик попыток
     g_fgTries = 0;
     
+    
+    // Enable this module / Включить модуль
+    g_enabled = TRUE;
     // Enter startup phase (enable minimize prevention and foreground enforcement)
     // Войти в фазу запуска (включить предотвращение сворачивания и вывод на передний план)
     g_startupPhase = TRUE;
@@ -437,6 +455,9 @@ void Startup_Quit(void)
     
     // Exit startup phase / Выйти из фазы запуска
     g_startupPhase = FALSE;
+    
+    // Disable this module / Выключить модуль
+    g_enabled = FALSE;
 }
 
 /*******************************************************************************
@@ -506,6 +527,8 @@ LRESULT Startup_OnWinampMessage(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     // Only intercept messages during startup phase
     // Перехватывать сообщения только во время фазы запуска
+    if (!g_enabled) return 0;
+
     if (!g_startupPhase) return 0;
     
     // Intercept WM_SIZE message with SIZE_MINIMIZED parameter
