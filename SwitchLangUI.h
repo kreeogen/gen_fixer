@@ -10,7 +10,7 @@
 */
 
 #ifndef BUILD_LANG
-#define BUILD_LANG 0
+#define BUILD_LANG 1
 #endif
 
 // If some build config defines BUILD_LANG as a non-0/1 value (e.g. codepage),

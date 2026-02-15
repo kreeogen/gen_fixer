@@ -2,74 +2,74 @@
  * patch_cd.cpp
  * 
  * MEDIA LIBRARY CD RIPPING REMOVAL PATCH
- * ПАТЧ УДАЛЕНИЯ РИППИНГА CD ИЗ БИБЛИОТЕКИ
+ * РџРђРўР§ РЈР”РђР›Р•РќРРЇ Р РРџРџРРќР“Рђ CD РР— Р‘РР‘Р›РРћРўР•РљР
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Removes CD ripping functionality from Winamp's Media Library (gen_ml.dll).
  * Patches a single byte to disable CD ripping feature initialization.
  * 
- * Удаляет функциональность риппинга CD из библиотеки Winamp (gen_ml.dll).
- * Патчит один байт для отключения инициализации функции риппинга CD.
+ * РЈРґР°Р»СЏРµС‚ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ СЂРёРїРїРёРЅРіР° CD РёР· Р±РёР±Р»РёРѕС‚РµРєРё Winamp (gen_ml.dll).
+ * РџР°С‚С‡РёС‚ РѕРґРёРЅ Р±Р°Р№С‚ РґР»СЏ РѕС‚РєР»СЋС‡РµРЅРёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё С„СѓРЅРєС†РёРё СЂРёРїРїРёРЅРіР° CD.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * 1. Hooks LoadLibrary* functions in winamp.exe's Import Address Table
  * 2. Monitors when gen_ml.dll is loaded
  * 3. When gen_ml.dll loads, patches single byte at RVA 0x11DB2
  * 4. Patch changes 0xF4 -> 0x90 (HLT instruction -> NOP)
  * 5. This prevents CD ripping module initialization
  * 
- * 1. Перехватывает функции LoadLibrary* в таблице импорта winamp.exe
- * 2. Отслеживает, когда загружается gen_ml.dll
- * 3. Когда gen_ml.dll загружается, патчит один байт по RVA 0x11DB2
- * 4. Патч изменяет 0xF4 -> 0x90 (инструкция HLT -> NOP)
- * 5. Это предотвращает инициализацию модуля риппинга CD
+ * 1. РџРµСЂРµС…РІР°С‚С‹РІР°РµС‚ С„СѓРЅРєС†РёРё LoadLibrary* РІ С‚Р°Р±Р»РёС†Рµ РёРјРїРѕСЂС‚Р° winamp.exe
+ * 2. РћС‚СЃР»РµР¶РёРІР°РµС‚, РєРѕРіРґР° Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ gen_ml.dll
+ * 3. РљРѕРіРґР° gen_ml.dll Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ, РїР°С‚С‡РёС‚ РѕРґРёРЅ Р±Р°Р№С‚ РїРѕ RVA 0x11DB2
+ * 4. РџР°С‚С‡ РёР·РјРµРЅСЏРµС‚ 0xF4 -> 0x90 (РёРЅСЃС‚СЂСѓРєС†РёСЏ HLT -> NOP)
+ * 5. Р­С‚Рѕ РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ РјРѕРґСѓР»СЏ СЂРёРїРїРёРЅРіР° CD
  * 
- * TECHNICAL DETAILS / ТЕХНИЧЕСКИЕ ДЕТАЛИ:
+ * TECHNICAL DETAILS / РўР•РҐРќРР§Р•РЎРљРР• Р”Р•РўРђР›Р:
  * 
- * PATCH LOCATION / РАСПОЛОЖЕНИЕ ПАТЧА:
+ * PATCH LOCATION / Р РђРЎРџРћР›РћР–Р•РќРР• РџРђРўР§Рђ:
  * - Target DLL: gen_ml.dll (Winamp Media Library)
  * - Relative Virtual Address (RVA): 0x11DB2
  * - Original byte: 0xF4 (HLT - halt instruction)
  * - Patched byte: 0x90 (NOP - no operation)
  * 
- * - Целевая DLL: gen_ml.dll (Библиотека Winamp)
- * - Относительный виртуальный адрес (RVA): 0x11DB2
- * - Оригинальный байт: 0xF4 (HLT - инструкция остановки)
- * - Пропатченный байт: 0x90 (NOP - нет операции)
+ * - Р¦РµР»РµРІР°СЏ DLL: gen_ml.dll (Р‘РёР±Р»РёРѕС‚РµРєР° Winamp)
+ * - РћС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ Р°РґСЂРµСЃ (RVA): 0x11DB2
+ * - РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ Р±Р°Р№С‚: 0xF4 (HLT - РёРЅСЃС‚СЂСѓРєС†РёСЏ РѕСЃС‚Р°РЅРѕРІРєРё)
+ * - РџСЂРѕРїР°С‚С‡РµРЅРЅС‹Р№ Р±Р°Р№С‚: 0x90 (NOP - РЅРµС‚ РѕРїРµСЂР°С†РёРё)
  * 
- * WHY THIS WORKS / ПОЧЕМУ ЭТО РАБОТАЕТ:
+ * WHY THIS WORKS / РџРћР§Р•РњРЈ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * The byte at 0x11DB2 is likely part of CD ripping initialization code.
  * Changing HLT to NOP prevents critical initialization from completing.
  * CD ripping feature becomes unavailable in Media Library UI.
  * 
- * Байт по адресу 0x11DB2 вероятно часть кода инициализации риппинга CD.
- * Изменение HLT на NOP предотвращает завершение критической инициализации.
- * Функция риппинга CD становится недоступной в UI библиотеки.
+ * Р‘Р°Р№С‚ РїРѕ Р°РґСЂРµСЃСѓ 0x11DB2 РІРµСЂРѕСЏС‚РЅРѕ С‡Р°СЃС‚СЊ РєРѕРґР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЂРёРїРїРёРЅРіР° CD.
+ * РР·РјРµРЅРµРЅРёРµ HLT РЅР° NOP РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ Р·Р°РІРµСЂС€РµРЅРёРµ РєСЂРёС‚РёС‡РµСЃРєРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё.
+ * Р¤СѓРЅРєС†РёСЏ СЂРёРїРїРёРЅРіР° CD СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅРµРґРѕСЃС‚СѓРїРЅРѕР№ РІ UI Р±РёР±Р»РёРѕС‚РµРєРё.
  * 
- * TIMING / ВРЕМЕННАЯ ПРИВЯЗКА:
+ * TIMING / Р’Р Р•РњР•РќРќРђРЇ РџР РР’РЇР—РљРђ:
  * Patch must be applied BEFORE gen_ml.dll initializes its features.
  * LoadLibrary hooks ensure we patch immediately after DLL load.
  * 
- * Патч должен быть применён ДО инициализации функций gen_ml.dll.
- * Хуки LoadLibrary гарантируют, что мы патчим сразу после загрузки DLL.
+ * РџР°С‚С‡ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїСЂРёРјРµРЅС‘РЅ Р”Рћ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё С„СѓРЅРєС†РёР№ gen_ml.dll.
+ * РҐСѓРєРё LoadLibrary РіР°СЂР°РЅС‚РёСЂСѓСЋС‚, С‡С‚Рѕ РјС‹ РїР°С‚С‡РёРј СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё DLL.
  * 
- * COMPATIBILITY / СОВМЕСТИМОСТЬ:
+ * COMPATIBILITY / РЎРћР’РњР•РЎРўРРњРћРЎРўР¬:
  * - Winamp 2.95 with gen_ml.dll
  * - Windows 98 through Windows 11
  * - ANSI and Unicode builds
  * 
- * - Winamp 2.95 с gen_ml.dll
- * - Windows 98 до Windows 11
- * - ANSI и Unicode сборки
+ * - Winamp 2.95 СЃ gen_ml.dll
+ * - Windows 98 РґРѕ Windows 11
+ * - ANSI Рё Unicode СЃР±РѕСЂРєРё
  * 
- * SAFETY / БЕЗОПАСНОСТЬ:
+ * SAFETY / Р‘Р•Р—РћРџРђРЎРќРћРЎРўР¬:
  * - Only patches if byte matches expected value (0xF4)
  * - One-time patch prevents multiple applications
  * - Does not modify winamp.exe itself
  * 
- * - Патчит только если байт соответствует ожидаемому значению (0xF4)
- * - Однократный патч предотвращает множественные применения
- * - Не изменяет сам winamp.exe
+ * - РџР°С‚С‡РёС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё Р±Р°Р№С‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РѕР¶РёРґР°РµРјРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ (0xF4)
+ * - РћРґРЅРѕРєСЂР°С‚РЅС‹Р№ РїР°С‚С‡ РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ РїСЂРёРјРµРЅРµРЅРёСЏ
+ * - РќРµ РёР·РјРµРЅСЏРµС‚ СЃР°Рј winamp.exe
  * 
  ******************************************************************************/
 
@@ -80,65 +80,65 @@
 
 /*******************************************************************************
  * UTILITY MACROS
- * УТИЛИТАРНЫЕ МАКРОСЫ
+ * РЈРўРР›РРўРђР РќР«Р• РњРђРљР РћРЎР«
  ******************************************************************************/
 
-// Safe array size calculation / Безопасное вычисление размера массива
+// Safe array size calculation / Р‘РµР·РѕРїР°СЃРЅРѕРµ РІС‹С‡РёСЃР»РµРЅРёРµ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР°
 #define ARRAYSIZE_(a) ((int)(sizeof(a) / sizeof((a)[0])))
 
 /*******************************************************************************
  * PATCH DEFINITION
- * ОПРЕДЕЛЕНИЕ ПАТЧА
+ * РћРџР Р•Р”Р•Р›Р•РќРР• РџРђРўР§Рђ
  * 
  * Single-byte patch to disable CD ripping in gen_ml.dll.
- * Однобайтовый патч для отключения риппинга CD в gen_ml.dll.
+ * РћРґРЅРѕР±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡ РґР»СЏ РѕС‚РєР»СЋС‡РµРЅРёСЏ СЂРёРїРїРёРЅРіР° CD РІ gen_ml.dll.
  * 
- * PATCH STRUCTURE / СТРУКТУРА ПАТЧА:
+ * PATCH STRUCTURE / РЎРўР РЈРљРўРЈР Рђ РџРђРўР§Рђ:
  * Each PatchByte entry contains:
- * - rva: Relative Virtual Address from module base / Относительный виртуальный адрес от базы модуля
- * - expected: Expected original byte value / Ожидаемое оригинальное значение байта
- * - patch: New byte value to write / Новое значение байта для записи
+ * - rva: Relative Virtual Address from module base / РћС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ Р°РґСЂРµСЃ РѕС‚ Р±Р°Р·С‹ РјРѕРґСѓР»СЏ
+ * - expected: Expected original byte value / РћР¶РёРґР°РµРјРѕРµ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Р±Р°Р№С‚Р°
+ * - patch: New byte value to write / РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ Р±Р°Р№С‚Р° РґР»СЏ Р·Р°РїРёСЃРё
  * 
- * PATCH SAFETY / БЕЗОПАСНОСТЬ ПАТЧА:
+ * PATCH SAFETY / Р‘Р•Р—РћРџРђРЎРќРћРЎРўР¬ РџРђРўР§Рђ:
  * If expected byte doesn't match, patch is NOT applied.
  * This prevents corrupting wrong code or wrong DLL version.
  * 
- * Если ожидаемый байт не совпадает, патч НЕ применяется.
- * Это предотвращает повреждение неправильного кода или неправильной версии DLL.
+ * Р•СЃР»Рё РѕР¶РёРґР°РµРјС‹Р№ Р±Р°Р№С‚ РЅРµ СЃРѕРІРїР°РґР°РµС‚, РїР°С‚С‡ РќР• РїСЂРёРјРµРЅСЏРµС‚СЃСЏ.
+ * Р­С‚Рѕ РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РїРѕРІСЂРµР¶РґРµРЅРёРµ РЅРµРїСЂР°РІРёР»СЊРЅРѕРіРѕ РєРѕРґР° РёР»Рё РЅРµРїСЂР°РІРёР»СЊРЅРѕР№ РІРµСЂСЃРёРё DLL.
  ******************************************************************************/
 static const PatchByte g_PatchCDRva[] =
 {
-    /* RVA       Expected  Patch  Description / Описание */
-    { 0x00011DB2,  0xF4,    0x90 },  // HLT -> NOP at CD ripping init / HLT -> NOP при инициализации риппинга CD
+    /* RVA       Expected  Patch  Description / РћРїРёСЃР°РЅРёРµ */
+    { 0x00011DB2,  0xF4,    0x90 },  // HLT -> NOP at CD ripping init / HLT -> NOP РїСЂРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЂРёРїРїРёРЅРіР° CD
 };
 
 /*******************************************************************************
  * IAT PATCHING HELPER
- * ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ПАТЧИНГА IAT
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќРђРЇ Р¤РЈРќРљР¦РРЇ РџРђРўР§РРќР“Рђ IAT
  ******************************************************************************/
 
 /*******************************************************************************
  * IAT_Patch
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Patches Import Address Table (IAT) to redirect function calls.
  * Used to hook LoadLibrary* functions in winamp.exe.
  * 
- * Патчит таблицу адресов импорта (IAT) для перенаправления вызовов функций.
- * Используется для перехвата функций LoadLibrary* в winamp.exe.
+ * РџР°С‚С‡РёС‚ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° (IAT) РґР»СЏ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РІС‹Р·РѕРІРѕРІ С„СѓРЅРєС†РёР№.
+ * РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРµСЂРµС…РІР°С‚Р° С„СѓРЅРєС†РёР№ LoadLibrary* РІ winamp.exe.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * hMod    - Module handle to patch / Дескриптор модуля для патча
- * dll     - DLL name containing function to hook / Имя DLL содержащей функцию для перехвата
- * func    - Function name to hook / Имя функции для перехвата
- * newFunc - New function pointer (hook) / Новый указатель функции (хук)
- * oldFunc - Output: original function pointer / Вывод: оригинальный указатель функции
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * hMod    - Module handle to patch / Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ РґР»СЏ РїР°С‚С‡Р°
+ * dll     - DLL name containing function to hook / РРјСЏ DLL СЃРѕРґРµСЂР¶Р°С‰РµР№ С„СѓРЅРєС†РёСЋ РґР»СЏ РїРµСЂРµС…РІР°С‚Р°
+ * func    - Function name to hook / РРјСЏ С„СѓРЅРєС†РёРё РґР»СЏ РїРµСЂРµС…РІР°С‚Р°
+ * newFunc - New function pointer (hook) / РќРѕРІС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё (С…СѓРє)
+ * oldFunc - Output: original function pointer / Р’С‹РІРѕРґ: РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * TRUE if patch successful, FALSE otherwise
- * TRUE если патч успешен, FALSE иначе
+ * TRUE РµСЃР»Рё РїР°С‚С‡ СѓСЃРїРµС€РµРЅ, FALSE РёРЅР°С‡Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Validate PE structure (DOS header, NT header)
  * 2. Locate import descriptor for specified DLL
  * 3. Find import thunk for specified function name
@@ -146,64 +146,64 @@ static const PatchByte g_PatchCDRva[] =
  * 5. Replace function pointer in IAT
  * 6. Restore original memory protection
  * 
- * 1. Проверить PE структуру (DOS заголовок, NT заголовок)
- * 2. Найти дескриптор импорта для указанной DLL
- * 3. Найти thunk импорта для указанного имени функции
- * 4. Изменить защиту памяти для разрешения записи
- * 5. Заменить указатель функции в IAT
- * 6. Восстановить оригинальную защиту памяти
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ PE СЃС‚СЂСѓРєС‚СѓСЂСѓ (DOS Р·Р°РіРѕР»РѕРІРѕРє, NT Р·Р°РіРѕР»РѕРІРѕРє)
+ * 2. РќР°Р№С‚Рё РґРµСЃРєСЂРёРїС‚РѕСЂ РёРјРїРѕСЂС‚Р° РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕР№ DLL
+ * 3. РќР°Р№С‚Рё thunk РёРјРїРѕСЂС‚Р° РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ РёРјРµРЅРё С„СѓРЅРєС†РёРё
+ * 4. РР·РјРµРЅРёС‚СЊ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ Р·Р°РїРёСЃРё
+ * 5. Р—Р°РјРµРЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ С„СѓРЅРєС†РёРё РІ IAT
+ * 6. Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ Р·Р°С‰РёС‚Сѓ РїР°РјСЏС‚Рё
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * This is standard IAT hooking technique.
  * Safe for all Windows versions (98 through 11).
  * 
- * Это стандартная техника перехвата IAT.
- * Безопасна для всех версий Windows (98 до 11).
+ * Р­С‚Рѕ СЃС‚Р°РЅРґР°СЂС‚РЅР°СЏ С‚РµС…РЅРёРєР° РїРµСЂРµС…РІР°С‚Р° IAT.
+ * Р‘РµР·РѕРїР°СЃРЅР° РґР»СЏ РІСЃРµС… РІРµСЂСЃРёР№ Windows (98 РґРѕ 11).
  ******************************************************************************/
 static BOOL IAT_Patch(HMODULE hMod, const char* dll, const char* func, void* newFunc, void** oldFunc)
 {
     if (!hMod || !dll || !func || !newFunc) return FALSE;
 
-    // Validate DOS header / Проверить DOS заголовок
+    // Validate DOS header / РџСЂРѕРІРµСЂРёС‚СЊ DOS Р·Р°РіРѕР»РѕРІРѕРє
     PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)hMod;
     if (dos->e_magic != IMAGE_DOS_SIGNATURE) return FALSE;
 
-    // Validate NT header / Проверить NT заголовок
+    // Validate NT header / РџСЂРѕРІРµСЂРёС‚СЊ NT Р·Р°РіРѕР»РѕРІРѕРє
     PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)((BYTE*)hMod + dos->e_lfanew);
     if (nt->Signature != IMAGE_NT_SIGNATURE) return FALSE;
 
-    // Get import directory / Получить каталог импорта
+    // Get import directory / РџРѕР»СѓС‡РёС‚СЊ РєР°С‚Р°Р»РѕРі РёРјРїРѕСЂС‚Р°
     DWORD va = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     if (!va) return FALSE;
 
-    // Iterate through import descriptors / Перебрать дескрипторы импорта
+    // Iterate through import descriptors / РџРµСЂРµР±СЂР°С‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РёРјРїРѕСЂС‚Р°
     PIMAGE_IMPORT_DESCRIPTOR imp = (PIMAGE_IMPORT_DESCRIPTOR)((BYTE*)hMod + va);
     for (; imp->Name; imp++)
     {
-        // Check if this is the target DLL / Проверить, это ли целевая DLL
+        // Check if this is the target DLL / РџСЂРѕРІРµСЂРёС‚СЊ, СЌС‚Рѕ Р»Рё С†РµР»РµРІР°СЏ DLL
         const char* name = (const char*)((BYTE*)hMod + imp->Name);
         if (lstrcmpiA(name, dll) != 0) continue;
 
-        // Get thunk arrays / Получить массивы thunk
+        // Get thunk arrays / РџРѕР»СѓС‡РёС‚СЊ РјР°СЃСЃРёРІС‹ thunk
         PIMAGE_THUNK_DATA oft = (PIMAGE_THUNK_DATA)((BYTE*)hMod + imp->OriginalFirstThunk);
         PIMAGE_THUNK_DATA ft  = (PIMAGE_THUNK_DATA)((BYTE*)hMod + imp->FirstThunk);
 
-        // Iterate through imports / Перебрать импорты
+        // Iterate through imports / РџРµСЂРµР±СЂР°С‚СЊ РёРјРїРѕСЂС‚С‹
         for (; oft->u1.Function; oft++, ft++)
         {
-            // Skip ordinal imports / Пропустить импорты по порядковому номеру
+            // Skip ordinal imports / РџСЂРѕРїСѓСЃС‚РёС‚СЊ РёРјРїРѕСЂС‚С‹ РїРѕ РїРѕСЂСЏРґРєРѕРІРѕРјСѓ РЅРѕРјРµСЂСѓ
             if (IMAGE_SNAP_BY_ORDINAL(oft->u1.Ordinal)) continue;
 
-            // Get import name / Получить имя импорта
+            // Get import name / РџРѕР»СѓС‡РёС‚СЊ РёРјСЏ РёРјРїРѕСЂС‚Р°
             PIMAGE_IMPORT_BY_NAME ibn = (PIMAGE_IMPORT_BY_NAME)((BYTE*)hMod + oft->u1.AddressOfData);
             if (lstrcmpiA((char*)ibn->Name, func) != 0) continue;
 
-            // Found target function - patch it / Найдена целевая функция - пропатчить её
+            // Found target function - patch it / РќР°Р№РґРµРЅР° С†РµР»РµРІР°СЏ С„СѓРЅРєС†РёСЏ - РїСЂРѕРїР°С‚С‡РёС‚СЊ РµС‘
             DWORD old;
-            VirtualProtect(&ft->u1.Function, 4, PAGE_READWRITE, &old);  // Make writable / Сделать доступной для записи
-            if (oldFunc) *oldFunc = (void*)ft->u1.Function;              // Save original / Сохранить оригинал
-            ft->u1.Function = (DWORD)newFunc;                            // Install hook / Установить хук
-            VirtualProtect(&ft->u1.Function, 4, old, &old);              // Restore protection / Восстановить защиту
+            VirtualProtect(&ft->u1.Function, 4, PAGE_READWRITE, &old);  // Make writable / РЎРґРµР»Р°С‚СЊ РґРѕСЃС‚СѓРїРЅРѕР№ РґР»СЏ Р·Р°РїРёСЃРё
+            if (oldFunc) *oldFunc = (void*)ft->u1.Function;              // Save original / РЎРѕС…СЂР°РЅРёС‚СЊ РѕСЂРёРіРёРЅР°Р»
+            ft->u1.Function = (DWORD)newFunc;                            // Install hook / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРє
+            VirtualProtect(&ft->u1.Function, 4, old, &old);              // Restore protection / Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°С‰РёС‚Сѓ
             return TRUE;
         }
     }
@@ -212,18 +212,18 @@ static BOOL IAT_Patch(HMODULE hMod, const char* dll, const char* func, void* new
 
 /*******************************************************************************
  * LOADLIBRARY HOOK INFRASTRUCTURE
- * ИНФРАСТРУКТУРА ХУКОВ LOADLIBRARY
+ * РРќР¤Р РђРЎРўР РЈРљРўРЈР Рђ РҐРЈРљРћР’ LOADLIBRARY
  ******************************************************************************/
 
 // Function pointer types for hooked functions
-// Типы указателей функций для перехваченных функций
+// РўРёРїС‹ СѓРєР°Р·Р°С‚РµР»РµР№ С„СѓРЅРєС†РёР№ РґР»СЏ РїРµСЂРµС…РІР°С‡РµРЅРЅС‹С… С„СѓРЅРєС†РёР№
 typedef HMODULE (WINAPI *PFN_LoadLibraryA)(LPCSTR);
 typedef HMODULE (WINAPI *PFN_LoadLibraryW)(LPCWSTR);
 typedef HMODULE (WINAPI *PFN_LoadLibraryExA)(LPCSTR, HANDLE, DWORD);
 typedef HMODULE (WINAPI *PFN_LoadLibraryExW)(LPCWSTR, HANDLE, DWORD);
 
 // Real function pointers (updated during IAT patching)
-// Реальные указатели функций (обновляются во время патчинга IAT)
+// Р РµР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё С„СѓРЅРєС†РёР№ (РѕР±РЅРѕРІР»СЏСЋС‚СЃСЏ РІРѕ РІСЂРµРјСЏ РїР°С‚С‡РёРЅРіР° IAT)
 static PFN_LoadLibraryA   Real_LoadLibraryA   = NULL;
 static PFN_LoadLibraryW   Real_LoadLibraryW   = NULL;
 static PFN_LoadLibraryExA Real_LoadLibraryExA = NULL;
@@ -231,53 +231,53 @@ static PFN_LoadLibraryExW Real_LoadLibraryExW = NULL;
 
 /*******************************************************************************
  * STATE FLAGS
- * ФЛАГИ СОСТОЯНИЯ
+ * Р¤Р›РђР“Р РЎРћРЎРўРћРЇРќРРЇ
  * 
  * Thread-safe flags using interlocked operations.
- * Потокобезопасные флаги используя interlocked операции.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅС‹Рµ С„Р»Р°РіРё РёСЃРїРѕР»СЊР·СѓСЏ interlocked РѕРїРµСЂР°С†РёРё.
  ******************************************************************************/
 
 // Flag: TRUE if gen_ml.dll has been patched
-// Флаг: TRUE если gen_ml.dll был пропатчен
+// Р¤Р»Р°Рі: TRUE РµСЃР»Рё gen_ml.dll Р±С‹Р» РїСЂРѕРїР°С‚С‡РµРЅ
 static volatile LONG g_genmlPatched = 0;
 
 // Flag: TRUE if LoadLibrary hooks have been installed
-// Флаг: TRUE если хуки LoadLibrary были установлены
+// Р¤Р»Р°Рі: TRUE РµСЃР»Рё С…СѓРєРё LoadLibrary Р±С‹Р»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹
 static volatile LONG g_hookInstalled = 0;
 
 /*******************************************************************************
  * FILENAME DETECTION HELPERS
- * ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ОПРЕДЕЛЕНИЯ ИМЕНИ ФАЙЛА
+ * Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР РћРџР Р•Р”Р•Р›Р•РќРРЇ РРњР•РќР Р¤РђР™Р›Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * is_genml_a
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if ANSI path ends with "gen_ml.dll" (case-insensitive).
- * Проверяет, заканчивается ли ANSI путь на "gen_ml.dll" (без учёта регистра).
+ * РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєР°РЅС‡РёРІР°РµС‚СЃСЏ Р»Рё ANSI РїСѓС‚СЊ РЅР° "gen_ml.dll" (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - ANSI file path / ANSI путь к файлу
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - ANSI file path / ANSI РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 1 if filename is gen_ml.dll, 0 otherwise
- * 1 если имя файла gen_ml.dll, 0 иначе
+ * 1 РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° gen_ml.dll, 0 РёРЅР°С‡Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Find last path separator (\ or /)
  * 2. Extract filename portion
  * 3. Compare case-insensitively with "gen_ml.dll"
  * 
- * 1. Найти последний разделитель пути (\ или /)
- * 2. Извлечь часть с именем файла
- * 3. Сравнить без учёта регистра с "gen_ml.dll"
+ * 1. РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·РґРµР»РёС‚РµР»СЊ РїСѓС‚Рё (\ РёР»Рё /)
+ * 2. РР·РІР»РµС‡СЊ С‡Р°СЃС‚СЊ СЃ РёРјРµРЅРµРј С„Р°Р№Р»Р°
+ * 3. РЎСЂР°РІРЅРёС‚СЊ Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР° СЃ "gen_ml.dll"
  ******************************************************************************/
 static int is_genml_a(LPCSTR s)
 {
     if (!s) return 0;
     
-    // Find last path separator / Найти последний разделитель пути
+    // Find last path separator / РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·РґРµР»РёС‚РµР»СЊ РїСѓС‚Рё
     const char* p = s;
     const char* last = s;
     while (*p) {
@@ -285,33 +285,33 @@ static int is_genml_a(LPCSTR s)
         p++;
     }
     
-    // Compare filename / Сравнить имя файла
+    // Compare filename / РЎСЂР°РІРЅРёС‚СЊ РёРјСЏ С„Р°Р№Р»Р°
     return (lstrcmpiA(last, "gen_ml.dll") == 0);
 }
 
 /*******************************************************************************
  * is_genml_w
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Checks if Unicode path ends with "gen_ml.dll" (case-insensitive).
- * Проверяет, заканчивается ли Unicode путь на "gen_ml.dll" (без учёта регистра).
+ * РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєР°РЅС‡РёРІР°РµС‚СЃСЏ Р»Рё Unicode РїСѓС‚СЊ РЅР° "gen_ml.dll" (Р±РµР· СѓС‡С‘С‚Р° СЂРµРіРёСЃС‚СЂР°).
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * s - Unicode file path / Unicode путь к файлу
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * s - Unicode file path / Unicode РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * 1 if filename is gen_ml.dll, 0 otherwise
- * 1 если имя файла gen_ml.dll, 0 иначе
+ * 1 РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° gen_ml.dll, 0 РёРЅР°С‡Рµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * Same as is_genml_a but for Unicode strings.
- * То же что is_genml_a но для Unicode строк.
+ * РўРѕ Р¶Рµ С‡С‚Рѕ is_genml_a РЅРѕ РґР»СЏ Unicode СЃС‚СЂРѕРє.
  ******************************************************************************/
 static int is_genml_w(LPCWSTR s)
 {
     if (!s) return 0;
     
-    // Find last path separator / Найти последний разделитель пути
+    // Find last path separator / РќР°Р№С‚Рё РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·РґРµР»РёС‚РµР»СЊ РїСѓС‚Рё
     const wchar_t* p = s;
     const wchar_t* last = s;
     while (*p) {
@@ -319,99 +319,99 @@ static int is_genml_w(LPCWSTR s)
         p++;
     }
     
-    // Compare filename / Сравнить имя файла
+    // Compare filename / РЎСЂР°РІРЅРёС‚СЊ РёРјСЏ С„Р°Р№Р»Р°
     return (lstrcmpiW(last, L"gen_ml.dll") == 0);
 }
 
 /*******************************************************************************
  * PATCHING LOGIC
- * ЛОГИКА ПАТЧИНГА
+ * Р›РћР“РРљРђ РџРђРўР§РРќР“Рђ
  ******************************************************************************/
 
 /*******************************************************************************
  * patch_genml_if_needed
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Applies CD ripping removal patch to gen_ml.dll if not already patched.
  * Uses atomic flag to ensure one-time patching.
  * 
- * Применяет патч удаления риппинга CD к gen_ml.dll если ещё не пропатчен.
- * Использует атомарный флаг для обеспечения однократного патчинга.
+ * РџСЂРёРјРµРЅСЏРµС‚ РїР°С‚С‡ СѓРґР°Р»РµРЅРёСЏ СЂРёРїРїРёРЅРіР° CD Рє gen_ml.dll РµСЃР»Рё РµС‰С‘ РЅРµ РїСЂРѕРїР°С‚С‡РµРЅ.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ Р°С‚РѕРјР°СЂРЅС‹Р№ С„Р»Р°Рі РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ РѕРґРЅРѕРєСЂР°С‚РЅРѕРіРѕ РїР°С‚С‡РёРЅРіР°.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * h - Module handle to gen_ml.dll / Дескриптор модуля gen_ml.dll
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * h - Module handle to gen_ml.dll / Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ gen_ml.dll
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Validate module handle
  * 2. Check if already patched using interlocked compare-exchange
  * 3. If not patched, apply byte patch from g_PatchCDRva table
  * 4. Set patched flag to prevent re-patching
  * 
- * 1. Проверить дескриптор модуля
- * 2. Проверить, уже ли пропатчен используя interlocked compare-exchange
- * 3. Если не пропатчен, применить байтовый патч из таблицы g_PatchCDRva
- * 4. Установить флаг патчинга для предотвращения повторного патчинга
+ * 1. РџСЂРѕРІРµСЂРёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, СѓР¶Рµ Р»Рё РїСЂРѕРїР°С‚С‡РµРЅ РёСЃРїРѕР»СЊР·СѓСЏ interlocked compare-exchange
+ * 3. Р•СЃР»Рё РЅРµ РїСЂРѕРїР°С‚С‡РµРЅ, РїСЂРёРјРµРЅРёС‚СЊ Р±Р°Р№С‚РѕРІС‹Р№ РїР°С‚С‡ РёР· С‚Р°Р±Р»РёС†С‹ g_PatchCDRva
+ * 4. РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С„Р»Р°Рі РїР°С‚С‡РёРЅРіР° РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РїР°С‚С‡РёРЅРіР°
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Thread-safe. Multiple threads calling this will only patch once.
  * Uses patcher_apply_table_base from patcher_core.h.
  * 
- * Потокобезопасна. Множественные потоки вызывающие это пропатчат только один раз.
- * Использует patcher_apply_table_base из patcher_core.h.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°. РњРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ РїРѕС‚РѕРєРё РІС‹Р·С‹РІР°СЋС‰РёРµ СЌС‚Рѕ РїСЂРѕРїР°С‚С‡Р°С‚ С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·.
+ * РСЃРїРѕР»СЊР·СѓРµС‚ patcher_apply_table_base РёР· patcher_core.h.
  ******************************************************************************/
 static void patch_genml_if_needed(HMODULE h)
 {
     if (!h) return;
     
-    // Atomic check: only first thread proceeds / Атомарная проверка: только первый поток продолжает
+    // Atomic check: only first thread proceeds / РђС‚РѕРјР°СЂРЅР°СЏ РїСЂРѕРІРµСЂРєР°: С‚РѕР»СЊРєРѕ РїРµСЂРІС‹Р№ РїРѕС‚РѕРє РїСЂРѕРґРѕР»Р¶Р°РµС‚
     if (InterlockedCompareExchange(&g_genmlPatched, 1, 0) != 0)
-        return;  // Already patched by another thread / Уже пропатчен другим потоком
+        return;  // Already patched by another thread / РЈР¶Рµ РїСЂРѕРїР°С‚С‡РµРЅ РґСЂСѓРіРёРј РїРѕС‚РѕРєРѕРј
 
     // Apply patch table to gen_ml.dll base address
-    // Применить таблицу патчей к базовому адресу gen_ml.dll
+    // РџСЂРёРјРµРЅРёС‚СЊ С‚Р°Р±Р»РёС†Сѓ РїР°С‚С‡РµР№ Рє Р±Р°Р·РѕРІРѕРјСѓ Р°РґСЂРµСЃСѓ gen_ml.dll
     patcher_apply_table_base((BYTE*)h, g_PatchCDRva, ARRAYSIZE_(g_PatchCDRva));
 }
 
 /*******************************************************************************
  * LOADLIBRARY HOOK FUNCTIONS
- * ФУНКЦИИ ХУКОВ LOADLIBRARY
+ * Р¤РЈРќРљР¦РР РҐРЈРљРћР’ LOADLIBRARY
  * 
  * These functions intercept LoadLibrary* calls from winamp.exe.
  * When gen_ml.dll is loaded, they apply the CD ripping patch.
  * 
- * Эти функции перехватывают вызовы LoadLibrary* из winamp.exe.
- * Когда gen_ml.dll загружается, они применяют патч риппинга CD.
+ * Р­С‚Рё С„СѓРЅРєС†РёРё РїРµСЂРµС…РІР°С‚С‹РІР°СЋС‚ РІС‹Р·РѕРІС‹ LoadLibrary* РёР· winamp.exe.
+ * РљРѕРіРґР° gen_ml.dll Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ, РѕРЅРё РїСЂРёРјРµРЅСЏСЋС‚ РїР°С‚С‡ СЂРёРїРїРёРЅРіР° CD.
  ******************************************************************************/
 
 /*******************************************************************************
  * Hook_LoadLibraryA
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for LoadLibraryA. Patches gen_ml.dll when it's loaded.
- * Хук для LoadLibraryA. Патчит gen_ml.dll когда он загружается.
+ * РҐСѓРє РґР»СЏ LoadLibraryA. РџР°С‚С‡РёС‚ gen_ml.dll РєРѕРіРґР° РѕРЅ Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ.
  * 
- * PARAMETERS / ПАРАМЕТРЫ:
- * lpFile - ANSI path to DLL to load / ANSI путь к DLL для загрузки
+ * PARAMETERS / РџРђР РђРњР•РўР Р«:
+ * lpFile - ANSI path to DLL to load / ANSI РїСѓС‚СЊ Рє DLL РґР»СЏ Р·Р°РіСЂСѓР·РєРё
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
  * Module handle or NULL on failure
- * Дескриптор модуля или NULL при ошибке
+ * Р”РµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ РёР»Рё NULL РїСЂРё РѕС€РёР±РєРµ
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Call real LoadLibraryA
  * 2. If successful and DLL is gen_ml.dll, apply patch
  * 3. Return module handle
  * 
- * 1. Вызвать реальную LoadLibraryA
- * 2. Если успешно и DLL - gen_ml.dll, применить патч
- * 3. Вернуть дескриптор модуля
+ * 1. Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅСѓСЋ LoadLibraryA
+ * 2. Р•СЃР»Рё СѓСЃРїРµС€РЅРѕ Рё DLL - gen_ml.dll, РїСЂРёРјРµРЅРёС‚СЊ РїР°С‚С‡
+ * 3. Р’РµСЂРЅСѓС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂ РјРѕРґСѓР»СЏ
  ******************************************************************************/
 static HMODULE WINAPI Hook_LoadLibraryA(LPCSTR lpFile)
 {
-    // Call real function / Вызвать реальную функцию
+    // Call real function / Р’С‹Р·РІР°С‚СЊ СЂРµР°Р»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
     HMODULE h = Real_LoadLibraryA ? Real_LoadLibraryA(lpFile) : NULL;
     
-    // If gen_ml.dll loaded, patch it / Если gen_ml.dll загружен, пропатчить его
+    // If gen_ml.dll loaded, patch it / Р•СЃР»Рё gen_ml.dll Р·Р°РіСЂСѓР¶РµРЅ, РїСЂРѕРїР°С‚С‡РёС‚СЊ РµРіРѕ
     if (h && is_genml_a(lpFile)) {
         patch_genml_if_needed(h);
     }
@@ -422,9 +422,9 @@ static HMODULE WINAPI Hook_LoadLibraryA(LPCSTR lpFile)
 /*******************************************************************************
  * Hook_LoadLibraryW
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for LoadLibraryW. Unicode version of Hook_LoadLibraryA.
- * Хук для LoadLibraryW. Unicode версия Hook_LoadLibraryA.
+ * РҐСѓРє РґР»СЏ LoadLibraryW. Unicode РІРµСЂСЃРёСЏ Hook_LoadLibraryA.
  ******************************************************************************/
 static HMODULE WINAPI Hook_LoadLibraryW(LPCWSTR lpFile)
 {
@@ -438,9 +438,9 @@ static HMODULE WINAPI Hook_LoadLibraryW(LPCWSTR lpFile)
 /*******************************************************************************
  * Hook_LoadLibraryExA
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for LoadLibraryExA. Extended version with flags support.
- * Хук для LoadLibraryExA. Расширенная версия с поддержкой флагов.
+ * РҐСѓРє РґР»СЏ LoadLibraryExA. Р Р°СЃС€РёСЂРµРЅРЅР°СЏ РІРµСЂСЃРёСЏ СЃ РїРѕРґРґРµСЂР¶РєРѕР№ С„Р»Р°РіРѕРІ.
  ******************************************************************************/
 static HMODULE WINAPI Hook_LoadLibraryExA(LPCSTR lpFile, HANDLE hf, DWORD fl)
 {
@@ -454,9 +454,9 @@ static HMODULE WINAPI Hook_LoadLibraryExA(LPCSTR lpFile, HANDLE hf, DWORD fl)
 /*******************************************************************************
  * Hook_LoadLibraryExW
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Hook for LoadLibraryExW. Extended Unicode version.
- * Хук для LoadLibraryExW. Расширенная Unicode версия.
+ * РҐСѓРє РґР»СЏ LoadLibraryExW. Р Р°СЃС€РёСЂРµРЅРЅР°СЏ Unicode РІРµСЂСЃРёСЏ.
  ******************************************************************************/
 static HMODULE WINAPI Hook_LoadLibraryExW(LPCWSTR lpFile, HANDLE hf, DWORD fl)
 {
@@ -469,56 +469,56 @@ static HMODULE WINAPI Hook_LoadLibraryExW(LPCWSTR lpFile, HANDLE hf, DWORD fl)
 
 /*******************************************************************************
  * HOOK INSTALLATION
- * УСТАНОВКА ХУКОВ
+ * РЈРЎРўРђРќРћР’РљРђ РҐРЈРљРћР’
  ******************************************************************************/
 
 /*******************************************************************************
  * install_hook_once
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Installs LoadLibrary hooks in winamp.exe (one-time operation).
  * Also patches gen_ml.dll immediately if it's already loaded.
  * 
- * Устанавливает хуки LoadLibrary в winamp.exe (однократная операция).
- * Также немедленно патчит gen_ml.dll если он уже загружен.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё LoadLibrary РІ winamp.exe (РѕРґРЅРѕРєСЂР°С‚РЅР°СЏ РѕРїРµСЂР°С†РёСЏ).
+ * РўР°РєР¶Рµ РЅРµРјРµРґР»РµРЅРЅРѕ РїР°С‚С‡РёС‚ gen_ml.dll РµСЃР»Рё РѕРЅ СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅ.
  * 
- * ALGORITHM / АЛГОРИТМ:
+ * ALGORITHM / РђР›Р“РћР РРўРњ:
  * 1. Atomic check: ensure one-time installation
  * 2. Check if gen_ml.dll already loaded - patch immediately if so
  * 3. Get winamp.exe and kernel32.dll module handles
  * 4. Get real addresses of LoadLibrary* functions
  * 5. Patch winamp.exe's IAT to install hooks for all LoadLibrary variants
  * 
- * 1. Атомарная проверка: обеспечить однократную установку
- * 2. Проверить, загружен ли уже gen_ml.dll - пропатчить немедленно если да
- * 3. Получить дескрипторы модулей winamp.exe и kernel32.dll
- * 4. Получить реальные адреса функций LoadLibrary*
- * 5. Пропатчить IAT winamp.exe для установки хуков для всех вариантов LoadLibrary
+ * 1. РђС‚РѕРјР°СЂРЅР°СЏ РїСЂРѕРІРµСЂРєР°: РѕР±РµСЃРїРµС‡РёС‚СЊ РѕРґРЅРѕРєСЂР°С‚РЅСѓСЋ СѓСЃС‚Р°РЅРѕРІРєСѓ
+ * 2. РџСЂРѕРІРµСЂРёС‚СЊ, Р·Р°РіСЂСѓР¶РµРЅ Р»Рё СѓР¶Рµ gen_ml.dll - РїСЂРѕРїР°С‚С‡РёС‚СЊ РЅРµРјРµРґР»РµРЅРЅРѕ РµСЃР»Рё РґР°
+ * 3. РџРѕР»СѓС‡РёС‚СЊ РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РјРѕРґСѓР»РµР№ winamp.exe Рё kernel32.dll
+ * 4. РџРѕР»СѓС‡РёС‚СЊ СЂРµР°Р»СЊРЅС‹Рµ Р°РґСЂРµСЃР° С„СѓРЅРєС†РёР№ LoadLibrary*
+ * 5. РџСЂРѕРїР°С‚С‡РёС‚СЊ IAT winamp.exe РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С…СѓРєРѕРІ РґР»СЏ РІСЃРµС… РІР°СЂРёР°РЅС‚РѕРІ LoadLibrary
  * 
- * WHY HOOK ALL VARIANTS / ПОЧЕМУ ХУКАЕМ ВСЕ ВАРИАНТЫ:
+ * WHY HOOK ALL VARIANTS / РџРћР§Р•РњРЈ РҐРЈРљРђР•Рњ Р’РЎР• Р’РђР РРђРќРўР«:
  * Winamp might use any of these functions to load plugins.
  * Hooking all variants ensures we catch gen_ml.dll load.
  * 
- * Winamp может использовать любую из этих функций для загрузки плагинов.
- * Перехват всех вариантов гарантирует, что мы поймаем загрузку gen_ml.dll.
+ * Winamp РјРѕР¶РµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»СЋР±СѓСЋ РёР· СЌС‚РёС… С„СѓРЅРєС†РёР№ РґР»СЏ Р·Р°РіСЂСѓР·РєРё РїР»Р°РіРёРЅРѕРІ.
+ * РџРµСЂРµС…РІР°С‚ РІСЃРµС… РІР°СЂРёР°РЅС‚РѕРІ РіР°СЂР°РЅС‚РёСЂСѓРµС‚, С‡С‚Рѕ РјС‹ РїРѕР№РјР°РµРј Р·Р°РіСЂСѓР·РєСѓ gen_ml.dll.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Thread-safe. Multiple threads calling this will only install once.
  * 
- * Потокобезопасна. Множественные потоки вызывающие это установят только один раз.
+ * РџРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅР°. РњРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ РїРѕС‚РѕРєРё РІС‹Р·С‹РІР°СЋС‰РёРµ СЌС‚Рѕ СѓСЃС‚Р°РЅРѕРІСЏС‚ С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·.
  ******************************************************************************/
 static void install_hook_once(void)
 {
-    // Atomic check: only first thread proceeds / Атомарная проверка: только первый поток продолжает
+    // Atomic check: only first thread proceeds / РђС‚РѕРјР°СЂРЅР°СЏ РїСЂРѕРІРµСЂРєР°: С‚РѕР»СЊРєРѕ РїРµСЂРІС‹Р№ РїРѕС‚РѕРє РїСЂРѕРґРѕР»Р¶Р°РµС‚
     if (InterlockedCompareExchange(&g_hookInstalled, 1, 0) != 0)
-        return;  // Already installed / Уже установлено
+        return;  // Already installed / РЈР¶Рµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ
 
     /***************************************************************************
      * STEP 1: PATCH IF ALREADY LOADED
-     * ШАГ 1: ПРОПАТЧИТЬ ЕСЛИ УЖЕ ЗАГРУЖЕН
+     * РЁРђР“ 1: РџР РћРџРђРўР§РРўР¬ Р•РЎР›Р РЈР–Р• Р—РђР“Р РЈР–Р•Рќ
      * 
      * If gen_ml.dll is already loaded (rare but possible), patch it now.
-     * Если gen_ml.dll уже загружен (редко но возможно), пропатчить его сейчас.
+     * Р•СЃР»Рё gen_ml.dll СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅ (СЂРµРґРєРѕ РЅРѕ РІРѕР·РјРѕР¶РЅРѕ), РїСЂРѕРїР°С‚С‡РёС‚СЊ РµРіРѕ СЃРµР№С‡Р°СЃ.
      ***************************************************************************/
     HMODULE hML = GetModuleHandleA("gen_ml.dll");
     if (hML) {
@@ -527,21 +527,21 @@ static void install_hook_once(void)
 
     /***************************************************************************
      * STEP 2: GET MODULE HANDLES
-     * ШАГ 2: ПОЛУЧИТЬ ДЕСКРИПТОРЫ МОДУЛЕЙ
+     * РЁРђР“ 2: РџРћР›РЈР§РРўР¬ Р”Р•РЎРљР РРџРўРћР Р« РњРћР”РЈР›Р•Р™
      ***************************************************************************/
     HMODULE hExe = GetModuleHandleA(NULL);         // winamp.exe
     HMODULE hK32 = GetModuleHandleA("KERNEL32.dll");
-    if (!hExe || !hK32) return;  // Critical modules not found / Критичные модули не найдены
+    if (!hExe || !hK32) return;  // Critical modules not found / РљСЂРёС‚РёС‡РЅС‹Рµ РјРѕРґСѓР»Рё РЅРµ РЅР°Р№РґРµРЅС‹
 
     /***************************************************************************
      * STEP 3: GET REAL FUNCTION ADDRESSES
-     * ШАГ 3: ПОЛУЧИТЬ РЕАЛЬНЫЕ АДРЕСА ФУНКЦИЙ
+     * РЁРђР“ 3: РџРћР›РЈР§РРўР¬ Р Р•РђР›Р¬РќР«Р• РђР”Р Р•РЎРђ Р¤РЈРќРљР¦РР™
      * 
      * Get original kernel32 function addresses.
      * These will be called from our hooks.
      * 
-     * Получить оригинальные адреса функций kernel32.
-     * Они будут вызываться из наших хуков.
+     * РџРѕР»СѓС‡РёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ Р°РґСЂРµСЃР° С„СѓРЅРєС†РёР№ kernel32.
+     * РћРЅРё Р±СѓРґСѓС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РёР· РЅР°С€РёС… С…СѓРєРѕРІ.
      ***************************************************************************/
     if (!Real_LoadLibraryA)   Real_LoadLibraryA   = (PFN_LoadLibraryA)GetProcAddress(hK32, "LoadLibraryA");
     if (!Real_LoadLibraryW)   Real_LoadLibraryW   = (PFN_LoadLibraryW)GetProcAddress(hK32, "LoadLibraryW");
@@ -550,10 +550,10 @@ static void install_hook_once(void)
 
     /***************************************************************************
      * STEP 4: INSTALL IAT HOOKS
-     * ШАГ 4: УСТАНОВИТЬ ХУКИ IAT
+     * РЁРђР“ 4: РЈРЎРўРђРќРћР’РРўР¬ РҐРЈРљР IAT
      * 
      * Patch winamp.exe's Import Address Table to redirect LoadLibrary* calls.
-     * Пропатчить таблицу адресов импорта winamp.exe для перенаправления вызовов LoadLibrary*.
+     * РџСЂРѕРїР°С‚С‡РёС‚СЊ С‚Р°Р±Р»РёС†Сѓ Р°РґСЂРµСЃРѕРІ РёРјРїРѕСЂС‚Р° winamp.exe РґР»СЏ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёСЏ РІС‹Р·РѕРІРѕРІ LoadLibrary*.
      ***************************************************************************/
     IAT_Patch(hExe, "KERNEL32.dll", "LoadLibraryA",   (void*)Hook_LoadLibraryA,   (void**)&Real_LoadLibraryA);
     IAT_Patch(hExe, "KERNEL32.dll", "LoadLibraryW",   (void*)Hook_LoadLibraryW,   (void**)&Real_LoadLibraryW);
@@ -563,37 +563,37 @@ static void install_hook_once(void)
 
 /*******************************************************************************
  * PUBLIC API
- * ПУБЛИЧНЫЙ API
+ * РџРЈР‘Р›РР§РќР«Р™ API
  ******************************************************************************/
 
 /*******************************************************************************
  * patch_cd_init
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Initializes CD ripping removal patch.
  * Installs LoadLibrary hooks to catch gen_ml.dll loading.
  * 
- * Инициализирует патч удаления риппинга CD.
- * Устанавливает хуки LoadLibrary для перехвата загрузки gen_ml.dll.
+ * РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїР°С‚С‡ СѓРґР°Р»РµРЅРёСЏ СЂРёРїРїРёРЅРіР° CD.
+ * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…СѓРєРё LoadLibrary РґР»СЏ РїРµСЂРµС…РІР°С‚Р° Р·Р°РіСЂСѓР·РєРё gen_ml.dll.
  * 
- * RETURNS / ВОЗВРАЩАЕТ:
- * 1 on success / 1 при успехе
+ * RETURNS / Р’РћР—Р’Р РђР©РђР•Рў:
+ * 1 on success / 1 РїСЂРё СѓСЃРїРµС…Рµ
  * 
- * WHEN TO CALL / КОГДА ВЫЗЫВАТЬ:
+ * WHEN TO CALL / РљРћР“Р”Рђ Р’Р«Р—Р«Р’РђРўР¬:
  * Call during plugin initialization, before Winamp loads gen_ml.dll.
  * Safe to call multiple times - only installs once.
  * 
- * Вызывайте во время инициализации плагина, до загрузки gen_ml.dll в Winamp.
- * Безопасно вызывать много раз - устанавливает только один раз.
+ * Р’С‹Р·С‹РІР°Р№С‚Рµ РІРѕ РІСЂРµРјСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР»Р°РіРёРЅР°, РґРѕ Р·Р°РіСЂСѓР·РєРё gen_ml.dll РІ Winamp.
+ * Р‘РµР·РѕРїР°СЃРЅРѕ РІС‹Р·С‹РІР°С‚СЊ РјРЅРѕРіРѕ СЂР°Р· - СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·.
  * 
- * HOW IT WORKS / КАК ЭТО РАБОТАЕТ:
+ * HOW IT WORKS / РљРђРљ Р­РўРћ Р РђР‘РћРўРђР•Рў:
  * Sets up hooks one time. Later, when winamp loads gen_ml.dll,
  * we patch the byte BEFORE Media Library init() is called.
  * 
- * Настраивает хуки один раз. Позже, когда winamp загружает gen_ml.dll,
- * мы патчим байт ДО вызова init() библиотеки.
+ * РќР°СЃС‚СЂР°РёРІР°РµС‚ С…СѓРєРё РѕРґРёРЅ СЂР°Р·. РџРѕР·Р¶Рµ, РєРѕРіРґР° winamp Р·Р°РіСЂСѓР¶Р°РµС‚ gen_ml.dll,
+ * РјС‹ РїР°С‚С‡РёРј Р±Р°Р№С‚ Р”Рћ РІС‹Р·РѕРІР° init() Р±РёР±Р»РёРѕС‚РµРєРё.
  * 
- * EXAMPLE / ПРИМЕР:
+ * EXAMPLE / РџР РРњР•Р :
  * ```c
  * int plugin_init() {
  *     patch_cd_init();  // Enable CD ripping removal
@@ -603,9 +603,9 @@ static void install_hook_once(void)
  ******************************************************************************/
 int patch_cd_init(void)
 {
-    // Install hook one time / Установить хук один раз
+    // Install hook one time / РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С…СѓРє РѕРґРёРЅ СЂР°Р·
     // Later when winamp loads gen_ml.dll, we'll patch the byte BEFORE init()
-    // Позже когда winamp загрузит gen_ml.dll, мы пропатчим байт ДО init()
+    // РџРѕР·Р¶Рµ РєРѕРіРґР° winamp Р·Р°РіСЂСѓР·РёС‚ gen_ml.dll, РјС‹ РїСЂРѕРїР°С‚С‡РёРј Р±Р°Р№С‚ Р”Рћ init()
     install_hook_once();
     return 1;
 }
@@ -613,34 +613,34 @@ int patch_cd_init(void)
 /*******************************************************************************
  * patch_cd_quit
  * 
- * PURPOSE / НАЗНАЧЕНИЕ:
+ * PURPOSE / РќРђР—РќРђР§Р•РќРР•:
  * Cleanup function for CD ripping removal patch.
  * Currently does nothing - hooks can remain until process exit.
  * 
- * Функция очистки для патча удаления риппинга CD.
- * В настоящее время ничего не делает - хуки могут оставаться до выхода процесса.
+ * Р¤СѓРЅРєС†РёСЏ РѕС‡РёСЃС‚РєРё РґР»СЏ РїР°С‚С‡Р° СѓРґР°Р»РµРЅРёСЏ СЂРёРїРїРёРЅРіР° CD.
+ * Р’ РЅР°СЃС‚РѕСЏС‰РµРµ РІСЂРµРјСЏ РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµС‚ - С…СѓРєРё РјРѕРіСѓС‚ РѕСЃС‚Р°РІР°С‚СЊСЃСЏ РґРѕ РІС‹С…РѕРґР° РїСЂРѕС†РµСЃСЃР°.
  * 
- * NOTES / ПРИМЕЧАНИЯ:
+ * NOTES / РџР РРњР•Р§РђРќРРЇ:
  * Usually hooks in winamp.exe can remain until process exit.
  * If your project has "unpatch IAT" mechanism, you can add it here.
  * 
- * Обычно хуки в winamp.exe могут оставаться до выхода процесса.
- * Если у вас в проекте есть механизм "unpatch IAT", можно добавить его здесь.
+ * РћР±С‹С‡РЅРѕ С…СѓРєРё РІ winamp.exe РјРѕРіСѓС‚ РѕСЃС‚Р°РІР°С‚СЊСЃСЏ РґРѕ РІС‹С…РѕРґР° РїСЂРѕС†РµСЃСЃР°.
+ * Р•СЃР»Рё Сѓ РІР°СЃ РІ РїСЂРѕРµРєС‚Рµ РµСЃС‚СЊ РјРµС…Р°РЅРёР·Рј "unpatch IAT", РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РµРіРѕ Р·РґРµСЃСЊ.
  * 
- * WHY NOT UNHOOK / ПОЧЕМУ НЕ ОТЦЕПЛЯЕМ:
+ * WHY NOT UNHOOK / РџРћР§Р•РњРЈ РќР• РћРўР¦Р•РџР›РЇР•Рњ:
  * Unhooking IAT during runtime is risky and unnecessary.
  * Hooks are benign and use minimal resources.
  * Process exit will clean everything up automatically.
  * 
- * Отцепление IAT во время выполнения рискованно и не нужно.
- * Хуки безвредны и используют минимальные ресурсы.
- * Выход процесса очистит всё автоматически.
+ * РћС‚С†РµРїР»РµРЅРёРµ IAT РІРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ СЂРёСЃРєРѕРІР°РЅРЅРѕ Рё РЅРµ РЅСѓР¶РЅРѕ.
+ * РҐСѓРєРё Р±РµР·РІСЂРµРґРЅС‹ Рё РёСЃРїРѕР»СЊР·СѓСЋС‚ РјРёРЅРёРјР°Р»СЊРЅС‹Рµ СЂРµСЃСѓСЂСЃС‹.
+ * Р’С‹С…РѕРґ РїСЂРѕС†РµСЃСЃР° РѕС‡РёСЃС‚РёС‚ РІСЃС‘ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.
  ******************************************************************************/
 void patch_cd_quit(void)
 {
     // Usually hooks in winamp.exe don't need to be removed until process exit.
     // If you have an "unpatch IAT" mechanism in your project, you can add it here.
     
-    // Обычно хуки в winamp.exe не нужно снимать до выхода процесса.
-    // Если у тебя в проекте есть механизм "unpatch IAT" — можно добавить.
+    // РћР±С‹С‡РЅРѕ С…СѓРєРё РІ winamp.exe РЅРµ РЅСѓР¶РЅРѕ СЃРЅРёРјР°С‚СЊ РґРѕ РІС‹С…РѕРґР° РїСЂРѕС†РµСЃСЃР°.
+    // Р•СЃР»Рё Сѓ С‚РµР±СЏ РІ РїСЂРѕРµРєС‚Рµ РµСЃС‚СЊ РјРµС…Р°РЅРёР·Рј "unpatch IAT" вЂ” РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ.
 }
