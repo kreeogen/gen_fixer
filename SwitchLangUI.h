@@ -159,13 +159,14 @@
 
 #define TIP_STARTUP     "Forces Winamp window to foreground when starting the application."
 
-#define TIP_ICONFIX     "Fixes Preferences window icon to display correctly." \
+#define TIP_ICONFIX     "Fixes Preferences window icon to display correctly." 
 
 #define TIP_ID3         "Prevents Winamp from damaging custom ID3v2 frames."
 
 #define TIP_PATCHURL    "Replaces the broken 'Get More Skins' menu item with a link to the Winamp Skin Museum."
 
 #define TIP_SKININSTALL "Adds 'Install Winamp Skin' option to right-click menu for .wsz files in Explorer."
+
 
 
 
